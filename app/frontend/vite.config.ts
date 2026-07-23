@@ -9,13 +9,10 @@ export default defineConfig({
 		dedupe: ["react", "react-dom", "react-router-dom"],
 		alias: {
 			"@": node_path.resolve(__dirname, "src"),
-			"@spatialhub/feedback": node_path.resolve(__dirname, "../../../feeedback_pipeline/frontend_overlay/src"),
 			"@spatialhub/forms": node_path.resolve(__dirname, "../../libs/forms/src"),
 			"@spatialhub/auth": node_path.resolve(__dirname, "../../libs/auth/src"),
 			"@spatialhub/ui": node_path.resolve(__dirname, "../../libs/ui/src"),
-			// i18n is owned by the app (src/i18n). The shared auth/forms
-			// libs still import "@spatialhub/i18n", so re-point that alias to the local
-			// module — everything then shares one i18next instance + the app's locales.
+			// Share application i18n instance.
 			"@spatialhub/i18n": node_path.resolve(__dirname, "src/i18n"),
 			"react": node_path.resolve(__dirname, "node_modules/react"),
 			"react-dom": node_path.resolve(__dirname, "node_modules/react-dom"),

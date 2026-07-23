@@ -7,7 +7,4 @@ import { initI18n } from "@/i18n";
 
 initI18n({ storageKey: "app_language" });
 
-// Feedback overlay temporarily disabled: @spatialhub/feedback not available locally.
-// import { FeedbackOverlay } from "@spatialhub/feedback";
-
 createRoot(document.getElementById("root")!).render(<App />);

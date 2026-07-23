@@ -8,7 +8,7 @@ import { ensureCSRFToken } from "@/utils/csrf";
 import { TooltipProvider } from "@spatialhub/ui";
 import { Loader2 } from 'lucide-react';
 
-// Lazy loaded components for code splitting
+// Lazy-loaded route components
 const MapComponent = lazy(() => import("./features/interactive-map").then(module => ({ default: module.MapComponent })));
 const ModelDashboard = lazy(() => import("@/features/model-dashboard/components").then(module => ({ default: module.ModelDashboard })));
 const Dashboard = lazy(() => import("@/features/admin-dashboard").then(module => ({ default: module.Dashboard })));
@@ -19,9 +19,12 @@ const ProfilePage = lazy(() => import("@/features/profile").then(module => ({ de
 const NotificationsPage = lazy(() => import("@/features/notifications/NotificationsPage"));
 const AreaSelect = lazy(() => import("@/features/configurator/region-selector/AreaSelect").then(module => ({ default: module.AreaSelect })));
 const ModelResultsViewer = lazy(() => import("@/features/model-results").then(module => ({ default: module.ModelResultsViewer })));
-const ComparisonPage = lazy(() => import("@/features/comparison").then(module => ({ default: module.ComparisonPage })));
 const LegalPage = lazy(() => import("@/pages/legal/LegalPage"));
 const LandingPage = lazy(() => import("@/features/landing").then(module => ({ default: module.LandingPage })));
+const TechnologyLibraryPage = lazy(() => import("@/features/technologies").then(module => ({ default: module.TechnologyLibraryPage })));
+const TransportNetworkPage = lazy(() => import("@/features/transport").then(module => ({ default: module.TransportNetworkPage })));
+const LocationsPage = lazy(() => import("@/features/locations").then(module => ({ default: module.LocationsPage })));
+const ExplorerPage = lazy(() => import("@/features/model-configurator").then(module => ({ default: module.ExplorerPage })));
 
 import { ProductTour } from "@/features/guided-tour/ProductTour";
 import NotificationProvider from "@/features/notifications/components/NotificationProvider";
@@ -38,7 +41,7 @@ const PageLoader = () => (
 type AppProps = Record<string, never>;
 
 const App: React.FC<AppProps> = () => {
-  // Initialize CSRF token on app load
+  // Initialize CSRF protection
   useEffect(() => {
     ensureCSRFToken().catch((err) => {
       if (import.meta.env.DEV) console.error('Failed to initialize CSRF token:', err);
@@ -60,7 +63,7 @@ const App: React.FC<AppProps> = () => {
                   <Route path="/forgot-password" element={<ForgotPasswordForm />} />
                 </Route>
 
-                {/* Map is publicly viewable; guests are prompted to sign in via the top-bar icon */}
+                {/* Public map with sign-in */}
                 <Route path="/app/map" element={<AppLayout><MapComponent /></AppLayout>} />
 
                 <Route element={<Middleware type="auth" />}>
@@ -76,16 +79,17 @@ const App: React.FC<AppProps> = () => {
 
                 <Route element={<Middleware type="auth" />}>
                   <Route path="/app/model-dashboard" element={<ModelDashboard />} />
-                  <Route path="/app/model-dashboard/new-model" element={<AreaSelect />} />
+                  <Route path="/app/model-dashboard/new-model" element={<ExplorerPage />} />
                   <Route path="/app/model-dashboard/edit/:id" element={<AreaSelect editMode={true} />} />
                   <Route path="/app/model-results/:id" element={<ModelResultsViewer />} />
-                  <Route path="/app/comparison" element={<ComparisonPage />} />
-                  <Route path="/app/comparison/:modelId" element={<ComparisonPage />} />
                   <Route path="/app/profile" element={<ProfilePage />} />
                   <Route path="/app/admin-dashboard" element={<Dashboard />} />
                   <Route path="/app/settings" element={<SettingsPage />} />
                   <Route path="/app/settings/weather" element={<WeatherSettings />} />
                   <Route path="/app/notifications" element={<NotificationsPage />} />
+                  <Route path="/app/technologies" element={<TechnologyLibraryPage />} />
+                  <Route path="/app/transport" element={<TransportNetworkPage />} />
+                  <Route path="/app/locations" element={<LocationsPage />} />
                 </Route>
               </Routes>
             </Suspense>

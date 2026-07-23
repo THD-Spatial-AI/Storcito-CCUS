@@ -19,7 +19,6 @@
 	"dependencies": {
 		"@internationalized/date": "^3.6.3",
 		"@spatialhub/auth": "file:../../libs/auth",
-		"@spatialhub/feedback": "file:../../../feeedback_pipeline/frontend_overlay",
 		"@spatialhub/forms": "file:../../libs/forms",
 		"@spatialhub/ui": "file:../../libs/ui",
 		"@tabler/icons-react": "^3.35.0",

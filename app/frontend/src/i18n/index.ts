@@ -2,9 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// Bundled locales. The template ships a fully generic English locale; add
-// further locales by dropping a JSON file in ./locales, importing it here,
-// and extending the `languages` and `resources` maps below.
+// Bundled locale resources.
 import en from "./locales/en.json";
 
 // Language configuration
@@ -14,7 +12,7 @@ export const languages = [
 
 export type LanguageCode = (typeof languages)[number]["code"];
 
-export interface Language {
+interface Language {
   code: LanguageCode;
   name: string;
   nativeName: string;
@@ -26,10 +24,10 @@ const resources = {
   en: { translation: en },
 };
 
-export interface I18nConfig {
-  /** Storage key for persisting language selection */
+interface I18nConfig {
+  /** Language storage key. */
   storageKey?: string;
-  /** Fallback language if detection fails */
+  /** Detection fallback language. */
   fallbackLng?: LanguageCode;
   /** Enable debug mode */
   debug?: boolean;
