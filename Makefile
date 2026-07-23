@@ -6,7 +6,7 @@ YELLOW := \033[1;33m
 CYAN := \033[0;36m
 NC := \033[0m
 
-# Compose files: dev overrides fix Keycloak issuer for localhost
+# Development Compose overrides
 PLATFORM_COMPOSE := -f platform-core/docker-compose.yml -f platform-core/docker-compose.dev.yml
 APP_COMPOSE := -f app/docker-compose.yml -f app/docker-compose.dev.yml
 
@@ -239,7 +239,7 @@ migrate:
 .PHONY: seed
 seed:
 	@echo "$(CYAN)Seeding Database...$(NC)"
-	@cd app/backend && go run cmd/seed/*.go
+	@cd app/backend && go run ./cmd/seed
 	@echo "$(GREEN)Database seeded.$(NC)"
 	@echo ""
 
@@ -271,4 +271,3 @@ setup-complete:
 sonar:
 	@echo "Running SonarQube Analysis..."
 	@./bin/sonar-scanner/bin/sonar-scanner
-
