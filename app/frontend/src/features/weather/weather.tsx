@@ -100,9 +100,9 @@ const WeatherDropdown: React.FC<WeatherDropdownProps> = ({ showSettingsIcon = tr
         <div className="flex items-center gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
-              <button type="button" onClick={handleClick} aria-label="Weather information - click to refresh" className={cn('relative flex items-center gap-2.5 px-3 py-1.5 rounded-md', 'bg-card', 'border border-border shadow-sm', 'hover:bg-muted hover:shadow-md', 'transition-all duration-300 ease-out cursor-pointer', 'overflow-hidden')}>
-                <div className="relative z-10">{getWeatherIcon(currentWeather.weather_code, 'w-5 h-5')}</div>
-                <span className="relative z-10 text-base font-semibold text-foreground tracking-tight">{formatTemperature(currentWeather.temperature)}</span>
+              <button type="button" onClick={handleClick} aria-label="Weather information - click to refresh" className={cn('relative flex items-center gap-2 px-2.5 py-1 rounded-md', 'bg-card', 'border border-border shadow-sm', 'hover:bg-muted hover:shadow-md', 'transition-all duration-300 ease-out cursor-pointer', 'overflow-hidden')}>
+                <div className="relative z-10">{getWeatherIcon(currentWeather.weather_code, 'w-4 h-4')}</div>
+                <span className="relative z-10 text-sm font-semibold text-foreground tracking-tight">{formatTemperature(currentWeather.temperature)}</span>
                 <div className="hidden sm:block w-px h-4 bg-border" />
                 <div className="hidden sm:flex items-center gap-1 relative z-10"><MapPin className="w-3 h-3 text-muted-foreground" /><span className="text-xs text-muted-foreground max-w-[80px] truncate">{location.name}</span></div>
               </button>

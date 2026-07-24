@@ -43,7 +43,7 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
             <img
               src="/images/logo/app-logo.png"
               alt="App"
-              className="h-8 w-auto object-contain dark:invert"
+              className="h-6 w-auto object-contain dark:invert"
             />
           </a>
           <h1 className="text-sm font-semibold text-foreground hidden sm:block">

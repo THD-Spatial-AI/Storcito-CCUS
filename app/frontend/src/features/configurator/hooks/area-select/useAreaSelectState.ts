@@ -18,7 +18,7 @@ const DEFAULT_OPTIONAL_LAYERS: Record<OptionalLayerKey, boolean> = {
   historical_fires: true,
 };
 
-export interface UseAreaSelectStateOptions {
+interface UseAreaSelectStateOptions {
   editMode: boolean;
 }
 
@@ -244,7 +244,7 @@ export const useAreaSelectState = ({ editMode }: UseAreaSelectStateOptions) => {
     setUploadedGeoJsonName,
     geoJsonUploadError,
     setGeoJsonUploadError,
-    // optional layers (forwarded to the processing engine as parameters.optional_layers)
+    // Engine optional layers
     optionalLayers,
     setOptionalLayers,
     toggleOptionalLayer,
