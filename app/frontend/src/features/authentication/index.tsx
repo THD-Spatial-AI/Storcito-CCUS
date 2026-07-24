@@ -21,16 +21,16 @@ const IMG = "/images/landing-page";
 const AnalysisSidePanel: React.FC = () => {
 	const { t } = useTranslation();
 	return (
-		<div className="absolute inset-0">
+		<div className="absolute inset-0 bg-[#16152e]">
 			<img
-				src={`${IMG}/placeholder.svg`}
-				alt=""
+				src={`${IMG}/ccus-transport-map.jpg`}
+				alt="CCUS Transport Network Map"
 				aria-hidden
-				className="absolute inset-0 h-full w-full object-cover"
+				className="absolute inset-0 h-full w-full object-cover opacity-75 contrast-125"
 			/>
-			<div className="absolute inset-0 bg-gradient-to-br from-[#2E2D52]/90 via-[#3B3A66]/80 to-[#56557F]/70" />
+			<div className="absolute inset-0 bg-gradient-to-br from-[#181636]/65 via-[#23204a]/50 to-[#0d0c1d]/85" />
 			{/* Dark bottom fade for text contrast */}
-			<div className="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#0b0918] via-[#0b0918]/70 to-transparent" />
+			<div className="absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-t from-[#0b0918] via-[#0b0918]/80 to-transparent" />
 			<div className="relative flex h-full flex-col justify-between p-10 xl:p-14 text-white">
 				<img
 					src={`/images/logo/app-logo.png`}
@@ -102,7 +102,7 @@ export const LoginForm: React.FC<Partial<LoginFormProps>> = (props) => {
 				onEnsureCSRF={async () => { await ensureCSRFToken(); }}
 				apiBaseUrl={config.api.baseUrl || "/api"}
 				appName={BrandLogo}
-				backgroundImageUrl="/images/landing-page/placeholder.svg"
+				backgroundImageUrl="/images/landing-page/ccus-transport-map.jpg"
 				layout="split"
 				sideContent={<AnalysisSidePanel />}
 				{...props}
@@ -120,7 +120,7 @@ export const RegisterForm: React.FC<Partial<RegisterFormProps>> = (props) => {
 			}}
 			apiBaseUrl={config.api.baseUrl || "/api"}
 			appName={BrandLogo}
-			backgroundImageUrl="/images/landing-page/placeholder.svg"
+			backgroundImageUrl="/images/landing-page/ccus-transport-map.jpg"
 			layout="split"
 			sideContent={<AnalysisSidePanel />}
 			{...props}
@@ -137,7 +137,7 @@ export const ForgotPasswordForm: React.FC<Partial<ForgotPasswordFormProps>> = (p
 			}}
 			apiBaseUrl={config.api.baseUrl || "/api"}
 			appName={BrandLogo}
-			backgroundImageUrl="/images/landing-page/placeholder.svg"
+			backgroundImageUrl="/images/landing-page/ccus-transport-map.jpg"
 			layout="split"
 			sideContent={<AnalysisSidePanel />}
 			{...props}
