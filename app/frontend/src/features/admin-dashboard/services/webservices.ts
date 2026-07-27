@@ -11,7 +11,7 @@ interface ApiResponse<T> {
 }
 
 
-export interface DataCoverageFeatureCollection {
+interface DataCoverageFeatureCollection {
     type: 'FeatureCollection';
     bbox?: number[];
     features: Array<{
@@ -21,7 +21,7 @@ export interface DataCoverageFeatureCollection {
     }>;
 }
 
-export interface WebserviceSummary {
+interface WebserviceSummary {
     total: number;
     online: number;
     available: number;

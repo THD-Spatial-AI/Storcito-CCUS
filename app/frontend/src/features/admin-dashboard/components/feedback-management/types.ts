@@ -1,7 +1,7 @@
 import type { FormDataConvertible } from "@/hooks/useForm";
 
-export type FeedbackStatus = "pending" | "in_progress" | "resolved" | "closed";
-export type FeedbackPriority = "low" | "medium" | "high" | "critical";
+type FeedbackStatus = "pending" | "in_progress" | "resolved" | "closed";
+type FeedbackPriority = "low" | "medium" | "high" | "critical";
 
 export interface FeedbackImage {
   path: string;

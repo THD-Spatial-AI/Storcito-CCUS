@@ -4,9 +4,6 @@ import {
   type FeedbackFilters,
   type UpdateFeedbackData,
 } from "@/features/admin-dashboard/services/feedback";
-import type { FeedbackItem } from "@/features/admin-dashboard/components/feedback-management/types";
-
-export type { FeedbackFilters, UpdateFeedbackData, FeedbackItem };
 
 // Query Keys
 const feedbackKeys = {
@@ -20,9 +17,7 @@ const feedbackKeys = {
 
 // Hooks
 
-/**
- * Fetch all feedback with filters (Admin)
- */
+/** Fetch filtered feedback. */
 export const useFeedbackList = (filters: FeedbackFilters = {}) => {
   return useQuery({
     queryKey: feedbackKeys.list(filters),

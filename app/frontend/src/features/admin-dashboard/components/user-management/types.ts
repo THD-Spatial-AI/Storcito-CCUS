@@ -13,7 +13,7 @@ export interface User {
 	group_id?: string;
 	model_limit?: number;
 	created_at?: number;
-	/** True when the user holds at least one active API token. */
+	/** Active API-token indicator. */
 	has_api_access?: boolean;
 }
 
@@ -28,14 +28,6 @@ export interface UserFormData {
 	password?: string;
 	password_confirmation?: string;
 	model_limit?: number | string;
-}
-
-export interface ApiResponse<T> {
-	success: boolean;
-	message: string;
-	data?: T;
-	users?: T;
-	errors?: Record<string, string>;
 }
 
 export interface NotificationState {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BookOpen, Flame, GitCompareArrows, Globe2, GraduationCap, Info, LogOut, Settings, User } from "lucide-react";
+import { BookOpen, Cpu, Globe2, GraduationCap, Info, LayoutDashboard, LogOut, MapPinned, Settings, Truck, User } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 import { useAuth } from "@/providers/auth-provider";
@@ -101,7 +101,7 @@ export const useAppLayoutState = () => {
     () => [
       {
         path: "/app/model-dashboard",
-        icon: Flame,
+        icon: LayoutDashboard,
         title: t("common.sidebar.simulations"),
         color: "#8b5cf6",
         bgColor: "#ede9fe",
@@ -116,12 +116,28 @@ export const useAppLayoutState = () => {
         dataTour: "map",
       },
       {
-        path: "/app/comparison",
-        icon: GitCompareArrows,
-        title: t("common.sidebar.simulationReports"),
-        color: "#10b981",
-        bgColor: "#d1fae5",
-        dataTour: "reports",
+        path: "/app/locations",
+        icon: MapPinned,
+        title: t("common.sidebar.locations"),
+        color: "#f59e0b",
+        bgColor: "#fef3c7",
+        dataTour: "locations",
+      },
+      {
+        path: "/app/transport",
+        icon: Truck,
+        title: t("common.sidebar.transport"),
+        color: "#6366f1",
+        bgColor: "#e0e7ff",
+        dataTour: "transport",
+      },
+      {
+        path: "/app/technologies",
+        icon: Cpu,
+        title: t("common.sidebar.technologies"),
+        color: "#0ea5e9",
+        bgColor: "#e0f2fe",
+        dataTour: "technologies",
       },
     ],
     [t]

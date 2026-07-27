@@ -38,17 +38,18 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
                 navigateHome();
               }
             }}
-            className="cursor-pointer hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity"
           >
             <img
               src="/images/logo/app-logo.png"
-              alt="App"
+              alt="STORCITO"
               className="h-6 w-auto object-contain dark:invert"
             />
+            <span className="h-4 w-[1.5px] bg-amber-500/60 dark:bg-amber-400/60 rounded-full shrink-0 hidden sm:block" />
+            <h1 className="text-xs font-semibold uppercase tracking-[0.15em] text-amber-600 dark:text-amber-400 hidden sm:block">
+              CCUS Assessment
+            </h1>
           </a>
-          <h1 className="text-sm font-semibold text-foreground hidden sm:block">
-            {t("common.appName", "App")}
-          </h1>
         </div>
 
         <div className="flex-1" />

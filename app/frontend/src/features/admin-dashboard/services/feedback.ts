@@ -15,7 +15,7 @@ export interface UpdateFeedbackData {
   admin_response?: string;
 }
 
-export interface FeedbackListPage {
+interface FeedbackListPage {
   data: FeedbackItem[];
   total: number;
   page: number;
