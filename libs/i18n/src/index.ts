@@ -2,16 +2,6 @@ import i18n from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// Import all locales
-import en from "./locales/en.json";
-import de from "./locales/de.json";
-import es from "./locales/es.json";
-import fr from "./locales/fr.json";
-import it from "./locales/it.json";
-import nl from "./locales/nl.json";
-import pl from "./locales/pl.json";
-import cs from "./locales/cs.json";
-
 // Language configuration
 export const languages = [
   { code: "en", name: "English", nativeName: "English", flag: "🇬🇧" },
@@ -33,18 +23,6 @@ export interface Language {
   flag: string;
 }
 
-// All translation resources
-const resources = {
-  en: { translation: en },
-  de: { translation: de },
-  es: { translation: es },
-  fr: { translation: fr },
-  it: { translation: it },
-  nl: { translation: nl },
-  pl: { translation: pl },
-  cs: { translation: cs },
-};
-
 export interface I18nConfig {
   /** Storage key for persisting language selection */
   storageKey?: string;
@@ -52,7 +30,6 @@ export interface I18nConfig {
   fallbackLng?: LanguageCode;
   /** Enable debug mode */
   debug?: boolean;
-
   resourceOverrides?: Partial<Record<LanguageCode, Record<string, unknown>>>;
 }
 
@@ -88,20 +65,11 @@ export const initI18n = (config: I18nConfig = {}) => {
     resourceOverrides = {},
   } = config;
 
-  const mergedResources = Object.fromEntries(
-    languages.map(({ code }) => {
-      const base = (resources as Record<string, { translation: Record<string, unknown> }>)[code]
-        .translation;
-      const override = resourceOverrides[code];
-      return [code, { translation: override ? deepMerge(base, override) : base }];
-    })
-  );
-
   i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-      resources: mergedResources,
+      resources: resourceOverrides as Record<string, any>,
       fallbackLng,
       defaultNS: "translation",
 
@@ -158,5 +126,3 @@ export { useTranslation } from "react-i18next";
 export { Trans } from "react-i18next";
 export { i18n };
 
-// Export locale JSON files for apps that want to extend/override
-export { en, de, es, fr, it, nl, pl, cs };

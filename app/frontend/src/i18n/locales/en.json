@@ -1,8 +1,142 @@
 {
+  "parameters": {
+    "names": {
+      "cont_energy_cap_max": "Maximum installed energy capacity",
+      "cont_energy_cap_max_systemwide": "System-wide maximum installed energy capacity",
+      "cont_energy_cap_min": "Minimum installed energy capacity",
+      "cont_energy_cap_scale": "Energy capacity scale factor",
+      "cont_energy_eff": "Energy efficiency, conversion efficiency",
+      "cont_export_cap": "Maximum export capacity",
+      "cont_lifetime": "Technology lifetime",
+      "cont_parasitic_eff": "Plant parasitic efficiency",
+      "cont_resource_eff": "Resource Efficiency",
+      "cont_storage_cap_max": "Maximum storage capacity",
+      "cont_storage_cap_min": "Minimum storage capacity",
+      "cont_storage_discharge_depth": "Storage discharge depth",
+      "cont_storage_initial": "Initial storage level",
+      "cont_storage_loss": "Storage loss rate",
+      "cost_energy_cap": "Cost of energy capacity",
+      "cost_export": "Export cost",
+      "cost_interest_rate": "Interest rate",
+      "cost_om_annual": "Yearly O&M costs",
+      "cost_om_annual_investment_fraction": "Annual O&M as investment fraction",
+      "cost_om_con": "Carrier consumption cost",
+      "cost_om_prod": "Production cost",
+      "cost_purchase": "Purchase cost",
+      "cost_storage_cap": "Storage capacity cost",
+      "system_capacity": "PV Panel Peak Capacity",
+      "azimuth": "Azimuth angle",
+      "tilt": "Tilt angle",
+      "inv_eff": "Inverter efficiency",
+      "losses": "System losses",
+      "dc_ac_ratio": "DC/AC ratio",
+      "feedstock_per_year": "Total feedstock",
+      "boiler_efficiency": "Plant rated efficiency",
+      "total_hhv": "Total HHV (Higher Heating Value)",
+      "steam_grade_psig": "Steam grade (psig)",
+      "boiler_numbers": "Number of boilers",
+      "flue_gas_temperature": "Flue gas temperature",
+      "parasitic_load": "Parasitic load",
+      "combustor_type": "Combustor Type",
+      "well_depth": "Well depth",
+      "ground_temperature": "Ground temperature",
+      "thermal_conductivity": "Thermal conductivity",
+      "head": "Hydraulic head",
+      "flow_rate": "Flow rate",
+      "turbine_efficiency": "Turbine efficiency",
+      "turbine_id": "Wind turbine model",
+      "hub_height": "Hub height",
+      "rotor_diameter": "Rotor diameter",
+      "annual_demand": "Annual demand",
+      "peak_demand": "Peak demand"
+    },
+    "cont_energy_cap_max": "The maximum amount of energy capacity that can be installed for this technology.",
+    "cont_energy_cap_max_systemwide": "The maximum energy capacity allowed across the entire system for this technology type.",
+    "cont_energy_cap_min": "The minimum energy capacity required for this technology to operate.",
+    "cont_energy_cap_scale": "A scaling factor applied to the energy capacity calculations.",
+    "cont_energy_eff": "The efficiency of energy conversion, representing how much input energy is converted to useful output.",
+    "cont_export_cap": "The maximum capacity for exporting energy from this technology.",
+    "cont_lifetime": "The expected operational lifetime of the technology before replacement is needed.",
+    "cont_storage_cap_max": "The maximum energy storage capacity available.",
+    "cont_storage_cap_min": "The minimum energy storage capacity required.",
+    "cont_storage_discharge_depth": "The depth of discharge - how much of the battery can be used.",
+    "cont_storage_initial": "The initial charge level of the storage system.",
+    "cont_storage_loss": "The rate at which stored energy is lost over time.",
+    "cont_storage_loss_rate": "The rate at which stored energy is lost over time.",
+    "cont_om_annual": "Annual operation and maintenance costs.",
+    "cont_om_annual_fixed": "Fixed annual operation and maintenance costs regardless of usage.",
+    "cont_om_prod": "Operation and maintenance costs based on production output.",
+    "cost_energy_cap": "Cost per unit of energy capacity installed.",
+    "cost_export": "Cost associated with exporting energy.",
+    "cost_interest_rate": "The interest rate used for financing calculations.",
+    "cost_om_annual": "Annual operation and maintenance costs.",
+    "cost_om_annual_investment_fraction": "O&M costs as a fraction of investment.",
+    "cost_purchase": "Initial purchase cost of the technology.",
+    "cost_storage_cap": "Cost per unit of storage capacity.",
+    "system_capacity": "The peak capacity of the system.",
+    "azimuth": "Panel orientation angle (0=North, 90=East, 180=South, 270=West).",
+    "tilt": "Panel tilt angle from horizontal.",
+    "inv_eff": "Inverter efficiency - conversion from DC to AC.",
+    "losses": "System losses due to wiring, soiling, etc.",
+    "dc_ac_ratio": "Ratio of DC capacity to AC inverter capacity.",
+    "feedstock_per_year": "Total feedstock available per year for biomass conversion.",
+    "boiler_efficiency": "Plant rated efficiency - the efficiency of the boiler in converting fuel to heat.",
+    "total_hhv": "Total HHV (Higher Heating Value) - total heat energy obtained from biomass combustion, including condensation of water vapor.",
+    "steam_grade_psig": "Steam grade pressure in pounds per square inch gauge.",
+    "monetary_depreciation_rate": "The rate at which the technology's value decreases over time.",
+    "monetary_discount_rate": "The discount rate used for financial calculations.",
+    "monetary_interest_rate": "The interest rate applied to financing costs.",
+    "monetary_inv_cost_energy_cap": "Investment cost per unit of energy capacity.",
+    "monetary_inv_cost_storage_cap": "Investment cost per unit of storage capacity.",
+    "monetary_purchase_cost_sum": "Total purchase cost including all components.",
+    "monetary_sale_cost_sum": "Total revenue from selling energy or services.",
+    "defaultDescription": "{{alias}} - Configure this parameter based on your requirements."
+  },
+  "areaStats": {
+    "title": "Area Overview",
+    "area": "Area",
+    "perimeter": "Perimeter",
+    "solarPotential": "Solar Potential",
+    "estGeneration": "Est. Generation",
+    "co2Offset": "CO₂ Offset",
+    "regions": "Regions"
+  },
+  "gridStats": {
+    "title": "Grid Analysis",
+    "analyzing": "Analyzing grid...",
+    "clusters": "cluster",
+    "clusters_plural": "clusters",
+    "buildings": "Buildings",
+    "trafos": "Trafos",
+    "cables": "Cables",
+    "peakLoad": "Peak Load",
+    "capacity": "Capacity",
+    "utilization": "Utilization",
+    "estCost": "Est. Cost",
+    "cablesLabel": "Cables",
+    "trafosLabel": "Trafos",
+    "costDescription": "Infrastructure costs incl. cables & transformers"
+  },
   "drawing": {
     "clickToDraw": "Click to draw",
     "clickToClose": "Click to close",
     "start": "Start"
+  },
+  "gridNotifications": {
+    "gridGenerated": "Grid generated: {{count}} buildings found",
+    "gridCompleteNoBuildings": "Grid generation complete (no buildings found in this area)",
+    "gridGenerationFailed": "Failed to send grid generation request",
+    "gridUpdated": "Grid updated: {{count}} buildings",
+    "gridRegenerationFailed": "Failed to regenerate grid",
+    "buildingLimitExceeded": "Area contains {{count}} buildings, which exceeds your limit of {{limit}}. Please draw a smaller polygon or adjust your limit in Settings.",
+    "noBuildingsFound": "No buildings found in the polygon",
+    "dropOnBuilding": "Please drop the technology on a building",
+    "techAddedToAll": "{{tech}} added to {{count}} buildings",
+    "techAddedToBuilding": "{{tech}} added to building",
+    "techRemovedFromAll": "{{tech}} removed from {{count}} buildings",
+    "techRemovedFromBuilding": "{{tech}} removed from building",
+    "techNotFound": "Technology {{tech}} not found",
+    "techLoadFailed": "Failed to load technology for editing"
   },
   "common": {
     "save": "Save",
@@ -74,11 +208,12 @@
       "help": "Help"
     },
     "sidebar": {
-      "energySimulations": "Energy Simulations",
+      "energySimulations": "CCUS Simulations",
       "map": "Map",
       "locations": "Locations",
       "simulationReports": "Model Comparison",
       "technologies": "Technologies",
+      "transport": "Transport",
       "simulations": "Analysis Runs"
     },
     "menu": {
@@ -111,7 +246,7 @@
       "previousPage": "Previous page",
       "nextPage": "Next page"
     },
-    "appName": "CCUS Platform",
+    "appName": "CCUS Assessment",
     "saved": "Saved"
   },
   "forms": {
@@ -267,6 +402,47 @@
         "max": "Maximum 10 copies allowed",
         "integer": "Must be a whole number"
       }
+    },
+    "pylovo": {
+      "serviceInfo": {
+        "title": "Service Information",
+        "description": "Basic Compute Engine instance identification"
+      },
+      "connectionDetails": {
+        "title": "Connection Details",
+        "description": "Network connection and endpoint configuration"
+      },
+      "statusSettings": {
+        "title": "Status",
+        "description": "Initial status of the Compute Engine instance"
+      },
+      "fields": {
+        "serviceName": "Service Name",
+        "protocol": "Protocol",
+        "ipAddress": "IP Address / Hostname",
+        "port": "Port",
+        "endpoint": "Endpoint Path",
+        "initialStatus": "Initial Status"
+      },
+      "placeholders": {
+        "serviceName": "Enter service name",
+        "ipAddress": "e.g., compute-engine or 10.1.66.41"
+      },
+      "descriptions": {
+        "serviceName": "Human-readable name for the Compute Engine instance"
+      },
+      "statusOptions": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "maintenance": "Maintenance"
+      },
+      "validation": {
+        "ipInvalid": "Please enter a valid IP address or hostname",
+        "portRange": "Port must be between 1 and 65535",
+        "nameRequired": "Service name is required",
+        "ipRequired": "IP address or hostname is required",
+        "portRequired": "Port is required"
+      }
     }
   },
   "dashboard": {
@@ -332,8 +508,381 @@
     "cancelled": "Cancelled",
     "modified": "Modified"
   },
+  "results": {
+    "title": "Simulation Results",
+    "unableToLoad": "Unable to Load Results",
+    "modelNotFound": "Model not found",
+    "backToDashboard": "Back to Dashboard",
+    "selectModel": "Select Model",
+    "completedSimulations": "Completed Simulations",
+    "loadingModels": "Loading models...",
+    "noCompletedSimulations": "No completed simulations in this workspace",
+    "noCompletedModels": "No completed models",
+    "resolution": "resolution",
+    "loadingResults": "Loading simulation results...",
+    "noResultsYet": "No results available for this assessment yet.",
+    "noResultsYetDescription": "Results will appear here once the calculation is complete and processed.",
+    "initializingMap": "Initializing map...",
+    "loadingWorkspace": "Loading workspace...",
+    "assessmentDetails": "Assessment Details",
+    "modelInfo": "Model Info",
+    "location": "Location",
+    "period": "Period",
+    "configuration": "Configuration",
+    "layerStatus": "Layer Status",
+    "availableResults": "Available Results",
+    "mapControls": "Map Controls",
+    "mapControlsDescription": "Use the zoom controls (top right) to zoom in/out, center the map, and explore the CCUS assessment layer.",
+    "opacity": "Opacity",
+    "layerHidden": "Layer Hidden",
+    "showLayer": "Show Layer",
+    "hideLayer": "Hide Layer",
+    "noModelIdProvided": "No model ID provided",
+    "failedToLoadResults": "Failed to load assessment results",
+    "failedToLoadTiles": "Failed to load tiles from GeoServer",
+    "failedToGetLayerInfo": "Failed to get layer information from backend",
+    "layerConfigIncomplete": "Layer configuration incomplete",
+    "failedToLoadLayerConfig": "Failed to load layer configuration",
+    "transformer": "Transformer",
+    "building": "Building",
+    "connectedBuilding": "connected building",
+    "connectedBuildings": "connected buildings",
+    "clickForDetails": "Click for details",
+    "tabs": {
+      "overview": "Overview",
+      "energy": "Energy",
+      "grid": "Grid",
+      "system": "System",
+      "cost": "Cost"
+    },
+    "metrics": {
+      "totalDemand": "Total Demand",
+      "renewableGen": "Renewable Gen.",
+      "gridImport": "Grid Import",
+      "selfSufficiency": "Self-Sufficiency",
+      "selfSufficiencyDesc": "% of demand met by renewables",
+      "peakDemand": "Peak Demand",
+      "totalCost": "Total Cost",
+      "over": "over",
+      "from": "from",
+      "installed": "installed",
+      "equipmentAndRunning": "Equipment + Running Costs"
+    },
+    "powerFlow": {
+      "converged": "Converged",
+      "notConverged": "Not Converged",
+      "convergedTitle": "Power Flow Converged",
+      "notConvergedTitle": "Power Flow Did Not Converge",
+      "convergedDescription": "The electrical power flow calculation successfully found a stable solution. Voltage and power values across the network are physically valid.",
+      "notConvergedDescription": "The power flow calculation could not find a stable solution within the iteration limit. Results may be inaccurate or incomplete."
+    },
+    "techNames": {
+      "solarPv": "Solar PV",
+      "wind": "Wind",
+      "windOnshore": "Wind (Onshore)",
+      "windOffshore": "Wind (Offshore)",
+      "biomass": "Biomass",
+      "batteryStorage": "Battery Storage",
+      "geothermal": "Geothermal",
+      "hydroPower": "Hydro Power",
+      "gridImport": "Grid Import",
+      "powerTransmission": "Power Transmission",
+      "householdH1": "Household H1",
+      "householdH2": "Household H2",
+      "industryG0": "Industry G0",
+      "industryG1": "Industry G1",
+      "industryG2": "Industry G2",
+      "g3Demand": "G3 Demand",
+      "gridConnection": "Grid Connection",
+      "gridElectricity": "Grid Electricity Purchase",
+      "householdSupply": "Household Supply",
+      "nonHouseholdSupply": "Non-Household Supply",
+      "windTurbine": "Wind Turbine",
+      "powerLines": "Power Lines",
+      "sfhDemand": "Single Family House Demand",
+      "thDemand": "Townhouse Demand",
+      "mfhDemand": "Multi Family House Demand",
+      "abDemand": "Apartment Block Demand",
+      "commercialDemand": "Commercial Demand",
+      "publicDemand": "Public Building Demand",
+      "industrialDemand": "Industrial Demand",
+      "agriculturalDemand": "Agricultural Demand"
+    },
+    "charts": {
+      "systemPerformance": "System Performance",
+      "systemPerformanceDesc": "Key performance indicators showing how efficiently the energy system operates.",
+      "selfSufficiencyDesc": "% of demand met by local generation",
+      "gridDependency": "Grid Dependency",
+      "gridDependencyDesc": "% of demand imported from the grid",
+      "capacityUtilization": "Capacity Utilization",
+      "capacityUtilizationDesc": "Average capacity factor of installed assets",
+      "technologyCapacity": "Technology Capacity",
+      "technologyCapacityDesc": "Installed capacity of each technology in the optimized energy system, measured in kW or kWh for storage.",
+      "generation": "Generation",
+      "generationDesc": "Solar PV, wind turbines, and other generators",
+      "storage": "Storage",
+      "storageDesc": "Battery systems and other storage technologies",
+      "costDistribution": "Cost Distribution",
+      "costDistributionDesc": "Breakdown of total system costs across different technologies and cost categories.",
+      "capitalCosts": "Capital Costs",
+      "capitalCostsDesc": "Investment costs for equipment and installation",
+      "lcoe": "LCOE",
+      "lcoeDesc": "Levelized Cost of Energy in €/kWh",
+      "energyFlow": "Energy Flow",
+      "energyFlowAggregated": "Energy Flow (Aggregated)",
+      "energyFlowDesc": "Sankey diagram showing the total aggregated energy capacity flowing from generation sources through the energy system to demand nodes.",
+      "sources": "Sources (Left)",
+      "sourcesDesc": "Total installed capacity from Solar PV, Wind, Grid Import aggregated across all buildings",
+      "energySystem": "Energy System (Center)",
+      "energySystemDesc": "Central hub representing the combined energy system",
+      "demand": "Demand (Right)",
+      "demandDesc": "Energy distributed to households and industrial consumers",
+      "energyFlowNote": "Flow width represents relative energy capacity (kW). Values are aggregated totals across all locations in the model.",
+      "lcoeComparison": "Energy Cost per Technology",
+      "investmentVsOperating": "Equipment vs. Running Costs",
+      "systemCostSummary": "System Cost Summary"
+    },
+    "energy": {
+      "noData": "No energy data available",
+      "dailyEnergyBalance": "Daily Energy Balance",
+      "dailyEnergyBalanceDesc": "Shows the daily balance between energy production and consumption across all technologies in the system.",
+      "production": "Production",
+      "productionDesc": "Energy generated by solar, wind, and other sources",
+      "consumption": "Consumption",
+      "consumptionDesc": "Energy used by loads, storage charging, and grid export",
+      "renewableProduction": "Renewable Production",
+      "totalRenewable": "Total Renewable",
+      "gridImport": "Grid Import",
+      "fromGrid": "From Grid",
+      "totalDemand": "Total Demand",
+      "selfSufficiency": "Self-Sufficiency",
+      "netBalance": "Net Balance",
+      "energyKwh": "Energy (kWh)",
+      "netKwh": "Net (kWh)",
+      "noEnergyBalanceData": "No energy balance data available",
+      "dailyLoadProfile": "Daily Load Profile",
+      "dailyLoadProfileDesc": "Shows electricity consumption patterns over a 24-hour period with automatic detection of peak demand periods.",
+      "peakPeriods": "Peak Periods",
+      "peakPeriodsDesc": "Morning (07:00-10:00) and evening (17:00-21:00) high demand periods",
+      "offPeak": "Off-Peak",
+      "offPeakDesc": "Lower demand periods ideal for EV charging or battery storage",
+      "peakPeriod": "Peak Period",
+      "averageLine": "Average Line",
+      "averageLineDesc": "Dashed line showing daily average power consumption",
+      "hourlyGenerationProfile": "Hourly Generation Profile",
+      "hourlyGenerationProfileDesc": "Displays hourly energy generation patterns, showing how production varies throughout the day and across seasons.",
+      "peakHours": "Peak Hours",
+      "peakHoursDesc": "Maximum generation typically during midday for solar",
+      "loadDuration": "Load Duration",
+      "loadDurationDesc": "Sorted profile showing capacity utilization distribution",
+      "peak": "Peak",
+      "min": "Min",
+      "average": "Average",
+      "avg": "Avg",
+      "at": "at",
+      "all": "All",
+      "solarPv": "Solar PV",
+      "wind": "Wind",
+      "biomass": "Biomass",
+      "geothermal": "Geothermal",
+      "power": "Power",
+      "timeOfDay": "Time of Day",
+      "hour": "Hour",
+      "morningPeak": "Morning Peak",
+      "eveningPeak": "Evening Peak",
+      "noDataLoadProfile": "No data available for daily load profile",
+      "noDataLoadCurve": "No data available for load curve"
+    },
+    "grid": {
+      "noData": "No PyPSA grid data available",
+      "noNetworkData": "No network data available",
+      "networkTopology": "Network Topology",
+      "transformer": "Transformer",
+      "building": "Building",
+      "normal": "Normal",
+      "warning": "Warning",
+      "critical": "Critical",
+      "voltage": "Voltage",
+      "power": "Power",
+      "status": "Status",
+      "connected": "Connected",
+      "buildings": "buildings",
+      "voltageStatusInfo": "Voltage status information",
+      "voltageStatusIndicators": "Voltage Status Indicators",
+      "voltageStatusDesc": "Bus voltage status based on EN 50160 grid standards:",
+      "normalVoltageDesc": "Grid operating within optimal voltage range",
+      "warningVoltageDesc": "Approaching limits, monitoring recommended",
+      "criticalVoltageDesc": "Outside limits, grid reinforcement needed",
+      "example": "Example",
+      "belowThreshold": "below 0.95 threshold",
+      "busLoadingStatus": "Bus Loading Status",
+      "busLoadingDesc": "Shows the loading percentage of each transformer/bus based on voltage deviation from nominal (1.0 p.u.).",
+      "normalOperation": "Normal operation, sufficient capacity",
+      "highUtilization": "High utilization, plan for upgrades",
+      "nearCapacity": "Near capacity, reinforcement needed",
+      "busDetails": "Bus Details",
+      "busDetailsDesc": "Electrical characteristics of the selected bus/transformer in the power grid.",
+      "totalBuses": "Total Buses",
+      "totalBusesDesc": "Number of nodes in the grid",
+      "selected": "Selected",
+      "avgVoltage": "Avg Voltage",
+      "avgVoltageDesc": "Mean voltage in per-unit (p.u.)",
+      "avgPower": "Avg Power",
+      "avgPowerDesc": "Mean power flow in kW",
+      "voltageProfile": "Voltage Profile",
+      "voltageProfileDesc": "Shows voltage magnitude over time at the selected bus in per-unit (p.u.) values. Nominal voltage is 1.0 p.u.",
+      "perUnit": "Per-Unit (p.u.)",
+      "perUnitDesc": "Normalized voltage where 1.0 = nominal voltage level",
+      "normalRange": "Normal Range",
+      "normalRangeDesc": "0.95 - 1.05 p.u. per EN 50160 standard",
+      "powerFlow": "Power Flow",
+      "powerFlowDesc": "Shows active and reactive power over time at the selected bus. Positive values indicate power consumption, negative values indicate generation.",
+      "activePower": "Active Power (P)",
+      "activePowerDesc": "Real power in kW that performs actual work",
+      "reactivePower": "Reactive Power (Q)",
+      "reactivePowerDesc": "Power in kVAR for magnetic fields in motors/transformers",
+      "noVoltageData": "No voltage data",
+      "noPowerData": "No power data",
+      "min": "Min",
+      "max": "Max",
+      "avg": "Avg",
+      "loading": "Loading",
+      "noLoadingData": "No loading data available"
+    },
+    "system": {
+      "noData": "No system data available",
+      "noAnalysisData": "No system analysis data available for this model",
+      "noAnalysisDataDesc": "System balance, unmet demand, and power flow data will appear here when available.",
+      "dailySystemBalance": "Daily System Balance",
+      "systemBalance": "System Balance",
+      "systemBalanceDesc": "Shows the balance between energy supply and demand. Positive values (blue) indicate surplus energy, negative values (red) indicate deficit.",
+      "surplus": "Surplus",
+      "surplusDesc": "Generation exceeds demand",
+      "deficit": "Deficit",
+      "deficitDesc": "Demand exceeds generation",
+      "balance": "Balance",
+      "balanceKw": "Balance (kW)",
+      "dailyUnmetDemand": "Daily Unmet Demand",
+      "unmetDemand": "Unmet Demand",
+      "unmetDemandDesc": "Energy demand that could not be satisfied by the available supply. Lower values indicate better system reliability.",
+      "unmetEnergy": "Unmet Energy",
+      "unmetEnergyDesc": "Demand exceeding available supply",
+      "unmetKwh": "Unmet (kWh)",
+      "powerFlowAnalysis": "Power Flow Analysis",
+      "powerFlow": "Power Flow",
+      "powerFlowDesc": "Power flowing through transmission lines and transformers. Compare sending and receiving power to identify transmission losses.",
+      "p0Sending": "P0 (Sending)",
+      "p0SendingDesc": "Power at source end of line",
+      "p1Receiving": "P1 (Receiving)",
+      "p1ReceivingDesc": "Power at destination end",
+      "loss": "Loss",
+      "lossDesc": "Transmission losses (P0 - P1)",
+      "select": "Select",
+      "selectLineOrTransformer": "Select Line or Transformer",
+      "transmissionLines": "Transmission Lines",
+      "transformers": "Transformers",
+      "lines": "Lines",
+      "powerW": "Power (W)",
+      "selectLinePrompt": "Select a line or transformer",
+      "selectLinePromptDesc": "to view power flow data",
+      "resourceConsumption": "Resource Consumption by Technology",
+      "resourceConsumptionDesc": "Total energy consumed by each technology type over the simulation period.",
+      "primary": "Primary",
+      "primaryDesc": "Highest consumption technologies",
+      "secondary": "Secondary",
+      "secondaryDesc": "Supporting technologies",
+      "totalConsumption": "Total Consumption",
+      "investmentCosts": "Investment Costs by Technology",
+      "investmentCostsDesc": "Capital expenditure required for each technology deployment.",
+      "capex": "CAPEX",
+      "capexDesc": "Initial capital investment",
+      "totalInvestment": "Total Investment"
+    },
+    "chartLabels": {
+      "amount": "Amount",
+      "share": "Share of Total Cost",
+      "totalCost": "Total Cost",
+      "noCostData": "No cost data available",
+      "installed": "Installed",
+      "avgUtilized": "Avg. Utilized",
+      "capacityFactor": "Capacity Factor",
+      "capacityKw": "Capacity (kW)",
+      "installedCapacity": "Installed Capacity",
+      "utilizedCapacity": "Utilized Capacity",
+      "noCapacityData": "No capacity data available",
+      "value": "Value",
+      "noEnergyFlowData": "No energy flow data available",
+      "gridImport": "Grid Import",
+      "gridExport": "Grid Export",
+      "energySystem": "Energy System",
+      "household": "Household",
+      "industry": "Industry",
+      "transmission": "Transmission",
+      "investmentCost": "Equipment & Installation",
+      "operatingCost": "Running Costs",
+      "systemLCOE": "Avg. Energy Cost",
+      "simulationPeriod": "Simulation Period",
+      "simulationPeriodCost": "Cost for Simulation Period",
+      "annualizedCost": "Annualized Cost (projected)",
+      "perLocation": "per location",
+      "locations": "Locations",
+      "capex": "Equipment & Installation",
+      "opex": "Running Costs",
+      "costPerKw": "Cost per kW/yr",
+      "costPerKwh": "Cost per kWh",
+      "costSplit": "Equipment / Running",
+      "energyProduced": "Energy Produced",
+      "cheaperThanAvg": "cheaper than system average",
+      "moreExpensiveThanAvg": "more expensive than average",
+      "days": "days",
+      "hours": "hours"
+    },
+    "costInfo": {
+      "simulationPeriodNote": "Costs shown are for the simulated period of {{days}} days ({{hours}} hours). To see full annual costs, run a 1-year simulation (8,760 hours).",
+      "simulationPeriodShort": "{{days}}-day simulation period",
+      "costBreakdownTooltip": "Costs shown cover only the simulated time window, not a full year. Equipment costs are spread over the equipment lifetime, while running costs (e.g., grid electricity purchases) reflect actual usage during the period. In short simulations, technologies with high running costs appear proportionally larger.",
+      "annualProjection": "Estimated annual: {{value}}",
+      "equipmentCostNote": "Equipment cost is spread over its lifetime, showing only the share for this simulation period.",
+      "equipmentCostDesc": "Solar panels, batteries, and other hardware. The purchase cost is spread over the equipment's lifetime (e.g. 25 years for solar).",
+      "runningCostDesc": "Electricity purchased from the grid, maintenance, and other ongoing expenses that depend on usage.",
+      "systemCostSummaryDesc": "Shows the average cost of energy (ct/kWh) and how total costs split between equipment and running costs. Lower ct/kWh means cheaper energy overall.",
+      "lcoeComparisonDesc": "Compares the cost of energy from each source in ct/kWh. Solar and wind have low costs because sunlight and wind are free — you only pay for the equipment. The dashed line shows the system-wide average.",
+      "investmentBreakdownDesc": "Shows how much each technology costs, split into equipment (one-time purchase, spread over lifetime) and running costs (grid electricity, maintenance). Renewables typically only have equipment costs."
+    },
+    "buildingDetail": {
+      "building": "Building",
+      "production": "Production",
+      "demand": "Demand",
+      "balance": "Balance",
+      "energyProfile": "Energy Profile",
+      "costs": "Costs",
+      "noEnergyData": "No hourly energy data available",
+      "noSimulationLinked": "No simulation data linked",
+      "household": "Household",
+      "householdLow": "Household (Low)",
+      "householdHigh": "Household (High)",
+      "commercial": "Commercial",
+      "commercialWeekday": "Commercial (Weekday)",
+      "commercialEvening": "Commercial (Evening)",
+      "commercial247": "Commercial (24/7)",
+      "warehouse": "Warehouse",
+      "industrial": "Industrial",
+      "retail": "Retail",
+      "office": "Office",
+      "residential": "Residential",
+      "h1Demand": "H1 Demand",
+      "powerTransmission": "Power Transmission",
+      "sources": "Sources"
+    },
+    "gauges": {
+      "selfConsumption": "Self-Consumption",
+      "gridIndependence": "Grid Independence",
+      "capacityFactor": "Capacity Factor",
+      "co2Reduction": "CO₂ Reduction"
+    }
+  },
   "auth": {
-    "signIn": "Sign in",
+    "signIn": "Sign In",
     "signUp": "Sign Up",
     "signOut": "Sign Out",
     "signingIn": "Signing in...",
@@ -357,7 +906,7 @@
     "resendVerificationEmail": "Resend verification email",
     "protectedByEncryption": "Protected by industry-standard encryption",
     "createAccount": "Create Account",
-    "joinUsAccess": "Join us to access the energy simulation platform",
+    "joinUsAccess": "Join us to access the CCUS simulation platform",
     "personalInformation": "Personal Information",
     "fullName": "Full Name",
     "enterFullName": "Enter your full name",
@@ -461,14 +1010,14 @@
     "export": "Export",
     "compare": "Compare",
     "dashboard": "Model Dashboard",
-    "manageConfigurations": "Manage your Analysis assessment configurations",
+    "manageConfigurations": "Manage your CCUS assessment configurations",
     "searchModels": "Search models...",
     "allModels": "All Models",
     "modelGroups": "Model Groups",
     "loadingWorkspace": "Loading workspace...",
     "loadingModels": "Loading models...",
     "loadingWorkspaceDescription": "Please wait while we initialize your workspace preferences.",
-    "loadingModelsDescription": "Please wait while we fetch your Energy assessment models.",
+    "loadingModelsDescription": "Please wait while we fetch your CCUS assessment models.",
     "selectWorkspace": "Select or create a workspace to organize your models",
     "refreshModels": "Refresh models list",
     "share": "Share",
@@ -484,7 +1033,7 @@
     "moveToWorkspace": "Move to workspace",
     "noModelsFound": "No models found",
     "noModelsMatch": "No models match \"{{search}}\". Try adjusting your search.",
-    "noModelsYet": "You haven't created any Energy assessment models yet. Get started by creating your first model!",
+    "noModelsYet": "You haven't created any CCUS assessment models yet. Get started by creating your first model!",
     "createFirstModel": "Create Your First Model",
     "selected": "selected",
     "deleteSelected": "Delete selected",
@@ -543,6 +1092,28 @@
     "removeVertexHint": "click on vertex",
     "escToClear": "to clear polygon"
   },
+  "workflow": {
+    "title": "Workflow",
+    "gridGeneration": "Grid Generation",
+    "gridGenerationHint": "Analyzing buildings & creating grid",
+    "addTransformer": "Add Transformer",
+    "addTransformerHint": "Place transformers on the map",
+    "addTransformerInstruction": "Enable toggle in toolbar, then click map",
+    "assignBuildings": "Assign Buildings",
+    "assignBuildingsHint": "Link buildings to transformers",
+    "assignBuildingsInstruction": "Select buildings → click target transformer",
+    "powerFlow": "Run Power Flow",
+    "powerFlowHint": "Analyze grid load & utilization",
+    "illustrationStep": "Step {{step}}",
+    "clickToSelect": "click to select",
+    "clickTransformer": "click transformer",
+    "then": "then",
+    "toCancel": "to cancel",
+    "addTransformerAction": "Add Transformer",
+    "assignBuildingsAction": "Assign Buildings",
+    "runPowerFlowAction": "Power Flow",
+    "rerunPowerFlowAction": "Re-run Flow"
+  },
   "time": {
     "justNow": "Just now",
     "minutesAgo": "{{count}} minute ago",
@@ -557,7 +1128,7 @@
   "adminDashboard": {
     "title": "Admin Dashboard",
     "welcomeBack": "Welcome back, {{name}}!",
-    "managePlatform": "Manage your Energy Simulation Platform",
+    "managePlatform": "Manage your CCUS Simulation Platform",
     "administrator": "Administrator",
     "loadingContent": "Loading content...",
     "profile": "Profile",
@@ -721,7 +1292,7 @@
       "groupNameRequired": "Group name is required",
       "groupCreated": "Group created successfully",
       "failedToCreateGroup": "Failed to create group",
-      "groupNamePlaceholder": "e.g., Team A, Team B",
+      "groupNamePlaceholder": "e.g., Fire Brigade, Emergency Response",
       "searchGroups": "Search groups...",
       "allGroups": "All Groups",
       "viewUsersFromAllGroups": "View users from all groups",
@@ -1024,9 +1595,83 @@
     }
   },
   "simulation": {
-    "simulationPeriod": "Assessment Period",
+    "title": "Simulation Configuration",
+    "modelName": "Model Name",
+    "modelNamePlaceholder": "Enter a name for your CCUS simulation",
+    "modelNameHint": "Give your simulation a descriptive name",
+    "simulationPeriod": "Simulation Period",
+    "duration": "Duration",
+    "days": "days",
+    "resolution": "Resolution (minutes)",
+    "resolutionPlaceholder": "Select resolution",
+    "resolutionHint": "Time interval for calculation resolution",
+    "minutes": "minutes",
+    "technologies": "Technologies",
+    "parameters": "Parameters",
+    "pypsaSimulation": "PyPSA Simulation",
+    "powerFlow": {
+      "run": "Run Power Flow Analysis",
+      "rerun": "Re-run Power Flow",
+      "running": "Analyzing...",
+      "calculating": "Calculating Power Flow Analysis...",
+      "success": "Power flow analysis completed. Line colors now show load utilization.",
+      "noData": "No grid data available for power flow analysis.",
+      "error": "Power flow analysis failed. Check console for details."
+    },
+    "transformer": {
+      "add": "Add Transformer",
+      "addButton": "Add Transformer",
+      "clickToPlace": "Click inside the polygon to place a transformer",
+      "clickToAdd": "Click to add transformer to the map",
+      "clickToCancel": "Click to cancel adding transformer",
+      "clickToMove": "Click to move",
+      "movingSuccess": "Transformer moved successfully",
+      "movingFailed": "Failed to move transformer"
+    },
+    "building": {
+      "assignSuccess": "Building assigned to transformer",
+      "assignFailed": "Failed to assign building",
+      "assignToTransformer": "Assign Buildings",
+      "assignDescription": "Select buildings and assign them to a transformer",
+      "selectBuildings": "Click on buildings to select them",
+      "selectTransformer": "Now click on a transformer to assign",
+      "selectedCount": "{{count}} building(s) selected",
+      "assigningBuildings": "Assigning buildings...",
+      "assignAllSuccess": "All buildings assigned to transformer",
+      "assignPartialSuccess": "{{success}} of {{total}} buildings assigned",
+      "cancelAssign": "Cancel",
+      "nextStep": "Next",
+      "finish": "Finish"
+    },
+    "summary": {
+      "title": "Simulation Summary",
+      "region": "Region",
+      "areaDefined": "Area Defined",
+      "drawn": "Drawn",
+      "notDrawn": "Not drawn",
+      "customLocations": "Custom Locations",
+      "found": "found",
+      "from": "From",
+      "to": "To",
+      "resolution": "Resolution"
+    },
+    "actions": {
+      "saveAndExit": "Save & Exit",
+      "create": "Create CCUS Simulation",
+      "update": "Update CCUS Simulation",
+      "creating": "Creating Simulation...",
+      "updating": "Updating Simulation...",
+      "cancel": "Cancel"
+    },
+    "tip": "Tip: Click on the map to draw your area of interest. The system will run CCUS simulation for the selected region during the specified time period.",
     "mapHeader": {
-      "clearAll": "Clear All"
+      "public": "Public",
+      "myBuildings": "My Buildings",
+      "multiplePolygons": "Multiple Polygons",
+      "clearAll": "Clear All",
+      "togglePublicBuildings": "Toggle public buildings",
+      "toggleMyBuildings": "Toggle my buildings",
+      "toggleMultiplePolygons": "Toggle multiple polygons"
     },
     "bufferDistance": {
       "label": "Buffer Distance (meters)",
@@ -1052,24 +1697,24 @@
       "cartoVoyager": "Detailed raster base map by CartoDB",
       "openTopoMap": "Topographic style map",
       "maplibreDark": "Dark vector basemap",
-      "maplibreVoyager": "Detailed vector basemap"
+      "maplibreVoyager": "Detailed vector basemap (Voyager)"
     },
     "dataLayers": {
       "title": "Data Layers",
-      "energySimulation": "Final Energy Simulation layer"
+      "energySimulation": "Final CCUS Simulation layer"
     },
     "tooltip": "Base Maps"
   },
   "tour": {
     "product": {
       "welcome": {
-        "title": "Welcome to CCUS Platform!",
-        "description": "Let's take a quick tour to help you get started with the CCUS Platform.",
+        "title": "Welcome to CCUS Simulation Platform!",
+        "description": "Let's take a quick tour to help you get started with your CCUS Simulation Platform.",
         "tip": "This tour will only show once. You can skip it anytime or restart it from the sidebar."
       },
       "newAssessment": {
-        "title": "Create New Simulation",
-        "description": "Ready to get started? Click this button to create your first analysis run. This will open the area selection wizard.",
+        "title": "Create New Assessment",
+        "description": "Ready to get started? Click this button to create your first CCUS assessment. This will open the area selection wizard.",
         "tip": "When you click this, you'll enter a dedicated tour for the area selection process!"
       },
       "profile": {
@@ -1081,25 +1726,25 @@
         "description": "Access your main dashboard to view your projects, recent assessments, and overall statistics. This is your home base."
       },
       "simulations": {
-        "title": "Analysis Runs",
-        "description": "Create and manage your analysis models. Start new simulations, configure parameters, and review existing runs."
+        "title": "CCUS Simulations",
+        "description": "Create and manage your CCUS simulation models. Start new assessments, configure parameters, and review existing calculations."
       },
       "map": {
         "title": "Interactive Map",
-        "description": "Your main workspace for geographical analysis. View map layers, select areas for simulation, and visualize analysis result data."
+        "description": "Your main workspace for geographical analysis. View map layers, select areas for assessment, and visualize energy risk data."
       },
       "locations": {
         "title": "Saved Locations",
         "description": "Manage your saved locations and areas of interest. Quick access to frequently analyzed regions."
       },
       "reports": {
-        "title": "Model Comparison",
-        "description": "Compare your simulation models side by side and analyze differences and risk trends over time."
+        "title": "Simulation Reports",
+        "description": "View detailed simulation reports, export data, and analyze historical trends and patterns."
       },
       "technologies": {
-        "title": "Simulation Parameters",
-        "description": "Configure analysis run parameters such as input models, weather, and input sources.",
-        "tip": "Parameters can be customized per scenario for accurate analysis runs."
+        "title": "Technologies",
+        "description": "Manage energy technologies like solar panels, batteries, and heat pumps. Configure parameters and assign them to buildings.",
+        "tip": "Technologies can be customized per building for accurate CCUS simulations."
       },
       "layers": {
         "title": "Map Layers",
@@ -1116,37 +1761,28 @@
       },
       "complete": {
         "title": "You're All Set!",
-        "description": "You've completed the tour! You're now ready to start creating analysis runs.",
+        "description": "You've completed the tour! You're now ready to start creating CCUS assessments.",
         "nextSteps": "Next Steps",
-        "nextStepsDescription": "Try creating your first analysis run or explore the interactive map.",
+        "nextStepsDescription": "Try creating your first CCUS assessment or explore the interactive map.",
         "restartTour": "Restart Tour",
         "restartTourDescription": "You can restart this tour anytime from the sidebar."
       }
     },
     "areaSelect": {
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
-      "customData": {
-        "title": "Custom data",
-        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
-      },
       "welcome": {
-        "title": "Analysis Guide",
-        "description": "Welcome! This tour will guide you through creating a analysis run for your chosen region.",
+        "title": "CCUS Simulation Guide",
+        "description": "Welcome! This tour will guide you through creating a CCUS simulation for your chosen region.",
         "tip": "You'll learn how to configure your model, draw areas, and create your simulation."
       },
       "modelName": {
         "title": "Model Name",
-        "description": "Give your analysis model a descriptive name. This helps you identify it later in your dashboard.",
-        "tip": "Good names: \"Region 2024\" or \"Coastal Scenario\""
+        "description": "Give your CCUS simulation model a descriptive name. This helps you identify it later in your dashboard.",
+        "tip": "Good names: \"Hamburg District 2024\" or \"Industrial Zone Energy Analysis\""
       },
       "dateRange": {
         "title": "Simulation Period",
-        "description": "Choose the time period for your analysis.",
-        "tip": "Longer periods provide more comprehensive analysis"
+        "description": "Choose the time period for your energy analysis. Select dates between 2019 and 2022 for your simulation.",
+        "tip": "Longer periods provide more comprehensive energy analysis"
       },
       "resolution": {
         "title": "Time Resolution",
@@ -1154,13 +1790,13 @@
         "tip": "60 minutes is recommended for most simulations"
       },
       "technologies": {
-        "title": "Parameters",
-        "description": "Configure analysis run parameters such as input models, weather, and input sources, and fine-tune advanced settings.",
+        "title": "Technologies & Parameters",
+        "description": "Configure energy technologies (solar, batteries, heat pumps) and fine-tune advanced simulation parameters.",
         "tip": "Click to view and customize settings for your simulation"
       },
       "mapContainer": {
         "title": "Interactive Map",
-        "description": "This is your main workspace. Draw polygons on the map to select areas for your analysis run.",
+        "description": "This is your main workspace. Draw polygons on the map to select areas for your CCUS simulation.",
         "tip": "You can zoom and pan the map to explore different regions"
       },
       "search": {
@@ -1170,8 +1806,17 @@
       },
       "save": {
         "title": "Create Simulation",
-        "description": "Once you've configured everything, click here to create your analysis model and start the analysis.",
+        "description": "Once you've configured everything, click here to create your CCUS simulation model and start the analysis.",
         "tip": "All fields must be completed before you can save"
+      },
+      "precomputed": {
+        "title": "Precomputed regional map",
+        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
+        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
+      },
+      "customData": {
+        "title": "Custom data",
+        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
       },
       "calculationStatus": {
         "title": "Calculation status",
@@ -1273,6 +1918,377 @@
     "words": "words",
     "chars": "chars",
     "previewEmpty": "Nothing to preview"
+  },
+  "tooltips": {
+    "multiplePolygons": {
+      "title": "Multiple Polygons",
+      "description": "Enable this option to draw multiple separate areas on the map for your CCUS assessment. When disabled, drawing a new polygon will replace the previous one. When enabled, you can define multiple distinct areas that will all be included in the analysis.",
+      "example": "Use this to analyze CCUS simulation across multiple non-contiguous areas simultaneously."
+    },
+    "publicBuildings": {
+      "title": "Public Custom Buildings",
+      "description": "Include buildings shared by other users in the grid calculation. These are custom buildings that other users have made publicly available.",
+      "example": "You can also exclude individual buildings by clicking on them on the map."
+    },
+    "privateBuildings": {
+      "title": "My Custom Buildings",
+      "description": "Include your private custom buildings in the grid calculation. These are buildings you have created and saved to your account.",
+      "example": "You can also exclude individual buildings by clicking on them on the map."
+    },
+    "simulateEV": {
+      "title": "Simulate EV Hosting Capacity",
+      "description": "Calculate the Electric Vehicle hosting capacity for each transformer in the selected area. This determines how many EV chargers (11 kW Level 2) can be connected before reaching grid constraints.",
+      "example": "A 'Grid Constrained' status means the transformer is already at capacity and cannot host additional EV chargers without upgrades."
+    },
+    "gridConstrained": {
+      "title": "Grid Constrained",
+      "description": "This status indicates that the transformer has reached its hosting capacity limit and cannot support additional EV chargers.",
+      "example": "Upgrade the local transformer or distribute EV charging across multiple connection points to resolve grid constraints."
+    },
+    "scenario": {
+      "title": "Scenario Year",
+      "description": "The target year for the energy system optimization. This determines the cost assumptions and demand projections used in the model.",
+      "example": "2030 represents a medium-term planning horizon."
+    },
+    "co2_limit": {
+      "title": "CO2 Limit",
+      "description": "The maximum allowed CO2 emissions for the optimized system in tonnes.",
+      "example": "Lower values force the model to use more renewable energy sources."
+    },
+    "max_hours": {
+      "title": "Max Battery Hours",
+      "description": "The maximum duration that battery storage can discharge at full power.",
+      "example": "72 hours allows for multi-day storage capability."
+    },
+    "solver": {
+      "title": "Optimization Solver",
+      "description": "The mathematical solver used to find the optimal energy system configuration.",
+      "example": "GLPK is a free solver, while Gurobi is a commercial high-performance solver."
+    },
+    "autarky": {
+      "title": "Autarky Level",
+      "description": "The degree of self-sufficiency required for the region, from 0 (no requirement) to 1 (100% self-sufficient).",
+      "example": "0.8 means 80% of energy must be produced locally."
+    },
+    "solarPotential": {
+      "title": "Solar Potential Estimation",
+      "description": "Estimated maximum PV capacity (kWp) based on total selected area.",
+      "example": "A 1000m² area results in approx 30 kWp of potential capacity."
+    },
+    "area": {
+      "title": "Total Selected Area",
+      "description": "The combined surface area of all selected polygons on the map.",
+      "example": "1 hectare (ha) = 10,000 m²."
+    },
+    "perimeter": {
+      "title": "Total Perimeter",
+      "description": "The total length of the boundary lines of all selected polygons.",
+      "example": "Useful for estimating fencing or cable routing requirements around the site."
+    },
+    "estGeneration": {
+      "title": "Estimated Annual Generation",
+      "description": "Predicted annual energy production based on the solar potential.",
+      "example": "A 30 kWp system produces approx 33 MWh/year in this region."
+    },
+    "co2Offset": {
+      "title": "Estimated CO₂ Offset",
+      "description": "Potential carbon dioxide emissions avoided by using this solar energy instead of grid electricity.",
+      "example": "Generating 100 MWh of clean energy saves approx 40 tonnes of CO₂."
+    },
+    "voltageStatus": {
+      "title": "Voltage Status Indicators",
+      "description": "Bus voltage status is determined based on the per-unit (p.u.) voltage magnitude according to EN 50160 grid standards.",
+      "example": "A voltage of 0.92 p.u. shows Warning status as it is below the optimal 0.95 threshold."
+    },
+    "pypsaSimulation": {
+      "title": "PyPSA Simulation",
+      "description": "Enable PyPSA (Python for Power System Analysis) to run advanced energy system optimization. When enabled, the model will optimize energy flows, storage dispatch, and technology sizing to minimize costs while meeting demand and grid constraints.",
+      "example": "Disable this for quick grid-only analysis. Enable for full energy system optimization with detailed results."
+    },
+    "assignBuildings": {
+      "title": "Assign Buildings to Transformer",
+      "description": "Reassign buildings to a different transformer. First select the buildings you want to move, then click on the destination transformer. This is useful for load balancing or fixing overloaded transformers.",
+      "example": "Select overloaded buildings (red cables) and assign them to a nearby transformer with spare capacity."
+    },
+    "buildingType": {
+      "title": "Building Type",
+      "description": "The building classification from OpenStreetMap (OSM). This determines the default energy profile and Standard Load Profile (SLP) class used for energy estimation.",
+      "example": "Common types: \"house\" (single-family), \"apartments\" (multi-family), \"commercial\", \"industrial\". The type affects whether residential (H0) or commercial (G0) load profiles are applied."
+    },
+    "constructionYear": {
+      "title": "Construction Year",
+      "description": "The year the building was constructed, sourced from OpenStreetMap. Used to apply age-dependent energy correction factors in AI estimation.",
+      "example": "Buildings before 1978 use factor 1.40× (higher demand), while modern buildings (2016+) use 0.55× due to improved insulation (GEG/EnEV)."
+    },
+    "floorArea": {
+      "title": "External Floor Area",
+      "description": "The footprint area of the building polygon calculated from map geometry. This is the primary input for AI energy estimation — energy demand scales proportionally with floor area.",
+      "example": "A 100 m² residential building typically consumes ~3,500 kWh/year. A 200 m² building would consume approximately double."
+    },
+    "buildingHeight": {
+      "title": "Building Height",
+      "description": "Maximum building height from OpenStreetMap geometry data. Height from ground level to the highest point of the building including roof.",
+      "example": "A typical 2-story residential building has a height of ~8–10 m. Data comes from available building metadata."
+    },
+    "peakLoad": {
+      "title": "Peak Electrical Load",
+      "description": "Maximum instantaneous electrical power demand. Calculated from yearly consumption divided by full load hours (FLH): Residential 1800h, Commercial 2000h, Industrial 2500h.",
+      "example": "A building consuming 3,500 kWh/year with 1800 FLH has a peak load of ~1.94 kW."
+    },
+    "energyDemandProfile": {
+      "title": "Energy Demand Profile",
+      "description": "Annual energy consumption for this building. You can manually adjust values. For multi-class buildings (mixed residential/commercial), each class is shown separately with its own editable demand.",
+      "example": "Values are in kWh/year. AI estimation provides initial values based on building type, area, and construction year."
+    },
+    "buildingUsageType": {
+      "title": "Building Usage Type",
+      "description": "Functional classification from OpenStreetMap tags. Determines the Standard Load Profile (SLP) class and energy intensity assumptions for demand estimation.",
+      "example": "Residential types (house, apartments) use SLP H0. Commercial (retail, office) use G0-G6. Industrial uses G3."
+    },
+    "windSpeed": {
+      "title": "Wind Speed",
+      "description": "Average wind speed over the selected area for the given time period.",
+      "example": "Higher wind speeds provide more energy to the process and can rapidly propagate effects, significantly increasing the rate of spread."
+    },
+    "windDirection": {
+      "title": "Wind Direction",
+      "description": "Average wind direction over the selected area, represented in degrees and compass points.",
+      "example": "N (North), E (East), S (South), W (West), and intermediate points like NNE (North-Northeast) or WSW (West-Southwest)."
+    },
+    "temperature": {
+      "title": "Temperature",
+      "description": "Average ambient temperature over the selected area for the given time period.",
+      "example": "High temperatures dry out vegetation inputs, making them more reactive and amplifying the effect."
+    },
+    "humidity": {
+      "title": "Relative Humidity",
+      "description": "Average relative humidity over the selected area for the given time period.",
+      "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
+    }
+  },
+  "technologies": {
+    "title": "Technologies",
+    "subtitle": "Energy technologies for your simulations",
+    "loading": "Loading technologies...",
+    "refresh": "Refresh technologies",
+    "reseed": "Reseed system technologies",
+    "documentation": "Documentation",
+    "importJson": "Import JSON",
+    "addTechnology": "Add Technology",
+    "addParameter": "Add Parameter",
+    "parameters": "Parameters",
+    "total": "total",
+    "mine": "Mine",
+    "user": "User",
+    "youCreatedThis": "You created this technology",
+    "userDefined": "User-defined technology",
+    "viewParameters": "View parameters",
+    "copyTechnology": "Copy technology",
+    "deleteTechnology": "Delete technology",
+    "editParameter": "Edit parameter",
+    "deleteParameter": "Delete parameter",
+    "systemTechnologies": "System Technologies",
+    "userDefinedTechnologies": "User-Defined Technologies",
+    "dragDropHint": "Drag and drop technologies between sections to change ownership",
+    "dropToMakeSystem": "Drop here to make system tech",
+    "dropToMakeUser": "Drop here to make user tech",
+    "movedTo": "Moved \"{{name}}\" to {{target}} Technologies",
+    "failedToMove": "Failed to move technology",
+    "stats": {
+      "totalTechnologies": "Total Technologies",
+      "systemTechnologies": "System",
+      "userTechnologies": "User Defined",
+      "totalParameters": "Total Parameters"
+    },
+    "dragInstruction": "Drag a technology onto a building on the map",
+    "noTechnologies": "No technologies available",
+    "categories": {
+      "supply": "Supply",
+      "storage": "Storage",
+      "other": "Other"
+    },
+    "form": {
+      "key": "Key",
+      "keyRequired": "Key is required",
+      "keyPlaceholder": "e.g., solar_supply",
+      "displayName": "Display Name",
+      "displayNameRequired": "Display name is required",
+      "displayNamePlaceholder": "e.g., Solar Energy Supply",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of the technology...",
+      "icon": "Icon",
+      "parametersOptional": "Parameters (Optional)",
+      "parameter": "Parameter",
+      "alias": "Alias",
+      "defaultValue": "Default Value",
+      "unit": "Unit",
+      "range": "Range",
+      "min": "Min",
+      "max": "Max",
+      "keyFieldPlaceholder": "Key",
+      "aliasFieldPlaceholder": "Alias",
+      "defaultValuePlaceholder": "Default Value",
+      "unitPlaceholder": "Unit (optional)",
+      "minPlaceholder": "Min (optional)",
+      "maxPlaceholder": "Max (optional)"
+    },
+    "addModal": {
+      "title": "Add New Technology",
+      "description": "Create a new technology with custom parameters"
+    },
+    "copyModal": {
+      "title": "Copy Technology",
+      "description": "Create a copy of {{name}} with a new name",
+      "uniqueIdentifier": "Unique identifier (lowercase, no spaces)",
+      "name": "Name",
+      "copyAllParameters": "This will copy all {{count}} parameters from \"{{name}}\""
+    },
+    "importModal": {
+      "title": "Import Technologies",
+      "description": "Choose how to import the {{count}} technologies",
+      "found": "{{count}} technologies found in file",
+      "existingSkipped": "Existing technologies with the same key will be skipped.",
+      "importAsSystem": "Import as System Technologies",
+      "systemDescription": "System technologies are visible to all users and cannot be edited by non-experts."
+    },
+    "paramModal": {
+      "title": "Add New Parameter",
+      "description": "Add a new parameter to {{name}}",
+      "keyPlaceholder": "e.g., cont_efficiency",
+      "aliasPlaceholder": "e.g., Efficiency Rate",
+      "descriptionPlaceholder": "Brief description of what this parameter controls...",
+      "unitPlaceholder": "kW, %, etc."
+    },
+    "detailsModal": {
+      "viewAndEdit": "View and edit technology parameters",
+      "selectFromOptions": "Select from {{count}} options",
+      "cancel": "Cancel",
+      "close": "Close",
+      "saveChanges": "Save Changes"
+    },
+    "confirm": {
+      "deleteTitle": "Delete Technology",
+      "deleteMessage": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
+      "deleteParamTitle": "Delete Parameter",
+      "deleteParamMessage": "Are you sure you want to delete the parameter \"{{name}}\"?"
+    },
+    "success": {
+      "added": "Technology \"{{name}}\" created successfully",
+      "copied": "Technology copied as \"{{name}}\"",
+      "deleted": "Technology \"{{name}}\" deleted",
+      "imported": "Successfully imported {{count}} technologies",
+      "paramAdded": "Parameter \"{{name}}\" added",
+      "paramDeleted": "Parameter \"{{name}}\" deleted",
+      "saved": "Changes saved successfully",
+      "reseeded": "System technologies reseeded successfully"
+    },
+    "error": {
+      "loadFailed": "Failed to load technologies",
+      "addFailed": "Failed to add technology",
+      "copyFailed": "Failed to copy technology",
+      "deleteFailed": "Failed to delete technology",
+      "importFailed": "Failed to import technologies",
+      "paramAddFailed": "Failed to add parameter",
+      "paramDeleteFailed": "Failed to delete parameter",
+      "saveFailed": "Failed to save changes",
+      "reseedFailed": "Failed to reseed technologies",
+      "invalidFile": "Invalid file format"
+    },
+    "items": {
+      "battery_storage": {
+        "name": "Battery Storage",
+        "description": "Energy storage system using batteries for load balancing and backup power"
+      },
+      "pv_supply": {
+        "name": "Photovoltaic Supply",
+        "description": "Solar photovoltaic energy generation system"
+      },
+      "wind_onshore": {
+        "name": "Wind Turbine Supply",
+        "description": "Onshore wind turbine energy generation system"
+      },
+      "biomass_supply": {
+        "name": "Biomass Supply",
+        "description": "Biomass power plant for renewable energy generation from organic materials"
+      },
+      "geothermal_supply": {
+        "name": "Geothermal Supply",
+        "description": "Geothermal power plant harnessing earth's heat for energy generation"
+      },
+      "water_supply": {
+        "name": "Hydropower Supply",
+        "description": "Hydropower plant for renewable energy generation from water flow"
+      },
+      "households_supply": {
+        "name": "Households consumers supply",
+        "description": "Residential household energy consumption profile"
+      },
+      "non_households_supply": {
+        "name": "Non-Households consumers supply",
+        "description": "Commercial and industrial energy consumption profile"
+      }
+    }
+  },
+  "locations": {
+    "title": "Custom Locations",
+    "subtitle": "Create and manage locations with building classifications",
+    "refresh": "Refresh locations",
+    "newLocation": "New Location",
+    "newLocationTooltip": "Create a new custom location",
+    "searchPlaceholder": "Search locations...",
+    "tabs": {
+      "my": "My Locations",
+      "public": "Public"
+    },
+    "stats": {
+      "total": "Total",
+      "totalArea": "Total Area",
+      "totalDemand": "Total Demand",
+      "public": "Public",
+      "private": "Private"
+    },
+    "empty": {
+      "title": "No locations found",
+      "description": "Create your first custom location to get started",
+      "publicTitle": "No public locations",
+      "publicDescription": "Public locations shared by other users will appear here. Toggle a location to public to share it."
+    },
+    "toggle": {
+      "makePublic": "Private - Click to make public",
+      "makePrivate": "Public - Click to make private",
+      "nowPublic": "Location is now public",
+      "nowPrivate": "Location is now private"
+    },
+    "share": {
+      "title": "Share Location",
+      "description": "Share \"{{name}}\" with users, workspaces, or groups",
+      "tabs": {
+        "users": "Users",
+        "workspaces": "Workspaces",
+        "groups": "Groups"
+      },
+      "userEmail": "User Email",
+      "selectWorkspace": "Select Workspace",
+      "selectGroup": "Select Group",
+      "addUser": "Share with User",
+      "addWorkspace": "Share with Workspace",
+      "addGroup": "Share with Group",
+      "sharedWithUsers": "Shared with Users",
+      "sharedWithWorkspaces": "Shared with Workspaces",
+      "sharedWithGroups": "Shared with Groups",
+      "noUsersYet": "Not shared with any users yet",
+      "noWorkspacesYet": "Not shared with any workspaces yet",
+      "noGroupsYet": "Not shared with any groups yet",
+      "removeAccess": "Remove access",
+      "totalShares": "{{count}} share(s) total",
+      "alreadySharedWithUser": "This location is already shared with this user",
+      "alreadySharedWithWorkspace": "This location is already shared with this workspace",
+      "alreadySharedWithGroup": "This location is already shared with this group",
+      "failedToShare": "Failed to share location. Please try again."
+    },
+    "Spain": "Spain",
+    "sampleRegion": "Sample Region",
+    "Vedra": "Vedra"
   },
   "weather": {
     "temperature": "Temp.",
@@ -1392,22 +2408,124 @@
       "sendNotification": "Send Notification",
       "sent": "Notification sent!",
       "failedToSend": "Failed to send"
+    },
+    "pylovo": {
+      "title": "Pylovo Pipeline",
+      "subtitle": "Data & grid generation",
+      "dataPipeline": "Data Pipeline",
+      "dataPipelineDesc": "Download and process OSM data",
+      "databaseConstructor": "Database Constructor",
+      "databaseConstructorDesc": "Build compute engine database tables",
+      "gridGeneration": "Grid Generation",
+      "gridGenerationDesc": "Generate synthetic electrical grid",
+      "fullPipeline": "Full Pipeline",
+      "fullPipelineDesc": "Run all steps sequentially",
+      "selectCountry": "Select country",
+      "selectState": "Select state",
+      "run": "Run",
+      "running": "Running",
+      "viewLogs": "View logs",
+      "hideLogs": "Hide logs",
+      "pending": "Pending",
+      "completed": "Completed",
+      "failed": "Failed",
+      "recentJobs": "Recent Jobs",
+      "noRecentJobs": "No recent jobs"
+    },
+    "polygonLimits": {
+      "title": "Polygon Limits",
+      "subtitle": "Building selection",
+      "yourLimit": "Your limit",
+      "unlimited": "Unlimited",
+      "byRole": "By Role",
+      "reset": "Reset",
+      "resetSuccess": "All limits reset to defaults",
+      "resetFailed": "Failed to reset limits",
+      "limitUpdated": "{{label}} limit updated to {{value}}",
+      "failedToUpdate": "Failed to update {{label}} limit",
+      "contactAdmin": "Contact admin for higher limits.",
+      "levels": {
+        "basic": "Basic",
+        "intermediate": "Intermediate",
+        "manager": "Manager",
+        "expert": "Expert"
+      }
     }
   },
   "simulationComparison": {
     "title": "Simulation Comparison",
     "subtitle": "Compare results across multiple simulation runs",
+    "pdfTitle": "Simulation Comparison Report",
     "baseline": "Baseline",
     "comparison": "Comparison",
+    "workspace": "Workspace",
+    "model": "Model",
     "selectBaselineModel": "Select baseline model",
     "selectComparisonModel": "Select comparison model",
     "noCompletedModels": "No completed models found",
     "noRegion": "No region",
+    "hideMaps": "Hide Maps",
+    "showMaps": "Show Maps",
+    "exportPdf": "Export PDF",
+    "locationMaps": "Location Maps",
+    "performanceComparison": "Performance Comparison",
     "loading": "Loading simulation data...",
     "selectModels": "Select Models to Compare",
     "selectModelsDescription": "Choose two completed simulation models above to analyze their differences in energy generation, costs, and key performance indicators.",
     "startBySelectingBaseline": "Start by selecting a baseline model",
     "nowSelectComparison": "Now select a comparison model",
+    "unableToLoadResults": "Unable to Load Results",
+    "errors": {
+      "baseline": "Baseline",
+      "comparison": "Comparison"
+    },
+    "metrics": {
+      "demandBaseline": "Demand (Baseline)",
+      "renewableGen": "Renewable Gen.",
+      "gridImport": "Grid Import",
+      "selfSufficiency": "Self-Sufficiency",
+      "peakDemand": "Peak Demand",
+      "totalCost": "Total Cost",
+      "totalDemand": "Total Demand",
+      "co2Savings": "CO₂ Savings"
+    },
+    "summary": {
+      "baseline": "Baseline"
+    },
+    "charts": {
+      "generationByTechnology": "Generation by Technology",
+      "sideBySideComparison": "Side-by-side comparison (kWh)",
+      "costDifferenceByCategory": "Cost Difference by Category",
+      "comparisonVsBaseline": "Comparison vs Baseline (EUR)",
+      "keyPerformanceIndicators": "Key Performance Indicators",
+      "selfSufficiencyBaseline": "Self-Sufficiency\n(Baseline)",
+      "selfSufficiencyComparison": "Self-Sufficiency\n(Comparison)",
+      "avgLcoe": "Avg. LCOE",
+      "installedCapacityComparison": "Installed Capacity Comparison",
+      "technologyCapacity": "Technology capacity (kW)",
+      "overallPerformance": "Overall Performance",
+      "multiDimensionalComparison": "Multi-dimensional comparison",
+      "totalCostBreakdown": "Total Cost Breakdown",
+      "stackedByTechnology": "Stacked by technology (EUR)",
+      "total": "Total",
+      "difference": "Difference",
+      "renewableProduction": "Renewable\nProduction",
+      "gridIndependence": "Grid\nIndependence",
+      "costEfficiency": "Cost\nEfficiency",
+      "demandCoverage": "Demand\nCoverage"
+    },
+    "technologies": {
+      "solar": "Solar",
+      "wind": "Wind",
+      "biomass": "Biomass",
+      "geothermal": "Geothermal",
+      "storageDischarge": "Storage Discharge",
+      "storage": "Storage",
+      "gridConnection": "Grid Connection",
+      "transformer": "Transformer",
+      "grid": "Grid",
+      "other": "Other"
+    },
     "summaryWorse": "Risk increased",
     "summaryBetter": "Risk reduced",
     "summaryStable": "Risk is broadly stable",
@@ -1484,15 +2602,16 @@
     "reviewPolicies": "For more information, please review the respective privacy policies:",
     "cartoPolicy": "Carto Privacy Policy",
     "osmfPolicy": "OSMF Privacy Policy",
-    "dataPolicy": "App Analysis Privacy Policy",
+    "firePolicy": "App Privacy Policy",
     "deny": "Deny",
-    "accept": "Accept"
+    "accept": "Accept",
+    "dataPolicy": "App Analysis Privacy Policy"
   },
   "onboarding": {
     "welcome": {
       "title": "Welcome!",
       "description": "Let's set up your preferences to get started",
-      "greeting": "Welcome to Energy Simulation Platform!",
+      "greeting": "Welcome to CCUS Simulation Platform!",
       "intro": "Let's take a moment to set up your preferences. This will help us personalize your experience and provide you with the most relevant information.",
       "step1": "Choose your preferred language",
       "step2": "Set your weather and map preferences",
@@ -1523,6 +2642,75 @@
       "skip": "Skip"
     }
   },
+  "pylovoManagement": {
+    "title": "Compute Engine Management",
+    "subtitle": "Manage Compute Engine instances",
+    "searchPlaceholder": "Search by name, IP...",
+    "refresh": "Refresh",
+    "registerNew": "Register New Instance",
+    "loadingInstances": "Loading instances...",
+    "noInstancesFound": "No compute engine instances found",
+    "noInstancesDescription": "Get started by registering your first Compute Engine instance.",
+    "noInstancesAvailable": "No compute engine instances are currently configured. Contact an administrator.",
+    "healthCheck": "Compute Engine",
+    "summary": {
+      "total": "Total",
+      "online": "Online",
+      "available": "Available",
+      "offline": "Offline"
+    },
+    "filters": {
+      "allStatus": "All Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "maintenance": "Maintenance",
+      "allAvailability": "All Availability",
+      "available": "Available",
+      "unavailable": "Unavailable"
+    },
+    "table": {
+      "service": "Service",
+      "endpoint": "Endpoint",
+      "status": "Status",
+      "availability": "Availability",
+      "primary": "Primary",
+      "lastCheck": "Last Check",
+      "actions": "Actions",
+      "never": "Never"
+    },
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "available": "Available",
+      "unavailable": "Unavailable"
+    },
+    "actions": {
+      "pingInstance": "Ping Instance",
+      "editInstance": "Edit Instance",
+      "deleteInstance": "Delete Instance",
+      "setPrimary": "Set as Primary",
+      "currentPrimary": "Current Primary Instance"
+    },
+    "dialog": {
+      "editTitle": "Edit Compute Engine Instance",
+      "createTitle": "Register New Compute Engine",
+      "editDescription": "Update compute engine configuration and settings",
+      "createDescription": "Configure a new Compute Engine instance",
+      "editButton": "Update Instance",
+      "createButton": "Register Instance"
+    },
+    "notifications": {
+      "created": "Grid engine instance registered successfully!",
+      "updated": "Grid engine instance updated successfully!",
+      "deleted": "Grid engine instance deleted successfully!",
+      "primarySet": "Primary instance updated successfully!",
+      "statusChanged": "Instance status changed to {{status}}",
+      "failedToCreate": "Failed to register instance",
+      "failedToUpdate": "Failed to update instance",
+      "failedToDelete": "Failed to delete instance",
+      "failedToPing": "Failed to ping instance"
+    }
+  },
   "regionSelector": {
     "goToRegion": "Go to region",
     "jumpToRegion": "Jump to a region with available grid data",
@@ -1538,6 +2726,162 @@
     "coverageMedium": "Medium data coverage",
     "coverageLow": "Low data coverage",
     "summaryFooter": "{{countries}} countries · {{regions}} regions · {{grids}} grids"
+  },
+  "landing": {
+    "nav": {
+      "challenge": "Challenge",
+      "platform": "Platform",
+      "infrastructure": "Infrastructure",
+      "howItWorks": "How it Works",
+      "personas": "Who It's For",
+      "contact": "Contact",
+      "signIn": "Sign in",
+      "tryItNow": "Try CCUS Platform"
+    },
+    "hero": {
+      "badge": "EU-Funded Horizon CCUS Research Project",
+      "title1": "Accelerate Carbon Capture Across Europe",
+      "titleHighlight": "CCUS Intelligence",
+      "subtitle": "Map industrial emissions, model optimal pipeline & shipping transport networks, evaluate geological storage reservoirs, and fast-track industrial decarbonization across Europe.",
+      "getStarted": "Launch CCUS Assessment",
+      "seeHow": "See How It Works",
+      "metricSites": "Capture Sites Mapped",
+      "metricStorage": "Storage Capacity",
+      "metricNetwork": "Route Network Modeled",
+      "metricCost": "Avoided-Cost Optimization"
+    },
+    "challenge": {
+      "eyebrow": "The Decarbonization Challenge",
+      "title": "Solving European Industrial Decarbonization",
+      "description": "Transitioning heavy industry to net-zero requires solving complex spatial, transport, and economic challenges across European borders.",
+      "card1Title": "Industrial Point Sources",
+      "card1Desc": "Heavy industry (cement, steel, chemicals) accounts for over 25% of European emissions, requiring rapid capture deployment.",
+      "card2Title": "Complex Transport Logistics",
+      "card2Desc": "Connecting inland industrial clusters to offshore storage requires combining high-pressure pipelines with LCO₂ shipping networks.",
+      "card3Title": "Geological Reservoir Matching",
+      "card3Desc": "Ensuring long-term containment integrity and matching annual capture volumes to offshore aquifer injection limits.",
+      "card4Title": "Economic Optimization",
+      "card4Desc": "Calculating levelized cost of CO₂ avoided (€/t CO₂) across CAPEX, compression power, shipping charters, and carbon taxes."
+    },
+    "features": {
+      "label": "Platform Capabilities",
+      "title": "Everything you need for CCUS planning & route optimization",
+      "description": "A comprehensive geospatial toolkit for modeling carbon capture, CO₂ transport logistics, and geological storage reservoirs.",
+      "f1Title": "Interactive Geospatial Map",
+      "f1Desc": "Visualize industrial emission sources, pipeline corridors, shipping routes and storage sites in one interactive map.",
+      "f2Title": "Source–Sink Matching",
+      "f2Desc": "Match industrial CO₂ emitters to suitable geological storage by capacity, distance and cost.",
+      "f3Title": "Route Optimization",
+      "f3Desc": "Model pipeline and shipping corridors and compute least-cost, carbon-optimal transport routing and sizing.",
+      "f4Title": "Storage Reservoir Analytics",
+      "f4Desc": "Evaluate deep saline aquifers and depleted oil & gas fields for capacity, pressure limits and injection rates.",
+      "f5Title": "Cost & CO₂ Reports",
+      "f5Desc": "Levelized cost of CO₂ avoided (€/t) with CAPEX, compression and shipping breakdowns and Sankey carbon flows.",
+      "f6Title": "Collaborative Workspaces",
+      "f6Desc": "Share models, compare scenarios and collaborate with regional consortiums on decarbonization plans."
+    },
+    "infrastructure": {
+      "eyebrow": "CCUS Value Chain",
+      "title": "Four stages, one integrated model",
+      "description": "Capture, transport, storage and utilization — modeled end to end so every project is planned as a complete value chain.",
+      "c1Subtitle": "Point-Source Capture",
+      "c1Title": "Carbon Capture",
+      "c1Desc": "Capture CO₂ at cement, steel, chemical and power plants using post-combustion and other proven technologies.",
+      "c1Spec1": "Post-combustion & oxy-fuel capture",
+      "c1Spec2": "Flue-gas volume & purity modeling",
+      "c1Spec3": "Capture rate vs. energy penalty",
+      "c1Spec4": "Retrofit feasibility scoring",
+      "c2Subtitle": "Pipeline & Shipping",
+      "c2Title": "CO₂ Transport",
+      "c2Desc": "Move captured CO₂ from inland clusters to storage via high-pressure pipelines and liquefied-CO₂ shipping.",
+      "c2Spec1": "Pipeline diameter & pressure sizing",
+      "c2Spec2": "Maritime LCO₂ shipping routes",
+      "c2Spec3": "Compression & liquefaction power",
+      "c2Spec4": "Least-cost corridor routing",
+      "c3Subtitle": "Geological Storage",
+      "c3Title": "CO₂ Storage",
+      "c3Desc": "Assess offshore and onshore reservoirs for safe, permanent geological containment of injected CO₂.",
+      "c3Spec1": "Saline aquifers & depleted fields",
+      "c3Spec2": "Injection-rate & pressure limits",
+      "c3Spec3": "Containment integrity checks",
+      "c3Spec4": "Annual capacity matching",
+      "c4Subtitle": "CO₂ Utilization",
+      "c4Title": "Carbon Utilization",
+      "c4Desc": "Convert captured CO₂ into e-fuels, chemicals, building materials and other valuable products.",
+      "c4Spec1": "E-fuels & synthetic chemicals",
+      "c4Spec2": "Mineralization & building materials",
+      "c4Spec3": "Enhanced recovery pathways",
+      "c4Spec4": "Utilization vs. storage trade-offs"
+    },
+    "howItWorks": {
+      "label": "4-Step Workflow",
+      "title": "From site data to operational CCUS network",
+      "description": "Design, optimize, and deploy carbon capture and storage infrastructure in four steps.",
+      "s1Title": "1. Select a Region",
+      "s1Desc": "Draw or pick an area on the map. Industrial emitters, storage sites and existing infrastructure load automatically.",
+      "s2Title": "2. Configure the Chain",
+      "s2Desc": "Attach capture to emitters, then choose pipeline corridors, shipping terminals and candidate storage reservoirs.",
+      "s3Title": "3. Optimize Routes",
+      "s3Desc": "Run the optimization engine to compute least-cost transport routing, network capacity and compression needs.",
+      "s4Title": "4. Analyze & Share",
+      "s4Desc": "Explore maps, CO₂ flow diagrams and levelized cost (€/t CO₂), then export reports and share scenarios."
+    },
+    "personas": {
+      "eyebrow": "Who it is for",
+      "title": "Designed for the entire CCUS ecosystem",
+      "p1Title": "Industrial Emitters",
+      "p1Desc": "Cement, steel, chemical, and power plants evaluating point-source capture feasibility and regional trunk connections.",
+      "p2Title": "Pipeline & Logistics Developers",
+      "p2Desc": "Route high-pressure CO₂ trunk lines, size compressor stations, and optimize ship chartering logistics.",
+      "p3Title": "Storage Reservoir Operators",
+      "p3Desc": "Analyze offshore North Sea, Baltic, and Mediterranean deep saline aquifers for injection rate limits.",
+      "p4Title": "Policy Makers & Consortiums",
+      "p4Desc": "Simulate regional net-zero roadmaps, cross-border CO₂ transport regulations, and EU Taxonomy compliance."
+    },
+    "trust": {
+      "euTitle": "Funded by the European Union",
+      "euDescription": "This CCUS assessment platform is developed as part of an EU-funded Horizon research project accelerating industrial decarbonization across Europe."
+    },
+    "contact": {
+      "label": "Get in Touch",
+      "title": "Contact the CCUS Project Team",
+      "description": "Questions, partnership ideas or feedback? Send us a message and we'll get back to you.",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "category": "Category",
+      "categories": {
+        "general": "General Inquiry",
+        "partnership": "Partnership",
+        "pilot": "Pilot / Demo Request",
+        "research": "Research Collaboration",
+        "media": "Media & Press"
+      },
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us more…",
+      "send": "Send Message",
+      "sending": "Sending…",
+      "successText": "Thanks! Your message has been sent.",
+      "genericError": "Something went wrong. Please try again.",
+      "submitFailed": "Failed to send your message. Please try again.",
+      "validationError": "Please fill in all required fields."
+    },
+    "footer": {
+      "brandDescription": "Advanced CCUS planning platform for a sustainable future. Funded by the European Union.",
+      "privacySettings": "Privacy Settings",
+      "privacyPolicy": "Privacy Policy",
+      "tagline": "Accelerating carbon capture, transport and storage across Europe.",
+      "cookies": "Cookies Policy",
+      "impressum": "Impressum",
+      "terms": "Terms & Conditions",
+      "euFundedAlt": "Funded by the European Union",
+      "euDisclaimer": "Funded by the European Union. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the European Union nor the granting authority can be held responsible for them.",
+      "copyright": "STORCITO CCUS · Technische Hochschule Deggendorf",
+      "builtOn": "Built on the STORCITO platform"
+    }
   },
   "modelResults": {
     "title": "Model Results",
@@ -1629,196 +2973,6 @@
       "loading": "Computing daily distributions… the first load can take a minute.",
       "empty": "No daily risk maps in this run."
     }
-  },
-  "landing": {
-    "nav": {
-      "challenge": "The challenge",
-      "platform": "Platform",
-      "personas": "Who it's for",
-      "contact": "Contact"
-    },
-    "openApp": "Open the App",
-    "languageLabel": "Language",
-    "hero": {
-      "badge": "Community-based analysis",
-      "title": "Analysis intelligence for rural communities",
-      "subtitle": "A geospatial platform for municipalities, civil protection and researchers to map, model and act on analysis — turning local knowledge and data into proactive protection before issues escalate.",
-      "explore": "Explore the platform",
-      "why": "Why it matters"
-    },
-    "challenge": {
-      "eyebrow": "The challenge we face",
-      "title": "Turn geospatial data into actionable insight",
-      "p1": "Across Southern Europe, rising temperatures, longer droughts and unpredictable weather are increasing landscape hazard. Rural depopulation means less land management and greater unmanaged build-up, making outbreaks more intense and harder to control.",
-      "p2": "Recent seasons in Portugal, Spain and Greece were among the worst on record — costing lives, destroying ecosystems and displacing communities, while threatening agriculture, forestry, tourism and basic safety. Local actors remain under-equipped and under-supported.",
-      "cards": {
-        "hotter": {
-          "title": "Hotter, drier seasons",
-          "text": "Climate shifts extend the active season year on year."
-        },
-        "vegetation": {
-          "title": "Vegetation build-up",
-          "text": "Depopulation leaves landscapes unmanaged and hazard-prone."
-        },
-        "cascading": {
-          "title": "Cascading impact",
-          "text": "Ecosystems, economies and rural life are all at risk."
-        },
-        "tooling": {
-          "title": "Limited tooling",
-          "text": "Communities lack shared, data-driven decision support."
-        }
-      },
-      "imgAlt1": "Aerial view of a rural landscape",
-      "imgAlt2": "Field team responding on site"
-    },
-    "platform": {
-      "eyebrow": "How it works",
-      "title": "From an area on the map to shared risk evidence",
-      "subtitle": "The platform combines 3D building and terrain data, geospatial analysis and a processing engine into one role-appropriate workflow.",
-      "step": "STEP",
-      "imgAlt": "Field team at work",
-      "steps": {
-        "define": {
-          "title": "Define an area",
-          "text": "Search a municipality and draw the area of interest directly on the interactive map."
-        },
-        "run": {
-          "title": "Run a risk model",
-          "text": "Queue a analysis calculation over your AOI with the configured engine."
-        },
-        "inspect": {
-          "title": "Inspect the results",
-          "text": "Explore the classified risk overlay with optional input-layer and vegetation layers."
-        },
-        "compare": {
-          "title": "Compare & share",
-          "text": "Compare scenarios side by side, export artefacts and share with stakeholders."
-        }
-      }
-    },
-    "capabilities": {
-      "eyebrow": "Capabilities",
-      "title": "Everything you need to assess and explain risk",
-      "items": {
-        "mapping": {
-          "title": "Interactive mapping",
-          "text": "2D maps with polygon drawing, place search and persistent operating areas."
-        },
-        "engine": {
-          "title": "Processing engine",
-          "text": "Classified risk rasters with calibrated severity and high-risk area estimates."
-        },
-        "metrics": {
-          "title": "Metrics & comparison",
-          "text": "Risk cards, distribution charts, deltas and trends across model runs."
-        },
-        "layers": {
-          "title": "Input & vegetation layers",
-          "text": "Optional vegetation and terrain overlays to understand why the result map behaves as it does."
-        },
-        "multilingual": {
-          "title": "Multilingual & accessible",
-          "text": "Available in 8 languages with clear labels and guided tours for every role."
-        },
-        "secure": {
-          "title": "Secure & governed",
-          "text": "Role-based access, audited results and EU-compliant privacy controls."
-        }
-      }
-    },
-    "personas": {
-      "eyebrow": "Who it's for",
-      "title": "One platform, role-appropriate analysis evidence",
-      "items": {
-        "planners": {
-          "title": "Municipal & civil-protection planners",
-          "text": "Create and explain analysis results and brief decision-makers."
-        },
-        "analysts": {
-          "title": "Analysis reviewers",
-          "text": "Validate GIS layers, risk metrics and engine outputs at expert level."
-        },
-        "researchers": {
-          "title": "Researchers & GIS teams",
-          "text": "Download GeoTIFF/ZIP outputs and study input models and vegetation indices."
-        },
-        "leads": {
-          "title": "Workshop leads & reviewers",
-          "text": "Run training sessions and review shared risk evidence with limited access."
-        }
-      }
-    },
-    "contact": {
-      "eyebrow": "Get in touch",
-      "title": "Start a conversation",
-      "subtitle": "Tell us about your region and how you'd like to use the platform. The team will get back to you — no account required to reach out.",
-      "responseTime": "We typically respond within a few working days.",
-      "name": "Name",
-      "email": "Email",
-      "category": "Category",
-      "subject": "Subject",
-      "message": "Message",
-      "send": "Send message",
-      "sending": "Sending…",
-      "successTitle": "Message sent",
-      "successText": "Thanks for reaching out — we'll be in touch soon.",
-      "sendAnother": "Send another message",
-      "validationError": "Please complete name, email, subject and message.",
-      "genericError": "Something went wrong. Please try again.",
-      "submitFailed": "Submission failed.",
-      "agree": "By submitting you agree to our",
-      "privacyPolicy": "privacy policy",
-      "categories": {
-        "general": "General enquiry",
-        "partnership": "Partnership",
-        "bug": "Bug report"
-      }
-    },
-    "footer": {
-      "tagline": "Community-based strategies to prevent and manage analysis across rural Europe.",
-      "privacy": "Privacy Policy",
-      "cookies": "Cookies Policy",
-      "impressum": "Impressum",
-      "terms": "Terms & Conditions",
-      "euFundedAlt": "Funded by the European Union",
-      "euDisclaimer": "Funded by the European Union under grant agreement 101132652. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the European Union nor the granting authority can be held responsible for them.",
-      "builtOn": "Built on the App platform",
-      "copyright": "App App · Technische Hochschule Deggendorf"
-    },
-    "stats": {
-      "affectedArea": "Affected Area",
-      "municipalities": "Municipalities",
-      "riskDistribution": "Risk Distribution",
-      "trendAnalysis": "Risk Trend Analysis"
-    }
-  },
-  "tooltips": {
-    "windSpeed": {
-      "title": "Wind Speed",
-      "description": "Average wind speed over the selected area for the given time period.",
-      "example": "Higher wind speeds provide more energy to the process and can rapidly propagate effects, significantly increasing the rate of spread."
-    },
-    "windDirection": {
-      "title": "Wind Direction",
-      "description": "Average wind direction over the selected area, represented in degrees and compass points.",
-      "example": "N (North), E (East), S (South), W (West), and intermediate points like NNE (North-Northeast) or WSW (West-Southwest)."
-    },
-    "temperature": {
-      "title": "Temperature",
-      "description": "Average ambient temperature over the selected area for the given time period.",
-      "example": "High temperatures dry out vegetation inputs, making them more reactive and amplifying the effect."
-    },
-    "humidity": {
-      "title": "Relative Humidity",
-      "description": "Average relative humidity over the selected area for the given time period.",
-      "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
-    }
-  },
-  "locations": {
-    "Spain": "Spain",
-    "sampleRegion": "Sample Region",
-    "Vedra": "Vedra"
   },
   "configurator": {
     "registry": {

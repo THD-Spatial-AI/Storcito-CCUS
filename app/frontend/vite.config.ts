@@ -2,7 +2,6 @@ import node_path from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import cesium from "vite-plugin-cesium";
 
 export default defineConfig({
 	resolve: {
@@ -21,7 +20,7 @@ export default defineConfig({
 			"i18next-browser-languagedetector": node_path.resolve(__dirname, "node_modules/i18next-browser-languagedetector"),
 		},
 	},
-	plugins: [react(), tailwindcss(), cesium()],
+	plugins: [react(), tailwindcss()],
 	server: {
 		port: 3000,
 		proxy: {

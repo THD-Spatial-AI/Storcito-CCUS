@@ -15,7 +15,7 @@ import { useBulkOperations } from '@/features/model-dashboard/hooks/useBulkOpera
 import { useDeleteConfirm } from '@/hooks/useDeleteConfirm';
 import { type ActionConfig } from "@/components/shared/ModelActionGroup";
 import { useFavoriteModelsStore } from "@/features/model-dashboard/store/favorite-models";
-import { isModelDisabled as checkModelDisabled, isModelCompleted } from "@/features/model-dashboard/utils/statusHelpers";
+import { isModelDisabled as checkModelDisabled } from "@/features/model-dashboard/utils/statusHelpers";
 import { useWebservices } from "@/features/admin-dashboard/hooks/useWebservices";
 import { processModelTimingUpdates, type TimingUpdate } from "@/features/model-dashboard/utils/modelTimingUtils";
 import { organizeModelsHierarchically } from "@/features/model-dashboard/utils/dashboardHelpers";
@@ -161,13 +161,12 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const { summary: webserviceSummary } = useWebservices({}, { autoRefresh: true, refreshInterval: 10000 });
 	const hasAvailableWebservice = (webserviceSummary?.available ?? 0) > 0;
 
-	// Exactly the page slice from the API; child rows show their parent via
-	// the parent_model_title field, so off-page parents are not merged in.
+	// Preserve API page slice.
 	const models = useMemo(() => modelsResponse?.data || [], [modelsResponse?.data]);
 	const totalItems = modelsResponse?.total || 0;
 	const isLoading = isLoadingModels;
 
-	// Use stats directly from React Query, fallback to defaults
+	// Use query statistics.
 	const stats = useMemo(() => {
 		if (statsResponse?.success && statsResponse.data) {
 			return statsResponse.data;
@@ -175,16 +174,16 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		return DEFAULT_STATS;
 	}, [statsResponse]);
 
-	// Check if model limit is reached
+	// Check model limit.
 	const isModelLimitReached = useMemo(() => {
 		if (stats.is_unlimited) return false;
 		if (!stats.model_limit) return false;
 		return stats.total >= stats.model_limit;
 	}, [stats.total, stats.model_limit, stats.is_unlimited]);
 
-	// No-op function for compatibility - mutations handle cache invalidation automatically
+	// Preserve callback compatibility.
 	const loadStats = useCallback(async () => {
-		// Stats are handled by React Query - mutations invalidate the cache
+		// Query invalidates statistics.
 	}, []);
 
 	const {
@@ -235,7 +234,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const handleRefresh = useCallback(async () => {
 		setIsRefreshing(true);
 		try {
-			// Reload both workspaces and models
+			// Refresh workspaces and models.
 			setWsReloadKey((k) => k + 1);
 			await loadModels();
 		} finally {
@@ -283,7 +282,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
 
 	const sortedModels = useMemo(() => {
-		// Server already sorts by orderBy/order — only reorder favorites to top
+		// Prioritize favorites locally.
 		return [...filteredModels].sort((a, b) => {
 			const aFav = favoriteIdSet.has(a.id) ? 0 : 1;
 			const bFav = favoriteIdSet.has(b.id) ? 0 : 1;
@@ -389,9 +388,9 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 
 	const handleCopyWorkspaceSuccess = async (copiedWorkspace: Workspace, sourceWorkspace: Workspace) => {
 		try {
-			// Reload workspace list to include the new workspace
+			// Refresh workspace list.
 			setWsReloadKey((k) => k + 1);
-			// Switch to the new workspace
+			// Select new workspace.
 			handleWorkspaceChange(copiedWorkspace);
 			await loadModels();
 			await loadStats();
@@ -405,7 +404,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 
 	const handleRenameWorkspaceSuccess = async (updatedWorkspace: Workspace) => {
 		try {
-			// Update the current workspace
+			// Update current workspace.
 			setCurrentWorkspace(updatedWorkspace);
 			setWsReloadKey((k) => k + 1);
 
@@ -427,7 +426,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 			onConfirm: async () => {
 				try {
 					await workspaceService.deleteWorkspace(currentWorkspace.id);
-					// Load default workspace after deletion
+					// Load default workspace.
 					const defaultWorkspace = await workspaceService.getDefaultWorkspace();
 					handleWorkspaceChange(defaultWorkspace);
 					setWsReloadKey((k) => k + 1);
@@ -458,7 +457,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	}, []);
 
 	const handleMoveToWorkspace = useCallback((model: Model) => {
-		// Blur active element to prevent aria-hidden focus warning
+		// Prevent hidden-focus warnings.
 		if (document.activeElement instanceof HTMLElement) {
 			document.activeElement.blur();
 		}
@@ -469,15 +468,15 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	}, []);
 
 	const handleBulkMoveToWorkspace = useCallback(() => {
-		// Blur active element to prevent aria-hidden focus warning
+		// Prevent hidden-focus warnings.
 		if (document.activeElement instanceof HTMLElement) {
 			document.activeElement.blur();
 		}
 		const ownedModels = selectedModels.filter((model: Model) => canUserDeleteModel(model));
 		
-		// Exclude parent models if their children are also being moved
+		// Exclude selected parents.
 		const modelsToMove = ownedModels.filter(model => {
-			// Check if any selected model has this model as parent
+			// Detect selected children.
 			const hasChildInSelection = ownedModels.some(
 				m => m.parent_model_id === model.id
 			);
@@ -564,23 +563,6 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		return t('model.cannotDelete');
 	}, [canDeleteAnySelected, deletableCount, t]);
 
-	const canCompareSelected = useMemo(() => {
-		if (selectedModels.length !== 2) return false;
-		const freshModels = modelsResponse?.data ?? [];
-		return selectedModels.every((sel: Model) => {
-			const fresh = freshModels.find((m: Model) => m.id === sel.id);
-			return isModelCompleted(fresh ? fresh.status : sel.status);
-		});
-	}, [selectedModels, modelsResponse]);
-
-	const handleCompareSelected = useCallback(() => {
-		if (selectedModels.length !== 2) return;
-		const [m1, m2] = selectedModels;
-		navigate(`/app/comparison?model1=${m1.id}&model2=${m2.id}`);
-	}, [selectedModels, navigate]);
-
-
-
 	const bulkActions: ActionConfig[] = useMemo(() => [
 		{
 			key: "bulk-move",
@@ -660,8 +642,8 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 
 return (
 		<Fragment>
-			<div className="relative p-4 w-full space-y-4 bg-background overflow-x-hidden overflow-y-scroll">
-				<div className="w-full space-y-4">
+			<div className="md-scope relative p-4 sm:p-6 w-full bg-background overflow-x-hidden overflow-y-scroll">
+				<div className="w-full space-y-5">
 					<ModelDashboardFilters
 						groups={groups}
 						selectedGroup={selectedGroup}
@@ -678,8 +660,6 @@ return (
 						handleRefresh={handleRefresh}
 						isRefreshing={isRefreshing}
 						isLoading={isLoading}
-						handleCompareSelected={handleCompareSelected}
-						canCompareSelected={canCompareSelected}
 						canManageWorkspace={canManageWorkspace}
 						setIsShareWsOpen={setIsShareWsOpen}
 						setIsCopyWsOpen={setIsCopyWsOpen}

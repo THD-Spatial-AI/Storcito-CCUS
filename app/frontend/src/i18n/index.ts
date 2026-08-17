@@ -4,10 +4,24 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 // Bundled locale resources.
 import en from "./locales/en.json";
+import de from "./locales/de.json";
+import es from "./locales/es.json";
+import fr from "./locales/fr.json";
+import it from "./locales/it.json";
+import nl from "./locales/nl.json";
+import pl from "./locales/pl.json";
+import cs from "./locales/cs.json";
 
 // Language configuration
 export const languages = [
   { code: "en", name: "English", nativeName: "English", flag: "🇬🇧" },
+  { code: "de", name: "German", nativeName: "Deutsch", flag: "🇩🇪" },
+  { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸" },
+  { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷" },
+  { code: "it", name: "Italian", nativeName: "Italiano", flag: "🇮🇹" },
+  { code: "nl", name: "Dutch", nativeName: "Nederlands", flag: "🇳🇱" },
+  { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱" },
+  { code: "cs", name: "Czech", nativeName: "Čeština", flag: "🇨🇿" },
 ] as const;
 
 export type LanguageCode = (typeof languages)[number]["code"];
@@ -22,6 +36,13 @@ interface Language {
 // All translation resources
 const resources = {
   en: { translation: en },
+  de: { translation: de },
+  es: { translation: es },
+  fr: { translation: fr },
+  it: { translation: it },
+  nl: { translation: nl },
+  pl: { translation: pl },
+  cs: { translation: cs },
 };
 
 interface I18nConfig {

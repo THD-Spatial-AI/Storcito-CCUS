@@ -158,14 +158,17 @@
       "restartTour": "Riavvia tour",
       "feedback": "Feedback",
       "theme": "Tema",
-      "searchLocation": "Cerca posizione"
+      "searchLocation": "Cerca posizione",
+      "help": "Help"
     },
     "sidebar": {
-      "energySimulations": "Simulazioni Energetiche",
+      "energySimulations": "Simulazioni CCUS",
       "map": "Mappa",
       "locations": "Posizioni",
       "simulationReports": "Confronto Modelli",
-      "technologies": "Tecnologie"
+      "technologies": "Tecnologie",
+      "transport": "Transport",
+      "simulations": "Analysis Runs"
     },
     "menu": {
       "profile": "Profilo",
@@ -196,7 +199,9 @@
       "perPage": "per pagina",
       "previousPage": "Pagina precedente",
       "nextPage": "Pagina successiva"
-    }
+    },
+    "appName": "CCUS Assessment",
+    "saved": "Saved"
   },
   "dashboard": {
     "stats": {
@@ -285,7 +290,7 @@
     "layerStatus": "Stato layer",
     "availableResults": "Risultati disponibili",
     "mapControls": "Controlli mappa",
-    "mapControlsDescription": "Usa i controlli zoom (in alto a destra) per ingrandire/ridurre, centrare la mappa ed esplorare il layer di valutazione energetica.",
+    "mapControlsDescription": "Usa i controlli zoom (in alto a destra) per ingrandire/ridurre, centrare la mappa ed esplorare il layer di valutazione CCUS.",
     "opacity": "Opacità",
     "layerHidden": "Layer nascosto",
     "showLayer": "Mostra layer",
@@ -348,7 +353,10 @@
       "commercialDemand": "Domanda commerciale",
       "publicDemand": "Domanda edificio pubblico",
       "industrialDemand": "Domanda industriale",
-      "agriculturalDemand": "Domanda agricola"
+      "agriculturalDemand": "Domanda agricola",
+      "gridElectricity": "Grid Electricity Purchase",
+      "householdSupply": "Household Supply",
+      "nonHouseholdSupply": "Non-Household Supply"
     },
     "charts": {
       "systemPerformance": "Prestazioni del Sistema",
@@ -562,7 +570,22 @@
       "transmission": "Trasmissione",
       "investmentCost": "Investimento (CAPEX)",
       "operatingCost": "Esercizio (OPEX)",
-      "systemLCOE": "LCOE di Sistema"
+      "systemLCOE": "LCOE di Sistema",
+      "simulationPeriod": "Simulation Period",
+      "simulationPeriodCost": "Cost for Simulation Period",
+      "annualizedCost": "Annualized Cost (projected)",
+      "perLocation": "per location",
+      "locations": "Locations",
+      "capex": "Equipment & Installation",
+      "opex": "Running Costs",
+      "costPerKw": "Cost per kW/yr",
+      "costPerKwh": "Cost per kWh",
+      "costSplit": "Equipment / Running",
+      "energyProduced": "Energy Produced",
+      "cheaperThanAvg": "cheaper than system average",
+      "moreExpensiveThanAvg": "more expensive than average",
+      "days": "days",
+      "hours": "hours"
     },
     "buildingDetail": {
       "building": "Edificio",
@@ -602,6 +625,18 @@
       "notConvergedTitle": "Il flusso di potenza non è convergito",
       "convergedDescription": "Il calcolo del flusso di potenza elettrica ha trovato con successo una soluzione stabile. I valori di tensione e potenza attraverso la rete sono fisicamente validi.",
       "notConvergedDescription": "Il calcolo del flusso di potenza non è riuscito a trovare una soluzione stabile entro il limite di iterazione. I risultati potrebbero essere imprecisi o incompleti."
+    },
+    "costInfo": {
+      "simulationPeriodNote": "Costs shown are for the simulated period of {{days}} days ({{hours}} hours). To see full annual costs, run a 1-year simulation (8,760 hours).",
+      "simulationPeriodShort": "{{days}}-day simulation period",
+      "costBreakdownTooltip": "Costs shown cover only the simulated time window, not a full year. Equipment costs are spread over the equipment lifetime, while running costs (e.g., grid electricity purchases) reflect actual usage during the period. In short simulations, technologies with high running costs appear proportionally larger.",
+      "annualProjection": "Estimated annual: {{value}}",
+      "equipmentCostNote": "Equipment cost is spread over its lifetime, showing only the share for this simulation period.",
+      "equipmentCostDesc": "Solar panels, batteries, and other hardware. The purchase cost is spread over the equipment's lifetime (e.g. 25 years for solar).",
+      "runningCostDesc": "Electricity purchased from the grid, maintenance, and other ongoing expenses that depend on usage.",
+      "systemCostSummaryDesc": "Shows the average cost of energy (ct/kWh) and how total costs split between equipment and running costs. Lower ct/kWh means cheaper energy overall.",
+      "lcoeComparisonDesc": "Compares the cost of energy from each source in ct/kWh. Solar and wind have low costs because sunlight and wind are free — you only pay for the equipment. The dashed line shows the system-wide average.",
+      "investmentBreakdownDesc": "Shows how much each technology costs, split into equipment (one-time purchase, spread over lifetime) and running costs (grid electricity, maintenance). Renewables typically only have equipment costs."
     }
   },
   "auth": {
@@ -629,7 +664,7 @@
     "resendVerificationEmail": "Reinvia e-mail di verifica",
     "protectedByEncryption": "Protetto da crittografia standard del settore",
     "createAccount": "Crea Account",
-    "joinUsAccess": "Unisciti a noi per accedere alla piattaforma di simulazione energetica",
+    "joinUsAccess": "Unisciti a noi per accedere alla piattaforma di simulazione CCUS",
     "personalInformation": "Informazioni Personali",
     "fullName": "Nome Completo",
     "enterFullName": "Inserisci il tuo nome completo",
@@ -672,7 +707,14 @@
     "signUpNow": "Registrati ora",
     "createPassword": "Crea una password",
     "creating": "Creazione in corso...",
-    "agreeToTerms": "Creando un account, accetti i nostri Termini di Servizio"
+    "agreeToTerms": "Creando un account, accetti i nostri Termini di Servizio",
+    "signInHere": "Sign in here",
+    "sidePanel": {
+      "badge": "CCUS intelligence",
+      "title": "Accelerate carbon capture before emissions escalate",
+      "subtitle": "Map, model and act on CCUS projects — turning site data and geospatial insight into safe, scalable carbon capture, utilisation and storage across Europe.",
+      "funded": "Funded by the European Union · Built on the App platform"
+    }
   },
   "workspace": {
     "workspace": "Area di lavoro",
@@ -724,14 +766,14 @@
     "export": "Esporta",
     "compare": "Confronta",
     "dashboard": "Dashboard modelli",
-    "manageConfigurations": "Gestisci le tue configurazioni di valutazione energetica",
+    "manageConfigurations": "Gestisci le tue configurazioni di valutazione CCUS",
     "searchModels": "Cerca modelli...",
     "allModels": "Tutti i modelli",
     "modelGroups": "Gruppi di modelli",
     "loadingWorkspace": "Caricamento area di lavoro...",
     "loadingModels": "Caricamento modelli...",
     "loadingWorkspaceDescription": "Attendere durante l'inizializzazione delle preferenze dell'area di lavoro.",
-    "loadingModelsDescription": "Attendere durante il caricamento dei modelli di valutazione energetica.",
+    "loadingModelsDescription": "Attendere durante il caricamento dei modelli di valutazione CCUS.",
     "selectWorkspace": "Seleziona o crea un'area di lavoro",
     "refreshModels": "Aggiorna elenco modelli",
     "share": "Condividi",
@@ -747,7 +789,7 @@
     "moveToWorkspace": "Sposta nell'area di lavoro",
     "noModelsFound": "Nessun modello trovato",
     "noModelsMatch": "Nessun modello corrisponde a \"{{search}}\". Prova a modificare la ricerca.",
-    "noModelsYet": "Non hai ancora creato modelli di valutazione energetica. Inizia creando il tuo primo modello!",
+    "noModelsYet": "Non hai ancora creato modelli di valutazione CCUS. Inizia creando il tuo primo modello!",
     "createFirstModel": "Crea il tuo primo modello",
     "selected": "selezionati",
     "deleteSelected": "Elimina selezionati",
@@ -915,7 +957,8 @@
       "energyRiskFinal": "Rischio Energetico Finale",
       "vegetationRisk": "Rischio Vegetazione",
       "topographyRisk": "Rischio Topografia",
-      "upgradeMessage": "Sblocca più funzionalità richiedendo un upgrade al tuo amministratore."
+      "upgradeMessage": "Sblocca più funzionalità richiedendo un upgrade al tuo amministratore.",
+      "resultFinal": "Result Final"
     },
     "quickActions": {
       "title": "Azioni Rapide",
@@ -929,7 +972,7 @@
     },
     "title": "Pannello amministratore",
     "welcomeBack": "Bentornato, {{name}}!",
-    "managePlatform": "Gestisci la tua piattaforma di simulazione energetica",
+    "managePlatform": "Gestisci la tua piattaforma di simulazione CCUS",
     "administrator": "Amministratore",
     "loadingContent": "Caricamento contenuto..."
   },
@@ -1128,6 +1171,29 @@
       "updated": "Profilo aggiornato con successo!",
       "failedToLoad": "Impossibile caricare il profilo. Riprova.",
       "failedToUpdate": "Impossibile aggiornare il profilo. Riprova."
+    },
+    "password": {
+      "title": "Change Password",
+      "description": "Update the password you use to sign in",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password",
+      "currentPlaceholder": "Enter your current password",
+      "newPlaceholder": "Enter a new password",
+      "confirmPlaceholder": "Re-enter your new password",
+      "submit": "Update Password",
+      "updating": "Updating...",
+      "updated": "Password changed successfully!",
+      "failed": "Failed to change password. Please try again.",
+      "requirements": {
+        "minChars": "At least 8 characters",
+        "uppercase": "One uppercase letter",
+        "lowercase": "One lowercase letter",
+        "number": "One number",
+        "specialChar": "One special character"
+      },
+      "requirementsNotMet": "Password does not meet all requirements",
+      "mismatch": "Passwords do not match"
     }
   },
   "webservicesManagement": {
@@ -1293,7 +1359,7 @@
   "simulation": {
     "title": "Configurazione simulazione",
     "modelName": "Nome modello",
-    "modelNamePlaceholder": "Inserisci un nome per la tua simulazione energetica",
+    "modelNamePlaceholder": "Inserisci un nome per la tua simulazione CCUS",
     "modelNameHint": "Dai alla tua simulazione un nome descrittivo",
     "simulationPeriod": "Periodo di simulazione",
     "duration": "Durata",
@@ -1319,13 +1385,13 @@
     },
     "actions": {
       "saveAndExit": "Salva & Esci",
-      "create": "Crea simulazione energetica",
-      "update": "Aggiorna simulazione energetica",
+      "create": "Crea simulazione CCUS",
+      "update": "Aggiorna simulazione CCUS",
       "creating": "Creazione simulazione...",
       "updating": "Aggiornamento simulazione...",
       "cancel": "Annulla"
     },
-    "tip": "Suggerimento: Clicca sulla mappa per disegnare la tua area di interesse. Il sistema eseguirà la simulazione energetica per la regione selezionata durante il periodo specificato.",
+    "tip": "Suggerimento: Clicca sulla mappa per disegnare la tua area di interesse. Il sistema eseguirà la simulazione CCUS per la regione selezionata durante il periodo specificato.",
     "mapHeader": {
       "public": "Pubblico",
       "myBuildings": "I miei edifici",
@@ -1368,6 +1434,17 @@
       "cancelAssign": "Annulla",
       "nextStep": "Avanti",
       "finish": "Fine"
+    },
+    "bufferDistance": {
+      "label": "Buffer Distance (meters)",
+      "hint": "Range 0–2000 m in 100 m steps. Expands the area considered around your polygon.",
+      "decrease": "Decrease buffer distance",
+      "increase": "Increase buffer distance"
+    },
+    "progress": {
+      "queued": "Queued",
+      "assessing": "Assessing",
+      "done": "Done"
     }
   },
   "mapLayers": {
@@ -1380,23 +1457,26 @@
       "osmHumanitarian": "Stile umanitario OpenStreetMap",
       "cartoPositron": "Mappa base chiara di CartoDB",
       "cartoVoyager": "Mappa base dettagliata di CartoDB",
-      "openTopoMap": "Mappa di stile topografico"
+      "openTopoMap": "Mappa di stile topografico",
+      "maplibreDark": "Dark vector basemap",
+      "maplibreVoyager": "Detailed vector basemap"
     },
     "dataLayers": {
       "title": "Livelli dati",
-      "energySimulation": "Livello simulazione energetica finale"
-    }
+      "energySimulation": "Livello simulazione CCUS finale"
+    },
+    "tooltip": "Base Maps"
   },
   "tour": {
     "product": {
       "welcome": {
-        "title": "Benvenuto nella Piattaforma di Simulazione Energetica!",
-        "description": "Facciamo un tour rapido per aiutarti a iniziare con la tua Piattaforma di Simulazione Energetica.",
+        "title": "Benvenuto nella Piattaforma di Simulazione CCUS!",
+        "description": "Facciamo un tour rapido per aiutarti a iniziare con la tua Piattaforma di Simulazione CCUS.",
         "tip": "Questo tour verrà mostrato solo una volta. Puoi saltarlo in qualsiasi momento o riavviarlo dalla barra laterale."
       },
       "newAssessment": {
         "title": "Crea Nuova Valutazione",
-        "description": "Pronto per iniziare? Clicca questo pulsante per creare la tua prima valutazione energetica. Questo aprirà la procedura guidata di selezione dell'area.",
+        "description": "Pronto per iniziare? Clicca questo pulsante per creare la tua prima valutazione CCUS. Questo aprirà la procedura guidata di selezione dell'area.",
         "tip": "Quando clicchi qui, entrerai in un tour dedicato al processo di selezione dell'area!"
       },
       "profile": {
@@ -1408,8 +1488,8 @@
         "description": "Accedi alla tua dashboard principale per visualizzare progetti, valutazioni recenti e statistiche generali. Questa è la tua base."
       },
       "simulations": {
-        "title": "Simulazioni Energetiche",
-        "description": "Crea e gestisci i tuoi modelli di simulazione energetica. Avvia nuove valutazioni, configura parametri e rivedi calcoli esistenti."
+        "title": "Simulazioni CCUS",
+        "description": "Crea e gestisci i tuoi modelli di simulazione CCUS. Avvia nuove valutazioni, configura parametri e rivedi calcoli esistenti."
       },
       "map": {
         "title": "Mappa Interattiva",
@@ -1426,7 +1506,7 @@
       "technologies": {
         "title": "Tecnologie",
         "description": "Gestisci tecnologie energetiche come pannelli solari, batterie e pompe di calore. Configura parametri e assegnali agli edifici.",
-        "tip": "Le tecnologie possono essere personalizzate per edificio per simulazioni energetiche accurate."
+        "tip": "Le tecnologie possono essere personalizzate per edificio per simulazioni CCUS accurate."
       },
       "layers": {
         "title": "Livelli Mappa",
@@ -1443,22 +1523,22 @@
       },
       "complete": {
         "title": "Tutto Pronto!",
-        "description": "Hai completato il tour! Ora sei pronto per iniziare a creare valutazioni energetiche.",
+        "description": "Hai completato il tour! Ora sei pronto per iniziare a creare valutazioni CCUS.",
         "nextSteps": "Prossimi Passi",
-        "nextStepsDescription": "Prova a creare la tua prima valutazione energetica o esplora la mappa interattiva.",
+        "nextStepsDescription": "Prova a creare la tua prima valutazione CCUS o esplora la mappa interattiva.",
         "restartTour": "Riavvia Tour",
         "restartTourDescription": "Puoi riavviare questo tour in qualsiasi momento dalla barra laterale."
       }
     },
     "areaSelect": {
       "welcome": {
-        "title": "Guida alla Simulazione Energetica",
-        "description": "Benvenuto! Questo tour ti guiderà nella creazione di una simulazione energetica per la tua regione scelta.",
+        "title": "Guida alla Simulazione CCUS",
+        "description": "Benvenuto! Questo tour ti guiderà nella creazione di una simulazione CCUS per la tua regione scelta.",
         "tip": "Imparerai a configurare il tuo modello, disegnare aree e creare la tua simulazione."
       },
       "modelName": {
         "title": "Nome Modello",
-        "description": "Dai al tuo modello di simulazione energetica un nome descrittivo. Questo ti aiuta a identificarlo più tardi nella dashboard.",
+        "description": "Dai al tuo modello di simulazione CCUS un nome descrittivo. Questo ti aiuta a identificarlo più tardi nella dashboard.",
         "tip": "Buoni nomi: \"Distretto Amburgo 2024\" o \"Analisi Energetica Zona Industriale\""
       },
       "dateRange": {
@@ -1478,7 +1558,7 @@
       },
       "mapContainer": {
         "title": "Mappa Interattiva",
-        "description": "Questo è il tuo spazio di lavoro principale. Disegna poligoni sulla mappa per selezionare aree per la tua simulazione energetica.",
+        "description": "Questo è il tuo spazio di lavoro principale. Disegna poligoni sulla mappa per selezionare aree per la tua simulazione CCUS.",
         "tip": "Puoi zoomare e spostare la mappa per esplorare diverse regioni"
       },
       "search": {
@@ -1488,8 +1568,44 @@
       },
       "save": {
         "title": "Crea Simulazione",
-        "description": "Una volta configurato tutto, clicca qui per creare il tuo modello di simulazione energetica e avviare l'analisi.",
+        "description": "Una volta configurato tutto, clicca qui per creare il tuo modello di simulazione CCUS e avviare l'analisi.",
         "tip": "Tutti i campi devono essere completati prima di poter salvare"
+      },
+      "precomputed": {
+        "title": "Precomputed regional map",
+        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
+        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
+      },
+      "customData": {
+        "title": "Custom data",
+        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
+      },
+      "calculationStatus": {
+        "title": "Calculation status",
+        "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
+        "tip": "If this shows a blocker, the continue button stays disabled until the date selection is valid."
+      },
+      "areaInput": {
+        "title": "Area input",
+        "description": "Draw the area directly on the map or upload a GeoJSON Polygon/MultiPolygon boundary.",
+        "tip": "The model can continue only after one valid area of interest is available."
+      },
+      "areaStatus": {
+        "title": "AOI status",
+        "description": "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
+      },
+      "optionalLayers": {
+        "title": "Risk signals",
+        "description": "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events.",
+        "tip": "Keep weather enabled for normal analysis runs; disabling it is useful only for a baseline comparison."
+      },
+      "finalReview": {
+        "title": "Validation status",
+        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+      },
+      "saveSummary": {
+        "title": "Save summary",
+        "description": "This final summary shows the values that will be saved with the model and sent to the calculation workflow."
       }
     },
     "buttons": {
@@ -1538,7 +1654,8 @@
       "loginRequired": "Effettua l'accesso per inviare feedback",
       "submitFailed": "Invio feedback fallito. Riprova più tardi.",
       "invalidImageType": "Seleziona un file immagine valido (PNG, JPG, GIF)",
-      "imageTooLarge": "La dimensione dell'immagine deve essere inferiore a 15MB"
+      "imageTooLarge": "La dimensione dell'immagine deve essere inferiore a 15MB",
+      "payloadTooLarge": "The attachment is too large. Please use smaller images."
     },
     "myFeedback": {
       "title": "Il mio feedback",
@@ -1556,7 +1673,13 @@
         "resolved": "Risolto",
         "closed": "Chiuso"
       }
-    }
+    },
+    "write": "Write",
+    "preview": "Preview",
+    "markdownSupported": "Markdown supported",
+    "words": "words",
+    "chars": "chars",
+    "previewEmpty": "Nothing to preview"
   },
   "technologies": {
     "title": "Tecnologie",
@@ -1777,7 +1900,10 @@
       "alreadySharedWithWorkspace": "Questa posizione è già condivisa con questo spazio di lavoro",
       "alreadySharedWithGroup": "Questa posizione è già condivisa con questo gruppo",
       "failedToShare": "Condivisione fallita. Riprova."
-    }
+    },
+    "Spain": "Spain",
+    "sampleRegion": "Sample Region",
+    "Vedra": "Vedra"
   },
   "weather": {
     "temperature": "Temp.",
@@ -2014,7 +2140,56 @@
       "grid": "Rete",
       "other": "Altro"
     },
-    "pdfTitle": "Rapporto confronto simulazione"
+    "pdfTitle": "Rapporto confronto simulazione",
+    "summaryWorse": "Risk increased",
+    "summaryBetter": "Risk reduced",
+    "summaryStable": "Risk is broadly stable",
+    "loadingMetrics": "Loading risk metrics…",
+    "summaryTitle": "Comparison Summary",
+    "summarySub": "Key changes between the baseline and comparison model.",
+    "criticalShare": "High + Very High share",
+    "dominantClass": "Dominant class",
+    "dominantClassSub": "Largest share of valid pixels: {{baseline}}% in baseline, {{comparison}}% in comparison.",
+    "dominantClassUnavailable": "Distribution data is not available.",
+    "analyzedArea": "Analyzed area",
+    "analyzedAreaSub": "Area is calculated from valid non-nodata pixels, so it can differ between model outputs.",
+    "readingDirection": "Interpretation",
+    "badDeltaLabel": "More High/Very High",
+    "badDeltaText": "means the comparison model is more severe.",
+    "goodDeltaLabel": "More Very Low/Low",
+    "goodDeltaText": "usually means risk shifted toward safer classes.",
+    "distribution": "Distribution Comparison",
+    "distributionSub": "Share of area per risk class in each model.",
+    "changeAnalysis": "Risk Change Analysis",
+    "changeAnalysisSub": "How risk shifted between the baseline and the comparison model, cell by cell on the sampled grid.",
+    "riskFlow": "Risk Flow",
+    "riskFlowSub": "Bands show the share of the area moving from a baseline class (left) to a comparison class (right).",
+    "scoreDistribution": "Risk Score Distribution",
+    "scoreDistributionSub": "Frequency of the continuous risk score across sampled cells. A curve shifted to the right means a more severe model; the coloured bands mark the risk classes.",
+    "areaByClass": "Area by Risk Class",
+    "areaByClassSub": "Area assigned to each risk class — comparable even when the two models cover differently sized areas.",
+    "topTransitions": "Biggest Changes",
+    "topTransitionsSub": "Largest class-to-class shifts by share of the area.",
+    "unchangedShare": "kept the same class",
+    "increasedShare": "moved to higher risk",
+    "decreasedShare": "moved to lower risk",
+    "ofArea": "of the area",
+    "noTransitions": "No class changes detected — both models assign the same risk class everywhere.",
+    "differentAreas": "The two models cover different areas or grids, so a cell-by-cell change analysis is not possible. Use the side-by-side maps above and the distribution below instead.",
+    "validCells": "valid cells",
+    "loadingMapSamples": "Loading geographic raster samples…",
+    "noMapSamples": "Geographic map samples are not available yet.",
+    "cells": "cells",
+    "noConfiguredLayer": "No GeoServer layer is configured for this model yet.",
+    "incompleteLayer": "Layer configuration is incomplete",
+    "loadLayerFailed": "Failed to load layer from GeoServer",
+    "mapHint": "Pan/zoom either map — views stay in sync.",
+    "mapHintIndependent": "These models cover different areas — each map shows its own model.",
+    "synced": "Synced",
+    "independent": "Independent",
+    "loadingLayer": "Loading layer…",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen"
   },
   "map": {
     "zoomIn": "Ingrandisci",
@@ -2044,7 +2219,8 @@
     "osmfPolicy": "Politica sulla privacy di OSMF",
     "firePolicy": "Politica sulla privacy di App",
     "deny": "Rifiuta",
-    "accept": "Accetta"
+    "accept": "Accetta",
+    "dataPolicy": "App Analysis Privacy Policy"
   },
   "areaStats": {
     "title": "Panoramica area",
@@ -2291,8 +2467,8 @@
   "tooltips": {
     "multiplePolygons": {
       "title": "Poligoni Multipli",
-      "description": "Abilita questa opzione per disegnare più aree separate sulla mappa per la valutazione energetica. Se disabilitata, disegnare un nuovo poligono sostituirà il precedente. Se abilitata, puoi definire più aree distinte che saranno tutte incluse nell'analisi.",
-      "example": "Usa questa funzione per analizzare simulazioni energetiche su più aree non contigue simultaneamente."
+      "description": "Abilita questa opzione per disegnare più aree separate sulla mappa per la valutazione CCUS. Se disabilitata, disegnare un nuovo poligono sostituirà il precedente. Se abilitata, puoi definire più aree distinte che saranno tutte incluse nell'analisi.",
+      "example": "Usa questa funzione per analizzare simulazioni CCUS su più aree non contigue simultaneamente."
     },
     "publicBuildings": {
       "title": "Edifici Personalizzati Pubblici",
@@ -2413,13 +2589,33 @@
       "title": "Tipo d'uso dell'edificio",
       "description": "Classificazione funzionale dai tag OpenStreetMap. Determina la classe del profilo di carico standard (SLP).",
       "example": "Tipi residenziali usano SLP H0. Commerciale usa G0-G6. Industriale usa G3."
+    },
+    "windSpeed": {
+      "title": "Wind Speed",
+      "description": "Average wind speed over the selected area for the given time period.",
+      "example": "Higher wind speeds provide more energy to the process and can rapidly propagate effects, significantly increasing the rate of spread."
+    },
+    "windDirection": {
+      "title": "Wind Direction",
+      "description": "Average wind direction over the selected area, represented in degrees and compass points.",
+      "example": "N (North), E (East), S (South), W (West), and intermediate points like NNE (North-Northeast) or WSW (West-Southwest)."
+    },
+    "temperature": {
+      "title": "Temperature",
+      "description": "Average ambient temperature over the selected area for the given time period.",
+      "example": "High temperatures dry out vegetation inputs, making them more reactive and amplifying the effect."
+    },
+    "humidity": {
+      "title": "Relative Humidity",
+      "description": "Average relative humidity over the selected area for the given time period.",
+      "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
     }
   },
   "onboarding": {
     "welcome": {
       "title": "Benvenuto!",
       "description": "Configuriamo le tue preferenze per iniziare",
-      "greeting": "Benvenuto nella piattaforma di simulazione energetica!",
+      "greeting": "Benvenuto nella piattaforma di simulazione CCUS!",
       "intro": "Prendiamoci un momento per configurare le tue preferenze. Questo ci aiuterà a personalizzare la tua esperienza e fornirti le informazioni più rilevanti.",
       "step1": "Scegli la tua lingua preferita",
       "step2": "Imposta le preferenze meteo e mappa",
@@ -2540,196 +2736,408 @@
     "coverageMedium": "Copertura dati media",
     "coverageLow": "Copertura dati bassa",
     "summaryFooter": "{{countries}} paesi · {{regions}} regioni · {{grids}} griglie"
-  }
-,
+  },
   "landing": {
     "nav": {
-      "features": "Funzionalità",
-      "energy": "Energia",
+      "challenge": "Sfida",
+      "platform": "Piattaforma",
+      "infrastructure": "Infrastruttura",
       "howItWorks": "Come funziona",
-      "about": "Chi siamo",
+      "personas": "Per chi",
       "contact": "Contatti",
       "signIn": "Accedi",
-      "tryItNow": "Provalo ora"
+      "tryItNow": "Prova la piattaforma CCUS"
     },
     "hero": {
-      "badge": "Progetto di ricerca finanziato dall'UE",
-      "title1": "Pianificazione energetica intelligente",
-      "titleFor": "per un",
-      "titleHighlight": "Futuro sostenibile",
-      "description": "Modella, simula e ottimizza sistemi di energia rinnovabile su scala di edificio e quartiere. App aiuta comuni, ricercatori e pianificatori energetici ad accelerare la transizione energetica.",
-      "getStarted": "Inizia gratis",
+      "badge": "Progetto di ricerca CCUS Horizon finanziato dall'UE",
+      "title1": "Accelera la cattura del carbonio in Europa",
+      "titleHighlight": "l'intelligenza CCUS",
+      "subtitle": "Mappa le emissioni industriali, modella reti di trasporto ottimali via condotta e nave, valuta i giacimenti di stoccaggio geologico e accelera la decarbonizzazione industriale in Europa.",
+      "getStarted": "Avvia la valutazione CCUS",
       "seeHow": "Scopri come funziona",
-      "countries": "Paesi",
-      "regions": "Regioni",
-      "hourlyResolution": "Risoluzione oraria",
-      "yearsData": "Dati 2015–2025",
-      "technologies": "Tecnologie",
-      "germany": "Germania",
-      "netherlands": "Paesi Bassi",
-      "austria": "Austria",
-      "czechRepublic": "Repubblica Ceca",
-      "deRegions": "16 Länder",
-      "nlRegions": "12 province",
-      "atRegions": "9 Länder",
-      "czRegions": "13 regioni"
+      "metricSites": "Siti di cattura mappati",
+      "metricStorage": "Capacità di stoccaggio",
+      "metricNetwork": "Rete di rotte modellata",
+      "metricCost": "Ottimizzazione del costo evitato"
+    },
+    "challenge": {
+      "eyebrow": "La sfida della decarbonizzazione",
+      "title": "Risolvere la decarbonizzazione industriale europea",
+      "description": "Portare l'industria pesante a zero netto richiede di risolvere complesse sfide spaziali, logistiche ed economiche attraverso i confini europei.",
+      "card1Title": "Sorgenti puntuali industriali",
+      "card1Desc": "L'industria pesante (cemento, acciaio, chimica) rappresenta oltre il 25% delle emissioni europee e richiede una rapida diffusione della cattura.",
+      "card2Title": "Logistica di trasporto complessa",
+      "card2Desc": "Collegare i cluster industriali interni allo stoccaggio offshore richiede di combinare condotte ad alta pressione con reti di navi LCO₂.",
+      "card3Title": "Abbinamento dei giacimenti",
+      "card3Desc": "Garantire l'integrità del confinamento a lungo termine e adattare i volumi annui catturati ai limiti di iniezione degli acquiferi offshore.",
+      "card4Title": "Ottimizzazione economica",
+      "card4Desc": "Calcolare il costo livellato della CO₂ evitata (€/t CO₂) considerando CAPEX, energia di compressione, noli marittimi e tasse sul carbonio."
     },
     "features": {
-      "label": "Funzionalità della piattaforma",
-      "title": "Tutto ciò che serve per la pianificazione energetica",
-      "description": "Un insieme completo di strumenti per modellare, simulare e ottimizzare sistemi energetici decentralizzati.",
-      "map": "Mappa 3D interattiva",
-      "mapDesc": "Visualizza edifici, infrastrutture energetiche e topologia della rete in un ambiente 3D interattivo con immagini satellitari.",
-      "multiTech": "Modellazione multi-tecnologia",
-      "multiTechDesc": "Configura FV, eolico, biomassa, geotermia, accumulo a batteria e connessioni alla rete per qualsiasi edificio o quartiere.",
-      "simulation": "Simulazione avanzata",
-      "simulationDesc": "Esegui l'ottimizzazione oraria con i solver Calliope, PyPSA e PyLoVo per trovare sistemi energetici ottimali nei costi e minimi nelle emissioni.",
-      "grid": "Analisi della rete intelligente",
-      "gridDesc": "Analizza il flusso di potenza, i profili di tensione, il carico dei trasformatori e la capacità delle linee con la simulazione di rete integrata PyPSA e PyLoVo.",
-      "reports": "Report completi",
-      "reportsDesc": "Genera grafici di bilancio energetico, curve di durata del carico, profili giornalieri, ripartizioni dei costi e diagrammi di flusso Sankey.",
-      "workspace": "Spazio di lavoro collaborativo",
-      "workspaceDesc": "Condividi modelli con il tuo team, confronta scenari di simulazione e collabora alla pianificazione della transizione energetica."
+      "label": "Capacità della piattaforma",
+      "title": "Tutto per la pianificazione CCUS e l'ottimizzazione delle rotte",
+      "description": "Un kit di strumenti geospaziali completo per modellare la cattura del carbonio, la logistica di trasporto della CO₂ e i giacimenti di stoccaggio geologico.",
+      "f1Title": "Mappa geospaziale interattiva",
+      "f1Desc": "Visualizza sorgenti di emissione, corridoi di condotte, rotte marittime e siti di stoccaggio in un'unica mappa interattiva.",
+      "f2Title": "Abbinamento sorgente–pozzo",
+      "f2Desc": "Abbina gli emettitori industriali di CO₂ allo stoccaggio geologico idoneo per capacità, distanza e costo.",
+      "f3Title": "Ottimizzazione delle rotte",
+      "f3Desc": "Modella corridoi di condotte e marittimi e calcola un instradamento a costo minimo e ottimale in termini di carbonio.",
+      "f4Title": "Analisi dei giacimenti",
+      "f4Desc": "Valuta acquiferi salini profondi e giacimenti di petrolio e gas esauriti per capacità, limiti di pressione e portate di iniezione.",
+      "f5Title": "Report costi e CO₂",
+      "f5Desc": "Costo livellato della CO₂ evitata (€/t) con ripartizione di CAPEX, compressione e trasporto e diagrammi di flusso Sankey.",
+      "f6Title": "Spazi di lavoro collaborativi",
+      "f6Desc": "Condividi modelli, confronta scenari e collabora con consorzi regionali sui piani di decarbonizzazione."
     },
-    "energy": {
-      "label": "Tecnologie energetiche",
-      "title": "Modellazione integrata delle energie rinnovabili",
-      "description": "App supporta la modellazione e l'ottimizzazione dettagliate di cinque tecnologie energetiche principali, basate su PySAM, pvlib e Calliope.",
-      "pv": {
-        "title": "Solare fotovoltaico",
-        "subtitle": "Sistemi FV",
-        "description": "Modella sistemi FV su tetto e a terra con simulazioni orarie ad alta fedeltà usando PySAM e pvlib. Tiene conto di orientamento dei pannelli, inclinazione, ombreggiamento, efficienza dell'inverter e degrado.",
-        "spec1": "Su tetto e a terra",
-        "spec2": "Modellazione oraria dell'irradianza",
-        "spec3": "Motori PySAM e pvlib",
-        "spec4": "Rilevamento automatico dei tetti"
-      },
-      "wind": {
-        "title": "Energia eolica",
-        "subtitle": "Turbine eoliche",
-        "description": "Simula turbine eoliche onshore usando i modelli eolici PySAM con dati di rianalisi MERRA-2 e Open-Meteo. Supporta più tipi di turbine, altezze del mozzo e modellazione delle curve di potenza.",
-        "spec1": "Modelli di turbine onshore",
-        "spec2": "Profili di vento MERRA-2",
-        "spec3": "Modellazione curva di potenza",
-        "spec4": "Ottimizzazione altezza del mozzo"
-      },
-      "biomass": {
-        "title": "Energia da biomassa",
-        "subtitle": "Cogenerazione e riscaldamento a biomassa",
-        "description": "Configura sistemi di riscaldamento a biomassa e cogenerazione (CHP). Supporta cippato, biogas e rifiuti organici con pianificazione del dispacciamento flessibile.",
-        "spec1": "Modalità cogenerazione e riscaldamento",
-        "spec2": "Cippato e biogas",
-        "spec3": "Dispacciamento flessibile",
-        "spec4": "Funzionamento neutro in CO₂"
-      },
-      "geothermal": {
-        "title": "Energia geotermica",
-        "subtitle": "Calore da fonte geotermica",
-        "description": "Modella sistemi geotermici superficiali e profondi, comprese pompe di calore geotermiche e scambiatori di calore a sonda. Accumulo termico stagionale con profili orari di temperatura del terreno.",
-        "spec1": "Sistemi superficiali e profondi",
-        "spec2": "Scambiatori di calore a sonda",
-        "spec3": "Accumulo termico stagionale",
-        "spec4": "Profili di temperatura del terreno"
-      },
-      "battery": {
-        "title": "Accumulo a batteria",
-        "subtitle": "Sistemi di accumulo energetico",
-        "description": "Ottimizza i sistemi di accumulo a batteria agli ioni di litio e altri per il peak shaving, la massimizzazione dell'autoconsumo e i servizi di rete. Supporta il dimensionamento della capacità e la modellazione del degrado.",
-        "spec1": "Ioni di litio e altre chimiche",
-        "spec2": "Ottimizzazione del peak shaving",
-        "spec3": "Dimensionamento della capacità",
-        "spec4": "Modellazione del degrado"
-      }
+    "infrastructure": {
+      "eyebrow": "Catena del valore CCUS",
+      "title": "Quattro fasi, un modello integrato",
+      "description": "Cattura, trasporto, stoccaggio e utilizzo — modellati end-to-end per pianificare ogni progetto come una catena del valore completa.",
+      "c1Subtitle": "Cattura alla sorgente",
+      "c1Title": "Cattura del carbonio",
+      "c1Desc": "Cattura la CO₂ in impianti di cemento, acciaio, chimica ed energia con post-combustione e altre tecnologie collaudate.",
+      "c1Spec1": "Cattura post-combustione e ossicombustione",
+      "c1Spec2": "Modellazione di volume e purezza dei fumi",
+      "c1Spec3": "Tasso di cattura vs. penalità energetica",
+      "c1Spec4": "Valutazione di fattibilità del retrofit",
+      "c2Subtitle": "Condotta e nave",
+      "c2Title": "Trasporto di CO₂",
+      "c2Desc": "Trasporta la CO₂ catturata dai cluster interni allo stoccaggio tramite condotte ad alta pressione e navi di CO₂ liquefatta.",
+      "c2Spec1": "Diametro condotta e dimensionamento pressione",
+      "c2Spec2": "Rotte marittime LCO₂",
+      "c2Spec3": "Energia di compressione e liquefazione",
+      "c2Spec4": "Instradamento a costo minimo",
+      "c3Subtitle": "Stoccaggio geologico",
+      "c3Title": "Stoccaggio di CO₂",
+      "c3Desc": "Valuta giacimenti offshore e onshore per un confinamento geologico sicuro e permanente della CO₂ iniettata.",
+      "c3Spec1": "Acquiferi salini e giacimenti esauriti",
+      "c3Spec2": "Limiti di iniezione e pressione",
+      "c3Spec3": "Controlli di integrità del confinamento",
+      "c3Spec4": "Adeguamento della capacità annua",
+      "c4Subtitle": "Utilizzo della CO₂",
+      "c4Title": "Valorizzazione del carbonio",
+      "c4Desc": "Converti la CO₂ catturata in e-fuel, prodotti chimici, materiali da costruzione e altri prodotti di valore.",
+      "c4Spec1": "E-fuel e prodotti chimici sintetici",
+      "c4Spec2": "Mineralizzazione e materiali",
+      "c4Spec3": "Percorsi di recupero assistito",
+      "c4Spec4": "Utilizzo vs. stoccaggio"
     },
     "howItWorks": {
-      "label": "Per iniziare",
-      "title": "Come funziona",
-      "description": "Dalla selezione della regione a informazioni utili in quattro semplici passaggi.",
-      "step1Title": "Seleziona la tua regione",
-      "step1Desc": "Disegna o seleziona un'area geografica sulla mappa interattiva. Edifici e infrastrutture vengono caricati automaticamente.",
-      "step2Title": "Configura i sistemi energetici",
-      "step2Desc": "Aggiungi tecnologie come pannelli FV, turbine eoliche, accumulo a batteria e biomassa agli edifici. Imposta vincoli e obiettivi.",
-      "step3Title": "Esegui l'ottimizzazione",
-      "step3Desc": "Avvia i solver Calliope, PyPSA e PyLoVo per trovare la progettazione ottimale del sistema energetico con risoluzione oraria.",
-      "step4Title": "Analizza i risultati",
-      "step4Desc": "Esplora grafici interattivi, flussi di energia, topologia della rete e ripartizioni dei costi ed esporta report completi."
+      "label": "Flusso in 4 passi",
+      "title": "Dai dati del sito alla rete CCUS operativa",
+      "description": "Progetta, ottimizza e implementa l'infrastruttura di cattura e stoccaggio del carbonio in quattro passi.",
+      "s1Title": "1. Seleziona una regione",
+      "s1Desc": "Disegna o scegli un'area sulla mappa. Emettitori, siti di stoccaggio e infrastrutture esistenti si caricano automaticamente.",
+      "s2Title": "2. Configura la catena",
+      "s2Desc": "Assegna la cattura agli emettitori, poi scegli corridoi di condotte, terminali marittimi e giacimenti candidati.",
+      "s3Title": "3. Ottimizza le rotte",
+      "s3Desc": "Esegui il motore di ottimizzazione per calcolare l'instradamento a costo minimo, la capacità di rete e le esigenze di compressione.",
+      "s4Title": "4. Analizza e condividi",
+      "s4Desc": "Esplora mappe, diagrammi di flusso della CO₂ e costo livellato (€/t CO₂), poi esporta report e condividi scenari."
     },
-    "showcase": {
-      "label": "Guardalo in azione",
-      "title": "Strumenti potenti, interfaccia elegante",
-      "description": "Progettato per chiarezza ed efficienza, App rende l'analisi energetica complessa accessibile a tutti.",
-      "mapTitle": "Mappa 3D interattiva",
-      "mapDesc": "Esplora edifici, sistemi energetici e infrastrutture di rete in un ricco ambiente 3D con immagini satellitari e sovrapposizioni di dati in tempo reale.",
-      "mapBadge": "Funzionalità principale",
-      "chartsTitle": "Risultati della simulazione",
-      "chartsDesc": "Analizza il bilancio energetico, le curve di produzione, le ripartizioni dei costi e i diagrammi di flusso Sankey con grafici interattivi ed esportazione dei dati.",
-      "chartsBadge": "Analisi",
-      "gridTitle": "Topologia della rete",
-      "gridDesc": "Visualizza il flusso di potenza, i profili di tensione, il carico dei trasformatori e la topologia della rete con i risultati integrati della simulazione PyPSA e PyLoVo.",
-      "gridBadge": "Rete intelligente"
+    "personas": {
+      "eyebrow": "A chi è rivolta",
+      "title": "Progettata per l'intero ecosistema CCUS",
+      "p1Title": "Emettitori industriali",
+      "p1Desc": "Impianti di cemento, acciaio, chimica ed energia che valutano la fattibilità della cattura e i collegamenti dorsali regionali.",
+      "p2Title": "Sviluppatori di condotte e logistica",
+      "p2Desc": "Traccia dorsali di CO₂ ad alta pressione, dimensiona le stazioni di compressione e ottimizza il noleggio navale.",
+      "p3Title": "Operatori di stoccaggio",
+      "p3Desc": "Analizza gli acquiferi salini profondi del Mare del Nord, del Baltico e del Mediterraneo secondo i limiti di iniezione.",
+      "p4Title": "Decisori politici e consorzi",
+      "p4Desc": "Simula roadmap regionali di zero netto, la regolamentazione transfrontaliera della CO₂ e la conformità alla tassonomia UE."
     },
     "trust": {
       "euTitle": "Finanziato dall'Unione Europea",
-      "euDescription": "App è un progetto di ricerca finanziato dall'Unione Europea, sviluppato presso la Technische Hochschule Deggendorf in collaborazione con importanti università e istituzioni di ricerca europee. La piattaforma sostiene la missione dell'UE per la neutralità climatica entro il 2050.",
-      "availableAcross": "Disponibile in tutta Europa",
-      "countriesComingSoon": "oltre 30 paesi",
-      "comingSoon": "prossimamente",
-      "hourlyResolution": "Risoluzione oraria",
-      "hourlyResolutionDesc": "Simulazione su anno intero",
-      "energyTechnologies": "Tecnologie energetiche",
-      "energyTechnologiesDesc": "FV, eolico, accumulo e altro",
-      "integratedDataSources": "Fonti di dati integrate",
-      "poweredByOpenSource": "Basato su tecnologia open source"
+      "euDescription": "Questa piattaforma di valutazione CCUS è sviluppata nell'ambito di un progetto di ricerca Horizon finanziato dall'UE per accelerare la decarbonizzazione industriale in Europa."
     },
     "contact": {
-      "label": "Mettiti in contatto",
-      "title": "Ci piacerebbe sentirti",
-      "description": "Hai una domanda, un suggerimento o vuoi collaborare? Inviaci un messaggio e il nostro team ti risponderà.",
+      "label": "Contattaci",
+      "title": "Contatta il team del progetto CCUS",
+      "description": "Domande, idee di partnership o feedback? Inviaci un messaggio e ti risponderemo.",
       "name": "Nome",
       "namePlaceholder": "Il tuo nome",
       "email": "Email",
-      "emailPlaceholder": "tu@esempio.com",
+      "emailPlaceholder": "tu@esempio.it",
       "category": "Categoria",
-      "subject": "Oggetto",
-      "subjectPlaceholder": "Di cosa si tratta?",
-      "message": "Messaggio",
-      "messagePlaceholder": "Raccontaci di più...",
-      "send": "Invia messaggio",
-      "sending": "Invio in corso...",
-      "successTitle": "Messaggio inviato!",
-      "successMessage": "Grazie per averci contattato. Ti risponderemo il prima possibile.",
-      "sendAnother": "Invia un altro messaggio",
-      "error": "Qualcosa è andato storto. Riprova.",
       "categories": {
         "general": "Richiesta generale",
-        "feature": "Richiesta di funzionalità",
-        "bug": "Segnalazione di bug",
-        "improvement": "Suggerimento"
-      }
-    },
-    "cta": {
-      "title": "Inizia a pianificare la tua transizione energetica",
-      "description": "Unisciti a ricercatori e pianificatori energetici di tutta Europa. Progetta sistemi energetici sostenibili con App.",
-      "button": "Provalo ora — è gratis",
-      "noCreditCard": "Nessuna carta di credito richiesta",
-      "gdpr": "Conforme al GDPR"
+        "partnership": "Partnership",
+        "pilot": "Pilota / Demo",
+        "research": "Collaborazione di ricerca",
+        "media": "Stampa e media"
+      },
+      "subject": "Oggetto",
+      "subjectPlaceholder": "Come possiamo aiutarti?",
+      "message": "Messaggio",
+      "messagePlaceholder": "Dicci di più…",
+      "send": "Invia messaggio",
+      "sending": "Invio…",
+      "successText": "Grazie! Il tuo messaggio è stato inviato.",
+      "genericError": "Qualcosa è andato storto. Riprova.",
+      "submitFailed": "Impossibile inviare il messaggio. Riprova.",
+      "validationError": "Compila tutti i campi obbligatori."
     },
     "footer": {
-      "brandDescription": "Piattaforma avanzata di pianificazione energetica per un futuro sostenibile. Finanziata dall'Unione Europea.",
-      "product": "Prodotto",
-      "features": "Funzionalità",
-      "howItWorks": "Come funziona",
-      "documentation": "Documentazione",
-      "legal": "Note legali",
+      "brandDescription": "Piattaforma avanzata di pianificazione CCUS per un futuro sostenibile. Finanziata dall'Unione Europea.",
+      "privacySettings": "Impostazioni privacy",
       "privacyPolicy": "Informativa sulla privacy",
-      "termsConditions": "Termini e condizioni",
+      "tagline": "Accelerare la cattura, il trasporto e lo stoccaggio del carbonio in Europa.",
+      "cookies": "Politica sui cookie",
       "impressum": "Impressum",
-      "disclaimer": "Disclaimer",
-      "project": "Progetto",
-      "about": "Chi siamo",
-      "acknowledgements": "Ringraziamenti",
-      "thirdPartyLicenses": "Licenze di terze parti",
-      "copyright": "© {{year}} App — Technische Hochschule Deggendorf. Questo progetto ha ricevuto finanziamenti dall'Unione Europea. Le opinioni espresse sono esclusivamente quelle dell'autore o degli autori e non riflettono necessariamente quelle dell'Unione Europea."
+      "terms": "Termini e condizioni",
+      "euFundedAlt": "Finanziato dall'Unione Europea",
+      "euDisclaimer": "Finanziato dall'Unione Europea. Le opinioni espresse appartengono tuttavia esclusivamente all'autore o agli autori e non riflettono necessariamente quelle dell'Unione Europea o dell'Agenzia esecutiva europea per la ricerca (REA). Né l'Unione Europea né l'autorità concedente possono esserne ritenute responsabili.",
+      "copyright": "STORCITO CCUS · Technische Hochschule Deggendorf",
+      "builtOn": "Basato sulla piattaforma STORCITO"
+    }
+  },
+  "modelResults": {
+    "title": "Model Results",
+    "errors": {
+      "noId": "No model ID provided",
+      "loadFailed": "Failed to load model results",
+      "layerIncomplete": "Layer configuration is incomplete",
+      "layerLoad": "Failed to load layer from GeoServer",
+      "tileLoad": "Some tiles failed to load from GeoServer ({{count}})"
+    },
+    "loadingWorkspace": "Loading workspace…",
+    "loadingModels": "Loading models…",
+    "noCompletedModels": "No completed models",
+    "selectModel": "Select a model",
+    "layer": {
+      "visible": "Visible",
+      "hidden": "Hidden",
+      "opacity": "Opacity",
+      "publishing": "Publishing layer to GeoServer…",
+      "day": "Day",
+      "view3d": "3D Terrain",
+      "view2d": "2D Map",
+      "playDaily": "Animate daily risk maps",
+      "fullscreen": "Fullscreen",
+      "exitFullscreen": "Exit fullscreen"
+    },
+    "map": {
+      "initializing": "Initializing map…"
+    },
+    "empty": {
+      "title": "No result for this model yet.",
+      "hint": "The simulation output will appear here once processing finishes."
+    },
+    "layers": {
+      "title": "Overlays",
+      "roads": "Roads",
+      "labels": "Labels & places"
+    },
+    "legend": {
+      "title": "Result",
+      "allLevels": "All available levels",
+      "levels": {
+        "very_low": "Very Low",
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "very_high": "Very High"
+      }
+    },
+    "details": {
+      "description": "Description",
+      "location": "Location",
+      "period": "Assessment period",
+      "days": "days",
+      "updated": "Updated",
+      "awaiting": "Waiting for result…",
+      "title": "Title",
+      "region": "Region",
+      "country": "Country",
+      "from": "From",
+      "to": "To",
+      "windSpeed": "Wind speed",
+      "windDirection": "Wind direction",
+      "temperature": "Temperature",
+      "humidity": "Humidity"
+    },
+    "risk": {
+      "notReady": "Metrics will be available once the layer is configured in GeoServer.",
+      "overall": "Overall Risk",
+      "meanScore": "Mean Risk Score",
+      "highRiskArea": "High + Very High area",
+      "ofArea": "of area",
+      "totalArea": "Analyzed area",
+      "analyzedSurface": "Valid (non-nodata) pixels",
+      "distribution": "Risk Level",
+      "sampleNote": "Based on {{count}} sampled pixels",
+      "highPlusArea": "High + Very High area",
+      "highPlusPixels": "High + Very High pixels"
+    },
+    "metrics": {
+      "overallRisk": "Overall risk",
+      "meanRiskScore": "Mean risk score",
+      "highVeryHighArea": "High + very high area",
+      "analyzedArea": "Analyzed area"
+    },
+    "timeline": {
+      "title": "Risk Over Time",
+      "subtitle": "Analyzed area per risk class for each day of the run. Click a day to show it on the map.",
+      "loading": "Computing daily distributions… the first load can take a minute.",
+      "empty": "No daily risk maps in this run."
+    }
+  },
+  "configurator": {
+    "registry": {
+      "layer1Title": "Model Initialization",
+      "layer1Subtitle": "Name and simulation timeframe",
+      "layer2Title": "Area Selection",
+      "layer2Subtitle": "Define where the model lives",
+      "layer3Title": "Risk Components",
+      "layer3Subtitle": "Choose which signals feed the model",
+      "layer4Title": "Final Review",
+      "layer4Subtitle": "Sanity check before run",
+      "layer5Title": "Save & Calculate",
+      "layer5Subtitle": "Persist and start the run"
+    },
+    "stepper": {
+      "stepOf": "Step {{step}} of {{total}}",
+      "back": "Back",
+      "continue": "Continue",
+      "update": "Update",
+      "save": "Save",
+      "saving": "Saving...",
+      "starting": "Starting...",
+      "saveAndRun": "Save & run",
+      "introTitle": "New analysis model",
+      "introSubtitle": "Let's set up your simulation",
+      "introDesc": "Six guided steps to define your area, validate inputs and launch a analysis run.",
+      "introProgressSaved": "Your progress is saved as you go",
+      "introDontShow": "Don't show this intro again",
+      "introCancel": "Cancel",
+      "introStart": "Get started",
+      "step": "STEP"
+    },
+    "layer1": {
+      "purpose": "Name this analysis run and choose the date window you want to assess.",
+      "nextStepHint": "Next you'll outline the geographic area on the map.",
+      "modelNameLabel": "Model name",
+      "modelNamePlaceholder": "e.g. Sample Area Summer 2026",
+      "modelNameHint": "A descriptive name so you can find this model later.",
+      "dynamicHint": "Dynamic runs keep the selected date range and use the 16:00 to 17:00 window.",
+      "dynamicLoading": "Loading available dynamic dates...",
+      "dynamicEmpty": "No dynamic dates available.",
+      "dynamicSelected": "Selected range: {{start}} to {{end}} ({{days}} days).",
+      "dynamicSelectedOne": "Selected range: {{start}} to {{end}} (1 day).",
+      "dynamicSelectInside": "Select a range inside available dynamic dates: {{start}} to {{end}}",
+      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}"
+    },
+    "layer2": {
+      "purpose": "Optionally upload a DTM to see its coverage, then draw inside it — or just draw on the bundled data.",
+      "nextStepHint": "Next we'll validate the selected area and model inputs.",
+      "terrainModel": "Terrain model (DTM)",
+      "dtmHint": "Optional GeoTIFF (.tif) — its coverage is shown on the map",
+      "dtmInfo": "A Digital Terrain Model — a GeoTIFF where each pixel is the ground elevation. Upload it first to see its coverage outline on the map, then draw your area inside it. Used to derive slope/aspect and as the spatial reference grid. If omitted, the bundled regional terrain is used.",
+      "readingDtm": "Reading DTM coverage…",
+      "coverageShown": "Coverage shown on the map — draw your area inside the outline.",
+      "drawArea": "Draw area",
+      "uploadGeoJson": "Upload GeoJSON",
+      "notSureFormat": "Not sure about the format?",
+      "formatDesc": "Polygon or MultiPolygon, WGS84 (EPSG:4326), [lon, lat] order.",
+      "sample": "Sample",
+      "statusUploaded": "GeoJSON boundary loaded from {{fileName}}.",
+      "statusUploadedNoName": "GeoJSON boundary loaded.",
+      "statusUploadPrompt": "Upload a GeoJSON file with Polygon or MultiPolygon geometry.",
+      "statusDrawn": "Area defined. You can keep adjusting it or move on.",
+      "statusDrawPrompt": "Click on the map to draw your area. Close the polygon to finish.",
+      "areaSummary": "Area summary",
+      "regions": "{{count}} regions",
+      "status": "Status",
+      "statusUploadedLabel": "Uploaded",
+      "statusDrawnLabel": "Drawn",
+      "statusNotSet": "Not set",
+      "area": "Area",
+      "perimeter": "Perimeter",
+      "blockingUploadGeoJson": "Upload a GeoJSON boundary file or switch back to draw.",
+      "blockingDrawArea": "Draw an area on the map to continue."
+    },
+    "layer3": {
+      "purpose": "These signals feed the AHP-weighted risk model. All three are enabled by default and recommended for an accurate analysis.",
+      "nextStepHint": "Next we'll do a final review before saving.",
+      "fwiLabel": "Weather signal (optional)",
+      "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
+      "fwiWeight": "30% weight",
+      "terrainLabel": "Terrain & slope",
+      "terrainHint": "Elevation, slope and aspect influence on spread",
+      "terrainWeight": "6% weight",
+      "historicalLabel": "Historical events",
+      "historicalHint": "Recurrence based on past incidents in the area",
+      "historicalWeight": "4% weight",
+      "weatherWarning": "Weather is the main risk signal. Disabling it makes the date selection irrelevant and produces a drastically under-estimated risk map. Keep it on unless you specifically need a baseline without weather.",
+      "customData": "Custom data (optional)",
+      "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
+      "weatherStationData": "Weather station data",
+      "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
+      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used."
+    },
+    "layer4": {
+      "purpose": "Real-time validation of the model configuration. Blockers must be cleared in their respective steps before the run can start.",
+      "nextStepHint": "Then you'll save the model and kick off the calculation.",
+      "missingModelName": "Missing — go back to Step 1.",
+      "missingDates": "Start or end date missing.",
+      "loadingDynamic": "Loading available dynamic dates…",
+      "dynamicRequiresBefore": "Dynamic mode requires start before end.",
+      "dynamicUnavailableDates": "The selected dynamic date range contains unavailable dates.",
+      "dynamicRange": "Dynamic {{start}} → {{end}}.",
+      "noGeoJson": "No GeoJSON uploaded.",
+      "noPolygon": "No polygon drawn on the map.",
+      "uploadIncomplete": "GeoJSON upload incomplete.",
+      "areaDetails": "{{count}} regions · {{area}}",
+      "areaDetailsSingle": "1 region · {{area}}",
+      "weatherDisabledWarn": "Weather signal (optional) is disabled — risk will be significantly under-estimated and the date becomes irrelevant.",
+      "allSignalsActive": "All risk signals active (weather + terrain + history).",
+      "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
+      "bufferDistance": "{{buffer}} m around the AOI.",
+      "blockers": "{{count}} blockers — fix before running.",
+      "blockersSingle": "1 blocker — fix before running.",
+      "warnings": "{{count}} warnings — review before running.",
+      "warningsSingle": "1 warning — review before running.",
+      "allPassed": "All checks passed. Ready to save & calculate.",
+      "labels": {
+        "modelName": "Model name",
+        "timeframe": "Timeframe",
+        "areaOfInterest": "Area of interest",
+        "riskComponents": "Risk components",
+        "bufferDistance": "Buffer distance"
+      }
+    },
+    "layer5": {
+      "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
+      "looksGood": "Everything looks good? Hit ",
+      "below": " below.",
+      "drawn": "drawn",
+      "notDrawn": "not drawn",
+      "coreOnly": "core only (veg + infra)",
+      "labels": {
+        "modelName": "Model name",
+        "from": "From",
+        "to": "To",
+        "dailyRun": "Daily run",
+        "buffer": "Buffer",
+        "area": "Area",
+        "riskComponents": "Risk components"
+      }
+    },
+    "coverage": {
+      "title": "Data coverage",
+      "unavailable": "Coverage unavailable",
+      "exactFootprint": "Exact raster footprint",
+      "mainFootprint": "{{percent}}% main footprint",
+      "data": "Data",
+      "noData": "No data",
+      "useShaded": "Use shaded areas",
+      "requiredAvailable": "Required inputs are available.",
+      "requiredAvailableDates": "Required inputs are available for {{dates}}.",
+      "avoidBlank": "Avoid blank gaps",
+      "blankDesc": "Blank areas have no valid source raster data for calculation.",
+      "availableData": "Data available"
     }
   }
 }

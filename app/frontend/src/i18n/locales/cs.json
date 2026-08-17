@@ -158,14 +158,17 @@
       "restartTour": "Restartovat prohlídku",
       "feedback": "Zpětná vazba",
       "theme": "Motiv",
-      "searchLocation": "Hledat místo"
+      "searchLocation": "Hledat místo",
+      "help": "Help"
     },
     "sidebar": {
-      "energySimulations": "Energetické Simulace",
+      "energySimulations": "CCUS Simulace",
       "map": "Mapa",
       "locations": "Polohy",
       "simulationReports": "Porovnání Modelů",
-      "technologies": "Technologie"
+      "technologies": "Technologie",
+      "transport": "Transport",
+      "simulations": "Analysis Runs"
     },
     "menu": {
       "profile": "Profil",
@@ -196,7 +199,9 @@
       "perPage": "na stránku",
       "previousPage": "Předchozí stránka",
       "nextPage": "Další stránka"
-    }
+    },
+    "appName": "CCUS Assessment",
+    "saved": "Saved"
   },
   "dashboard": {
     "stats": {
@@ -285,7 +290,7 @@
     "layerStatus": "Stav vrstvy",
     "availableResults": "Dostupné výsledky",
     "mapControls": "Ovládání mapy",
-    "mapControlsDescription": "Použijte ovládací prvky přiblížení (vpravo nahoře) pro přiblížení/oddálení, vycentrování mapy a prozkoumání vrstvy energetického hodnocení.",
+    "mapControlsDescription": "Použijte ovládací prvky přiblížení (vpravo nahoře) pro přiblížení/oddálení, vycentrování mapy a prozkoumání vrstvy CCUS hodnocení.",
     "opacity": "Průhlednost",
     "layerHidden": "Vrstva skryta",
     "showLayer": "Zobrazit vrstvu",
@@ -348,7 +353,10 @@
       "commercialDemand": "Komerční poptávka",
       "publicDemand": "Poptávka veřejná budova",
       "industrialDemand": "Průmyslová poptávka",
-      "agriculturalDemand": "Zemědělská poptávka"
+      "agriculturalDemand": "Zemědělská poptávka",
+      "gridElectricity": "Grid Electricity Purchase",
+      "householdSupply": "Household Supply",
+      "nonHouseholdSupply": "Non-Household Supply"
     },
     "charts": {
       "systemPerformance": "Výkon Systému",
@@ -562,7 +570,22 @@
       "transmission": "Přenos",
       "investmentCost": "Investice (CAPEX)",
       "operatingCost": "Provoz (OPEX)",
-      "systemLCOE": "LCOE Systému"
+      "systemLCOE": "LCOE Systému",
+      "simulationPeriod": "Simulation Period",
+      "simulationPeriodCost": "Cost for Simulation Period",
+      "annualizedCost": "Annualized Cost (projected)",
+      "perLocation": "per location",
+      "locations": "Locations",
+      "capex": "Equipment & Installation",
+      "opex": "Running Costs",
+      "costPerKw": "Cost per kW/yr",
+      "costPerKwh": "Cost per kWh",
+      "costSplit": "Equipment / Running",
+      "energyProduced": "Energy Produced",
+      "cheaperThanAvg": "cheaper than system average",
+      "moreExpensiveThanAvg": "more expensive than average",
+      "days": "days",
+      "hours": "hours"
     },
     "buildingDetail": {
       "building": "Budova",
@@ -602,6 +625,18 @@
       "notConvergedTitle": "Tok výkonu nekonvergoval",
       "convergedDescription": "Výpočet elektrického toku výkonu úspěšně nalezl stabilní řešení. Hodnoty napětí a výkonu v síti jsou fyzikálně platné.",
       "notConvergedDescription": "Výpočet toku výkonu nemohl najít stabilní řešení v limitu iterací. Výsledky mohou být nepřesné nebo neúplné."
+    },
+    "costInfo": {
+      "simulationPeriodNote": "Costs shown are for the simulated period of {{days}} days ({{hours}} hours). To see full annual costs, run a 1-year simulation (8,760 hours).",
+      "simulationPeriodShort": "{{days}}-day simulation period",
+      "costBreakdownTooltip": "Costs shown cover only the simulated time window, not a full year. Equipment costs are spread over the equipment lifetime, while running costs (e.g., grid electricity purchases) reflect actual usage during the period. In short simulations, technologies with high running costs appear proportionally larger.",
+      "annualProjection": "Estimated annual: {{value}}",
+      "equipmentCostNote": "Equipment cost is spread over its lifetime, showing only the share for this simulation period.",
+      "equipmentCostDesc": "Solar panels, batteries, and other hardware. The purchase cost is spread over the equipment's lifetime (e.g. 25 years for solar).",
+      "runningCostDesc": "Electricity purchased from the grid, maintenance, and other ongoing expenses that depend on usage.",
+      "systemCostSummaryDesc": "Shows the average cost of energy (ct/kWh) and how total costs split between equipment and running costs. Lower ct/kWh means cheaper energy overall.",
+      "lcoeComparisonDesc": "Compares the cost of energy from each source in ct/kWh. Solar and wind have low costs because sunlight and wind are free — you only pay for the equipment. The dashed line shows the system-wide average.",
+      "investmentBreakdownDesc": "Shows how much each technology costs, split into equipment (one-time purchase, spread over lifetime) and running costs (grid electricity, maintenance). Renewables typically only have equipment costs."
     }
   },
   "auth": {
@@ -629,7 +664,7 @@
     "resendVerificationEmail": "Znovu odeslat ověřovací e-mail",
     "protectedByEncryption": "Chráněno standardním šifrováním",
     "createAccount": "Vytvořit Účet",
-    "joinUsAccess": "Připojte se k nám pro přístup k platformě energetické simulace",
+    "joinUsAccess": "Připojte se k nám pro přístup k platformě CCUS simulace",
     "personalInformation": "Osobní Informace",
     "fullName": "Celé Jméno",
     "enterFullName": "Zadejte své celé jméno",
@@ -672,7 +707,14 @@
     "signUpNow": "Zaregistrujte se nyní",
     "createPassword": "Vytvořte heslo",
     "creating": "Vytváření...",
-    "agreeToTerms": "Vytvořením účtu souhlasíte s našimi Podmínkami služby"
+    "agreeToTerms": "Vytvořením účtu souhlasíte s našimi Podmínkami služby",
+    "signInHere": "Sign in here",
+    "sidePanel": {
+      "badge": "CCUS intelligence",
+      "title": "Accelerate carbon capture before emissions escalate",
+      "subtitle": "Map, model and act on CCUS projects — turning site data and geospatial insight into safe, scalable carbon capture, utilisation and storage across Europe.",
+      "funded": "Funded by the European Union · Built on the App platform"
+    }
   },
   "workspace": {
     "workspace": "Pracovní prostor",
@@ -724,14 +766,14 @@
     "export": "Exportovat",
     "compare": "Porovnat",
     "dashboard": "Panel modelů",
-    "manageConfigurations": "Spravujte konfigurace energetického hodnocení",
+    "manageConfigurations": "Spravujte konfigurace CCUS hodnocení",
     "searchModels": "Hledat modely...",
     "allModels": "Všechny modely",
     "modelGroups": "Skupiny modelů",
     "loadingWorkspace": "Načítání pracovního prostoru...",
     "loadingModels": "Načítání modelů...",
     "loadingWorkspaceDescription": "Prosím počkejte, inicializujeme vaše preference pracovního prostoru.",
-    "loadingModelsDescription": "Prosím počkejte, načítáme vaše modely energetického hodnocení.",
+    "loadingModelsDescription": "Prosím počkejte, načítáme vaše modely CCUS hodnocení.",
     "selectWorkspace": "Vyberte nebo vytvořte pracovní prostor",
     "refreshModels": "Obnovit seznam modelů",
     "share": "Sdílet",
@@ -747,7 +789,7 @@
     "moveToWorkspace": "Přesunout do pracovního prostoru",
     "noModelsFound": "Žádné modely nenalezeny",
     "noModelsMatch": "Žádný model neodpovídá \"{{search}}\". Zkuste upravit vyhledávání.",
-    "noModelsYet": "Zatím jste nevytvořili žádné modely energetického hodnocení. Začněte vytvořením prvního modelu!",
+    "noModelsYet": "Zatím jste nevytvořili žádné modely CCUS hodnocení. Začněte vytvořením prvního modelu!",
     "createFirstModel": "Vytvořte svůj první model",
     "selected": "vybráno",
     "deleteSelected": "Smazat vybrané",
@@ -915,7 +957,8 @@
       "energyRiskFinal": "Konečné Energetické Riziko",
       "vegetationRisk": "Riziko Vegetace",
       "topographyRisk": "Riziko Topografie",
-      "upgradeMessage": "Odemkněte více funkcí požádáním administrátora o upgrade."
+      "upgradeMessage": "Odemkněte více funkcí požádáním administrátora o upgrade.",
+      "resultFinal": "Result Final"
     },
     "quickActions": {
       "title": "Rychlé Akce",
@@ -929,7 +972,7 @@
     },
     "title": "Panel správce",
     "welcomeBack": "Vítejte zpět, {{name}}!",
-    "managePlatform": "Spravujte svou platformu pro simulaci energie",
+    "managePlatform": "Spravujte svou platformu pro simulaci CCUS",
     "administrator": "Administrátor",
     "loadingContent": "Načítání obsahu..."
   },
@@ -1128,6 +1171,29 @@
       "updated": "Profil úspěšně aktualizován!",
       "failedToLoad": "Nepodařilo se načíst profil. Zkuste to prosím znovu.",
       "failedToUpdate": "Nepodařilo se aktualizovat profil. Zkuste to prosím znovu."
+    },
+    "password": {
+      "title": "Change Password",
+      "description": "Update the password you use to sign in",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password",
+      "currentPlaceholder": "Enter your current password",
+      "newPlaceholder": "Enter a new password",
+      "confirmPlaceholder": "Re-enter your new password",
+      "submit": "Update Password",
+      "updating": "Updating...",
+      "updated": "Password changed successfully!",
+      "failed": "Failed to change password. Please try again.",
+      "requirements": {
+        "minChars": "At least 8 characters",
+        "uppercase": "One uppercase letter",
+        "lowercase": "One lowercase letter",
+        "number": "One number",
+        "specialChar": "One special character"
+      },
+      "requirementsNotMet": "Password does not meet all requirements",
+      "mismatch": "Passwords do not match"
     }
   },
   "webservicesManagement": {
@@ -1293,7 +1359,7 @@
   "simulation": {
     "title": "Konfigurace simulace",
     "modelName": "Název modelu",
-    "modelNamePlaceholder": "Zadejte název pro vaši energetickou simulaci",
+    "modelNamePlaceholder": "Zadejte název pro vaši CCUS simulaci",
     "modelNameHint": "Dejte své simulaci popisný název",
     "simulationPeriod": "Období simulace",
     "duration": "Trvání",
@@ -1319,13 +1385,13 @@
     },
     "actions": {
       "saveAndExit": "Uložit & Odejít",
-      "create": "Vytvořit energetickou simulaci",
-      "update": "Aktualizovat energetickou simulaci",
+      "create": "Vytvořit CCUS simulaci",
+      "update": "Aktualizovat CCUS simulaci",
       "creating": "Vytváření simulace...",
       "updating": "Aktualizace simulace...",
       "cancel": "Zrušit"
     },
-    "tip": "Tip: Klikněte na mapu a nakreslete oblast vašeho zájmu. Systém spustí energetickou simulaci pro vybranou oblast během stanoveného období.",
+    "tip": "Tip: Klikněte na mapu a nakreslete oblast vašeho zájmu. Systém spustí CCUS simulaci pro vybranou oblast během stanoveného období.",
     "mapHeader": {
       "public": "Veřejné",
       "myBuildings": "Moje budovy",
@@ -1368,6 +1434,17 @@
       "cancelAssign": "Zrušit",
       "nextStep": "Další",
       "finish": "Dokončit"
+    },
+    "bufferDistance": {
+      "label": "Buffer Distance (meters)",
+      "hint": "Range 0–2000 m in 100 m steps. Expands the area considered around your polygon.",
+      "decrease": "Decrease buffer distance",
+      "increase": "Increase buffer distance"
+    },
+    "progress": {
+      "queued": "Queued",
+      "assessing": "Assessing",
+      "done": "Done"
     }
   },
   "mapLayers": {
@@ -1380,23 +1457,26 @@
       "osmHumanitarian": "Humanitární styl OpenStreetMap",
       "cartoPositron": "Světlá základní mapa od CartoDB",
       "cartoVoyager": "Podrobná základní mapa od CartoDB",
-      "openTopoMap": "Topografická stylová mapa"
+      "openTopoMap": "Topografická stylová mapa",
+      "maplibreDark": "Dark vector basemap",
+      "maplibreVoyager": "Detailed vector basemap"
     },
     "dataLayers": {
       "title": "Datové vrstvy",
-      "energySimulation": "Konečná vrstva energetické simulace"
-    }
+      "energySimulation": "Konečná vrstva CCUS simulace"
+    },
+    "tooltip": "Base Maps"
   },
   "tour": {
     "product": {
       "welcome": {
-        "title": "Vítejte na Platformě Energetické Simulace!",
-        "description": "Udělejme si rychlou prohlídku, která vám pomůže začít s Platformou Energetické Simulace.",
+        "title": "Vítejte na Platformě CCUS Simulace!",
+        "description": "Udělejme si rychlou prohlídku, která vám pomůže začít s Platformou CCUS Simulace.",
         "tip": "Tato prohlídka se zobrazí pouze jednou. Můžete ji kdykoli přeskočit nebo restartovat z postranního panelu."
       },
       "newAssessment": {
         "title": "Vytvořit Nové Hodnocení",
-        "description": "Připraveni začít? Klikněte na toto tlačítko pro vytvoření prvního energetického hodnocení. Otevře se průvodce výběrem oblasti.",
+        "description": "Připraveni začít? Klikněte na toto tlačítko pro vytvoření prvního CCUS hodnocení. Otevře se průvodce výběrem oblasti.",
         "tip": "Když zde kliknete, vstoupíte do speciální prohlídky procesu výběru oblasti!"
       },
       "profile": {
@@ -1408,8 +1488,8 @@
         "description": "Přístup k hlavnímu řídicímu panelu pro zobrazení projektů, nedávných hodnocení a celkových statistik. Toto je vaše základna."
       },
       "simulations": {
-        "title": "Energetické Simulace",
-        "description": "Vytvářejte a spravujte modely energetické simulace. Zahajte nová hodnocení, konfigurujte parametry a kontrolujte stávající výpočty."
+        "title": "CCUS Simulace",
+        "description": "Vytvářejte a spravujte modely CCUS simulace. Zahajte nová hodnocení, konfigurujte parametry a kontrolujte stávající výpočty."
       },
       "map": {
         "title": "Interaktivní Mapa",
@@ -1426,7 +1506,7 @@
       "technologies": {
         "title": "Technologie",
         "description": "Spravujte energetické technologie jako solární panely, baterie a tepelná čerpadla. Konfigurujte parametry a přiřazujte je budovám.",
-        "tip": "Technologie mohou být přizpůsobeny pro každou budovu pro přesné energetické simulace."
+        "tip": "Technologie mohou být přizpůsobeny pro každou budovu pro přesné CCUS simulace."
       },
       "layers": {
         "title": "Vrstvy Mapy",
@@ -1443,22 +1523,22 @@
       },
       "complete": {
         "title": "Vše je Připraveno!",
-        "description": "Dokončili jste prohlídku! Nyní jste připraveni začít vytvářet energetická hodnocení.",
+        "description": "Dokončili jste prohlídku! Nyní jste připraveni začít vytvářet CCUS hodnocení.",
         "nextSteps": "Další Kroky",
-        "nextStepsDescription": "Zkuste vytvořit své první energetické hodnocení nebo prozkoumejte interaktivní mapu.",
+        "nextStepsDescription": "Zkuste vytvořit své první CCUS hodnocení nebo prozkoumejte interaktivní mapu.",
         "restartTour": "Restartovat Prohlídku",
         "restartTourDescription": "Tuto prohlídku můžete kdykoli restartovat z postranního panelu."
       }
     },
     "areaSelect": {
       "welcome": {
-        "title": "Průvodce Energetickou Simulací",
-        "description": "Vítejte! Tato prohlídka vás provede vytvořením energetické simulace pro vámi zvolenou oblast.",
+        "title": "Průvodce CCUS Simulací",
+        "description": "Vítejte! Tato prohlídka vás provede vytvořením CCUS simulace pro vámi zvolenou oblast.",
         "tip": "Naučíte se, jak nakonfigurovat model, kreslit oblasti a vytvořit simulaci."
       },
       "modelName": {
         "title": "Název Modelu",
-        "description": "Dejte svému modelu energetické simulace popisný název. To vám pomůže jej později identifikovat v řídicím panelu.",
+        "description": "Dejte svému modelu CCUS simulace popisný název. To vám pomůže jej později identifikovat v řídicím panelu.",
         "tip": "Dobrá jména: \"Čtvrť Hamburk 2024\" nebo \"Energetická Analýza Průmyslové Zóny\""
       },
       "dateRange": {
@@ -1478,7 +1558,7 @@
       },
       "mapContainer": {
         "title": "Interaktivní Mapa",
-        "description": "Toto je váš hlavní pracovní prostor. Kreslte polygony na mapě pro výběr oblastí pro vaši energetickou simulaci.",
+        "description": "Toto je váš hlavní pracovní prostor. Kreslte polygony na mapě pro výběr oblastí pro vaši CCUS simulaci.",
         "tip": "Můžete přibližovat a posouvat mapu pro prozkoumání různých oblastí"
       },
       "search": {
@@ -1488,8 +1568,44 @@
       },
       "save": {
         "title": "Vytvořit Simulaci",
-        "description": "Jakmile vše nakonfigurujete, klikněte zde pro vytvoření modelu energetické simulace a spuštění analýzy.",
+        "description": "Jakmile vše nakonfigurujete, klikněte zde pro vytvoření modelu CCUS simulace a spuštění analýzy.",
         "tip": "Všechna pole musí být vyplněna, než budete moci uložit"
+      },
+      "precomputed": {
+        "title": "Precomputed regional map",
+        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
+        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
+      },
+      "customData": {
+        "title": "Custom data",
+        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
+      },
+      "calculationStatus": {
+        "title": "Calculation status",
+        "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
+        "tip": "If this shows a blocker, the continue button stays disabled until the date selection is valid."
+      },
+      "areaInput": {
+        "title": "Area input",
+        "description": "Draw the area directly on the map or upload a GeoJSON Polygon/MultiPolygon boundary.",
+        "tip": "The model can continue only after one valid area of interest is available."
+      },
+      "areaStatus": {
+        "title": "AOI status",
+        "description": "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
+      },
+      "optionalLayers": {
+        "title": "Risk signals",
+        "description": "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events.",
+        "tip": "Keep weather enabled for normal analysis runs; disabling it is useful only for a baseline comparison."
+      },
+      "finalReview": {
+        "title": "Validation status",
+        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+      },
+      "saveSummary": {
+        "title": "Save summary",
+        "description": "This final summary shows the values that will be saved with the model and sent to the calculation workflow."
       }
     },
     "buttons": {
@@ -1538,7 +1654,8 @@
       "loginRequired": "Pro odeslání zpětné vazby se prosím přihlaste",
       "submitFailed": "Odeslání zpětné vazby se nezdařilo. Zkuste to prosím později.",
       "invalidImageType": "Vyberte prosím platný obrazový soubor (PNG, JPG, GIF)",
-      "imageTooLarge": "Velikost obrázku musí být menší než 15MB"
+      "imageTooLarge": "Velikost obrázku musí být menší než 15MB",
+      "payloadTooLarge": "The attachment is too large. Please use smaller images."
     },
     "myFeedback": {
       "title": "Moje zpětná vazba",
@@ -1556,7 +1673,13 @@
         "resolved": "Vyřešeno",
         "closed": "Uzavřeno"
       }
-    }
+    },
+    "write": "Write",
+    "preview": "Preview",
+    "markdownSupported": "Markdown supported",
+    "words": "words",
+    "chars": "chars",
+    "previewEmpty": "Nothing to preview"
   },
   "technologies": {
     "title": "Technologie",
@@ -1777,7 +1900,10 @@
       "alreadySharedWithWorkspace": "Toto místo je již s tímto pracovním prostorem sdíleno",
       "alreadySharedWithGroup": "Toto místo je již s touto skupinou sdíleno",
       "failedToShare": "Sdílení se nezdařilo. Zkuste to prosím znovu."
-    }
+    },
+    "Spain": "Spain",
+    "sampleRegion": "Sample Region",
+    "Vedra": "Vedra"
   },
   "weather": {
     "temperature": "Tep.",
@@ -2014,7 +2140,56 @@
       "grid": "Síť",
       "other": "Ostatní"
     },
-    "pdfTitle": "Zpráva srovnání simulací"
+    "pdfTitle": "Zpráva srovnání simulací",
+    "summaryWorse": "Risk increased",
+    "summaryBetter": "Risk reduced",
+    "summaryStable": "Risk is broadly stable",
+    "loadingMetrics": "Loading risk metrics…",
+    "summaryTitle": "Comparison Summary",
+    "summarySub": "Key changes between the baseline and comparison model.",
+    "criticalShare": "High + Very High share",
+    "dominantClass": "Dominant class",
+    "dominantClassSub": "Largest share of valid pixels: {{baseline}}% in baseline, {{comparison}}% in comparison.",
+    "dominantClassUnavailable": "Distribution data is not available.",
+    "analyzedArea": "Analyzed area",
+    "analyzedAreaSub": "Area is calculated from valid non-nodata pixels, so it can differ between model outputs.",
+    "readingDirection": "Interpretation",
+    "badDeltaLabel": "More High/Very High",
+    "badDeltaText": "means the comparison model is more severe.",
+    "goodDeltaLabel": "More Very Low/Low",
+    "goodDeltaText": "usually means risk shifted toward safer classes.",
+    "distribution": "Distribution Comparison",
+    "distributionSub": "Share of area per risk class in each model.",
+    "changeAnalysis": "Risk Change Analysis",
+    "changeAnalysisSub": "How risk shifted between the baseline and the comparison model, cell by cell on the sampled grid.",
+    "riskFlow": "Risk Flow",
+    "riskFlowSub": "Bands show the share of the area moving from a baseline class (left) to a comparison class (right).",
+    "scoreDistribution": "Risk Score Distribution",
+    "scoreDistributionSub": "Frequency of the continuous risk score across sampled cells. A curve shifted to the right means a more severe model; the coloured bands mark the risk classes.",
+    "areaByClass": "Area by Risk Class",
+    "areaByClassSub": "Area assigned to each risk class — comparable even when the two models cover differently sized areas.",
+    "topTransitions": "Biggest Changes",
+    "topTransitionsSub": "Largest class-to-class shifts by share of the area.",
+    "unchangedShare": "kept the same class",
+    "increasedShare": "moved to higher risk",
+    "decreasedShare": "moved to lower risk",
+    "ofArea": "of the area",
+    "noTransitions": "No class changes detected — both models assign the same risk class everywhere.",
+    "differentAreas": "The two models cover different areas or grids, so a cell-by-cell change analysis is not possible. Use the side-by-side maps above and the distribution below instead.",
+    "validCells": "valid cells",
+    "loadingMapSamples": "Loading geographic raster samples…",
+    "noMapSamples": "Geographic map samples are not available yet.",
+    "cells": "cells",
+    "noConfiguredLayer": "No GeoServer layer is configured for this model yet.",
+    "incompleteLayer": "Layer configuration is incomplete",
+    "loadLayerFailed": "Failed to load layer from GeoServer",
+    "mapHint": "Pan/zoom either map — views stay in sync.",
+    "mapHintIndependent": "These models cover different areas — each map shows its own model.",
+    "synced": "Synced",
+    "independent": "Independent",
+    "loadingLayer": "Loading layer…",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen"
   },
   "map": {
     "zoomIn": "Přiblížit",
@@ -2044,7 +2219,8 @@
     "osmfPolicy": "Zásady ochrany osobních údajů OSMF",
     "firePolicy": "Zásady ochrany osobních údajů App",
     "deny": "Odmítnout",
-    "accept": "Přijmout"
+    "accept": "Přijmout",
+    "dataPolicy": "App Analysis Privacy Policy"
   },
   "areaStats": {
     "title": "Přehled oblasti",
@@ -2291,8 +2467,8 @@
   "tooltips": {
     "multiplePolygons": {
       "title": "Více Polygonů",
-      "description": "Povolte tuto možnost pro kreslení více oddělených oblastí na mapě pro hodnocení energie. Při vypnutí kreslení nového polygonu nahradí předchozí. Při povolení můžete definovat více odlišných oblastí, které budou všechny zahrnuty do analýzy.",
-      "example": "Použijte pro současnou analýzu energetických simulací ve více nesouvislých oblastech."
+      "description": "Povolte tuto možnost pro kreslení více oddělených oblastí na mapě pro hodnocení CCUS. Při vypnutí kreslení nového polygonu nahradí předchozí. Při povolení můžete definovat více odlišných oblastí, které budou všechny zahrnuty do analýzy.",
+      "example": "Použijte pro současnou analýzu CCUS simulací ve více nesouvislých oblastech."
     },
     "publicBuildings": {
       "title": "Veřejné Vlastní Budovy",
@@ -2413,13 +2589,33 @@
       "title": "Typ využití budovy",
       "description": "Funkční klasifikace z tagů OpenStreetMap. Určuje třídu standardního odběrového profilu (SLP).",
       "example": "Obytné typy používají SLP H0. Komerční používají G0-G6. Průmyslové používají G3."
+    },
+    "windSpeed": {
+      "title": "Wind Speed",
+      "description": "Average wind speed over the selected area for the given time period.",
+      "example": "Higher wind speeds provide more energy to the process and can rapidly propagate effects, significantly increasing the rate of spread."
+    },
+    "windDirection": {
+      "title": "Wind Direction",
+      "description": "Average wind direction over the selected area, represented in degrees and compass points.",
+      "example": "N (North), E (East), S (South), W (West), and intermediate points like NNE (North-Northeast) or WSW (West-Southwest)."
+    },
+    "temperature": {
+      "title": "Temperature",
+      "description": "Average ambient temperature over the selected area for the given time period.",
+      "example": "High temperatures dry out vegetation inputs, making them more reactive and amplifying the effect."
+    },
+    "humidity": {
+      "title": "Relative Humidity",
+      "description": "Average relative humidity over the selected area for the given time period.",
+      "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
     }
   },
   "onboarding": {
     "welcome": {
       "title": "Vítejte!",
       "description": "Nastavme vaše preference pro začátek",
-      "greeting": "Vítejte na platformě pro energetickou simulaci!",
+      "greeting": "Vítejte na platformě pro CCUS simulaci!",
       "intro": "Věnujme chvíli nastavení vašich preferencí. To nám pomůže přizpůsobit váš zážitek a poskytnout vám nejrelevantnější informace.",
       "step1": "Vyberte svůj preferovaný jazyk",
       "step2": "Nastavte preference počasí a mapy",
@@ -2540,196 +2736,408 @@
     "coverageMedium": "Střední pokrytí dat",
     "coverageLow": "Nízké pokrytí dat",
     "summaryFooter": "{{countries}} zemí · {{regions}} regionů · {{grids}} mřížek"
-  }
-,
+  },
   "landing": {
     "nav": {
-      "features": "Funkce",
-      "energy": "Energie",
+      "challenge": "Výzva",
+      "platform": "Platforma",
+      "infrastructure": "Infrastruktura",
       "howItWorks": "Jak to funguje",
-      "about": "O nás",
+      "personas": "Pro koho",
       "contact": "Kontakt",
       "signIn": "Přihlásit se",
-      "tryItNow": "Vyzkoušet hned"
+      "tryItNow": "Vyzkoušet platformu CCUS"
     },
     "hero": {
-      "badge": "Výzkumný projekt financovaný EU",
-      "title1": "Inteligentní energetické plánování",
-      "titleFor": "pro",
-      "titleHighlight": "udržitelnou budoucnost",
-      "description": "Modelujte, simulujte a optimalizujte systémy obnovitelné energie na úrovni budov a čtvrtí. App pomáhá obcím, výzkumníkům a energetickým plánovačům urychlit energetickou transformaci.",
-      "getStarted": "Začněte zdarma",
+      "badge": "Výzkumný projekt CCUS Horizon financovaný EU",
+      "title1": "Urychlete zachytávání uhlíku napříč Evropou",
+      "titleHighlight": "inteligence CCUS",
+      "subtitle": "Mapujte průmyslové emise, modelujte optimální potrubní a lodní přepravní sítě, hodnoťte geologická úložiště a urychlete průmyslovou dekarbonizaci napříč Evropou.",
+      "getStarted": "Spustit hodnocení CCUS",
       "seeHow": "Podívejte se, jak to funguje",
-      "countries": "Země",
-      "regions": "Regiony",
-      "hourlyResolution": "Hodinové rozlišení",
-      "yearsData": "Data 2015–2025",
-      "technologies": "Technologie",
-      "germany": "Německo",
-      "netherlands": "Nizozemsko",
-      "austria": "Rakousko",
-      "czechRepublic": "Česko",
-      "deRegions": "16 spolkových zemí",
-      "nlRegions": "12 provincií",
-      "atRegions": "9 spolkových zemí",
-      "czRegions": "13 krajů"
+      "metricSites": "Zmapovaná místa zachytávání",
+      "metricStorage": "Kapacita úložišť",
+      "metricNetwork": "Modelovaná síť tras",
+      "metricCost": "Optimalizace nákladů na vyhnutí"
+    },
+    "challenge": {
+      "eyebrow": "Výzva dekarbonizace",
+      "title": "Řešení evropské průmyslové dekarbonizace",
+      "description": "Přechod těžkého průmyslu na čistou nulu vyžaduje řešení složitých prostorových, logistických a ekonomických výzev napříč evropskými hranicemi.",
+      "card1Title": "Průmyslové bodové zdroje",
+      "card1Desc": "Těžký průmysl (cement, ocel, chemie) tvoří přes 25 % evropských emisí a vyžaduje rychlé zavedení zachytávání.",
+      "card2Title": "Složitá přepravní logistika",
+      "card2Desc": "Propojení vnitrozemských průmyslových klastrů s pobřežním úložištěm vyžaduje kombinaci vysokotlakých potrubí a sítí lodí LCO₂.",
+      "card3Title": "Párování geologických úložišť",
+      "card3Desc": "Zajištění dlouhodobé těsnosti a sladění ročních objemů zachytávání s limity vtláčení pobřežních zvodní.",
+      "card4Title": "Ekonomická optimalizace",
+      "card4Desc": "Výpočet nivelizovaných nákladů na vyhnuté CO₂ (€/t CO₂) zahrnující CAPEX, energii komprese, lodní charter a uhlíkové daně."
     },
     "features": {
-      "label": "Funkce platformy",
-      "title": "Vše, co potřebujete pro energetické plánování",
-      "description": "Komplexní sada nástrojů pro modelování, simulaci a optimalizaci decentralizovaných energetických systémů.",
-      "map": "Interaktivní 3D mapa",
-      "mapDesc": "Vizualizujte budovy, energetickou infrastrukturu a topologii sítě v interaktivním 3D prostředí se satelitními snímky.",
-      "multiTech": "Vícetechnologické modelování",
-      "multiTechDesc": "Konfigurujte FV, vítr, biomasu, geotermii, bateriové úložiště a připojení k síti pro libovolnou budovu nebo čtvrť.",
-      "simulation": "Pokročilá simulace",
-      "simulationDesc": "Spusťte hodinovou optimalizaci pomocí řešičů Calliope, PyPSA a PyLoVo a najděte nákladově optimální a uhlíkově minimální energetické systémy.",
-      "grid": "Analýza chytré sítě",
-      "gridDesc": "Analyzujte tok výkonu, napěťové profily, zatížení transformátorů a kapacitu vedení pomocí integrované simulace sítě PyPSA a PyLoVo.",
-      "reports": "Komplexní reporty",
-      "reportsDesc": "Generujte grafy energetické bilance, křivky trvání zatížení, denní profily, rozpis nákladů a Sankeyovy diagramy toků.",
-      "workspace": "Společný pracovní prostor",
-      "workspaceDesc": "Sdílejte modely se svým týmem, porovnávejte scénáře simulace a spolupracujte na plánování energetické transformace."
+      "label": "Možnosti platformy",
+      "title": "Vše pro plánování CCUS a optimalizaci tras",
+      "description": "Komplexní geoprostorová sada nástrojů pro modelování zachytávání uhlíku, přepravní logistiky CO₂ a geologických úložišť.",
+      "f1Title": "Interaktivní geoprostorová mapa",
+      "f1Desc": "Vizualizujte zdroje emisí, potrubní koridory, lodní trasy a úložiště na jedné interaktivní mapě.",
+      "f2Title": "Párování zdroj–úložiště",
+      "f2Desc": "Přiřaďte průmyslové emitenty CO₂ k vhodnému geologickému úložišti podle kapacity, vzdálenosti a nákladů.",
+      "f3Title": "Optimalizace tras",
+      "f3Desc": "Modelujte potrubní a lodní koridory a vypočítejte nejlevnější, uhlíkově optimální trasování a dimenzování.",
+      "f4Title": "Analytika úložišť",
+      "f4Desc": "Hodnoťte hluboké solné zvodně a vytěžená ropná a plynová pole z hlediska kapacity, tlakových limitů a rychlosti vtláčení.",
+      "f5Title": "Zprávy o nákladech a CO₂",
+      "f5Desc": "Nivelizované náklady na vyhnuté CO₂ (€/t) s rozpisem CAPEX, komprese a přepravy a Sankeyovými diagramy toků.",
+      "f6Title": "Sdílené pracovní prostory",
+      "f6Desc": "Sdílejte modely, porovnávejte scénáře a spolupracujte s regionálními konsorcii na plánech dekarbonizace."
     },
-    "energy": {
-      "label": "Energetické technologie",
-      "title": "Integrované modelování obnovitelné energie",
-      "description": "App podporuje podrobné modelování a optimalizaci pěti klíčových energetických technologií s využitím PySAM, pvlib a Calliope.",
-      "pv": {
-        "title": "Fotovoltaika",
-        "subtitle": "FV systémy",
-        "description": "Modelujte střešní a pozemní FV systémy s vysoce přesnými hodinovými simulacemi pomocí PySAM a pvlib. Zohledňuje orientaci panelů, sklon, zastínění, účinnost střídače a degradaci.",
-        "spec1": "Střešní a pozemní",
-        "spec2": "Hodinové modelování ozáření",
-        "spec3": "Enginy PySAM a pvlib",
-        "spec4": "Automatická detekce střech"
-      },
-      "wind": {
-        "title": "Větrná energie",
-        "subtitle": "Větrné turbíny",
-        "description": "Simulujte pozemní větrné turbíny pomocí větrných modelů PySAM s reanalyzačními daty MERRA-2 a Open-Meteo. Podporuje více typů turbín, výšek náboje a modelování výkonových křivek.",
-        "spec1": "Modely pozemních turbín",
-        "spec2": "Větrné profily MERRA-2",
-        "spec3": "Modelování výkonové křivky",
-        "spec4": "Optimalizace výšky náboje"
-      },
-      "biomass": {
-        "title": "Energie z biomasy",
-        "subtitle": "Kogenerace a vytápění biomasou",
-        "description": "Konfigurujte systémy vytápění biomasou a kombinované výroby tepla a elektřiny (KVET). Podporuje dřevní štěpku, bioplyn a organický odpad s flexibilním plánováním provozu.",
-        "spec1": "Režimy KVET a vytápění",
-        "spec2": "Dřevní štěpka a bioplyn",
-        "spec3": "Flexibilní provoz",
-        "spec4": "Provoz neutrální vůči CO₂"
-      },
-      "geothermal": {
-        "title": "Geotermální energie",
-        "subtitle": "Teplo ze země",
-        "description": "Modelujte mělké a hluboké geotermální systémy včetně zemních tepelných čerpadel a vrtaných výměníků tepla. Sezónní akumulace tepla s hodinovými profily teploty půdy.",
-        "spec1": "Mělké a hluboké systémy",
-        "spec2": "Vrtané výměníky tepla",
-        "spec3": "Sezónní akumulace tepla",
-        "spec4": "Profily teploty půdy"
-      },
-      "battery": {
-        "title": "Bateriové úložiště",
-        "subtitle": "Systémy ukládání energie",
-        "description": "Optimalizujte lithium-iontové a další bateriové úložné systémy pro snižování špiček, maximalizaci vlastní spotřeby a síťové služby. Podporuje dimenzování kapacity a modelování degradace.",
-        "spec1": "Li-ion a další chemie",
-        "spec2": "Optimalizace snižování špiček",
-        "spec3": "Dimenzování kapacity",
-        "spec4": "Modelování degradace"
-      }
+    "infrastructure": {
+      "eyebrow": "Hodnotový řetězec CCUS",
+      "title": "Čtyři fáze, jeden integrovaný model",
+      "description": "Zachytávání, přeprava, ukládání a využití — modelováno od začátku do konce, aby byl každý projekt plánován jako úplný hodnotový řetězec.",
+      "c1Subtitle": "Zachytávání u zdroje",
+      "c1Title": "Zachytávání uhlíku",
+      "c1Desc": "Zachytávejte CO₂ v cementárnách, ocelárnách, chemických závodech a elektrárnách pomocí post-combustion a dalších ověřených technologií.",
+      "c1Spec1": "Zachytávání post-combustion a oxy-fuel",
+      "c1Spec2": "Modelování objemu a čistoty spalin",
+      "c1Spec3": "Míra zachytávání vs. energetická penalizace",
+      "c1Spec4": "Hodnocení proveditelnosti modernizace",
+      "c2Subtitle": "Potrubí a loď",
+      "c2Title": "Přeprava CO₂",
+      "c2Desc": "Přepravujte zachycené CO₂ z vnitrozemských klastrů do úložiště vysokotlakými potrubími a loděmi se zkapalněným CO₂.",
+      "c2Spec1": "Průměr potrubí a dimenzování tlaku",
+      "c2Spec2": "Námořní trasy LCO₂",
+      "c2Spec3": "Energie komprese a zkapalňování",
+      "c2Spec4": "Nejlevnější trasování koridorů",
+      "c3Subtitle": "Geologické ukládání",
+      "c3Title": "Ukládání CO₂",
+      "c3Desc": "Hodnoťte pobřežní a pevninská úložiště pro bezpečné a trvalé geologické uzavření vtláčeného CO₂.",
+      "c3Spec1": "Solné zvodně a vytěžená pole",
+      "c3Spec2": "Limity vtláčení a tlaku",
+      "c3Spec3": "Kontroly těsnosti uzavření",
+      "c3Spec4": "Sladění roční kapacity",
+      "c4Subtitle": "Využití CO₂",
+      "c4Title": "Zhodnocení uhlíku",
+      "c4Desc": "Přeměňujte zachycené CO₂ na e-paliva, chemikálie, stavební materiály a další hodnotné produkty.",
+      "c4Spec1": "E-paliva a syntetické chemikálie",
+      "c4Spec2": "Mineralizace a stavební materiály",
+      "c4Spec3": "Cesty zvýšené těžby",
+      "c4Spec4": "Využití vs. ukládání"
     },
     "howItWorks": {
-      "label": "Začínáme",
-      "title": "Jak to funguje",
-      "description": "Od výběru regionu k užitečným poznatkům ve čtyřech jednoduchých krocích.",
-      "step1Title": "Vyberte svůj region",
-      "step1Desc": "Nakreslete nebo vyberte geografickou oblast na interaktivní mapě. Budovy a infrastruktura se načtou automaticky.",
-      "step2Title": "Nakonfigurujte energetické systémy",
-      "step2Desc": "Přidávejte k budovám technologie jako FV panely, větrné turbíny, bateriové úložiště a biomasu. Nastavte omezení a cíle.",
-      "step3Title": "Spusťte optimalizaci",
-      "step3Desc": "Spusťte řešiče Calliope, PyPSA a PyLoVo a najděte optimální návrh energetického systému s hodinovým rozlišením.",
-      "step4Title": "Analyzujte výsledky",
-      "step4Desc": "Prozkoumejte interaktivní grafy, energetické toky, topologii sítě a rozpis nákladů a exportujte komplexní reporty."
+      "label": "Postup ve 4 krocích",
+      "title": "Od dat lokality k provozní síti CCUS",
+      "description": "Navrhujte, optimalizujte a nasazujte infrastrukturu zachytávání a ukládání uhlíku ve čtyřech krocích.",
+      "s1Title": "1. Vyberte region",
+      "s1Desc": "Nakreslete nebo vyberte oblast na mapě. Emitenti, úložiště a stávající infrastruktura se načtou automaticky.",
+      "s2Title": "2. Nakonfigurujte řetězec",
+      "s2Desc": "Přiřaďte zachytávání k emitentům a poté zvolte potrubní koridory, lodní terminály a kandidátská úložiště.",
+      "s3Title": "3. Optimalizujte trasy",
+      "s3Desc": "Spusťte optimalizační engine pro výpočet nejlevnějšího trasování, kapacity sítě a potřeb komprese.",
+      "s4Title": "4. Analyzujte a sdílejte",
+      "s4Desc": "Prozkoumejte mapy, diagramy toků CO₂ a nivelizované náklady (€/t CO₂), exportujte zprávy a sdílejte scénáře."
     },
-    "showcase": {
-      "label": "Podívejte se v akci",
-      "title": "Výkonné nástroje, elegantní rozhraní",
-      "description": "App je navržen pro přehlednost a efektivitu a zpřístupňuje složitou energetickou analýzu každému.",
-      "mapTitle": "Interaktivní 3D mapa",
-      "mapDesc": "Prozkoumejte budovy, energetické systémy a síťovou infrastrukturu v bohatém 3D prostředí se satelitními snímky a daty v reálném čase.",
-      "mapBadge": "Hlavní funkce",
-      "chartsTitle": "Výsledky simulace",
-      "chartsDesc": "Analyzujte energetickou bilanci, výrobní křivky, rozpis nákladů a Sankeyovy diagramy toků pomocí interaktivních grafů a exportu dat.",
-      "chartsBadge": "Analytika",
-      "gridTitle": "Topologie sítě",
-      "gridDesc": "Vizualizujte tok výkonu, napěťové profily, zatížení transformátorů a topologii sítě s integrovanými výsledky simulace PyPSA a PyLoVo.",
-      "gridBadge": "Chytrá síť"
+    "personas": {
+      "eyebrow": "Pro koho je určena",
+      "title": "Navrženo pro celý ekosystém CCUS",
+      "p1Title": "Průmysloví emitenti",
+      "p1Desc": "Cementárny, ocelárny, chemické závody a elektrárny hodnotící proveditelnost zachytávání a regionální páteřní připojení.",
+      "p2Title": "Vývojáři potrubí a logistiky",
+      "p2Desc": "Trasujte vysokotlaké páteřní vedení CO₂, dimenzujte kompresní stanice a optimalizujte lodní charter.",
+      "p3Title": "Provozovatelé úložišť",
+      "p3Desc": "Analyzujte hluboké solné zvodně Severního moře, Baltu a Středomoří z hlediska limitů vtláčení.",
+      "p4Title": "Tvůrci politik a konsorcia",
+      "p4Desc": "Simulujte regionální plány čisté nuly, přeshraniční pravidla přepravy CO₂ a soulad s taxonomií EU."
     },
     "trust": {
       "euTitle": "Financováno Evropskou unií",
-      "euDescription": "App je výzkumný projekt financovaný Evropskou unií, vyvinutý na Technische Hochschule Deggendorf ve spolupráci s předními evropskými univerzitami a výzkumnými institucemi. Platforma podporuje misi EU za klimatickou neutralitu do roku 2050.",
-      "availableAcross": "Dostupné po celé Evropě",
-      "countriesComingSoon": "více než 30 zemí",
-      "comingSoon": "již brzy",
-      "hourlyResolution": "Hodinové rozlišení",
-      "hourlyResolutionDesc": "Simulace celého roku",
-      "energyTechnologies": "Energetické technologie",
-      "energyTechnologiesDesc": "FV, vítr, úložiště a další",
-      "integratedDataSources": "Integrované zdroje dat",
-      "poweredByOpenSource": "Postaveno na open source technologii"
+      "euDescription": "Tato platforma pro hodnocení CCUS je vyvíjena v rámci výzkumného projektu Horizon financovaného EU, který urychluje průmyslovou dekarbonizaci napříč Evropou."
     },
     "contact": {
       "label": "Spojte se s námi",
-      "title": "Rádi se s vámi spojíme",
-      "description": "Máte dotaz, návrh nebo chcete spolupracovat? Pošlete nám zprávu a náš tým se vám ozve.",
+      "title": "Kontaktujte tým projektu CCUS",
+      "description": "Máte dotazy, nápady na spolupráci nebo zpětnou vazbu? Napište nám a ozveme se.",
       "name": "Jméno",
       "namePlaceholder": "Vaše jméno",
       "email": "E-mail",
-      "emailPlaceholder": "vy@priklad.com",
+      "emailPlaceholder": "vy@priklad.cz",
       "category": "Kategorie",
-      "subject": "Předmět",
-      "subjectPlaceholder": "Čeho se to týká?",
-      "message": "Zpráva",
-      "messagePlaceholder": "Řekněte nám více...",
-      "send": "Odeslat zprávu",
-      "sending": "Odesílání...",
-      "successTitle": "Zpráva odeslána!",
-      "successMessage": "Děkujeme, že jste se ozvali. Odpovíme vám co nejdříve.",
-      "sendAnother": "Odeslat další zprávu",
-      "error": "Něco se pokazilo. Zkuste to prosím znovu.",
       "categories": {
         "general": "Obecný dotaz",
-        "feature": "Žádost o funkci",
-        "bug": "Hlášení chyby",
-        "improvement": "Návrh"
-      }
-    },
-    "cta": {
-      "title": "Začněte plánovat svou energetickou transformaci",
-      "description": "Připojte se k výzkumníkům a energetickým plánovačům z celé Evropy. Navrhujte udržitelné energetické systémy s App.",
-      "button": "Vyzkoušejte hned — zdarma",
-      "noCreditCard": "Není nutná platební karta",
-      "gdpr": "V souladu s GDPR"
+        "partnership": "Partnerství",
+        "pilot": "Pilot / Demo",
+        "research": "Výzkumná spolupráce",
+        "media": "Tisk a média"
+      },
+      "subject": "Předmět",
+      "subjectPlaceholder": "Jak můžeme pomoci?",
+      "message": "Zpráva",
+      "messagePlaceholder": "Řekněte nám více…",
+      "send": "Odeslat zprávu",
+      "sending": "Odesílání…",
+      "successText": "Děkujeme! Vaše zpráva byla odeslána.",
+      "genericError": "Něco se pokazilo. Zkuste to prosím znovu.",
+      "submitFailed": "Zprávu se nepodařilo odeslat. Zkuste to prosím znovu.",
+      "validationError": "Vyplňte prosím všechna povinná pole."
     },
     "footer": {
-      "brandDescription": "Pokročilá platforma pro energetické plánování pro udržitelnou budoucnost. Financováno Evropskou unií.",
-      "product": "Produkt",
-      "features": "Funkce",
-      "howItWorks": "Jak to funguje",
-      "documentation": "Dokumentace",
-      "legal": "Právní informace",
+      "brandDescription": "Pokročilá platforma pro plánování CCUS pro udržitelnou budoucnost. Financováno Evropskou unií.",
+      "privacySettings": "Nastavení soukromí",
       "privacyPolicy": "Zásady ochrany osobních údajů",
-      "termsConditions": "Obchodní podmínky",
+      "tagline": "Urychlujeme zachytávání, přepravu a ukládání uhlíku napříč Evropou.",
+      "cookies": "Zásady používání cookies",
       "impressum": "Impressum",
-      "disclaimer": "Prohlášení",
-      "project": "Projekt",
-      "about": "O nás",
-      "acknowledgements": "Poděkování",
-      "thirdPartyLicenses": "Licence třetích stran",
-      "copyright": "© {{year}} App — Technische Hochschule Deggendorf. Tento projekt byl financován Evropskou unií. Vyjádřené názory a stanoviska jsou pouze názory autorů a nemusí nutně odrážet názory Evropské unie."
+      "terms": "Obchodní podmínky",
+      "euFundedAlt": "Financováno Evropskou unií",
+      "euDisclaimer": "Financováno Evropskou unií. Vyjádřené názory a stanoviska jsou však pouze názory autora (autorů) a nemusí nutně odrážet názory Evropské unie nebo Evropské výkonné agentury pro výzkum (REA). Evropská unie ani orgán poskytující financování za ně nenesou odpovědnost.",
+      "copyright": "STORCITO CCUS · Technische Hochschule Deggendorf",
+      "builtOn": "Postaveno na platformě STORCITO"
+    }
+  },
+  "modelResults": {
+    "title": "Model Results",
+    "errors": {
+      "noId": "No model ID provided",
+      "loadFailed": "Failed to load model results",
+      "layerIncomplete": "Layer configuration is incomplete",
+      "layerLoad": "Failed to load layer from GeoServer",
+      "tileLoad": "Some tiles failed to load from GeoServer ({{count}})"
+    },
+    "loadingWorkspace": "Loading workspace…",
+    "loadingModels": "Loading models…",
+    "noCompletedModels": "No completed models",
+    "selectModel": "Select a model",
+    "layer": {
+      "visible": "Visible",
+      "hidden": "Hidden",
+      "opacity": "Opacity",
+      "publishing": "Publishing layer to GeoServer…",
+      "day": "Day",
+      "view3d": "3D Terrain",
+      "view2d": "2D Map",
+      "playDaily": "Animate daily risk maps",
+      "fullscreen": "Fullscreen",
+      "exitFullscreen": "Exit fullscreen"
+    },
+    "map": {
+      "initializing": "Initializing map…"
+    },
+    "empty": {
+      "title": "No result for this model yet.",
+      "hint": "The simulation output will appear here once processing finishes."
+    },
+    "layers": {
+      "title": "Overlays",
+      "roads": "Roads",
+      "labels": "Labels & places"
+    },
+    "legend": {
+      "title": "Result",
+      "allLevels": "All available levels",
+      "levels": {
+        "very_low": "Very Low",
+        "low": "Low",
+        "moderate": "Moderate",
+        "high": "High",
+        "very_high": "Very High"
+      }
+    },
+    "details": {
+      "description": "Description",
+      "location": "Location",
+      "period": "Assessment period",
+      "days": "days",
+      "updated": "Updated",
+      "awaiting": "Waiting for result…",
+      "title": "Title",
+      "region": "Region",
+      "country": "Country",
+      "from": "From",
+      "to": "To",
+      "windSpeed": "Wind speed",
+      "windDirection": "Wind direction",
+      "temperature": "Temperature",
+      "humidity": "Humidity"
+    },
+    "risk": {
+      "notReady": "Metrics will be available once the layer is configured in GeoServer.",
+      "overall": "Overall Risk",
+      "meanScore": "Mean Risk Score",
+      "highRiskArea": "High + Very High area",
+      "ofArea": "of area",
+      "totalArea": "Analyzed area",
+      "analyzedSurface": "Valid (non-nodata) pixels",
+      "distribution": "Risk Level",
+      "sampleNote": "Based on {{count}} sampled pixels",
+      "highPlusArea": "High + Very High area",
+      "highPlusPixels": "High + Very High pixels"
+    },
+    "metrics": {
+      "overallRisk": "Overall risk",
+      "meanRiskScore": "Mean risk score",
+      "highVeryHighArea": "High + very high area",
+      "analyzedArea": "Analyzed area"
+    },
+    "timeline": {
+      "title": "Risk Over Time",
+      "subtitle": "Analyzed area per risk class for each day of the run. Click a day to show it on the map.",
+      "loading": "Computing daily distributions… the first load can take a minute.",
+      "empty": "No daily risk maps in this run."
+    }
+  },
+  "configurator": {
+    "registry": {
+      "layer1Title": "Model Initialization",
+      "layer1Subtitle": "Name and simulation timeframe",
+      "layer2Title": "Area Selection",
+      "layer2Subtitle": "Define where the model lives",
+      "layer3Title": "Risk Components",
+      "layer3Subtitle": "Choose which signals feed the model",
+      "layer4Title": "Final Review",
+      "layer4Subtitle": "Sanity check before run",
+      "layer5Title": "Save & Calculate",
+      "layer5Subtitle": "Persist and start the run"
+    },
+    "stepper": {
+      "stepOf": "Step {{step}} of {{total}}",
+      "back": "Back",
+      "continue": "Continue",
+      "update": "Update",
+      "save": "Save",
+      "saving": "Saving...",
+      "starting": "Starting...",
+      "saveAndRun": "Save & run",
+      "introTitle": "New analysis model",
+      "introSubtitle": "Let's set up your simulation",
+      "introDesc": "Six guided steps to define your area, validate inputs and launch a analysis run.",
+      "introProgressSaved": "Your progress is saved as you go",
+      "introDontShow": "Don't show this intro again",
+      "introCancel": "Cancel",
+      "introStart": "Get started",
+      "step": "STEP"
+    },
+    "layer1": {
+      "purpose": "Name this analysis run and choose the date window you want to assess.",
+      "nextStepHint": "Next you'll outline the geographic area on the map.",
+      "modelNameLabel": "Model name",
+      "modelNamePlaceholder": "e.g. Sample Area Summer 2026",
+      "modelNameHint": "A descriptive name so you can find this model later.",
+      "dynamicHint": "Dynamic runs keep the selected date range and use the 16:00 to 17:00 window.",
+      "dynamicLoading": "Loading available dynamic dates...",
+      "dynamicEmpty": "No dynamic dates available.",
+      "dynamicSelected": "Selected range: {{start}} to {{end}} ({{days}} days).",
+      "dynamicSelectedOne": "Selected range: {{start}} to {{end}} (1 day).",
+      "dynamicSelectInside": "Select a range inside available dynamic dates: {{start}} to {{end}}",
+      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}"
+    },
+    "layer2": {
+      "purpose": "Optionally upload a DTM to see its coverage, then draw inside it — or just draw on the bundled data.",
+      "nextStepHint": "Next we'll validate the selected area and model inputs.",
+      "terrainModel": "Terrain model (DTM)",
+      "dtmHint": "Optional GeoTIFF (.tif) — its coverage is shown on the map",
+      "dtmInfo": "A Digital Terrain Model — a GeoTIFF where each pixel is the ground elevation. Upload it first to see its coverage outline on the map, then draw your area inside it. Used to derive slope/aspect and as the spatial reference grid. If omitted, the bundled regional terrain is used.",
+      "readingDtm": "Reading DTM coverage…",
+      "coverageShown": "Coverage shown on the map — draw your area inside the outline.",
+      "drawArea": "Draw area",
+      "uploadGeoJson": "Upload GeoJSON",
+      "notSureFormat": "Not sure about the format?",
+      "formatDesc": "Polygon or MultiPolygon, WGS84 (EPSG:4326), [lon, lat] order.",
+      "sample": "Sample",
+      "statusUploaded": "GeoJSON boundary loaded from {{fileName}}.",
+      "statusUploadedNoName": "GeoJSON boundary loaded.",
+      "statusUploadPrompt": "Upload a GeoJSON file with Polygon or MultiPolygon geometry.",
+      "statusDrawn": "Area defined. You can keep adjusting it or move on.",
+      "statusDrawPrompt": "Click on the map to draw your area. Close the polygon to finish.",
+      "areaSummary": "Area summary",
+      "regions": "{{count}} regions",
+      "status": "Status",
+      "statusUploadedLabel": "Uploaded",
+      "statusDrawnLabel": "Drawn",
+      "statusNotSet": "Not set",
+      "area": "Area",
+      "perimeter": "Perimeter",
+      "blockingUploadGeoJson": "Upload a GeoJSON boundary file or switch back to draw.",
+      "blockingDrawArea": "Draw an area on the map to continue."
+    },
+    "layer3": {
+      "purpose": "These signals feed the AHP-weighted risk model. All three are enabled by default and recommended for an accurate analysis.",
+      "nextStepHint": "Next we'll do a final review before saving.",
+      "fwiLabel": "Weather signal (optional)",
+      "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
+      "fwiWeight": "30% weight",
+      "terrainLabel": "Terrain & slope",
+      "terrainHint": "Elevation, slope and aspect influence on spread",
+      "terrainWeight": "6% weight",
+      "historicalLabel": "Historical events",
+      "historicalHint": "Recurrence based on past incidents in the area",
+      "historicalWeight": "4% weight",
+      "weatherWarning": "Weather is the main risk signal. Disabling it makes the date selection irrelevant and produces a drastically under-estimated risk map. Keep it on unless you specifically need a baseline without weather.",
+      "customData": "Custom data (optional)",
+      "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
+      "weatherStationData": "Weather station data",
+      "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
+      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used."
+    },
+    "layer4": {
+      "purpose": "Real-time validation of the model configuration. Blockers must be cleared in their respective steps before the run can start.",
+      "nextStepHint": "Then you'll save the model and kick off the calculation.",
+      "missingModelName": "Missing — go back to Step 1.",
+      "missingDates": "Start or end date missing.",
+      "loadingDynamic": "Loading available dynamic dates…",
+      "dynamicRequiresBefore": "Dynamic mode requires start before end.",
+      "dynamicUnavailableDates": "The selected dynamic date range contains unavailable dates.",
+      "dynamicRange": "Dynamic {{start}} → {{end}}.",
+      "noGeoJson": "No GeoJSON uploaded.",
+      "noPolygon": "No polygon drawn on the map.",
+      "uploadIncomplete": "GeoJSON upload incomplete.",
+      "areaDetails": "{{count}} regions · {{area}}",
+      "areaDetailsSingle": "1 region · {{area}}",
+      "weatherDisabledWarn": "Weather signal (optional) is disabled — risk will be significantly under-estimated and the date becomes irrelevant.",
+      "allSignalsActive": "All risk signals active (weather + terrain + history).",
+      "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
+      "bufferDistance": "{{buffer}} m around the AOI.",
+      "blockers": "{{count}} blockers — fix before running.",
+      "blockersSingle": "1 blocker — fix before running.",
+      "warnings": "{{count}} warnings — review before running.",
+      "warningsSingle": "1 warning — review before running.",
+      "allPassed": "All checks passed. Ready to save & calculate.",
+      "labels": {
+        "modelName": "Model name",
+        "timeframe": "Timeframe",
+        "areaOfInterest": "Area of interest",
+        "riskComponents": "Risk components",
+        "bufferDistance": "Buffer distance"
+      }
+    },
+    "layer5": {
+      "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
+      "looksGood": "Everything looks good? Hit ",
+      "below": " below.",
+      "drawn": "drawn",
+      "notDrawn": "not drawn",
+      "coreOnly": "core only (veg + infra)",
+      "labels": {
+        "modelName": "Model name",
+        "from": "From",
+        "to": "To",
+        "dailyRun": "Daily run",
+        "buffer": "Buffer",
+        "area": "Area",
+        "riskComponents": "Risk components"
+      }
+    },
+    "coverage": {
+      "title": "Data coverage",
+      "unavailable": "Coverage unavailable",
+      "exactFootprint": "Exact raster footprint",
+      "mainFootprint": "{{percent}}% main footprint",
+      "data": "Data",
+      "noData": "No data",
+      "useShaded": "Use shaded areas",
+      "requiredAvailable": "Required inputs are available.",
+      "requiredAvailableDates": "Required inputs are available for {{dates}}.",
+      "avoidBlank": "Avoid blank gaps",
+      "blankDesc": "Blank areas have no valid source raster data for calculation.",
+      "availableData": "Data available"
     }
   }
 }
