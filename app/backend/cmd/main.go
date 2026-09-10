@@ -12,10 +12,15 @@ import (
 
 	"spatialhub_backend/internal/apitoken"
 	"spatialhub_backend/internal/cache"
+	co2routexclient "spatialhub_backend/internal/co2routex"
 	"spatialhub_backend/internal/config"
 	"spatialhub_backend/internal/events"
 	geoserverclient "spatialhub_backend/internal/geoserver"
+	co2nodeshandler "spatialhub_backend/internal/handler/co2nodes"
+	co2routexhandler "spatialhub_backend/internal/handler/co2routex"
+	co2sourceshandler "spatialhub_backend/internal/handler/co2sources"
 	feedback "spatialhub_backend/internal/handler/feedback"
+	geocodinghandler "spatialhub_backend/internal/handler/geocoding"
 	grouphandler "spatialhub_backend/internal/handler/group"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
@@ -29,6 +34,7 @@ import (
 	"spatialhub_backend/internal/services"
 	apitokenstore "spatialhub_backend/internal/store/apitoken"
 	feedbackstore "spatialhub_backend/internal/store/feedback"
+	storeco2client "spatialhub_backend/internal/storeco2"
 	"spatialhub_backend/internal/webservice"
 	"spatialhub_backend/internal/worker"
 	workspacehandler "spatialhub_backend/internal/workspace/handler"
@@ -57,10 +63,10 @@ const (
 )
 
 func main() {
-	// Set GIN to release mode to disable debug messages
+	// Release mode.
 	gin.SetMode(gin.ReleaseMode)
 
-	// Automatically set GOMAXPROCS to match container CPU quota (silenced)
+	// Container CPU quota.
 	maxprocs.Set(maxprocs.Logger(func(string, ...interface{}) {}))
 
 	if err := platformlogger.Init("logs", "app"); err != nil {
@@ -84,10 +90,10 @@ func main() {
 
 	configureRoutes(r, cfg, appDeps)
 
-	// Start background cleanup for old closed/resolved feedback (every 24h, deletes after 7 days)
+	// Purge stale feedback.
 	go startFeedbackCleanup(appDeps.DB, log)
 
-	// Start the outbox relay that publishes domain events to the async queue.
+	// Relay domain events.
 	outboxRelay := events.NewRelay(
 		events.NewOutboxStore(appDeps.DB),
 		jobs.NewAsynqEventPublisher(appDeps.AsynqClient),
@@ -98,7 +104,7 @@ func main() {
 	runHTTPServer(serverAddr, r, log)
 }
 
-// AppDependencies holds all infrastructure connections and their cleanup functions
+// AppDependencies holds the connections.
 type AppDependencies struct {
 	DB                  *gorm.DB
 	SQLdb               *sql.DB
@@ -114,7 +120,7 @@ type AppDependencies struct {
 	Cfg                 *config.Config
 }
 
-// Close properly closes all infrastructure connections
+// Close releases the connections.
 func (d *AppDependencies) Close() {
 	if d.SQLdb != nil {
 		_ = d.SQLdb.Close()
@@ -130,7 +136,7 @@ func (d *AppDependencies) Close() {
 	}
 }
 
-// initializeInfrastructure sets up database, Redis, auth, and async workers
+// initializeInfrastructure wires the infrastructure.
 func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDependencies {
 	db, sqlDB, err := platformdatabase.ConnectWithPing(cfg.Database)
 	if err != nil {
@@ -217,7 +223,7 @@ func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDepend
 	}
 }
 
-// setupGinEngine creates and configures the Gin engine with middleware
+// setupGinEngine builds the engine.
 func setupGinEngine(cfg *config.Config, log *logrus.Logger) *gin.Engine {
 	trusted := []string{"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}
 
@@ -258,7 +264,7 @@ func setupGinEngine(cfg *config.Config, log *logrus.Logger) *gin.Engine {
 	return r
 }
 
-// configureRoutes sets up all application routes.
+// configureRoutes mounts the routes.
 func configureRoutes(r *gin.Engine, cfg *config.Config, deps *AppDependencies) {
 	routes.Register(r, buildRouteDeps(cfg, deps))
 }
@@ -286,6 +292,7 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 	modelHandler := modelhandler.NewModelHandlerWithCache(deps.DB, deps.AsynqClient, deps.AdminTokenProvider, cfg.Auth.BaseURL, cfg.Auth.Realm, deps.WebserviceClient, deps.KeycloakCache, deps.SyncCache, deps.NotificationService)
 	resultHandler := resulthandler.NewResultHandler(deps.DB, deps.NotificationService, deps.WebserviceClient, cfg.CallbackSecret, deps.AsynqClient, deps.GeoserverClient, cfg.GeoserverPublicURL)
 	weatherHandler := weather.NewWeatherHandler()
+	geocodingHandler := geocodinghandler.NewHandler()
 
 	return routes.Deps{
 		AuthServiceURL:             cfg.AuthServiceURL,
@@ -303,7 +310,11 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 		GroupHandler:               groupHandler,
 		ModelHandler:               modelHandler,
 		WeatherHandler:             weatherHandler,
+		GeocodingHandler:           geocodingHandler,
 		WebserviceClient:           deps.WebserviceClient,
+		CO2NodesHandler:            co2nodeshandler.NewHandler(deps.DB, storeco2client.NewClient(cfg.StoreCO2URL)),
+		CO2RouteXHandler:           co2routexhandler.NewHandler(deps.DB, co2routexclient.NewClient(cfg.CO2RouteXURL)),
+		CO2SourcesHandler:          co2sourceshandler.NewHandler(storeco2client.NewClient(cfg.StoreCO2URL)),
 	}
 }
 
@@ -312,7 +323,7 @@ func startFeedbackCleanup(db *gorm.DB, log *logrus.Logger) {
 	ticker := time.NewTicker(24 * time.Hour)
 	defer ticker.Stop()
 
-	// Run once at startup, then every 24h
+	// Startup, then daily.
 	for {
 		deleted, err := store.DeleteClosedOlderThan(7)
 		if err != nil {

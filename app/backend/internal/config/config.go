@@ -1,7 +1,9 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"platform.local/platform/auth"
 	platformconfig "platform.local/platform/config"
@@ -12,6 +14,10 @@ import (
 const (
 	defaultWebserviceURL = "http://localhost:8082"
 	defaultGeoserverURL  = "http://localhost:8083"
+	defaultCO2RouteXHost = "localhost"
+	defaultCO2RouteXPort = "8010"
+	defaultStoreCO2Host  = "localhost"
+	defaultStoreCO2Port  = "8020"
 )
 
 type Config struct {
@@ -24,13 +30,15 @@ type Config struct {
 	AppTimezone          string
 	CookieDomain         string
 	Database             platformconfig.DatabaseConfig
-	SessionTTLMinutes    int // Session timeout in minutes
+	SessionTTLMinutes    int // Minutes.
 	Email                platformconfig.EmailSettings
-	AuthServiceURL       string // URL of the auth-service
-	WebserviceServiceURL string // URL of the webservice microservice
-	GeoserverServiceURL  string // URL of the GeoServer control-plane microservice
-	GeoserverPublicURL   string // Publicly reachable URL of the geoservice (for browser WMS requests)
-	CallbackSecret       string // Shared secret for webservice callback authentication
+	AuthServiceURL       string // Auth service.
+	WebserviceServiceURL string // Webservice.
+	GeoserverServiceURL  string // GeoServer control plane.
+	GeoserverPublicURL   string // Public WMS URL.
+	CO2RouteXURL         string // CO2RouteX API.
+	StoreCO2URL          string // STORE_CO2 API.
+	CallbackSecret       string // Callback secret.
 }
 
 func LoadFromEnv() (*Config, error) {
@@ -66,12 +74,14 @@ func LoadFromEnv() (*Config, error) {
 		WebserviceServiceURL: normalizeWebserviceURL(platformconfig.GetEnv("WEBSERVICE_SERVICE_URL", defaultWebserviceURL)),
 		GeoserverServiceURL:  platformconfig.GetEnv("GEOSERVER_SERVICE_URL", defaultGeoserverURL),
 		GeoserverPublicURL:   platformconfig.GetEnv("GEOSERVER_PUBLIC_URL", defaultGeoserverURL),
+		CO2RouteXURL:         co2routeXURL(),
+		StoreCO2URL:          storeCO2URL(),
 		CallbackSecret:       os.Getenv("CALLBACK_SECRET"),
 	}
 	return cfg, nil
 }
 
-// normalizeWebserviceURL avoids unusable listener addresses such as 0.0.0.0 by replacing them with localhost.
+// normalizeWebserviceURL rewrites 0.0.0.0 to localhost.
 func normalizeWebserviceURL(raw string) string {
 	if raw == "" {
 		return defaultWebserviceURL
@@ -85,4 +95,24 @@ func normalizeWebserviceURL(raw string) string {
 		return defaultWebserviceURL
 	}
 	return raw
+}
+
+// co2routeXURL prefers CO2ROUTEX_URL.
+func co2routeXURL() string {
+	if url := strings.TrimSpace(os.Getenv("CO2ROUTEX_URL")); url != "" {
+		return strings.TrimRight(url, "/")
+	}
+	host := platformconfig.GetEnv("CO2ROUTEX_HOST", defaultCO2RouteXHost)
+	port := platformconfig.GetEnv("CO2ROUTEX_PORT", defaultCO2RouteXPort)
+	return fmt.Sprintf("http://%s:%s", host, port)
+}
+
+// storeCO2URL prefers STORECO2_URL.
+func storeCO2URL() string {
+	if url := strings.TrimSpace(os.Getenv("STORECO2_URL")); url != "" {
+		return strings.TrimRight(url, "/")
+	}
+	host := platformconfig.GetEnv("STORECO2_HOST", defaultStoreCO2Host)
+	port := platformconfig.GetEnv("STORECO2_PORT", defaultStoreCO2Port)
+	return fmt.Sprintf("http://%s:%s", host, port)
 }

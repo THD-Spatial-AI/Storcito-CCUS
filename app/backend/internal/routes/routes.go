@@ -5,7 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	co2nodeshandler "spatialhub_backend/internal/handler/co2nodes"
+	co2routexhandler "spatialhub_backend/internal/handler/co2routex"
+	co2sourceshandler "spatialhub_backend/internal/handler/co2sources"
 	feedback "spatialhub_backend/internal/handler/feedback"
+	geocodinghandler "spatialhub_backend/internal/handler/geocoding"
 	grouphandler "spatialhub_backend/internal/handler/group"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
@@ -48,7 +52,7 @@ type Deps struct {
 	CookieDomain               string
 	IsProduction               bool
 
-	// APITokenValidator enables personal access tokens on the protected API when non-nil.
+	// APITokenValidator enables personal access tokens.
 	APITokenValidator middleware.APITokenValidator
 
 	ResultHandler         *resulthandler.ResultHandler
@@ -62,6 +66,10 @@ type Deps struct {
 	ModelHandler          *modelhandler.ModelHandler
 	WeatherHandler        *weather.WeatherHandler
 	WebserviceClient      *webservice.Client
+	CO2NodesHandler       *co2nodeshandler.Handler
+	CO2RouteXHandler      *co2routexhandler.Handler
+	CO2SourcesHandler     *co2sourceshandler.Handler
+	GeocodingHandler      *geocodinghandler.Handler
 }
 
 func Register(r *gin.Engine, deps Deps) {
@@ -95,7 +103,7 @@ func RegisterPublic(r *gin.Engine, deps Deps) {
 	registerInternalRoutes(r, deps)
 }
 
-// registerInternalRoutes mounts the internal lifecycle API other services use to change model status.
+// registerInternalRoutes mounts lifecycle routes.
 func registerInternalRoutes(r *gin.Engine, deps Deps) {
 	internal := r.Group("/api/internal")
 	internal.Use(middleware.CallbackAuthMiddleware())
@@ -109,7 +117,7 @@ func registerInternalRoutes(r *gin.Engine, deps Deps) {
 func RegisterProtected(r *gin.Engine, deps Deps) {
 	protectedAPI := r.Group("/api")
 	if deps.APITokenValidator != nil {
-		// Must run before the session middleware.
+		// Before session middleware.
 		protectedAPI.Use(middleware.APITokenAuth(deps.APITokenValidator))
 	}
 	protectedAPI.Use(middleware.AuthServiceMiddleware(middleware.AuthServiceOptions{
@@ -133,7 +141,11 @@ func RegisterProtected(r *gin.Engine, deps Deps) {
 	ensureDefaultGroupExists(deps.GroupHandler)
 	registerGroupRoutes(protectedAPI, deps.GroupHandler)
 	registerModelRoutes(protectedAPI, deps.ModelHandler, deps.ResultHandler)
+	registerCO2NodeRoutes(protectedAPI, deps.CO2NodesHandler)
+	registerCO2RouteXRoutes(protectedAPI, deps.CO2RouteXHandler, deps.ModelHandler)
+	registerCO2SourceRoutes(protectedAPI, deps.CO2SourcesHandler)
 	registerWeatherRoutes(protectedAPI, deps.WeatherHandler)
+	registerGeocodingRoutes(protectedAPI, deps.GeocodingHandler)
 }
 
 func registerFrontend(r *gin.Engine) {
