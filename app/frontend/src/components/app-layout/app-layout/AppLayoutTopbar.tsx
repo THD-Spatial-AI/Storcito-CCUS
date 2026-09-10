@@ -8,6 +8,7 @@ import {
 } from "@spatialhub/ui";
 
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
 import { Authorized } from "@/middleware/authorized";
 import WeatherDropdown from "@/features/weather/weather";
@@ -27,7 +28,7 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
   const { t } = useTranslation();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[51] border-b border-border bg-card text-foreground h-[var(--topbar-height)]">
+    <header className="fixed top-0 left-0 right-0 z-[51] border-b border-border bg-card/80 backdrop-blur-sm text-foreground h-[var(--topbar-height)]">
       <div className="flex items-center h-full px-4">
         <div className="flex items-center gap-3">
           <a
@@ -55,7 +56,8 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
         <div className="flex-1" />
 
         <div className="flex items-center gap-1 mr-4" data-tour="navigation">
-          {/* Dashboard moved to the left sidebar bottom; weather stays here as a global tool. */}
+          {/* Weather is global. */}
+          <LanguageSwitcher />
           <Authorized>
             <NotificationDropdown />
           </Authorized>
@@ -65,7 +67,7 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Profile moved to the bottom of the left sidebar (see ProfileMenu). */}
+          {/* Profile lives in ProfileMenu. */}
 
           {!user && (
             <>
