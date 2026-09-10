@@ -3,6 +3,7 @@ package co2routex
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -50,7 +51,7 @@ func ParseMatrices(workbook []byte) ([]RoutePair, error) {
 				}
 				value, err := strconv.ParseFloat(strings.TrimSpace(row[col]), 64)
 				// Zero means unrouted.
-				if err != nil || value == 0 {
+				if err != nil || value <= 0 || math.IsNaN(value) || math.IsInf(value, 0) {
 					continue
 				}
 				pairs = append(pairs, RoutePair{

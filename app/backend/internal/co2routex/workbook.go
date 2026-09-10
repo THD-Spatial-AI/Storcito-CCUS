@@ -3,6 +3,8 @@ package co2routex
 import (
 	"bytes"
 	"fmt"
+	"math"
+	"strings"
 
 	"github.com/xuri/excelize/v2"
 	"platform.local/common/pkg/models"
@@ -23,6 +25,16 @@ var nodeColumns = []string{
 func BuildWorkbook(nodes []models.CO2Node) ([]byte, error) {
 	if len(nodes) == 0 {
 		return nil, fmt.Errorf("no nodes to write")
+	}
+	seen := map[string]bool{}
+	for _, node := range nodes {
+		if strings.TrimSpace(node.NodeID) == "" || seen[node.NodeID] {
+			return nil, fmt.Errorf("node IDs must be nonempty and unique across sources")
+		}
+		seen[node.NodeID] = true
+		if math.IsNaN(node.Longitude) || math.IsInf(node.Longitude, 0) || math.IsNaN(node.Latitude) || math.IsInf(node.Latitude, 0) || node.Longitude < -180 || node.Longitude > 180 || node.Latitude < -90 || node.Latitude > 90 {
+			return nil, fmt.Errorf("invalid coordinates for %s", node.NodeID)
+		}
 	}
 
 	file := excelize.NewFile()
