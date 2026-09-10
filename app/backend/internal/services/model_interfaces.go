@@ -10,7 +10,7 @@ import (
 	commonModels "platform.local/common/pkg/models"
 )
 
-// ModelStore captures the persistence operations the model handler uses.
+// ModelStore is the model persistence port.
 type ModelStore interface {
 	DB() *gorm.DB
 
@@ -35,6 +35,7 @@ type ModelStore interface {
 
 	// Sharing
 	CreateModelShare(share *commonModels.ModelShare) error
+	DeleteModelShare(modelID, shareID uint) (bool, error)
 	FindModelShareByModelAndEmail(modelID uint, email string) (*commonModels.ModelShare, error)
 	CountModelSharesByModelAndUser(modelID uint, userID string) int64
 	CountModelSharesByModelAndUserOrEmail(modelID uint, userID, email string) int64

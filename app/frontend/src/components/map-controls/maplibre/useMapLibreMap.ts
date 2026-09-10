@@ -1,15 +1,25 @@
-import { useEffect, useRef } from 'react';
-import maplibregl, { type MapLibreEvent } from 'maplibre-gl';
+import { useEffect, useRef, useState } from 'react';
+import maplibregl, { type MapLibreEvent, type MapSourceDataEvent } from 'maplibre-gl';
 import { toLonLat, fromLonLat } from 'ol/proj';
 import type { Map as OlMap } from 'ol';
 import type Interaction from 'ol/interaction/Interaction';
 import { DoubleClickZoom, DragPan, MouseWheelZoom, PinchZoom } from 'ol/interaction';
-import { BASE_STYLE, BASE_STYLE_VOYAGER, tuneBaseStyle } from './maplibre-styles';
-import { useMapStore, MAPLIBRE_VOYAGER_LAYER_ID } from '@/features/interactive-map/store/map-store';
+import { BASE_STYLE_VOYAGER } from './maplibre-styles';
+import {
+  markBaseLayerHealthy,
+  reportBaseLayerFailure,
+  useMapStore,
+} from '@/features/interactive-map/store/map-store';
+import { withCartoBasemapKey } from '@/utils/carto-basemap';
+
+/** Vector style timeout. */
+const STYLE_LOAD_TIMEOUT_MS = 8000;
+const VECTOR_SOURCE_ERROR_THRESHOLD = 3;
 
 export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolean = false) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const [mapInstance, setMapInstance] = useState<maplibregl.Map | null>(null);
   const isDrawingRef = useRef(isDrawing);
   const selectedBaseLayerId = useMapStore(s => s.selectedBaseLayerId);
 
@@ -46,16 +56,18 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
       const zoom = view.getZoom() ?? 14;
       const [lon, lat] = center ? toLonLat(center, view.getProjection()) : [0, 0];
 
-      const styleUrl = selectedBaseLayerId === MAPLIBRE_VOYAGER_LAYER_ID ? BASE_STYLE_VOYAGER : BASE_STYLE;
-
       map = new maplibregl.Map({
         container,
-        style: styleUrl,
+        style: BASE_STYLE_VOYAGER,
+        // Key CARTO requests.
+        transformRequest: (url) => ({ url: withCartoBasemapKey(url) }),
         center: [lon, lat],
         zoom: zoom - 1,
         pitch: 0,
         bearing: 0,
         maxPitch: 0,
+        // Keeps canvas readable.
+        canvasContextAttributes: { preserveDrawingBuffer: true },
         attributionControl: false,
         dragPan: true,
         dragRotate: false,
@@ -118,6 +130,7 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
 
       mapRef.current = map;
       const createdMap = map;
+      setMapInstance(createdMap);
       let resizeRaf = 0;
       let resizeObserver: ResizeObserver | null = null;
 
@@ -129,7 +142,7 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
           try {
             createdMap.resize();
           } catch {
-            // Ignore resize errors during fast route transitions.
+            // Ignore transition races.
           }
           if (olMap.getTarget()) {
             olMap.updateSize();
@@ -138,21 +151,42 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
         });
       };
 
-      let tuneRaf = 0;
-      const applyStyleTuning = () => {
-        if (tuneRaf) return;
-        tuneRaf = requestAnimationFrame(() => {
-          tuneRaf = 0;
-          if (cancelled || mapRef.current !== createdMap) return;
-          tuneBaseStyle(createdMap, selectedBaseLayerId);
-        });
+      let fallbackRequested = false;
+      const sourceErrorCounts = new Map<string, number>();
+      const requestRasterFallback = () => {
+        if (fallbackRequested || cancelled || mapRef.current !== createdMap) return;
+        fallbackRequested = reportBaseLayerFailure(selectedBaseLayerId) !== null;
       };
+      const handleMapError = (event: { error: { message: string }; sourceId?: string }) => {
+        const sourceId = event.sourceId ?? '__style__';
+        const errorCount = (sourceErrorCounts.get(sourceId) ?? 0) + 1;
+        sourceErrorCounts.set(sourceId, errorCount);
 
-      if (createdMap.isStyleLoaded()) {
-        applyStyleTuning();
-      }
-      createdMap.on('styledata', applyStyleTuning);
-      createdMap.on('load', applyStyleTuning);
+        // Fatal only pre-render.
+        if (!createdMap.isStyleLoaded() || errorCount >= VECTOR_SOURCE_ERROR_THRESHOLD) {
+          requestRasterFallback();
+        }
+      };
+      const handleSourceData = (event: MapSourceDataEvent) => {
+        if (!event.isSourceLoaded) return;
+        sourceErrorCounts.delete(event.sourceId);
+        if (createdMap.isStyleLoaded()) markBaseLayerHealthy(selectedBaseLayerId);
+      };
+      const handleMapLoad = () => {
+        sourceErrorCounts.clear();
+        markBaseLayerHealthy(selectedBaseLayerId);
+      };
+      createdMap.on('error', handleMapError);
+      createdMap.on('sourcedata', handleSourceData);
+      createdMap.on('load', handleMapLoad);
+
+      // Fall back to raster.
+      const styleWatchdogId = window.setTimeout(() => {
+        if (cancelled || mapRef.current !== createdMap) return;
+        if (createdMap.isStyleLoaded()) return;
+        requestRasterFallback();
+      }, STYLE_LOAD_TIMEOUT_MS);
+      resizeTimeoutIds.push(styleWatchdogId);
 
       const scheduleResize = (delayMs: number) => {
         const id = window.setTimeout(() => {
@@ -287,11 +321,11 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
       olViewport.addEventListener('touchend', onTouchEnd);
 
       cleanupFns.push(
-        () => { createdMap.off('styledata', applyStyleTuning); },
-        () => { createdMap.off('load', applyStyleTuning); },
+        () => { createdMap.off('error', handleMapError); },
+        () => { createdMap.off('sourcedata', handleSourceData); },
+        () => { createdMap.off('load', handleMapLoad); },
         () => { createdMap.off('styledata', resizeMaps); },
         () => { createdMap.off('load', resizeMaps); },
-        () => { if (tuneRaf) cancelAnimationFrame(tuneRaf); },
         () => { if (resizeRaf) cancelAnimationFrame(resizeRaf); },
         () => { resizeObserver?.disconnect(); },
         () => { window.removeEventListener('resize', resizeMaps); },
@@ -312,12 +346,14 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
       if (retryInitTimeoutId !== null) clearTimeout(retryInitTimeoutId);
       resizeTimeoutIds.forEach((id) => clearTimeout(id));
       cleanupFns.forEach(fn => fn());
-      if (mapRef.current) {
-        mapRef.current.remove();
+      const mapToRemove = mapRef.current;
+      if (mapToRemove) {
+        mapToRemove.remove();
         mapRef.current = null;
       }
+      setMapInstance((current) => current === mapToRemove ? null : current);
     };
-  }, [olMap, visible, selectedBaseLayerId]); // Re-initialize map when base layer changes
+  }, [olMap, visible, selectedBaseLayerId]); // Rebuild on change.
 
   useEffect(() => {
     if (!visible || isDrawing) return;
@@ -365,5 +401,5 @@ export function useMapLibreMap(olMap: OlMap, visible: boolean, isDrawing: boolea
     }
   }, [visible, isDrawing]);
 
-  return { containerRef, mapRef };
+  return { containerRef, mapRef, map: mapInstance };
 }

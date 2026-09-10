@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BookOpen, Cpu, Globe2, GraduationCap, Info, LayoutDashboard, LogOut, MapPinned, Settings, Truck, User } from "lucide-react";
+import { BookOpen, GitCompareArrows, Globe2, GraduationCap, Info, LayoutDashboard, LogOut, Settings, User } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 import { useAuth } from "@/providers/auth-provider";
@@ -8,10 +8,9 @@ import { useLogout } from "@/hooks/useLogout";
 import { useProductTour } from "@/features/guided-tour/hooks/useProductTour";
 import { useOnboarding } from "@/features/onboarding/hooks/useOnboarding";
 import { useMapStore } from "@/features/interactive-map/store/map-store";
+import { hasMinimumAccessLevel } from "@/utils/access-level";
 import { ADMIN_PATH, DOCUMENTATION_URL, SIDEBAR_WIDTH, TOPBAR_HEIGHT } from "../constants";
 import type { AccessLevel, NavigationHandlers, SidebarItem, UserMenuItem } from "../types";
-
-const accessLevels: AccessLevel[] = ["very_low", "intermediate", "manager", "expert"];
 
 export const useAppLayoutState = () => {
   const { user } = useAuth();
@@ -30,29 +29,29 @@ export const useAppLayoutState = () => {
     [location.pathname]
   );
 
+  const hasAccessLevel = useCallback(
+    (required: AccessLevel): boolean => {
+      return hasMinimumAccessLevel(user?.access_level, required);
+    },
+    [user]
+  );
+
   const hasAccessToLayer = useCallback(
     (layer: { accessLevel: AccessLevel }): boolean => {
       if (!user) return false;
 
-      const userLevel = accessLevels.indexOf(user.access_level);
-      const requiredLevel = accessLevels.indexOf(layer.accessLevel);
-
-      return (
-        userLevel >= requiredLevel ||
-        user.access_level === "expert" ||
-        user.access_level === "manager"
-      );
+      return hasMinimumAccessLevel(user.access_level, layer.accessLevel);
     },
     [user]
   );
 
   const changeBaseLayer = useCallback(
-    (index: number) => {
-      const layer = baseLayers.at(index);
-      if (!layer) return;
+    (layerId: string) => {
+      const layer = baseLayers.find((candidate) => candidate.id === layerId);
+      if (!layer || !hasAccessToLayer(layer)) return;
       setSelectedBaseLayerId(layer.id);
     },
-    [baseLayers, setSelectedBaseLayerId]
+    [baseLayers, hasAccessToLayer, setSelectedBaseLayerId]
   );
 
   const accessibleBaseLayers = useMemo(
@@ -98,7 +97,7 @@ export const useAppLayoutState = () => {
   }, [location.pathname, restartAreaSelectTour, startTour]);
 
   const sidebarItems: SidebarItem[] = useMemo(
-    () => [
+    () => ([
       {
         path: "/app/model-dashboard",
         icon: LayoutDashboard,
@@ -116,31 +115,17 @@ export const useAppLayoutState = () => {
         dataTour: "map",
       },
       {
-        path: "/app/locations",
-        icon: MapPinned,
-        title: t("common.sidebar.locations"),
-        color: "#f59e0b",
-        bgColor: "#fef3c7",
-        dataTour: "locations",
+        // Analyst task only.
+        path: "/app/comparison",
+        icon: GitCompareArrows,
+        title: t("common.sidebar.simulationReports"),
+        color: "#10b981",
+        bgColor: "#d1fae5",
+        dataTour: "reports",
+        minAccessLevel: "manager",
       },
-      {
-        path: "/app/transport",
-        icon: Truck,
-        title: t("common.sidebar.transport"),
-        color: "#6366f1",
-        bgColor: "#e0e7ff",
-        dataTour: "transport",
-      },
-      {
-        path: "/app/technologies",
-        icon: Cpu,
-        title: t("common.sidebar.technologies"),
-        color: "#0ea5e9",
-        bgColor: "#e0f2fe",
-        dataTour: "technologies",
-      },
-    ],
-    [t]
+    ] as SidebarItem[]).filter((item) => !item.minAccessLevel || hasAccessLevel(item.minAccessLevel)),
+    [hasAccessLevel, t]
   );
 
   const userMenuItems: UserMenuItem[] = useMemo(

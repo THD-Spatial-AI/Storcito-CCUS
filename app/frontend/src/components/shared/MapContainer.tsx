@@ -1,8 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { isMapLibreDarkLayerId, useMapStore } from "@/features/interactive-map/store/map-store";
+import { isMapLibreLayerId, useMapStore } from "@/features/interactive-map/store/map-store";
 import { useMapProvider } from "@/providers/map-context";
 import { initializeMap } from '@/features/interactive-map/utils/mapUtils';
 import { MapLibreOverlay } from '@/components/map-controls/maplibre';
+import MapSearchBar from '@/features/interactive-map/MapSearchBar';
 
 interface MapContainerProps {
 	topBar: ReactNode;
@@ -14,7 +15,7 @@ interface MapContainerProps {
 	mapContainerClassName?: string;
     modal?: boolean;
     headerOffsetPx?: number;
-    /** Hide the 2D map controls (e.g. while a 3D view covers the map). */
+    /** Hide the controls. */
     hideMapControls?: boolean;
 	onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
 	onDragOver?: (e: React.DragEvent<HTMLDivElement>) => void;
@@ -36,10 +37,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 }) => {
 	const { mapRef, initMapInstance, MapControls } = useMapProvider();
 	const { map } = useMapStore();
-	const isMapLibre = useMapStore(s => isMapLibreDarkLayerId(s.selectedBaseLayerId));
+	const isMapLibre = useMapStore(s => isMapLibreLayerId(s.selectedBaseLayerId));
 	const [muted, setMuted] = useState<boolean>(false);
 
-	// Initialize map using shared utility
+	// Shared init.
 	useEffect(() => {
 		initializeMap(mapRef, initMapInstance, setMuted);
 	}, [initMapInstance, mapRef]);
@@ -85,8 +86,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 				className="w-full h-full bg-gray-50 flex flex-col relative"
 				style={{
 					...(modal ? { paddingTop: `${headerOffsetPx}px` } : {}),
-					// Expose sidebar width as a CSS variable so overlays (MapControls) can offset
-					// @ts-expect-error: CSS custom property for sidebar offset
+					// Overlay offset.
 					['--sidebar-offset']: showSidebar ? '18rem' : '0rem',
 				}}
 			>
@@ -118,7 +118,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 									<MapLibreOverlay olMap={map} visible={isMapLibre} />
 								)}
 
-								{map && !muted && !hideMapControls && <MapControls />}
+								{map && !muted && !hideMapControls && (
+									<>
+										<MapSearchBar />
+										<MapControls />
+									</>
+								)}
 
 								{mapOverlays}
 							</div>

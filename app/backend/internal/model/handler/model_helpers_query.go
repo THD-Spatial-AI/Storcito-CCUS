@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"fmt"
+	"time"
 
 	modelservice "spatialhub_backend/internal/model/service"
 
@@ -14,7 +15,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func parseGetModelsParams(c *gin.Context) (limit, offset int, search, workspaceIDStr, sortBy, sortOrder string) {
+func parseGetModelsParams(c *gin.Context) (limit, offset int, search, workspaceIDStr, sortBy, sortOrder, fromDate, toDate string) {
 	limit = 100
 	offset = 0
 	sortBy = "created_at"
@@ -35,6 +36,8 @@ func parseGetModelsParams(c *gin.Context) (limit, offset int, search, workspaceI
 
 	search = c.Query("search")
 	workspaceIDStr = c.Query("workspace_id")
+	fromDate = c.Query("from_date")
+	toDate = c.Query("to_date")
 
 	if sb := c.Query("sort_by"); sb != "" {
 		switch sb {
@@ -57,14 +60,13 @@ func (h *ModelHandler) buildWorkspaceFilteredQuery(c *gin.Context, userCtx *http
 		return nil, false
 	}
 
-	// Check if this is the user's default workspace
+	// Default workspace?
 	modelSvc := h.newModelService()
 	defaultWs, err := modelSvc.GetDefaultWorkspace(userCtx.UserID)
 	isDefault := err == nil && defaultWs.ID == workspaceID
 
 	if isDefault {
-		// For the default workspace, also include directly shared models
-		// but only if the user doesn't have access to the model's original workspace
+		// Include directly shared models.
 		return h.store.DB().Where(
 			`workspace_id = ? OR (
 				id IN (SELECT model_id FROM model_shares WHERE user_id = ? OR LOWER(email) = LOWER(?))
@@ -78,12 +80,12 @@ func (h *ModelHandler) buildWorkspaceFilteredQuery(c *gin.Context, userCtx *http
 		), true
 	}
 
-	// For non-default workspaces, only show models belonging to this workspace
+	// Scope to this workspace.
 	return h.store.DB().Where("workspace_id = ?", workspaceID), true
 }
 
 func (h *ModelHandler) buildUserAccessQuery(c *gin.Context, userCtx *httputil.UserContext) *gorm.DB {
-	// Expert users see all models
+	// Experts see everything.
 	if userCtx.AccessLevel == constants.AccessLevelExpert {
 		return h.store.DB()
 	}
@@ -143,7 +145,7 @@ func (h *ModelHandler) combineConditions(conditions []interface{}) *gorm.DB {
 	return query
 }
 
-// postProcessModelWorkspacesBatch is the optimized batch version that checks workspace access in bulk
+// postProcessModelWorkspacesBatch batches the checks.
 func (h *ModelHandler) postProcessModelWorkspacesBatch(ctx context.Context, userCtx *httputil.UserContext, modelsList []models.Model) []models.Model {
 	modelSvc := h.newModelService()
 
@@ -152,9 +154,9 @@ func (h *ModelHandler) postProcessModelWorkspacesBatch(ctx context.Context, user
 		return modelsList
 	}
 
-	// 1. Collect all unique workspace IDs from models not owned by user
+	// Collect foreign workspace ids.
 	workspaceIDSet := make(map[uint]bool)
-	modelIDsToCheck := make(map[uint]bool) // models that are shared and need workspace access check
+	modelIDsToCheck := make(map[uint]bool) // shared; check access
 	for _, model := range modelsList {
 		if model.UserID == userCtx.UserID || model.WorkspaceID == nil {
 			continue
@@ -171,26 +173,26 @@ func (h *ModelHandler) postProcessModelWorkspacesBatch(ctx context.Context, user
 		workspaceIDs = append(workspaceIDs, wsID)
 	}
 
-	// 2. Get all shared model IDs in batch
+	// Batch the shared ids.
 	sharedModelIDs := h.store.PluckSharedModelIDsByUser(userCtx.UserID)
 
 	for _, modelID := range sharedModelIDs {
 		modelIDsToCheck[modelID] = true
 	}
 
-	// 3. Single batch check for workspace access
+	// Batch the access check.
 	accessMap := modelSvc.BatchUserHasWorkspaceAccess(ctx, userCtx.UserID, workspaceIDs)
 
 	// 4. Apply results
 	for i := range modelsList {
 		model := &modelsList[i]
 
-		// Skip if user owns the model or model has no workspace
+		// Skip owned or workspace-less.
 		if model.UserID == userCtx.UserID || model.WorkspaceID == nil {
 			continue
 		}
 
-		// Check if this is a shared model and user doesn't have workspace access
+		// Shared without workspace access?
 		if modelIDsToCheck[model.ID] && !accessMap[*model.WorkspaceID] {
 			model.WorkspaceID = &defaultWorkspace.ID
 			model.Workspace = defaultWorkspace
@@ -201,7 +203,7 @@ func (h *ModelHandler) postProcessModelWorkspacesBatch(ctx context.Context, user
 }
 
 func (h *ModelHandler) buildQueryWithWorkspaceFilter(c *gin.Context, userCtx *httputil.UserContext, workspaceIDStr string, limit, offset int) (*gorm.DB, bool) {
-	// Expert users see all models, skip workspace filtering when no workspace specified
+	// Experts skip workspace filtering.
 	if userCtx.AccessLevel == constants.AccessLevelExpert && workspaceIDStr == "" {
 		return h.store.DB(), true
 	}
@@ -213,7 +215,7 @@ func (h *ModelHandler) buildQueryWithWorkspaceFilter(c *gin.Context, userCtx *ht
 			return nil, false
 		}
 
-		// Expert users can access any workspace - only show models from this workspace
+		// Experts: scope to this workspace.
 		if userCtx.AccessLevel == constants.AccessLevelExpert {
 			return h.store.DB().Where("workspace_id = ?", workspaceID), true
 		}
@@ -245,10 +247,18 @@ func (h *ModelHandler) respondWithEmptyList(c *gin.Context, limit, offset int) {
 	})
 }
 
-func (h *ModelHandler) applySearchFilter(query *gorm.DB, search string) *gorm.DB {
+func (h *ModelHandler) applySearchFilter(query *gorm.DB, search, fromDate, toDate string) *gorm.DB {
 	query = query.Where("deleted_at IS NULL")
 	if search != "" {
 		query = query.Where("title ILIKE ?", "%"+search+"%")
+	}
+	// Period overlap.
+	if from, err := time.Parse("2006-01-02", fromDate); err == nil {
+		query = query.Where("to_date >= ?", from)
+	}
+	if to, err := time.Parse("2006-01-02", toDate); err == nil {
+		// Inclusive end day.
+		query = query.Where("from_date < ?", to.Add(24*time.Hour))
 	}
 	return query
 }
@@ -314,7 +324,7 @@ func (h *ModelHandler) prependMissingParents(modelsList, missingParents []models
 	return modelsList
 }
 
-// populateChildModelIDs fills ChildModelIDs for every model in the list
+// populateChildModelIDs fills every model.
 func (h *ModelHandler) populateChildModelIDs(modelsList []models.Model) {
 	if len(modelsList) == 0 {
 		return
@@ -350,7 +360,7 @@ func (h *ModelHandler) populateChildModelIDs(modelsList []models.Model) {
 	}
 }
 
-// populateParentModelTitles fills ParentModelTitle for every child in the list
+// populateParentModelTitles fills every child.
 func (h *ModelHandler) populateParentModelTitles(modelsList []models.Model) {
 	parentIDSet := make(map[uint]struct{})
 	for i := range modelsList {
@@ -395,12 +405,12 @@ func (h *ModelHandler) populateParentModelTitles(modelsList []models.Model) {
 	}
 }
 
-// populateParentModelTitleForModel fills ParentModelTitle for a single child model.
+// populateParentModelTitleForModel fills one child.
 func (h *ModelHandler) populateParentModelTitleForModel(model *models.Model) {
 	if model.ParentModelID == nil || *model.ParentModelID == 0 {
 		return
 	}
-	// Prefer the already-preloaded parent, falling back to a lookup.
+	// Preloaded parent first.
 	if model.ParentModel != nil && model.ParentModel.Title != "" {
 		t := model.ParentModel.Title
 		model.ParentModelTitle = &t
@@ -416,7 +426,7 @@ func (h *ModelHandler) populateParentModelTitleForModel(model *models.Model) {
 	model.ParentModelTitle = &titles[0]
 }
 
-// populateChildModelIDsForModel fills ChildModelIDs for a single model.
+// populateChildModelIDsForModel fills one model.
 func (h *ModelHandler) populateChildModelIDsForModel(model *models.Model) {
 	var ids []uint
 	if err := h.store.DB().

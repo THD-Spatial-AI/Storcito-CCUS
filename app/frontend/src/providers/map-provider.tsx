@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback, useMemo } from "react";
 import {
-	isMapLibreDarkLayerId,
+	isMapLibreLayerId,
 	normalizeBaseLayerId,
 	useMapStore,
 } from "@/features/interactive-map/store/map-store";
@@ -48,7 +48,7 @@ const MapControlsWrapper: React.FC<MapControlsWrapperProps> = ({ onZoomIn, onZoo
 	/>
 );
 
-// Separate component factory to avoid creating components inside parent
+// Factory, not inline.
 const createMapControlsComponent = (
 	zoomIn: () => void,
 	zoomOut: () => void,
@@ -84,7 +84,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
 
 		const normalizedSelectedBaseLayerId = normalizeBaseLayerId(selectedBaseLayerId);
 		const baseLayerInfo = layers.find((l) => l.id === normalizedSelectedBaseLayerId) ?? layers[0];
-		const isMapLibre = isMapLibreDarkLayerId(baseLayerInfo.id);
+		const isMapLibre = isMapLibreLayerId(baseLayerInfo.id);
 		if (baseLayerInfo.id !== selectedBaseLayerId) {
 			setSelectedBaseLayerId(baseLayerInfo.id);
 		}
@@ -125,11 +125,13 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
 			if (selected.id !== selectedBaseLayerId) {
 				setSelectedBaseLayerId(selected.id);
 			}
-			if (isMapLibreDarkLayerId(selected.id)) {
+			if (isMapLibreLayerId(selected.id)) {
 				baseLayer.setVisible(false);
 			} else {
 				baseLayer.setVisible(true);
 				baseLayer.setSource(selected.source);
+				// Retry a failed source.
+				selected.source.refresh();
 			}
 			if (map) {
 				requestAnimationFrame(() => {
@@ -227,8 +229,7 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
 
 	const clearDrawingLayers = useCallback(() => {
 		if (!map) return;
-		// Snapshot arrays before iterating - getLayers().getArray() returns the
-		// live internal array, so removing during iteration skips elements.
+		// The array is live.
 		const layers = [...map.getLayers().getArray()];
 		for (const layer of layers) {
 			if (layer instanceof VectorLayer) {
@@ -269,4 +270,4 @@ export const MapProvider: React.FC<MapProviderProps> = ({ children }) => {
 	);
 };
 
-// Hook moved to map-context.ts to satisfy react-refresh export hygiene
+// Moved for react-refresh.
