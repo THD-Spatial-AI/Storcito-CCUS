@@ -15,6 +15,12 @@ services:
       KEYCLOAK_REALM: spatialhub
       AUTH_SERVICE_URL: http://auth-service:8001
       WEBSERVICE_SERVICE_URL: http://webservice:8082
+      CO2ROUTEX_HOST: ${CO2ROUTEX_HOST:-co2routex}
+      CO2ROUTEX_PORT: ${CO2ROUTEX_PORT:-8000}
+      CO2ROUTEX_URL: ${CO2ROUTEX_URL:-}
+      STORECO2_HOST: ${STORECO2_HOST:-storeco2}
+      STORECO2_PORT: ${STORECO2_PORT:-8000}
+      STORECO2_URL: ${STORECO2_URL:-}
       RATE_LIMIT_PER_MIN: 1000
     volumes:
       - backend-storage:/app/storage
