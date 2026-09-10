@@ -28,14 +28,16 @@ func NewClient(baseURL string) *Client {
 
 // Node is one sheet row.
 type Node struct {
-	NodeID      string   `json:"node_id"`
-	NodeName    string   `json:"node_name"`
-	Longitude   float64  `json:"longitude"`
-	Latitude    float64  `json:"latitude"`
-	Altitude    *float64 `json:"altitude"`
-	AnnualFlux  *float64 `json:"annual_flux"`
-	NodeType    string   `json:"node_type"`
-	CountryCode *string  `json:"country_code"`
+	NodeID       string   `json:"node_id"`
+	NodeName     string   `json:"node_name"`
+	Longitude    float64  `json:"longitude"`
+	Latitude     float64  `json:"latitude"`
+	Altitude     *float64 `json:"altitude"`
+	AnnualFlux   *float64 `json:"annual_flux"`
+	NodeType     string   `json:"node_type"`
+	CountryCode  *string  `json:"country_code"`
+	State        *string  `json:"state"`
+	Municipality *string  `json:"municipality"`
 }
 
 type nodeList struct {
@@ -91,8 +93,8 @@ type PointSourceQuery struct {
 
 // CountryStat is per country.
 type CountryStat struct {
-	Country   string  `json:"country"`
-	Sources   int     `json:"sources"`
+	Country    string  `json:"country"`
+	Sources    int     `json:"sources"`
 	CO2TAnnual float64 `json:"co2_t_annual"`
 }
 
