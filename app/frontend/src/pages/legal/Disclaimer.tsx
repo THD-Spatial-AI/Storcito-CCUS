@@ -46,8 +46,8 @@ const Disclaimer: React.FC = () => {
                 current conditions.
               </li>
               <li>
-                <strong>Vegetation, terrain, and weather datasets</strong>: Inputs such as
-                land cover, topography, and meteorological observations are sourced from public
+                <strong>Emission, terrain, and infrastructure datasets</strong>: Inputs such as
+                point-source registries, topography, and transport networks are sourced from public
                 providers and may be subject to updates, gaps, or revisions.
               </li>
             </ul>

@@ -1,23 +1,20 @@
 import axios from '@/lib/axios';
 
-type UserAccessLevel = 'very_low' | 'intermediate' | 'manager' | 'expert';
+export type UserAccessLevel = 'very_low' | 'intermediate' | 'manager' | 'expert';
 
-interface AdminUser {
+export interface AdminUser {
 	id: string | number;
 	name: string;
 	email: string;
 	email_verified?: boolean;
 	enabled?: boolean;
-	organization?: string;
-	position?: string;
-	phone?: string;
 	access_level: UserAccessLevel;
 	group_id?: string;
 	model_limit?: number;
 	created_at?: number;
 }
 
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
 	success: boolean;
 	message: string;
 	data?: T;
@@ -25,23 +22,17 @@ interface ApiResponse<T> {
 	errors?: Record<string, string>;
 }
 
-interface CreateAdminUserPayload {
+export interface CreateAdminUserPayload {
 	email: string;
 	name: string;
 	password?: string;
 	access_level: UserAccessLevel;
-	organization: string;
-	position: string;
-	phone: string;
 	group_id?: string;
 }
 
-interface UpdateAdminUserPayload {
+export interface UpdateAdminUserPayload {
 	name?: string;
 	email?: string;
-	organization?: string;
-	position?: string;
-	phone?: string;
 	access_level?: UserAccessLevel;
 	email_verified?: boolean;
 	password?: string;
@@ -49,13 +40,13 @@ interface UpdateAdminUserPayload {
 	model_limit?: number | string;
 }
 
-interface ListAdminUsersParams {
+export interface ListAdminUsersParams {
 	page: number;
 	perPage: number;
 	search?: string;
 }
 
-interface ListAdminUsersData {
+export interface ListAdminUsersData {
 	data: AdminUser[];
 	total: number;
 }

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useRef, useLayoutEffect, useMemo, useCallback } from "react";
+import { CircleAlert, CircleCheck, Info, TriangleAlert, X } from "lucide-react";
 import {
 	AlertDialog,
 	AlertDialogContent,
@@ -9,13 +10,6 @@ import {
 	Button,
 } from "@spatialhub/ui";
 import { LoadingDots } from "@/components/ui/loading";
-import {
-	IconAlertTriangle,
-	IconCircleCheck,
-	IconExclamationCircle,
-	IconInfoCircle,
-	IconX,
-} from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 
 type ConfirmType = "success" | "info" | "warning" | "error" | "delete" | "default";
@@ -131,7 +125,7 @@ export const ConfirmProvider = ({ children }: { children: ReactNode }) => {
 						disabled={loading}
 						className="absolute right-3 top-3 z-10 p-1 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors disabled:opacity-50"
 					>
-						<IconX className="w-3.5 h-3.5" />
+						<X className="w-3.5 h-3.5" />
 					</button>
 
 					{/* Content */}
@@ -199,42 +193,42 @@ const AlertBadge: React.FC<{ type: ConfirmType }> = ({ type }) => {
 		case "success":
 			return (
 				<div className={cn(baseClasses, "bg-green-100 dark:bg-green-900/30")}>
-					<IconCircleCheck className="w-4 h-4 text-green-600 dark:text-green-400" />
+					<CircleCheck className="w-4 h-4 text-green-600 dark:text-green-400" />
 				</div>
 			);
 
 		case "error":
 			return (
 				<div className={cn(baseClasses, "bg-red-100 dark:bg-red-900/30")}>
-					<IconExclamationCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
+					<CircleAlert className="w-4 h-4 text-red-600 dark:text-red-400" />
 				</div>
 			);
 
 		case "info":
 			return (
 				<div className={cn(baseClasses, "bg-blue-100 dark:bg-blue-900/30")}>
-					<IconInfoCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+					<Info className="w-4 h-4 text-blue-600 dark:text-blue-400" />
 				</div>
 			);
 
 		case "delete":
 			return (
 				<div className={cn(baseClasses, "bg-red-100 dark:bg-red-900/30")}>
-					<IconAlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
+					<TriangleAlert className="w-4 h-4 text-red-600 dark:text-red-400" />
 				</div>
 			);
 
 		case "warning":
 			return (
 				<div className={cn(baseClasses, "bg-amber-100 dark:bg-amber-900/30")}>
-					<IconAlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+					<TriangleAlert className="w-4 h-4 text-amber-600 dark:text-amber-400" />
 				</div>
 			);
 
 		default:
 			return (
 				<div className={cn(baseClasses, "bg-gray-100 dark:bg-gray-800")}>
-					<IconAlertTriangle className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+					<TriangleAlert className="w-4 h-4 text-gray-600 dark:text-gray-400" />
 				</div>
 			);
 	}

@@ -1,6 +1,5 @@
 import React from "react";
-import { Shield, ExternalLink } from "lucide-react";
-import { IconX } from "@tabler/icons-react";
+import { ExternalLink, Shield, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/i18n";
 
@@ -46,7 +45,7 @@ export const PrivacyConsentDialog: React.FC<PrivacyConsentDialogProps> = ({
             aria-label={t('common.close')}
             className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
-            <IconX className="w-4 h-4" aria-hidden="true" />
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
 
@@ -95,7 +94,7 @@ export const PrivacyConsentDialog: React.FC<PrivacyConsentDialogProps> = ({
               onClick={() => window.open('/privacy', '_blank', 'noopener,noreferrer')}
               className="text-muted-foreground hover:text-foreground underline inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer p-0 font-inherit"
             >
-              {t('privacy.dataPolicy')} <ExternalLink className="w-3 h-3" aria-hidden="true" />
+              {t('privacy.firePolicy')} <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </button>
           </p>
         </div>
