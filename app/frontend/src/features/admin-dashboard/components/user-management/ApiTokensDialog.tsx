@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, Check, Copy, Loader2, Plus, ShieldOff } from "lucide-react";
-import { IconX } from "@tabler/icons-react";
+import { AlertTriangle, Check, Copy, Loader2, Plus, ShieldOff, X } from "lucide-react";
 import {
 	AlertDialog,
 	AlertDialogContent,
@@ -45,7 +44,7 @@ export function ApiTokensDialog({ user, isOpen, onClose }: ApiTokensDialogProps)
 	const [expiresInDays, setExpiresInDays] = useState(90);
 	const [creating, setCreating] = useState(false);
 
-	// The freshly created token; plaintext exists only in this state, shown once.
+	// Plaintext, shown once.
 	const [created, setCreated] = useState<CreatedApiToken | null>(null);
 	const [copied, setCopied] = useState(false);
 
@@ -126,7 +125,7 @@ export function ApiTokensDialog({ user, isOpen, onClose }: ApiTokensDialogProps)
 						onClick={onClose}
 						className="absolute right-3 top-3 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
 					>
-						<IconX className="w-4 h-4" />
+						<X className="w-4 h-4" />
 					</button>
 				</AlertDialogHeader>
 
@@ -138,7 +137,7 @@ export function ApiTokensDialog({ user, isOpen, onClose }: ApiTokensDialogProps)
 						</div>
 					)}
 
-					{/* One-time display of a freshly created token */}
+					{/* Shown once. */}
 					{created && (
 						<div className="border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4 space-y-2">
 							<p className="text-xs font-semibold text-amber-800 dark:text-amber-300">

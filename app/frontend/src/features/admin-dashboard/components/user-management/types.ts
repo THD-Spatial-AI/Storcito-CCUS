@@ -6,28 +6,30 @@ export interface User {
 	email: string;
 	email_verified?: boolean;
 	enabled?: boolean;
-	organization?: string;
-	position?: string;
-	phone?: string;
 	access_level: "very_low" | "intermediate" | "manager" | "expert";
 	group_id?: string;
 	model_limit?: number;
 	created_at?: number;
-	/** Active API-token indicator. */
+	/** Has an active token. */
 	has_api_access?: boolean;
 }
 
 export interface UserFormData {
 	name: string;
 	email: string;
-	organization: string;
-	position: string;
-	phone: string;
 	access_level: "very_low" | "intermediate" | "manager" | "expert";
 	email_verified?: boolean;
 	password?: string;
 	password_confirmation?: string;
 	model_limit?: number | string;
+}
+
+export interface ApiResponse<T> {
+	success: boolean;
+	message: string;
+	data?: T;
+	users?: T;
+	errors?: Record<string, string>;
 }
 
 export interface NotificationState {
@@ -41,8 +43,5 @@ export type CreateUserPayload = {
 	name: string;
 	password?: string;
 	access_level: User["access_level"];
-	organization: string;
-	position: string;
-	phone: string;
 	group_id?: Group["id"];
 };

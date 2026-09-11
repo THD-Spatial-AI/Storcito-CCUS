@@ -11,7 +11,7 @@ interface ApiResponse<T> {
 }
 
 
-interface DataCoverageFeatureCollection {
+export interface StorcitoCoverageFeatureCollection {
     type: 'FeatureCollection';
     bbox?: number[];
     features: Array<{
@@ -21,7 +21,7 @@ interface DataCoverageFeatureCollection {
     }>;
 }
 
-interface WebserviceSummary {
+export interface WebserviceSummary {
     total: number;
     online: number;
     available: number;
@@ -42,8 +42,8 @@ class WebservicesService {
     }
 
 
-    async getAvailableDataCoverage(): Promise<DataCoverageFeatureCollection | null> {
-        const { data } = await axios.get<ApiResponse<DataCoverageFeatureCollection>>(
+    async getAvailableDataCoverage(): Promise<StorcitoCoverageFeatureCollection | null> {
+        const { data } = await axios.get<ApiResponse<StorcitoCoverageFeatureCollection>>(
             '/webservices/available-data-coverage',
         );
         return data?.data ?? null;

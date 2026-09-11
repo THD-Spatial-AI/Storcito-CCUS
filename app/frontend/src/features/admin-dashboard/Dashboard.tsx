@@ -1,9 +1,6 @@
 import React, { useState, lazy, Suspense } from "react";
 import {
 	User,
-	Building,
-	Briefcase,
-	Phone,
 	Mail,
 	Shield,
 	LogOut,
@@ -39,7 +36,7 @@ import {
 	getDashboardTabs,
 } from "./utils/dashboardHelpers";
 
-// Lazy load management components for better performance
+// Lazy-loaded panels.
 const WebservicesManagement = lazy(() => import("./WebservicesManagement"));
 const UserManagement = lazy(() => import("./UserManagement").then(m => ({ default: m.UserManagement })));
 const ModelsManagement = lazy(() => import("./ModelsManagement").then(m => ({ default: m.ModelsManagement })));
@@ -52,7 +49,7 @@ interface TabPanelProps {
 }
 
 function TabPanel({ children, value, index }: Readonly<TabPanelProps>) {
-	// Only render children when tab is active - prevents unnecessary component mounting
+	// Active tab only.
 	if (value !== index) return null;
 
 	return (
@@ -62,7 +59,7 @@ function TabPanel({ children, value, index }: Readonly<TabPanelProps>) {
 	);
 }
 
-// Loading fallback component for lazy-loaded tabs
+// Lazy-load fallback.
 const TabLoadingFallback = () => {
 	const { t } = useTranslation();
 	return (
@@ -99,7 +96,7 @@ export const Dashboard: React.FC = () => {
 		setTabValue(newValue);
 	};
 
-	// Component action handlers for child component events
+	// Child action handlers.
 	const handleModelAction = useAdminModelActions();
 
 	const statsCards = buildStatsCards(user, canManageUsers, usersCount, usersCountLoading, t, onlineCount);
@@ -108,7 +105,7 @@ export const Dashboard: React.FC = () => {
 	const allTabs = getDashboardTabs(t, canManageUsers, isExpert);
 	const tabs = allTabs.filter((tab) => tab.show);
 	
-	// Create tab index mapping for TabPanels
+	// Tab index map.
 	const getTabIndex = (key: string) => {
 		return tabs.findIndex(tab => tab.key === key);
 	};
@@ -116,8 +113,8 @@ export const Dashboard: React.FC = () => {
 	return (
 		<div className="min-h-screen bg-background">
 			<div className="p-3 md:p-4 lg:p-5 max-w-[1600px] mx-auto space-y-4">
-				{/* Main header section with welcome message and user info */}
-				<div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800 via-gray-900 to-black p-4 md:p-5 text-white shadow-xl">
+				{/* Header. */}
+				<div className="md-rise relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800 via-gray-900 to-black p-4 md:p-5 text-white shadow-xl">
 					{/* Decorative elements */}
 					<div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2"></div>
 					<div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-1/2 -translate-x-1/2"></div>
@@ -181,8 +178,8 @@ export const Dashboard: React.FC = () => {
 					</div>
 				</div>
 
-					{/* User statistics cards section */}
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+					{/* Stat cards. */}
+				<div className="md-rise grid grid-cols-2 md:grid-cols-4 gap-3" style={{ animationDelay: "60ms" }}>
 					{statsCards.map((stat) => (
 						<div
 							key={stat.title}
@@ -207,8 +204,8 @@ export const Dashboard: React.FC = () => {
 					))}
 				</div>
 
-				{/* Main content area with tabbed interface */}
-				<div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+				{/* Tabbed content. */}
+				<div className="md-rise bg-card rounded-2xl shadow-sm border border-border overflow-hidden" style={{ animationDelay: "120ms" }}>
 					{/* Tab navigation */}
 					<div className="border-b border-border bg-muted/50">
 						<nav className="flex overflow-x-auto scrollbar-hide px-2 md:px-4 py-2 gap-1">
@@ -229,10 +226,10 @@ export const Dashboard: React.FC = () => {
 						</nav>
 					</div>
 
-					{/* Overview tab content with user profile and permissions */}
+					{/* Overview tab. */}
 					<TabPanel value={tabValue} index={getTabIndex("overview")}>
 						<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-							{/* User profile information card */}
+							{/* Profile card. */}
 							<div className="bg-gradient-to-br from-muted/50 to-card rounded-xl p-4 border border-border shadow-sm">
 								<div className="flex items-center gap-3 mb-4">
 									<div className="p-2 bg-muted rounded-lg">
@@ -261,9 +258,6 @@ export const Dashboard: React.FC = () => {
 									<div className="space-y-2">
 										{[
 											{ icon: Mail, label: t('adminDashboard.userProfile.email'), value: user?.email },
-											{ icon: Building, label: t('adminDashboard.userProfile.organization'), value: user?.organization },
-											{ icon: Briefcase, label: t('adminDashboard.userProfile.position'), value: user?.position },
-											{ icon: Phone, label: t('adminDashboard.userProfile.phone'), value: user?.phone },
 										].filter(item => item.value).map((item) => (
 											<div key={item.label} className="flex items-center gap-3 p-2.5 rounded-lg bg-muted hover:bg-muted/80 transition-colors">
 												<item.icon className="w-3.5 h-3.5 text-muted-foreground" />
@@ -277,7 +271,7 @@ export const Dashboard: React.FC = () => {
 								</div>
 							</div>
 
-							{/* User access permissions and capabilities card */}
+							{/* Permissions card. */}
 							<div className="bg-card rounded-xl p-4 border border-border/60 shadow-sm h-full flex flex-col relative overflow-hidden group hover:shadow-md transition-all duration-300">
 								{/* Decorative background gradient */}
 								<div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/5 to-transparent rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110 duration-700 pointer-events-none"></div>
@@ -337,7 +331,7 @@ export const Dashboard: React.FC = () => {
 										))}
 									</div>
 
-									{/* Layers Section - Clean List */}
+									{/* Layers. */}
 									<div className="flex-1">
 										<p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
 											<Layers className="w-3 h-3" />
@@ -369,7 +363,7 @@ export const Dashboard: React.FC = () => {
 							</div>
 						</div>
 
-						{/* Quick action buttons for common tasks */}
+						{/* Quick actions. */}
 						<div className="mt-5">
 							<div className="flex items-center gap-3 mb-3">
 								<div className="p-2 bg-muted rounded-lg">
@@ -406,7 +400,7 @@ export const Dashboard: React.FC = () => {
 						</div>
 					</TabPanel>
 
-					{/* Risk assessment models management (admin and manager) */}
+					{/* Models: admin, manager. */}
 					<Authorized access={["expert", "manager"]}>
 						<TabPanel value={tabValue} index={getTabIndex("models")}>
 							<Suspense fallback={<TabLoadingFallback />}>
@@ -415,8 +409,8 @@ export const Dashboard: React.FC = () => {
 						</TabPanel>
 					</Authorized>
 
-					{/* Simulation engine webservices management (admin only) */}
-					{/* Simulation Engine - visible to all, editable by experts only */}
+					{/* Webservices: admin only. */}
+					{/* Expert-editable. */}
 					<TabPanel value={tabValue} index={getTabIndex("webservices")}>
 						<Suspense fallback={<TabLoadingFallback />}>
 							<WebservicesManagement
@@ -425,7 +419,7 @@ export const Dashboard: React.FC = () => {
 						</Suspense>
 					</TabPanel>
 
-					{/* User feedback management (admin only) */}
+					{/* Feedback: admin only. */}
 					<Authorized access={["expert"]}>
 						<TabPanel value={tabValue} index={getTabIndex("feedback")}>
 							<Suspense fallback={<TabLoadingFallback />}>
@@ -434,7 +428,7 @@ export const Dashboard: React.FC = () => {
 						</TabPanel>
 					</Authorized>
 
-					{/* System user management (admin and manager) */}
+					{/* Users: admin, manager. */}
 					<Authorized access={["expert", "manager"]}>
 						<TabPanel value={tabValue} index={getTabIndex("users")}>
 							<Suspense fallback={<TabLoadingFallback />}>

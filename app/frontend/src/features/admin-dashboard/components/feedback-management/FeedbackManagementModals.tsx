@@ -1,6 +1,5 @@
 import { createPortal } from "react-dom";
 import { AlertCircle, Calendar, CheckCircle, Clock, Eye, Image, MessageCircle, User, X, ZoomIn } from "lucide-react";
-import { IconX } from "@tabler/icons-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useTranslation } from "@/i18n";
@@ -17,7 +16,7 @@ import {
   getStatusIcon,
 } from "./FeedbackManagementTable";
 
-// ---------- Shared helpers ----------
+// Shared helpers.
 
 type FormIcon = NonNullable<FormSection["fields"][number]["icon"]>;
 const formIcon = (icon: unknown): FormIcon => icon as FormIcon;
@@ -97,7 +96,7 @@ const parseFeedbackImages = (
     try {
       return { items: JSON.parse(feedback.images), fromJson: true };
     } catch {
-      // Fall back to legacy single image fields.
+      // Legacy image fields.
     }
   }
   if (feedback.image_path) {
@@ -115,7 +114,7 @@ const parseFeedbackImages = (
   return { items: [], fromJson: false };
 };
 
-// ---------- Edit modal ----------
+// Edit modal.
 
 interface EditFeedbackModalProps {
   open: boolean;
@@ -157,7 +156,7 @@ function EditFeedbackModal({
   );
 }
 
-// ---------- Lightbox modal ----------
+// Lightbox modal.
 
 interface ImageLightboxModalProps {
   open: boolean;
@@ -240,7 +239,7 @@ function ImageLightboxModal({
   );
 }
 
-// ---------- View modal ----------
+// View modal.
 
 interface ViewFeedbackModalProps {
   open: boolean;
@@ -298,7 +297,7 @@ function ViewFeedbackModal({
                   onClick={onClose}
                   className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 >
-                  <IconX className="w-4 h-4" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
