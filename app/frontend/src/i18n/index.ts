@@ -11,6 +11,7 @@ import it from "./locales/it.json";
 import nl from "./locales/nl.json";
 import pl from "./locales/pl.json";
 import cs from "./locales/cs.json";
+import pt from "./locales/pt.json";
 
 // Language configuration
 export const languages = [
@@ -22,6 +23,7 @@ export const languages = [
   { code: "nl", name: "Dutch", nativeName: "Nederlands", flag: "🇳🇱" },
   { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱" },
   { code: "cs", name: "Czech", nativeName: "Čeština", flag: "🇨🇿" },
+  { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹" },
 ] as const;
 
 export type LanguageCode = (typeof languages)[number]["code"];
@@ -43,6 +45,7 @@ const resources = {
   nl: { translation: nl },
   pl: { translation: pl },
   cs: { translation: cs },
+  pt: { translation: pt },
 };
 
 interface I18nConfig {

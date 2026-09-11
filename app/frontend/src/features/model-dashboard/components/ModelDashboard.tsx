@@ -1,26 +1,27 @@
 import React, { Fragment, useState, useCallback, useEffect, useMemo } from "react";
-import { FolderInput, Copy, Play, Trash2 } from "lucide-react";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { Model, ModelStats } from "@/features/model-dashboard/services/modelService";
 import { useConfirm } from "@/hooks/useConfirmDialog";
-import { useModelsQuery, useModelStatsQuery } from "@/features/model-dashboard/hooks/useModelsQuery";
-import { type Workspace, workspaceService } from "@/components/workspace";
+import { useModelsQuery, useModelStatsQuery, useRuntimeHistoryQuery } from "@/features/model-dashboard/hooks/useModelsQuery";
+import { type Workspace } from "@/components/workspace";
 import { useWorkspaceStore } from "@/components/workspace";
 import { useAuthStore } from "@/store/auth-store";
 import { useModelDashboardHandlers } from '@/features/model-dashboard/hooks/useModelDashboardHandlers';
+import { useModelDashboardModals } from '@/features/model-dashboard/hooks/useModelDashboardModals';
+import { useBulkActionConfigs } from '@/features/model-dashboard/hooks/useBulkActionConfigs';
 import { useModelSelection } from '@/features/model-dashboard/hooks/useModelSelection';
 import { useBulkOperations } from '@/features/model-dashboard/hooks/useBulkOperations';
 import { useDeleteConfirm } from '@/hooks/useDeleteConfirm';
-import { type ActionConfig } from "@/components/shared/ModelActionGroup";
 import { useFavoriteModelsStore } from "@/features/model-dashboard/store/favorite-models";
 import { isModelDisabled as checkModelDisabled } from "@/features/model-dashboard/utils/statusHelpers";
-import { useWebservices } from "@/features/admin-dashboard/hooks/useWebservices";
+import { useWebservices } from "@/features/admin-dashboard";
 import { processModelTimingUpdates, type TimingUpdate } from "@/features/model-dashboard/utils/modelTimingUtils";
+import { estimateRuntimesForModels, type RuntimeEstimate } from "@/features/model-dashboard/utils/runtimeEstimate";
 import { organizeModelsHierarchically } from "@/features/model-dashboard/utils/dashboardHelpers";
 import { useTranslation } from "@/i18n";
-import { useNotification } from "@/features/notifications/hooks/useNotification";
+import { useNotification } from "@/features/notifications";
 import { ModelDashboardFilters } from "./model-dashboard/ModelDashboardFilters";
 import { ModelDashboardBulkActions } from "./model-dashboard/ModelDashboardBulkActions";
 import { ModelDashboardTable } from "./model-dashboard/ModelDashboardTable";
@@ -75,11 +76,6 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const initializeWorkspace = useWorkspaceStore(state => state.initializeWorkspace);
     const user = useAuthStore(state => state.user);
 
-	const [isCreateWsOpen, setIsCreateWsOpen] = useState(false);
-	const [isShareWsOpen, setIsShareWsOpen] = useState(false);
-	const [isRenameWsOpen, setIsRenameWsOpen] = useState(false);
-	const [isCopyWsOpen, setIsCopyWsOpen] = useState(false);
-	const [wsReloadKey, setWsReloadKey] = useState(0);
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const { notification, showSuccess, showError, hide: hideNotification } = useNotification();
 
@@ -143,6 +139,8 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const [orderBy, setOrderBy] = useState<string>("created_at");
 	const [order, setOrder] = useState<"asc" | "desc">("desc");
 	const [filterText, setFilterText] = useState<string>("");
+	const [filterFromDate, setFilterFromDate] = useState<string>("");
+	const [filterToDate, setFilterToDate] = useState<string>("");
 	const [currentPage, setCurrentPage] = useState<number>(0);
 	const [itemsPerPage, setItemsPerPage] = useState<number>(12);
 	const [currentWorkspaceId, setCurrentWorkspaceId] = useState<number | undefined>(undefined);
@@ -154,19 +152,36 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		workspace_id: currentWorkspaceId,
 		sort_by: orderBy,
 		sort_order: order,
+		from_date: filterFromDate || undefined,
+		to_date: filterToDate || undefined,
 	});
 
 	const { data: statsResponse, isSuccess: statsLoaded } = useModelStatsQuery();
+	const { data: runtimeHistoryResponse } = useRuntimeHistoryQuery(currentWorkspaceId);
 
 	const { summary: webserviceSummary } = useWebservices({}, { autoRefresh: true, refreshInterval: 10000 });
 	const hasAvailableWebservice = (webserviceSummary?.available ?? 0) > 0;
 
-	// Preserve API page slice.
+	// Page slice only.
 	const models = useMemo(() => modelsResponse?.data || [], [modelsResponse?.data]);
+	const runtimeHistory = useMemo(() => {
+		const modelsById = new Map<number, Model>();
+		for (const model of runtimeHistoryResponse?.data ?? []) modelsById.set(model.id, model);
+		// Page wins.
+		for (const model of models) modelsById.set(model.id, model);
+		return [...modelsById.values()];
+	}, [models, runtimeHistoryResponse?.data]);
+	const runtimeEstimates = useMemo<Record<number, RuntimeEstimate>>(
+		() => estimateRuntimesForModels(
+			models.filter((model) => checkModelDisabled(model.status)),
+			runtimeHistory,
+		),
+		[models, runtimeHistory],
+	);
 	const totalItems = modelsResponse?.total || 0;
 	const isLoading = isLoadingModels;
 
-	// Use query statistics.
+	// Stats with defaults.
 	const stats = useMemo(() => {
 		if (statsResponse?.success && statsResponse.data) {
 			return statsResponse.data;
@@ -174,16 +189,16 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		return DEFAULT_STATS;
 	}, [statsResponse]);
 
-	// Check model limit.
+	// Model limit check.
 	const isModelLimitReached = useMemo(() => {
 		if (stats.is_unlimited) return false;
 		if (!stats.model_limit) return false;
 		return stats.total >= stats.model_limit;
 	}, [stats.total, stats.model_limit, stats.is_unlimited]);
 
-	// Preserve callback compatibility.
+	// No-op for compatibility.
 	const loadStats = useCallback(async () => {
-		// Query invalidates statistics.
+		// React Query stats.
 	}, []);
 
 	const {
@@ -234,7 +249,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const handleRefresh = useCallback(async () => {
 		setIsRefreshing(true);
 		try {
-			// Refresh workspaces and models.
+			// Reload all.
 			setWsReloadKey((k) => k + 1);
 			await loadModels();
 		} finally {
@@ -242,8 +257,45 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		}
 	}, [loadModels]);
 
+	// Modal state.
+	const {
+		isCreateWsOpen, setIsCreateWsOpen,
+		isShareWsOpen, setIsShareWsOpen,
+		isRenameWsOpen, setIsRenameWsOpen,
+		isCopyWsOpen, setIsCopyWsOpen,
+		wsReloadKey, setWsReloadKey,
+		shareModal, setShareModal,
+		moveModelModal, setMoveModelModal,
+		bulkCopyModal, setBulkCopyModal,
+		handleCopyWorkspaceSuccess,
+		handleRenameWorkspaceSuccess,
+		handleDeleteWorkspace,
+		handleShare,
+		handleMoveToWorkspace,
+		handleBulkMoveToWorkspace,
+		handleBulkCopy,
+	} = useModelDashboardModals({
+		currentWorkspace,
+		selectedModels,
+		canUserDeleteModel,
+		setCurrentWorkspace,
+		onWorkspaceChange: handleWorkspaceChange,
+		loadModels,
+		loadStats,
+		confirm,
+		showSuccess,
+		showError,
+	});
+
 	const handlePageChange = useCallback((page: number) => {
 		setCurrentPage(page);
+	}, []);
+
+	// Date-range filter.
+	const handleDateRangeChange = useCallback((from: string, to: string) => {
+		setFilterFromDate(from);
+		setFilterToDate(to);
+		setCurrentPage(0);
 	}, []);
 
 	const handleItemsPerPageChange = useCallback((newItemsPerPage: number) => {
@@ -282,7 +334,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
 
 	const sortedModels = useMemo(() => {
-		// Prioritize favorites locally.
+		// Favorites to top.
 		return [...filteredModels].sort((a, b) => {
 			const aFav = favoriteIdSet.has(a.id) ? 0 : 1;
 			const bFav = favoriteIdSet.has(b.id) ? 0 : 1;
@@ -360,85 +412,6 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 
 
 
-	const [shareModal, setShareModal] = useState<{
-		isOpen: boolean;
-		model: Model | null;
-	}>({
-		isOpen: false,
-		model: null,
-	});
-
-
-	const [moveModelModal, setMoveModelModal] = useState<{
-		isOpen: boolean;
-		model: Model | null;
-		models?: Model[];
-	}>({
-		isOpen: false,
-		model: null,
-	});
-
-	const [bulkCopyModal, setBulkCopyModal] = useState<{
-		isOpen: boolean;
-		models: Model[];
-	}>({
-		isOpen: false,
-		models: [],
-	});
-
-	const handleCopyWorkspaceSuccess = async (copiedWorkspace: Workspace, sourceWorkspace: Workspace) => {
-		try {
-			// Refresh workspace list.
-			setWsReloadKey((k) => k + 1);
-			// Select new workspace.
-			handleWorkspaceChange(copiedWorkspace);
-			await loadModels();
-			await loadStats();
-
-			showSuccess(`Workspace "${copiedWorkspace.name}" created successfully with all models copied from "${sourceWorkspace.name}".`);
-		} catch (error) {
-			if (import.meta.env.DEV) console.error("Failed to load copied workspace:", error);
-			showError("Workspace copied but failed to load. Please refresh the page.");
-		}
-	};
-
-	const handleRenameWorkspaceSuccess = async (updatedWorkspace: Workspace) => {
-		try {
-			// Update current workspace.
-			setCurrentWorkspace(updatedWorkspace);
-			setWsReloadKey((k) => k + 1);
-
-			showSuccess(`Workspace renamed to "${updatedWorkspace.name}" successfully.`);
-		} catch (error) {
-			if (import.meta.env.DEV) console.error("Failed to update workspace:", error);
-			showError("Workspace renamed but failed to refresh. Please reload the page.");
-		}
-	};
-
-	const handleDeleteWorkspace = async () => {
-		if (!currentWorkspace) return;
-
-		await confirm({
-			type: "delete",
-			itemType: "workspace",
-			itemName: currentWorkspace.name,
-			description: `This will permanently delete the workspace "${currentWorkspace.name}" and all models in it. This action cannot be undone.`,
-			onConfirm: async () => {
-				try {
-					await workspaceService.deleteWorkspace(currentWorkspace.id);
-					// Load default workspace.
-					const defaultWorkspace = await workspaceService.getDefaultWorkspace();
-					handleWorkspaceChange(defaultWorkspace);
-					setWsReloadKey((k) => k + 1);
-					await loadStats();
-				} catch (error) {
-					if (import.meta.env.DEV) console.error("Failed to delete workspace:", error);
-					alert("Failed to delete workspace. Please try again.");
-				}
-			}
-		});
-	};
-
 	const handleNewModel = useCallback((): void => {
 		if (currentWorkspace) {
 			navigate("/app/model-dashboard/new-model", {
@@ -449,153 +422,24 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		}
 	}, [currentWorkspace, navigate]);
 
-	const handleShare = useCallback((model: Model) => {
-		setShareModal({
-			isOpen: true,
-			model,
-		});
-	}, []);
-
-	const handleMoveToWorkspace = useCallback((model: Model) => {
-		// Prevent hidden-focus warnings.
-		if (document.activeElement instanceof HTMLElement) {
-			document.activeElement.blur();
-		}
-		setMoveModelModal({
-			isOpen: true,
-			model,
-		});
-	}, []);
-
-	const handleBulkMoveToWorkspace = useCallback(() => {
-		// Prevent hidden-focus warnings.
-		if (document.activeElement instanceof HTMLElement) {
-			document.activeElement.blur();
-		}
-		const ownedModels = selectedModels.filter((model: Model) => canUserDeleteModel(model));
-		
-		// Exclude selected parents.
-		const modelsToMove = ownedModels.filter(model => {
-			// Detect selected children.
-			const hasChildInSelection = ownedModels.some(
-				m => m.parent_model_id === model.id
-			);
-			return !hasChildInSelection;
-		});
-		
-		setMoveModelModal({
-			isOpen: true,
-			model: null,
-			models: modelsToMove,
-		});
-	}, [canUserDeleteModel, selectedModels]);
-
-	const canDeleteAnySelected = useMemo(() => {
-		return selectedModels.some((model: Model) =>
-			!isModelDisabled(model) && canUserDeleteModel(model)
-		);
-	}, [selectedModels, canUserDeleteModel, isModelDisabled]);
-
-	const canMoveAnySelected = useMemo(() => {
-		return selectedModels.some((model: Model) => canUserDeleteModel(model));
-	}, [selectedModels, canUserDeleteModel]);
-
-	const canCalculateAnySelected = useMemo(() => {
-		return hasAvailableWebservice && selectedModels.some((model: Model) => !isModelDisabled(model));
-	}, [selectedModels, isModelDisabled, hasAvailableWebservice]);
-
-	const calculatableCount = useMemo(() => {
-		return selectedModels.filter((model: Model) => !isModelDisabled(model)).length;
-	}, [selectedModels, isModelDisabled]);
-
-	const handleBulkCalculate = useCallback(async () => {
-		const calculatableModels = selectedModels.filter((model: Model) => !isModelDisabled(model));
-		const modelIds = calculatableModels.map((m) => m.id);
-		await handleCalculate(modelIds);
-		clearSelection();
-	}, [selectedModels, isModelDisabled, handleCalculate, clearSelection]);
 	const handleCalculateSingle = useCallback((model: Model) => {
 		handleCalculate([model.id]);
 	}, [handleCalculate]);
 
-	const handleBulkCopy = useCallback(() => {
-		if (document.activeElement instanceof HTMLElement) {
-			document.activeElement.blur();
-		}
-		setBulkCopyModal({
-			isOpen: true,
-			models: [...selectedModels],
-		});
-	}, [selectedModels]);
 
-	const deletableCount = useMemo(() => {
-		return selectedModels.filter((model: Model) =>
-			!isModelDisabled(model) && canUserDeleteModel(model)
-		).length;
-	}, [selectedModels, canUserDeleteModel, isModelDisabled]);
 
-	const getMoveTooltip = useCallback(() => {
-		const modelWord = selectedModels.length > 1 ? t('model.models').toLowerCase() : t('model.title').toLowerCase();
-		if (canMoveAnySelected) {
-			return `${t('model.move')} ${selectedModels.length} ${t('model.selected')} ${modelWord}`;
-		}
-		return t('model.cannotMove');
-	}, [selectedModels.length, canMoveAnySelected, t]);
 
-	const getCalculateTooltip = useCallback(() => {
-		if (!hasAvailableWebservice) {
-			return t('model.noWebserviceAvailable');
-		}
-		if (canCalculateAnySelected) {
-			return `${t('model.calculate')} ${calculatableCount} ${t('model.selected')}`;
-		}
-		return t('model.cannotCalculate');
-	}, [hasAvailableWebservice, canCalculateAnySelected, calculatableCount, t]);
-
-	const getCopyTooltip = useCallback(() => {
-		return `${t('model.copy')} ${selectedModels.length} ${t('model.selected')}`;
-	}, [selectedModels.length, t]);
-
-	const getDeleteTooltip = useCallback(() => {
-		if (canDeleteAnySelected) {
-			return `${t('model.delete')} ${deletableCount} ${t('model.selected')}`;
-		}
-		return t('model.cannotDelete');
-	}, [canDeleteAnySelected, deletableCount, t]);
-
-	const bulkActions: ActionConfig[] = useMemo(() => [
-		{
-			key: "bulk-move",
-			icon: FolderInput,
-			tooltip: getMoveTooltip(),
-			variant: "secondary" as const,
-			onClick: handleBulkMoveToWorkspace,
-			disabled: !canMoveAnySelected,
-		},
-		{
-			key: "bulk-copy",
-			icon: Copy,
-			tooltip: getCopyTooltip(),
-			variant: "purple" as const,
-			onClick: handleBulkCopy,
-		},
-		{
-			key: "bulk-calculate",
-			icon: Play,
-			tooltip: getCalculateTooltip(),
-			variant: "success" as const,
-			onClick: handleBulkCalculate,
-			disabled: !canCalculateAnySelected,
-		},
-		{
-			key: "bulk-delete",
-			icon: Trash2,
-			tooltip: getDeleteTooltip(),
-			variant: "danger" as const,
-			onClick: showBulkDeleteConfirm,
-			disabled: !canDeleteAnySelected,
-		},
-	], [getMoveTooltip, getCopyTooltip, getCalculateTooltip, getDeleteTooltip, handleBulkMoveToWorkspace, handleBulkCopy, handleBulkCalculate, showBulkDeleteConfirm, canMoveAnySelected, canCalculateAnySelected, canDeleteAnySelected]);
+	const bulkActions = useBulkActionConfigs({
+		selectedModels,
+		isModelDisabled,
+		canUserDeleteModel,
+		hasAvailableWebservice,
+		handleCalculate,
+		clearSelection,
+		handleBulkMoveToWorkspace,
+		handleBulkCopy,
+		showBulkDeleteConfirm,
+	});
 
 	const modelDashboardActions = useMemo<ModelDashboardActionsContextValue>(() => ({
 		selectedModels,
@@ -608,6 +452,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		editingModel,
 		editTitle,
 		calculationStartTimes,
+		runtimeEstimates,
 		calculationCompletionInfo,
 		canUserDeleteModel,
 		hasAvailableWebservice,
@@ -634,7 +479,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		statsModelLimit: stats.model_limit,
 	}), [
 		selectedModels, handleSelectAll, handleSort, orderBy, order, user, isSelected, editingModel, editTitle,
-		calculationStartTimes, calculationCompletionInfo, canUserDeleteModel, hasAvailableWebservice, handleSelectModel,
+		calculationStartTimes, runtimeEstimates, calculationCompletionInfo, canUserDeleteModel, hasAvailableWebservice, handleSelectModel,
 		startTitleEdit, setEditTitle, updateTitle, cancelTitleEdit, handleView, handleEdit, handleDownload, handleCopy,
 		handleCalculateSingle, handleSingleDelete, handleShare, handleMoveToWorkspace, currentPage, itemsPerPage,
 		handlePageChange, handleItemsPerPageChange, handleNewModel, isModelLimitReached, stats.total, stats.model_limit,
@@ -642,14 +487,17 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 
 return (
 		<Fragment>
-			<div className="md-scope relative p-4 sm:p-6 w-full bg-background overflow-x-hidden overflow-y-scroll">
-				<div className="w-full space-y-5">
+			<div className="md-scope relative w-full bg-background overflow-x-hidden overflow-y-scroll">
+				<div className="w-full px-4 py-6 sm:px-6 lg:px-8 space-y-6">
 					<ModelDashboardFilters
 						groups={groups}
 						selectedGroup={selectedGroup}
 						setSelectedGroup={setSelectedGroup}
 						filterText={filterText}
 						setFilterText={setFilterText}
+						filterFromDate={filterFromDate}
+						filterToDate={filterToDate}
+						onDateRangeChange={handleDateRangeChange}
 						isLoadingWorkspace={isLoadingWorkspace}
 						handleWorkspaceChange={handleWorkspaceChange}
 						setIsCreateWsOpen={setIsCreateWsOpen}

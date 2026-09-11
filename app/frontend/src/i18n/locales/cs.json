@@ -198,7 +198,10 @@
       "nextPage": "Další stránka"
     },
     "appName": "CCUS Assessment",
-    "saved": "Saved"
+    "saved": "Saved",
+    "copied": "Zkopírováno",
+    "copy": "Kopírovat",
+    "done": "Hotovo"
   },
   "dashboard": {
     "stats": {
@@ -739,7 +742,8 @@
     "noMembersYet": "Zatím žádní členové. Sdílejte s někým pro spolupráci!",
     "noGroupsYet": "Zatím žádná skupina nemá přístup. Sdílejte se skupinou pro přístup všech členů!",
     "removeMember": "Odstranit člena",
-    "removeGroup": "Odstranit skupinu"
+    "removeGroup": "Odstranit skupinu",
+    "selectorHint": "Vyberte nebo vytvořte pracovní prostor pro organizaci modelů"
   },
   "model": {
     "title": "Model",
@@ -828,7 +832,17 @@
     "estimateApproximate": "Tyto běhy předcházejí sledování fronty, skutečné čekání bude delší.",
     "estimateOverdue": "trvá déle než obvykle",
     "estimateRemaining": "zbývá ~{{duration}}",
-    "estimateUnavailable": "Nedostatek srovnatelných úspěšných běhů pro odhad"
+    "estimateUnavailable": "Nedostatek srovnatelných úspěšných běhů pro odhad",
+    "canEdit": "Může upravovat",
+    "canView": "Může zobrazit",
+    "clearDateFilter": "Vymazat filtr dat",
+    "filterPeriod": "Filtrovat podle období",
+    "noDirectShares": "Tento model zatím nebyl s nikým sdílen.",
+    "peopleWithAccess": "Lidé s přímým přístupem",
+    "peopleWithAccessDescription": "Lidé v tomto seznamu mohou otevřít tento model a jeho vrstvy rizika.",
+    "revokeAccess": "Odvolat",
+    "revokingAccess": "Odebírání přístupu…",
+    "revokeAccessFor": "Odebrat přístup pro {{email}}"
   },
   "polygon": {
     "drawRegion": "Nakreslete svůj region",
@@ -956,8 +970,6 @@
       "allLayersAvailable": "Všechny Vrstvy Dostupné",
       "fullSystemAccess": "Plný Přístup k Systému",
       "energyRiskFinal": "Konečné Energetické Riziko",
-      "vegetationRisk": "Riziko Vegetace",
-      "topographyRisk": "Riziko Topografie",
       "upgradeMessage": "Odemkněte více funkcí požádáním administrátora o upgrade.",
       "resultFinal": "Result Final"
     },
@@ -1025,7 +1037,9 @@
       "bulkMoveToGroup": "Přesunout do skupiny",
       "deselectAll": "Zrušit výběr všeho",
       "selectAll": "Vybrat vše",
-      "selected": "{{count}} vybráno"
+      "selected": "{{count}} vybráno",
+      "apiTokens": "API tokeny",
+      "apiTokensActive": "Přístup k API povolen — spravovat tokeny"
     },
     "groups": {
       "selectOrCreate": "Vyberte nebo vytvořte skupinu",
@@ -1588,6 +1602,11 @@
       "saveSummary": {
         "title": "Save summary",
         "description": "This final summary shows the values that will be saved with the model and sent to the calculation workflow."
+      },
+      "nodes": {
+        "description": "Vyberte zdroje a úložiště CO2, mezi nimiž model trasuje.",
+        "tip": "Pro pokračování je potřeba alespoň jeden uzel.",
+        "title": "Výběr uzlů"
       }
     },
     "buttons": {
@@ -1698,7 +1717,11 @@
       "veryHigh": "Potřeba extra ochrana",
       "extreme": "Vyhněte se slunečnímu záření"
     },
-    "dataBy": "Meteorologická data od"
+    "dataBy": "Meteorologická data od",
+    "settings": "Nastavení počasí",
+    "title": "Informace o počasí",
+    "uvUnavailable": "Data UV nejsou k dispozici (noc)",
+    "windSpeedTooltip": "Jednotku změníte v Nastavení → Zobrazení dat."
   },
   "settings": {
     "title": "Nastavení",
@@ -1709,7 +1732,8 @@
       "general": "Obecné",
       "display": "Zobrazení",
       "notifications": "Oznámení",
-      "advanced": "Pokročilé"
+      "advanced": "Pokročilé",
+      "privacyTerms": "Soukromí a podmínky"
     },
     "stats": {
       "language": "Jazyk",
@@ -1758,7 +1782,13 @@
       "windSpeed": "Rychlost Větru",
       "knots": "uzly",
       "dataRefresh": "Obnovení Dat",
-      "min": "min"
+      "min": "min",
+      "textSize": "Velikost textu",
+      "textSizes": {
+        "large": "Velký",
+        "normal": "Normální",
+        "small": "Malý"
+      }
     },
     "notifications": {
       "title": "Oznámení",
@@ -1787,29 +1817,6 @@
       "sent": "Oznámení odesláno!",
       "failedToSend": "Odeslání selhalo"
     },
-    "pylovo": {
-      "title": "Pipeline Pylovo",
-      "subtitle": "Generování dat a sítě",
-      "dataPipeline": "Datový Pipeline",
-      "dataPipelineDesc": "Stáhnout a zpracovat OSM data",
-      "databaseConstructor": "Konstruktor Databáze",
-      "databaseConstructorDesc": "Vytvořit tabulky databáze compute engine",
-      "gridGeneration": "Generování Sítě",
-      "gridGenerationDesc": "Vygenerovat syntetickou elektrickou síť",
-      "fullPipeline": "Úplný Pipeline",
-      "fullPipelineDesc": "Spustit všechny kroky postupně",
-      "selectCountry": "Vybrat zemi",
-      "selectState": "Vybrat kraj",
-      "run": "Spustit",
-      "running": "Běží",
-      "viewLogs": "Zobrazit logy",
-      "hideLogs": "Skrýt logy",
-      "pending": "Čekající",
-      "completed": "Dokončeno",
-      "failed": "Selhalo",
-      "recentJobs": "Nedávné Úlohy",
-      "noRecentJobs": "Žádné nedávné úlohy"
-    },
     "polygonLimits": {
       "title": "Limity Polygonů",
       "subtitle": "Výběr budov",
@@ -1828,131 +1835,28 @@
         "manager": "Manažer",
         "expert": "Expert"
       }
+    },
+    "accessLevels": {
+      "basic": "Základní",
+      "expert": "Expert",
+      "intermediate": "Pokročilý",
+      "manager": "Manažer"
+    },
+    "modelCreation": {
+      "checking": "Kontrola předvolby...",
+      "description": "Určuje, zda se před průvodcem tvorbou modelu zobrazí úvodní karta s nastavením.",
+      "enabled": "Úvod je zapnutý",
+      "enabledHint": "Shrnutí se zobrazí před vytvořením nového modelu.",
+      "enabledMessage": "Úvodní karta se zobrazí při příštím vytváření modelu.",
+      "guidancePreferences": "Předvolby nápovědy",
+      "hidden": "Úvod je skrytý",
+      "hiddenHint": "Zapněte jej znovu, když uživatelé potřebují shrnutí před vytvořením modelu.",
+      "loadError": "Tuto předvolbu se nepodařilo načíst.",
+      "sectionTitle": "Tvorba modelů",
+      "showAgain": "Zobrazit znovu",
+      "title": "Úvodní karta modelu",
+      "updateError": "Předvolbu úvodní karty se nepodařilo aktualizovat."
     }
-  },
-  "simulationComparison": {
-    "title": "Porovnání Simulací",
-    "subtitle": "Porovnejte výsledky více simulačních běhů",
-    "baseline": "Základní linie",
-    "comparison": "Porovnání",
-    "workspace": "Pracovní prostor",
-    "model": "Model",
-    "selectBaselineModel": "Vyberte základní model",
-    "selectComparisonModel": "Vyberte model pro porovnání",
-    "noCompletedModels": "Nebyly nalezeny žádné dokončené modely",
-    "noRegion": "Žádný region",
-    "hideMaps": "Skrýt mapy",
-    "showMaps": "Zobrazit mapy",
-    "exportPdf": "Exportovat PDF",
-    "locationMaps": "Mapy lokalit",
-    "performanceComparison": "Porovnání výkonu",
-    "loading": "Načítání dat simulace...",
-    "selectModels": "Vyberte modely k porovnání",
-    "selectModelsDescription": "Vyberte výše dva dokončené simulační modely pro analýzu jejich rozdílů ve výrobě energie, nákladech a klíčových ukazatelích výkonu.",
-    "startBySelectingBaseline": "Začněte výběrem základního modelu",
-    "nowSelectComparison": "Nyní vyberte model pro porovnání",
-    "unableToLoadResults": "Nelze načíst výsledky",
-    "errors": {
-      "baseline": "Základní linie",
-      "comparison": "Porovnání"
-    },
-    "metrics": {
-      "demandBaseline": "Poptávka (Základní)",
-      "renewableGen": "Obnovitelná výroba",
-      "gridImport": "Import ze sítě",
-      "selfSufficiency": "Soběstačnost",
-      "peakDemand": "Špičková poptávka",
-      "totalCost": "Celkové náklady",
-      "totalDemand": "Celková poptávka",
-      "co2Savings": "Úspora CO₂"
-    },
-    "summary": {
-      "baseline": "Základní"
-    },
-    "charts": {
-      "generationByTechnology": "Výroba podle technologie",
-      "sideBySideComparison": "Srovnání vedle sebe (kWh)",
-      "costDifferenceByCategory": "Rozdíl nákladů podle kategorie",
-      "comparisonVsBaseline": "Porovnání vs Základní (EUR)",
-      "keyPerformanceIndicators": "Klíčové ukazatele výkonu",
-      "selfSufficiencyBaseline": "Soběstačnost\n(Základní)",
-      "selfSufficiencyComparison": "Soběstačnost\n(Porovnání)",
-      "avgLcoe": "Prům. LCOE",
-      "installedCapacityComparison": "Porovnání instalovaného výkonu",
-      "technologyCapacity": "Kapacita technologie (kW)",
-      "overallPerformance": "Celkový výkon",
-      "multiDimensionalComparison": "Vícedimenzionální porovnání",
-      "totalCostBreakdown": "Rozklad celkových nákladů",
-      "stackedByTechnology": "Skládané podle technologie (EUR)",
-      "total": "Celkem",
-      "difference": "Rozdíl",
-      "renewableProduction": "Obnovitelná\nvýroba",
-      "gridIndependence": "Nezávislost\nna síti",
-      "costEfficiency": "Nákladová\nefektivita",
-      "demandCoverage": "Pokrytí\npoptávky"
-    },
-    "technologies": {
-      "solar": "Solární",
-      "wind": "Větrná",
-      "biomass": "Biomasa",
-      "geothermal": "Geotermální",
-      "storageDischarge": "Vybíjení úložiště",
-      "storage": "Úložiště",
-      "gridConnection": "Připojení k síti",
-      "transformer": "Transformátor",
-      "grid": "Síť",
-      "other": "Ostatní"
-    },
-    "pdfTitle": "Zpráva srovnání simulací",
-    "summaryWorse": "Risk increased",
-    "summaryBetter": "Risk reduced",
-    "summaryStable": "Risk is broadly stable",
-    "loadingMetrics": "Loading risk metrics…",
-    "summaryTitle": "Comparison Summary",
-    "summarySub": "Key changes between the baseline and comparison model.",
-    "criticalShare": "High + Very High share",
-    "dominantClass": "Dominant class",
-    "dominantClassSub": "Largest share of valid pixels: {{baseline}}% in baseline, {{comparison}}% in comparison.",
-    "dominantClassUnavailable": "Distribution data is not available.",
-    "analyzedArea": "Analyzed area",
-    "analyzedAreaSub": "Area is calculated from valid non-nodata pixels, so it can differ between model outputs.",
-    "readingDirection": "Interpretation",
-    "badDeltaLabel": "More High/Very High",
-    "badDeltaText": "means the comparison model is more severe.",
-    "goodDeltaLabel": "More Very Low/Low",
-    "goodDeltaText": "usually means risk shifted toward safer classes.",
-    "distribution": "Distribution Comparison",
-    "distributionSub": "Share of area per risk class in each model.",
-    "changeAnalysis": "Risk Change Analysis",
-    "changeAnalysisSub": "How risk shifted between the baseline and the comparison model, cell by cell on the sampled grid.",
-    "riskFlow": "Risk Flow",
-    "riskFlowSub": "Bands show the share of the area moving from a baseline class (left) to a comparison class (right).",
-    "scoreDistribution": "Risk Score Distribution",
-    "scoreDistributionSub": "Frequency of the continuous risk score across sampled cells. A curve shifted to the right means a more severe model; the coloured bands mark the risk classes.",
-    "areaByClass": "Area by Risk Class",
-    "areaByClassSub": "Area assigned to each risk class — comparable even when the two models cover differently sized areas.",
-    "topTransitions": "Biggest Changes",
-    "topTransitionsSub": "Largest class-to-class shifts by share of the area.",
-    "unchangedShare": "kept the same class",
-    "increasedShare": "moved to higher risk",
-    "decreasedShare": "moved to lower risk",
-    "ofArea": "of the area",
-    "noTransitions": "No class changes detected — both models assign the same risk class everywhere.",
-    "differentAreas": "The two models cover different areas or grids, so a cell-by-cell change analysis is not possible. Use the side-by-side maps above and the distribution below instead.",
-    "validCells": "valid cells",
-    "loadingMapSamples": "Loading geographic raster samples…",
-    "noMapSamples": "Geographic map samples are not available yet.",
-    "cells": "cells",
-    "noConfiguredLayer": "No GeoServer layer is configured for this model yet.",
-    "incompleteLayer": "Layer configuration is incomplete",
-    "loadLayerFailed": "Failed to load layer from GeoServer",
-    "mapHint": "Pan/zoom either map — views stay in sync.",
-    "mapHintIndependent": "These models cover different areas — each map shows its own model.",
-    "synced": "Synced",
-    "independent": "Independent",
-    "loadingLayer": "Loading layer…",
-    "fullscreen": "Fullscreen",
-    "exitFullscreen": "Exit fullscreen"
   },
   "map": {
     "zoomIn": "Přiblížit",
@@ -1964,7 +1868,22 @@
     "regions": "regiony",
     "myModels": "moje modely",
     "grids": "mřížky",
-    "countries": "země"
+    "countries": "země",
+    "bookmarks": {
+      "namePlaceholder": "Název záložky...",
+      "none": "Zatím žádné záložky",
+      "saveCurrentView": "Uložit aktuální pohled",
+      "title": "Záložky mapy"
+    },
+    "latestModel": "nejnovější model",
+    "legend": {
+      "title": "Obrysy mapy",
+      "yourModels": "Zelená plocha: váš nejnovější model — vyberte jej pro zobrazení výsledků",
+      "availableRegions": "Přerušovaná indigová: dostupné správní regiony",
+      "zoomDetail": "Podkladová mapa odhalí více detailů při přiblížení."
+    },
+    "newModelShortcut": "Zkratka: N",
+    "privacyRequired": "Pro zobrazení mapy přijměte podmínky o datech a soukromí"
   },
   "privacy": {
     "dataAndPrivacy": "Data a soukromí",
@@ -1980,7 +1899,6 @@
     "reviewPolicies": "Pro více informací si prosím přečtěte příslušné zásady ochrany osobních údajů:",
     "cartoPolicy": "Zásady ochrany osobních údajů Carto",
     "osmfPolicy": "Zásady ochrany osobních údajů OSMF",
-    "firePolicy": "Zásady ochrany osobních údajů App",
     "deny": "Odmítnout",
     "accept": "Přijmout",
     "dataPolicy": "App Analysis Privacy Policy"
@@ -2133,7 +2051,13 @@
       "descriptions": {
         "targetWorkspace": "Vyberte pracovní prostor, do kterého přesunout model"
       },
-      "defaultWorkspace": "Výchozí Pracovní Prostor"
+      "defaultWorkspace": "Výchozí Pracovní Prostor",
+      "errorMove": "Model se nepodařilo přesunout. Zkuste to znovu.",
+      "errorMovePlural": "Modely se nepodařilo přesunout. Zkuste to znovu.",
+      "errorSelect": "Vyberte pracovní prostor",
+      "noWorkspaces": "Žádné další pracovní prostory nejsou k dispozici. Nejprve vytvořte nový pracovní prostor.",
+      "title": "Přesunout model",
+      "titlePlural": "Přesunout modely"
     },
     "shareModel": {
       "title": "Sdílet s Jednotlivým Uživatelem",
@@ -2151,47 +2075,6 @@
         "min": "Je vyžadována alespoň 1 kopie",
         "max": "Maximálně 10 kopií povoleno",
         "integer": "Musí být celé číslo"
-      }
-    },
-    "pylovo": {
-      "serviceInfo": {
-        "title": "Informace o službě",
-        "description": "Základní identifikace instance Compute Engine"
-      },
-      "connectionDetails": {
-        "title": "Podrobnosti připojení",
-        "description": "Konfigurace síťového připojení a koncového bodu"
-      },
-      "statusSettings": {
-        "title": "Stav",
-        "description": "Počáteční stav instance Compute Engine"
-      },
-      "fields": {
-        "serviceName": "Název služby",
-        "protocol": "Protokol",
-        "ipAddress": "IP adresa / Název hostitele",
-        "port": "Port",
-        "endpoint": "Cesta koncového bodu",
-        "initialStatus": "Počáteční stav"
-      },
-      "placeholders": {
-        "serviceName": "Zadejte název služby",
-        "ipAddress": "např. compute-engine nebo 10.1.66.41"
-      },
-      "descriptions": {
-        "serviceName": "Čitelný název instance Compute Engine"
-      },
-      "statusOptions": {
-        "active": "Aktivní",
-        "inactive": "Neaktivní",
-        "maintenance": "Údržba"
-      },
-      "validation": {
-        "ipInvalid": "Zadejte platnou IP adresu nebo název hostitele",
-        "portRange": "Port musí být mezi 1 a 65535",
-        "nameRequired": "Název služby je povinný",
-        "ipRequired": "IP adresa nebo název hostitele je povinný",
-        "portRequired": "Port je povinný"
       }
     }
   },
@@ -2226,153 +2109,6 @@
     "cablesLabel": "Kabely",
     "trafosLabel": "Transformátory",
     "costDescription": "Náklady na infrastrukturu včetně kabelů a transformátorů"
-  },
-  "tooltips": {
-    "multiplePolygons": {
-      "title": "Více Polygonů",
-      "description": "Povolte tuto možnost pro kreslení více oddělených oblastí na mapě pro hodnocení CCUS. Při vypnutí kreslení nového polygonu nahradí předchozí. Při povolení můžete definovat více odlišných oblastí, které budou všechny zahrnuty do analýzy.",
-      "example": "Použijte pro současnou analýzu CCUS simulací ve více nesouvislých oblastech."
-    },
-    "publicBuildings": {
-      "title": "Veřejné Vlastní Budovy",
-      "description": "Zahrňte budovy sdílené jinými uživateli do výpočtu sítě. Jedná se o vlastní budovy, které jiní uživatelé veřejně zpřístupnili.",
-      "example": "Jednotlivé budovy můžete také vyloučit kliknutím na ně na mapě."
-    },
-    "privateBuildings": {
-      "title": "Moje Vlastní Budovy",
-      "description": "Zahrňte své soukromé vlastní budovy do výpočtu sítě. Jedná se o budovy, které jste vytvořili a uložili do svého účtu.",
-      "example": "Jednotlivé budovy můžete také vyloučit kliknutím na ně na mapě."
-    },
-    "simulateEV": {
-      "title": "Simulovat Kapacitu Hostingu EV",
-      "description": "Vypočítejte kapacitu hostingu elektrických vozidel pro každý transformátor ve vybrané oblasti. Tím se určí, kolik nabíječek EV (11 kW Úroveň 2) může být připojeno před dosažením omezení sítě.",
-      "example": "Stav 'Síť Omezena' znamená, že transformátor již dosáhl kapacity a nemůže podporovat další nabíječky EV bez modernizace."
-    },
-    "gridConstrained": {
-      "title": "Síť Omezena",
-      "description": "Tento stav označuje, že transformátor dosáhl limitu kapacity hostingu a nemůže podporovat další nabíječky EV.",
-      "example": "Modernizujte místní transformátor nebo rozložte nabíjení EV na více připojovacích bodů pro vyřešení omezení sítě."
-    },
-    "scenario": {
-      "title": "Rok Scénáře",
-      "description": "Cílový rok pro optimalizaci energetického systému. Tím se určují předpoklady nákladů a projekce poptávky použité v modelu.",
-      "example": "2030 představuje střednědobý plánovací horizont."
-    },
-    "co2_limit": {
-      "title": "Limit CO2",
-      "description": "Maximální povolené emise CO2 pro optimalizovaný systém v tunách.",
-      "example": "Nižší hodnoty nutí model používat více obnovitelných zdrojů energie."
-    },
-    "max_hours": {
-      "title": "Max Hodin Baterie",
-      "description": "Maximální doba, po kterou může úložiště baterie vybíjet při plném výkonu.",
-      "example": "72 hodin umožňuje vícedenní kapacitu úložiště."
-    },
-    "solver": {
-      "title": "Optimalizační Solver",
-      "description": "Matematický solver používaný k nalezení optimální konfigurace energetického systému.",
-      "example": "GLPK je bezplatný solver, zatímco Gurobi je komerční vysokovýkonný solver."
-    },
-    "autarky": {
-      "title": "Úroveň Autarkie",
-      "description": "Stupeň soběstačnosti požadovaný pro region, od 0 (žádný požadavek) do 1 (100% soběstačný).",
-      "example": "0.8 znamená, že 80% energie musí být vyrobeno lokálně."
-    },
-    "solarPotential": {
-      "title": "Odhad Solárního Potenciálu",
-      "description": "Odhadovaná maximální kapacita FV (kWp) na základě celkové vybrané plochy.",
-      "example": "Plocha 1000m² vede k přibližně 30 kWp potenciální kapacity."
-    },
-    "area": {
-      "title": "Celková Vybraná Plocha",
-      "description": "Kombinovaná plocha všech vybraných polygonů na mapě.",
-      "example": "1 hektar (ha) = 10 000 m²."
-    },
-    "perimeter": {
-      "title": "Celkový Obvod",
-      "description": "Celková délka hraničních linií všech vybraných polygonů.",
-      "example": "Užitečné pro odhad požadavků na oplocení nebo vedení kabelů kolem lokality."
-    },
-    "estGeneration": {
-      "title": "Odhadovaná Roční Výroba",
-      "description": "Předpokládaná roční produkce energie na základě solárního potenciálu.",
-      "example": "Systém 30 kWp produkuje přibližně 33 MWh/rok v tomto regionu."
-    },
-    "co2Offset": {
-      "title": "Odhadovaná Kompenzace CO₂",
-      "description": "Potenciální emise oxidu uhličitého, kterým se vyhneme použitím této solární energie místo elektřiny ze sítě.",
-      "example": "Výroba 100 MWh čisté energie ušetří přibližně 40 tun CO₂."
-    },
-    "voltageStatus": {
-      "title": "Indikátory Stavu Napětí",
-      "description": "Stav napětí sběrnice je určen na základě velikosti napětí na jednotku (p.u.) podle síťových standardů EN 50160.",
-      "example": "Napětí 0.92 p.u. ukazuje stav Varování, protože je pod optimálním prahem 0.95."
-    },
-    "pypsaSimulation": {
-      "title": "Simulace PyPSA",
-      "description": "Povolte PyPSA (Python for Power System Analysis) pro spuštění pokročilé optimalizace energetického systému. Při povolení model optimalizuje energetické toky, dispečink úložiště a dimenzování technologií pro minimalizaci nákladů při splnění požadavků poptávky a omezení sítě.",
-      "example": "Zakažte pro rychlou analýzu pouze sítě. Povolte pro úplnou optimalizaci energetického systému s podrobnými výsledky."
-    },
-    "assignBuildings": {
-      "title": "Přiřadit budovy k transformátoru",
-      "description": "Přiřaďte budovy k jinému transformátoru. Nejprve vyberte budovy k přesunu, poté klikněte na cílový transformátor. Užitečné pro vyrovnání zátěže nebo opravu přetížených transformátorů.",
-      "example": "Vyberte přetížené budovy (červené kabely) a přiřaďte je k blízkému transformátoru s volnou kapacitou."
-    },
-    "buildingType": {
-      "title": "Typ budovy",
-      "description": "Klasifikace budovy z OpenStreetMap (OSM). To určuje výchozí energetický profil a standardní třídu odběrového profilu (SLP).",
-      "example": "Běžné typy: \"dům\", \"byty\", \"komerční\", \"průmyslový\"."
-    },
-    "constructionYear": {
-      "title": "Rok výstavby",
-      "description": "Rok výstavby budovy ze OpenStreetMap. Používá se k aplikaci věkově závislých korekčních faktorů energie.",
-      "example": "Budovy před rokem 1978 používají faktor 1,40×, moderní budovy (2016+) používají 0,55×."
-    },
-    "floorArea": {
-      "title": "Zastavěná plocha",
-      "description": "Plocha půdorysu budovy vypočtená z geometrie mapy. Hlavní vstup pro odhad energie pomocí AI.",
-      "example": "Obytná budova o 100 m² typicky spotřebuje ~3 500 kWh/rok."
-    },
-    "buildingHeight": {
-      "title": "Výška budovy",
-      "description": "Maximální výška budovy z OpenStreetMap geometrie. Od úrovně terénu po nejvyšší bod budovy včetně střechy.",
-      "example": "Typická 2podlažní obytná budova má výšku ~8–10 m."
-    },
-    "peakLoad": {
-      "title": "Špičkový příkon",
-      "description": "Maximální okamžitý elektrický příkon. Vypočteno z roční spotřeby dělené hodinami plného zatížení (FLH).",
-      "example": "Budova spotřebovávající 3 500 kWh/rok s 1800 FLH má špičkový příkon ~1,94 kW."
-    },
-    "energyDemandProfile": {
-      "title": "Profil energetické potřeby",
-      "description": "Roční spotřeba energie tohoto budovy. Hodnoty lze ručně upravit. U vícetřídních budov je každá třída zobrazena samostatně.",
-      "example": "Hodnoty v kWh/rok. Odhad AI poskytuje počáteční hodnoty."
-    },
-    "buildingUsageType": {
-      "title": "Typ využití budovy",
-      "description": "Funkční klasifikace z tagů OpenStreetMap. Určuje třídu standardního odběrového profilu (SLP).",
-      "example": "Obytné typy používají SLP H0. Komerční používají G0-G6. Průmyslové používají G3."
-    },
-    "windSpeed": {
-      "title": "Wind Speed",
-      "description": "Average wind speed over the selected area for the given time period.",
-      "example": "Higher wind speeds provide more energy to the process and can rapidly propagate effects, significantly increasing the rate of spread."
-    },
-    "windDirection": {
-      "title": "Wind Direction",
-      "description": "Average wind direction over the selected area, represented in degrees and compass points.",
-      "example": "N (North), E (East), S (South), W (West), and intermediate points like NNE (North-Northeast) or WSW (West-Southwest)."
-    },
-    "temperature": {
-      "title": "Temperature",
-      "description": "Average ambient temperature over the selected area for the given time period.",
-      "example": "High temperatures dry out vegetation inputs, making them more reactive and amplifying the effect."
-    },
-    "humidity": {
-      "title": "Relative Humidity",
-      "description": "Average relative humidity over the selected area for the given time period.",
-      "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
-    }
   },
   "onboarding": {
     "welcome": {
@@ -2414,75 +2150,6 @@
     "readMore": "Číst více",
     "noNews": "Žádné zprávy k dispozici",
     "loading": "Načítání zpráv..."
-  },
-  "pylovoManagement": {
-    "title": "Správa Compute Engine",
-    "subtitle": "Správa instancí Compute Engine",
-    "searchPlaceholder": "Hledat podle názvu, IP...",
-    "refresh": "Obnovit",
-    "registerNew": "Registrovat novou instanci",
-    "loadingInstances": "Načítání instancí...",
-    "noInstancesFound": "Nebyly nalezeny žádné instance compute engine",
-    "noInstancesDescription": "Začněte registrací své první instance Compute Engine.",
-    "noInstancesAvailable": "V současné době nejsou nakonfigurovány žádné instance compute engine. Kontaktujte administrátora.",
-    "healthCheck": "Compute Engine",
-    "summary": {
-      "total": "Celkem",
-      "online": "Online",
-      "available": "Dostupné",
-      "offline": "Offline"
-    },
-    "filters": {
-      "allStatus": "Všechny stavy",
-      "active": "Aktivní",
-      "inactive": "Neaktivní",
-      "maintenance": "Údržba",
-      "allAvailability": "Veškerá dostupnost",
-      "available": "Dostupné",
-      "unavailable": "Nedostupné"
-    },
-    "table": {
-      "service": "Služba",
-      "endpoint": "Koncový bod",
-      "status": "Stav",
-      "availability": "Dostupnost",
-      "primary": "Primární",
-      "lastCheck": "Poslední kontrola",
-      "actions": "Akce",
-      "never": "Nikdy"
-    },
-    "status": {
-      "online": "Online",
-      "offline": "Offline",
-      "available": "Dostupné",
-      "unavailable": "Nedostupné"
-    },
-    "actions": {
-      "pingInstance": "Ping instance",
-      "editInstance": "Upravit instanci",
-      "deleteInstance": "Smazat instanci",
-      "setPrimary": "Nastavit jako primární",
-      "currentPrimary": "Aktuální primární instance"
-    },
-    "dialog": {
-      "editTitle": "Upravit instanci Compute Engine",
-      "createTitle": "Registrovat nový Compute Engine",
-      "editDescription": "Aktualizovat konfiguraci compute engine",
-      "createDescription": "Nakonfigurovat novou instanci Compute Engine",
-      "editButton": "Aktualizovat instanci",
-      "createButton": "Registrovat instanci"
-    },
-    "notifications": {
-      "created": "Instance compute engine úspěšně zaregistrována!",
-      "updated": "Instance compute engine úspěšně aktualizována!",
-      "deleted": "Instance compute engine úspěšně smazána!",
-      "primarySet": "Primární instance úspěšně aktualizována!",
-      "statusChanged": "Stav instance změněn na {{status}}",
-      "failedToCreate": "Nepodařilo se zaregistrovat instanci",
-      "failedToUpdate": "Nepodařilo se aktualizovat instanci",
-      "failedToDelete": "Nepodařilo se smazat instanci",
-      "failedToPing": "Nepodařilo se pingnout instanci"
-    }
   },
   "regionSelector": {
     "goToRegion": "Přejít na region",
@@ -2669,40 +2336,12 @@
     "loadingModels": "Loading models…",
     "noCompletedModels": "No completed models",
     "selectModel": "Select a model",
-    "layer": {
-      "visible": "Visible",
-      "hidden": "Hidden",
-      "opacity": "Opacity",
-      "publishing": "Publishing layer to GeoServer…",
-      "day": "Day",
-      "view3d": "3D Terrain",
-      "view2d": "2D Map",
-      "playDaily": "Animate daily risk maps",
-      "fullscreen": "Fullscreen",
-      "exitFullscreen": "Exit fullscreen"
-    },
     "map": {
       "initializing": "Initializing map…"
     },
     "empty": {
       "title": "No result for this model yet.",
       "hint": "The simulation output will appear here once processing finishes."
-    },
-    "layers": {
-      "title": "Overlays",
-      "roads": "Roads",
-      "labels": "Labels & places"
-    },
-    "legend": {
-      "title": "Result",
-      "allLevels": "All available levels",
-      "levels": {
-        "very_low": "Very Low",
-        "low": "Low",
-        "moderate": "Moderate",
-        "high": "High",
-        "very_high": "Very High"
-      }
     },
     "details": {
       "description": "Description",
@@ -2739,12 +2378,6 @@
       "meanRiskScore": "Mean risk score",
       "highVeryHighArea": "High + very high area",
       "analyzedArea": "Analyzed area"
-    },
-    "timeline": {
-      "title": "Risk Over Time",
-      "subtitle": "Analyzed area per risk class for each day of the run. Click a day to show it on the map.",
-      "loading": "Computing daily distributions… the first load can take a minute.",
-      "empty": "No daily risk maps in this run."
     }
   },
   "configurator": {
@@ -2797,7 +2430,9 @@
       "suggestedName1": "Regionální hodnocení CO₂",
       "suggestedName2": "Studie průmyslového klastru",
       "suggestedName3": "Screening úložných lokalit",
-      "suggestedName4": "Čtvrtletní výhled zachytávání"
+      "suggestedName4": "Čtvrtletní výhled zachytávání",
+      "modelNameQuestion": "Jak chcete tento model pojmenovat?",
+      "periodQuestion": "Jaké období se má vyhodnotit?"
     },
     "layer2": {
       "purpose": "Vyberte zdroje a úložiště CO₂, mezi kterými model vede trasy.",
@@ -2809,33 +2444,14 @@
     "layer3": {
       "purpose": "CO2RouteX prověří vybrané uzly na možná spojení, poté je trasuje a spočítá náklady.",
       "nextStepHint": "Dále uvidíte, kolik tyto trasy stojí.",
-      "fwiLabel": "Weather signal (optional)",
-      "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
-      "fwiWeight": "30% weight",
-      "terrainLabel": "Terrain & slope",
-      "terrainHint": "Elevation, slope and aspect influence on spread",
-      "terrainWeight": "6% weight",
-      "historicalLabel": "Historical events",
-      "historicalHint": "Recurrence based on past incidents in the area",
-      "historicalWeight": "4% weight",
-      "weatherWarning": "Weather is the main risk signal. Disabling it makes the date selection irrelevant and produces a drastically under-estimated risk map. Keep it on unless you specifically need a baseline without weather.",
       "customData": "Custom data (optional)",
       "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
       "weatherStationData": "Weather station data",
       "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
-      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used.",
-      "fwiInfo": "Index počasí spojuje vítr, relativní vlhkost, teplotu a sucho do jediné hodnoty. Má největší váhu, protože počasí se mění nejrychleji a výsledek ovlivňuje nejsilněji.",
-      "terrainInfo": "Sklon, nadmořská výška a orientace určují, jak se podmínky v oblasti liší — přivrácené svahy vysychají rychleji. Odvozeno z digitálního modelu terénu vaší oblasti.",
-      "historicalInfo": "Tam, kde už události nastaly, se obvykle opakují, protože přetrvávají jejich příčiny — využití území a dostupnost. Na základě zaznamenaných minulých incidentů v oblasti.",
-      "signalsQuestion": "Které signály mají vstupovat do modelu?",
-      "coreSignalsNote": "Vegetace (NDVI) a infrastruktura jsou vždy součástí modelu a nelze je vypnout. Vypnutím signálu výše se odebere jeho příspěvek k vážení — výpočet pokračuje se zbývajícími signály.",
       "lockedByPrecomputed": "Zahrnuto v předpočítané regionální mapě. Vypněte přepínač výše, chcete-li vrstvy upravit.",
       "precomputedLabel": "Předpočítaná regionální mapa",
       "precomputedInfoLabel": "O předpočítané regionální mapě",
-      "precomputedInfo": "Každou noc se analyzuje celý region se všemi vrstvami. Pokud je vaše datum pokryto, výsledek pro vaši oblast se z této mapy vyřízne a je k dispozici během několika sekund. Vypněte ji (nebo přepněte jednotlivé vrstvy níže) a model spočítá všechny kroky přímo pro vaši oblast (~1-2 minuty).",
-      "precomputedRange": "Předpočítané mapy pokrývají přesně jeden den - zvolte stejné datum začátku a konce. U rozsahu model spočítá každý den vaší oblasti a vrátí den s maximem (~1-2 minuty).",
       "precomputedUnavailable": "Noční analýza toto datum zatím nezpracovala. Model spočítá všechny kroky pro vaši oblast.",
-      "precomputedOnHint": "Výsledek během sekund, vyříznutý z noční analýzy celého regionu. Všechny tři vrstvy níže jsou zahrnuty, a proto uzamčeny.",
       "precomputedOffHint": "Úplný výpočet přesně pro vaši oblast (~1-2 minuty); jednotlivé vrstvy níže můžete přepínat.",
       "routesQuestion": "Jak jsou propojeny?",
       "routesInfo": "Jedna trasa na dvojici zdroj-úložiště: potrubí, kamion nebo železnice."
@@ -2854,7 +2470,6 @@
       "uploadIncomplete": "GeoJSON upload incomplete.",
       "areaDetails": "{{count}} regions · {{area}}",
       "areaDetailsSingle": "1 region · {{area}}",
-      "weatherDisabledWarn": "Weather signal (optional) is disabled — risk will be significantly under-estimated and the date becomes irrelevant.",
       "allSignalsActive": "All risk signals active (weather + terrain + history).",
       "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
       "bufferDistance": "{{buffer}} m around the AOI.",
@@ -2868,10 +2483,12 @@
         "timeframe": "Timeframe",
         "areaOfInterest": "Area of interest",
         "riskComponents": "Risk components",
-        "bufferDistance": "Buffer distance"
+        "bufferDistance": "Buffer distance",
+        "nodes": "Uzly"
       },
       "costsQuestion": "Kolik tyto trasy stojí?",
-      "costsInfo": "Spočítáno z tras nalezených v předchozím kroku."
+      "costsInfo": "Spočítáno z tras nalezených v předchozím kroku.",
+      "noNodes": "Nejsou vybrány uzly — vraťte se na krok 2."
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -2887,8 +2504,10 @@
         "dailyRun": "Daily run",
         "buffer": "Buffer",
         "area": "Area",
-        "riskComponents": "Risk components"
-      }
+        "riskComponents": "Risk components",
+        "nodes": "Uzly"
+      },
+      "dailyRunInfo": "Každý simulovaný den se vyhodnocuje počasím z tohoto okna — z nejteplejší a nejsušší části odpoledne."
     },
     "coverage": {
       "title": "Data coverage",
@@ -2906,6 +2525,26 @@
     },
     "mapHeader": {
       "clearNodes": "Vymazat"
+    },
+    "blocking": {
+      "and": " a ",
+      "dateRange": "počáteční a koncové datum",
+      "dynamicEmpty": "Momentálně nejsou k dispozici žádná dynamická data.",
+      "dynamicLoading": "Načítání dostupných dynamických dat.",
+      "dynamicRange": "Vyberte plně dostupný rozsah dynamických dat.",
+      "modelName": "název modelu",
+      "dynamicOrder": "Počáteční datum musí být dřívější nebo shodné s koncovým."
+    },
+    "save": {
+      "calculationFailed": "Model byl uložen, ale výpočet se nepodařilo spustit.",
+      "createFailed": "Model se nepodařilo vytvořit. Zkuste to prosím znovu.",
+      "updateFailed": "Model se nepodařilo uložit. Zkuste to prosím znovu.",
+      "uploadFailed": "Model byl uložen, ale jeho vstupní soubory se nepodařilo nahrát."
+    },
+    "stepPurposeHide": "Skrýt informace o kroku",
+    "stepPurposeShow": "Co je tento krok?",
+    "wizard": {
+      "steps": "Kroky modelu"
     }
   },
   "co2Nodes": {
@@ -2937,7 +2576,8 @@
     "legend": {
       "emitters": "Zdroje emisí",
       "sinks": "Úložiště a využití",
-      "routes": "Možné přepravní trasy"
+      "routes": "Možné přepravní trasy",
+      "size": "Velikost bubliny = roční emise CO₂"
     },
     "catalogueEmpty": "Katalog uzlů je prázdný.",
     "runConnections": "Najít spojení",
@@ -2958,14 +2598,109 @@
     "selectAll": "Vybrat vše ({{count}})",
     "clearCategory": "Zrušit",
     "needEmitter": "Přidejte alespoň jeden zdroj — tam trasy začínají.",
-    "needDestination": "Přidejte uzel úložiště, využití nebo dopravy — trasy musí někde končit."
+    "needDestination": "Přidejte uzel úložiště, využití nebo dopravy — trasy musí někde končit.",
+    "advancedFilters": "Rozšířené filtry",
+    "clearAllFilters": "Zrušit všechny filtry",
+    "clearFilters": "Zrušit filtry",
+    "filterListPlaceholder": "Pište pro zúžení…",
+    "fluxCustom": "Vlastní rozsah (kt/rok)",
+    "fluxFilterTitle": "Roční emise CO₂",
+    "fluxMax": "Max",
+    "fluxMin": "Min",
+    "municipalitiesFilter": "Města / obce",
+    "noMatches": "Žádné výsledky.",
+    "noSinks": "V katalogu zatím nejsou úložiště.",
+    "noState": "Region není uveden",
+    "sortAsc": "Nejnižší CO₂ první",
+    "sortDesc": "Nejvyšší CO₂ první",
+    "statesFilter": "Regiony"
   },
   "co2Routing": {
-    "run": "Najít trasy"
+    "run": "Najít trasy",
+    "cancel": "Zrušit",
+    "capex": "CAPEX (€2021)",
+    "connection": "Spojení",
+    "distance": "Vzdálenost",
+    "download": "Stáhnout sešit",
+    "modes": "Druhy dopravy",
+    "noRoutes": "Mezi vybranými uzly nebyly nalezeny trasy.",
+    "preview": "Náhled konceptu: stáhněte sešit, nebo model uložte a spusťte znovu, aby se trasy uchovaly.",
+    "resistance": "Odpor",
+    "stationDistances": "Vzdálenosti stanic",
+    "stationPair": "Ze stanice do stanice",
+    "unitCost": "Náklady (€/t/km)",
+    "unrouted": "Bez trasy",
+    "uploading": "Nahrávání dat tras…"
   },
   "co2Costs": {
     "running": "Výpočet stále běží — náklady se objeví po dokončení trasování.",
     "noRun": "Vraťte se na Trasy a nejprve najděte spojení — náklady z nich vycházejí.",
     "noCosts": "Žádné oceněné trasy. CAPEX potrubí vyžaduje trasované potrubí; tarify kamionu a železnice vyžadují trasované vzdálenosti."
+  },
+  "apiTokens": {
+    "create": "Vytvořit nový token",
+    "createdOnce": "Zkopírujte tento token hned — už se znovu nezobrazí.",
+    "errors": {
+      "create": "Token se nepodařilo vytvořit",
+      "load": "Tokeny se nepodařilo načíst",
+      "revoke": "Token se nepodařilo odvolat"
+    },
+    "existing": "Existující tokeny",
+    "expires": "vyprší",
+    "expiry": "Platnost",
+    "expiry30": "Vyprší za 30 dní",
+    "expiry365": "Vyprší za 1 rok",
+    "expiry90": "Vyprší za 90 dní",
+    "expiryNever": "Nikdy nevyprší",
+    "generate": "Vygenerovat token",
+    "lastUsed": "naposledy použit",
+    "namePlaceholder": "Název tokenu (např. analytický skript)",
+    "none": "Zatím žádné tokeny.",
+    "revoke": "Odvolat",
+    "scope": "Rozsah",
+    "scopeFull": "Čtení i zápis",
+    "scopeFullShort": "čtení i zápis",
+    "scopeRead": "Jen pro čtení (doporučeno)",
+    "scopeReadShort": "jen pro čtení",
+    "status": {
+      "active": "Aktivní",
+      "expired": "Vypršel",
+      "revoked": "Odvolán"
+    },
+    "subtitle": "Správa přístupových tokenů k API pro",
+    "title": "API tokeny"
+  },
+  "co2Source": {
+    "allCountries": "Vše",
+    "allIndustries": "Vše",
+    "allStatuses": "Vše",
+    "annual": "t CO₂/rok",
+    "browse": "Procházet všechny zdroje",
+    "catalogue": "Katalog zdrojů STORE_CO2",
+    "catalogueInfo": "Zahrnuje zdroje bez souřadnic. Mapovatelné provozy vyberte v kroku 2.",
+    "clearFilters": "Zrušit filtry",
+    "country": "Země",
+    "details": "Podrobnosti zdroje",
+    "detailsError": "Podrobnosti zdroje se nepodařilo načíst.",
+    "detailsInfo": "Úplný záznam STORE_CO2. Emise jsou v tunách CO₂ za rok; chybějící hodnoty zůstávají neznámé.",
+    "empty": "0 zdrojů",
+    "error": "Zdroje se nepodařilo načíst.",
+    "filters": "Filtrovat zdroje",
+    "history": "Historie ročních emisí (t CO₂/rok)",
+    "industry": "Odvětví",
+    "loading": "Načítání zdrojů…",
+    "loadingDetails": "Načítání zdroje",
+    "location": "Poloha",
+    "name": "Zdroj",
+    "next": "Další",
+    "no": "Ne",
+    "noCoordinates": "Bez souřadnic",
+    "noMatches": "Hledání neodpovídá žádný zdroj.",
+    "previous": "Předchozí",
+    "refresh": "Obnovit data zdrojů",
+    "refreshError": "Zdroje se nepodařilo obnovit. Stávající data zůstala zachována.",
+    "search": "Hledat zdroje",
+    "status": "Stav",
+    "yes": "Ano"
   }
 }

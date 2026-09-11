@@ -244,7 +244,10 @@
       "nextPage": "Página siguiente"
     },
     "appName": "CCUS Assessment",
-    "saved": "Saved"
+    "saved": "Saved",
+    "copied": "Copiado",
+    "copy": "Copiar",
+    "done": "Hecho"
   },
   "forms": {
     "user": {
@@ -380,7 +383,13 @@
       "descriptions": {
         "targetWorkspace": "Elija el espacio de trabajo al que mover el modelo"
       },
-      "defaultWorkspace": "Espacio de Trabajo Predeterminado"
+      "defaultWorkspace": "Espacio de Trabajo Predeterminado",
+      "errorMove": "No se pudo mover el modelo. Inténtalo de nuevo.",
+      "errorMovePlural": "No se pudieron mover los modelos. Inténtalo de nuevo.",
+      "errorSelect": "Selecciona un espacio de trabajo",
+      "noWorkspaces": "No hay otros espacios de trabajo disponibles. Crea primero un nuevo espacio de trabajo.",
+      "title": "Mover modelo",
+      "titlePlural": "Mover modelos"
     },
     "shareModel": {
       "title": "Compartir con un Usuario Individual",
@@ -398,47 +407,6 @@
         "min": "Se requiere al menos 1 copia",
         "max": "Máximo 10 copias permitidas",
         "integer": "Debe ser un número entero"
-      }
-    },
-    "pylovo": {
-      "serviceInfo": {
-        "title": "Información del servicio",
-        "description": "Identificación básica de la instancia Compute Engine"
-      },
-      "connectionDetails": {
-        "title": "Detalles de conexión",
-        "description": "Configuración de conexión de red y punto final"
-      },
-      "statusSettings": {
-        "title": "Estado",
-        "description": "Estado inicial de la instancia Compute Engine"
-      },
-      "fields": {
-        "serviceName": "Nombre del servicio",
-        "protocol": "Protocolo",
-        "ipAddress": "Dirección IP / Nombre de host",
-        "port": "Puerto",
-        "endpoint": "Ruta del punto final",
-        "initialStatus": "Estado inicial"
-      },
-      "placeholders": {
-        "serviceName": "Ingrese el nombre del servicio",
-        "ipAddress": "ej. compute-engine o 10.1.66.41"
-      },
-      "descriptions": {
-        "serviceName": "Nombre legible para la instancia Compute Engine"
-      },
-      "statusOptions": {
-        "active": "Activo",
-        "inactive": "Inactivo",
-        "maintenance": "Mantenimiento"
-      },
-      "validation": {
-        "ipInvalid": "Ingrese una dirección IP o nombre de host válido",
-        "portRange": "El puerto debe estar entre 1 y 65535",
-        "nameRequired": "El nombre del servicio es obligatorio",
-        "ipRequired": "La dirección IP o nombre de host es obligatorio",
-        "portRequired": "El puerto es obligatorio"
       }
     }
   },
@@ -981,7 +949,8 @@
     "noMembersYet": "Sin miembros aún. ¡Comparte con alguien para colaborar!",
     "noGroupsYet": "Ningún grupo tiene acceso aún. ¡Comparte con un grupo para dar acceso a todos los miembros!",
     "removeMember": "Eliminar miembro",
-    "removeGroup": "Eliminar grupo"
+    "removeGroup": "Eliminar grupo",
+    "selectorHint": "Selecciona o crea un espacio de trabajo para organizar tus modelos"
   },
   "model": {
     "title": "Modelo",
@@ -1070,7 +1039,17 @@
     "estimateApproximate": "Esas ejecuciones son anteriores al registro de cola, así que la espera real será mayor.",
     "estimateOverdue": "tardando más de lo habitual",
     "estimateRemaining": "~{{duration}} restante",
-    "estimateUnavailable": "No hay suficientes ejecuciones similares completadas para estimar el final"
+    "estimateUnavailable": "No hay suficientes ejecuciones similares completadas para estimar el final",
+    "canEdit": "Puede editar",
+    "canView": "Puede ver",
+    "clearDateFilter": "Borrar filtro de fechas",
+    "filterPeriod": "Filtrar por periodo",
+    "noDirectShares": "Este modelo aún no se ha compartido con nadie.",
+    "peopleWithAccess": "Personas con acceso directo",
+    "peopleWithAccessDescription": "Las personas de esta lista pueden abrir este modelo y sus capas de riesgo.",
+    "revokeAccess": "Revocar",
+    "revokingAccess": "Revocando…",
+    "revokeAccessFor": "Revocar el acceso de {{email}}"
   },
   "polygon": {
     "drawRegion": "Dibuja tu región",
@@ -1198,8 +1177,6 @@
       "allLayersAvailable": "Todas las Capas Disponibles",
       "fullSystemAccess": "Acceso Completo al Sistema",
       "energyRiskFinal": "Riesgo Energético Final",
-      "vegetationRisk": "Riesgo de Vegetación",
-      "topographyRisk": "Riesgo de Topografía",
       "upgradeMessage": "Desbloquea más funciones solicitando una actualización a tu administrador.",
       "resultFinal": "Result Final"
     },
@@ -1267,7 +1244,9 @@
       "bulkMoveToGroup": "Mover al grupo",
       "deselectAll": "Deseleccionar todo",
       "selectAll": "Seleccionar todo",
-      "selected": "{{count}} seleccionados"
+      "selected": "{{count}} seleccionados",
+      "apiTokens": "Tokens de API",
+      "apiTokensActive": "Acceso a la API activado: gestionar tokens"
     },
     "groups": {
       "selectOrCreate": "Seleccionar o crear un grupo",
@@ -1830,6 +1809,11 @@
       "saveSummary": {
         "title": "Save summary",
         "description": "This final summary shows the values that will be saved with the model and sent to the calculation workflow."
+      },
+      "nodes": {
+        "description": "Elige las fuentes y sumideros de CO2 entre los que el modelo traza rutas.",
+        "tip": "Se necesita al menos un nodo para continuar.",
+        "title": "Selección de nodos"
       }
     },
     "buttons": {
@@ -1905,153 +1889,6 @@
     "chars": "chars",
     "previewEmpty": "Nothing to preview"
   },
-  "tooltips": {
-    "multiplePolygons": {
-      "title": "Múltiples Polígonos",
-      "description": "Active esta opción para dibujar múltiples áreas separadas en el mapa para su evaluación CCUS. Cuando está desactivado, dibujar un nuevo polígono reemplazará el anterior. Cuando está activado, puede definir múltiples áreas distintas que se incluirán en el análisis.",
-      "example": "Use esto para analizar simulaciones CCUS en múltiples áreas no contiguas simultáneamente."
-    },
-    "publicBuildings": {
-      "title": "Edificios Personalizados Públicos",
-      "description": "Incluya edificios compartidos por otros usuarios en el cálculo de la red. Estos son edificios personalizados que otros usuarios han hecho públicamente disponibles.",
-      "example": "También puede excluir edificios individuales haciendo clic en ellos en el mapa."
-    },
-    "privateBuildings": {
-      "title": "Mis Edificios Personalizados",
-      "description": "Incluya sus edificios personalizados privados en el cálculo de la red. Estos son edificios que ha creado y guardado en su cuenta.",
-      "example": "También puede excluir edificios individuales haciendo clic en ellos en el mapa."
-    },
-    "simulateEV": {
-      "title": "Simular Capacidad de Alojamiento de VE",
-      "description": "Calcule la capacidad de alojamiento de vehículos eléctricos para cada transformador en el área seleccionada. Esto determina cuántos cargadores de VE (11 kW Nivel 2) pueden conectarse antes de alcanzar las restricciones de la red.",
-      "example": "Un estado 'Red Restringida' significa que el transformador ya está al máximo y no puede alojar cargadores de VE adicionales sin actualizaciones."
-    },
-    "gridConstrained": {
-      "title": "Red Restringida",
-      "description": "Este estado indica que el transformador ha alcanzado su límite de capacidad de alojamiento y no puede soportar cargadores de VE adicionales.",
-      "example": "Actualice el transformador local o distribuya la carga de VE en múltiples puntos de conexión para resolver las restricciones de la red."
-    },
-    "scenario": {
-      "title": "Año del Escenario",
-      "description": "El año objetivo para la optimización del sistema energético. Esto determina las suposiciones de costos y proyecciones de demanda utilizadas en el modelo.",
-      "example": "2030 representa un horizonte de planificación a mediano plazo."
-    },
-    "co2_limit": {
-      "title": "Límite de CO2",
-      "description": "Las emisiones máximas de CO2 permitidas para el sistema optimizado en toneladas.",
-      "example": "Valores más bajos obligan al modelo a usar más fuentes de energía renovable."
-    },
-    "max_hours": {
-      "title": "Máx. Horas de Batería",
-      "description": "La duración máxima que el almacenamiento de batería puede descargarse a plena potencia.",
-      "example": "72 horas permiten capacidad de almacenamiento de varios días."
-    },
-    "solver": {
-      "title": "Solucionador de Optimización",
-      "description": "El solucionador matemático utilizado para encontrar la configuración óptima del sistema energético.",
-      "example": "GLPK es un solucionador gratuito, mientras que Gurobi es un solucionador comercial de alto rendimiento."
-    },
-    "autarky": {
-      "title": "Nivel de Autarquía",
-      "description": "El grado de autosuficiencia requerido para la región, de 0 (sin requisito) a 1 (100% autosuficiente).",
-      "example": "0.8 significa que el 80% de la energía debe producirse localmente."
-    },
-    "solarPotential": {
-      "title": "Estimación del Potencial Solar",
-      "description": "Capacidad máxima estimada de PV (kWp) basada en el área total seleccionada.",
-      "example": "Un área de 1000m² resulta en aprox. 30 kWp de capacidad potencial."
-    },
-    "area": {
-      "title": "Área Total Seleccionada",
-      "description": "La superficie combinada de todos los polígonos seleccionados en el mapa.",
-      "example": "1 hectárea (ha) = 10,000 m²."
-    },
-    "perimeter": {
-      "title": "Perímetro Total",
-      "description": "La longitud total de las líneas de límite de todos los polígonos seleccionados.",
-      "example": "Útil para estimar requisitos de cercado o tendido de cables alrededor del sitio."
-    },
-    "estGeneration": {
-      "title": "Generación Anual Estimada",
-      "description": "Producción anual de energía prevista basada en el potencial solar.",
-      "example": "Un sistema de 30 kWp produce aprox. 33 MWh/año en esta región."
-    },
-    "co2Offset": {
-      "title": "Compensación Estimada de CO₂",
-      "description": "Emisiones potenciales de dióxido de carbono evitadas al usar esta energía solar en lugar de electricidad de la red.",
-      "example": "Generar 100 MWh de energía limpia ahorra aprox. 40 toneladas de CO₂."
-    },
-    "voltageStatus": {
-      "title": "Indicadores de Estado de Voltaje",
-      "description": "El estado del voltaje del bus se determina según la magnitud del voltaje por unidad (p.u.) según los estándares de red EN 50160.",
-      "example": "Un voltaje de 0.92 p.u. muestra estado de Advertencia ya que está por debajo del umbral óptimo de 0.95."
-    },
-    "pypsaSimulation": {
-      "title": "Simulación PyPSA",
-      "description": "Active PyPSA (Python for Power System Analysis) para ejecutar optimización avanzada del sistema energético. Cuando está activado, el modelo optimizará flujos de energía, despacho de almacenamiento y dimensionamiento de tecnología para minimizar costos cumpliendo con la demanda y restricciones de red.",
-      "example": "Desactive esto para análisis rápido solo de red. Active para optimización completa del sistema energético con resultados detallados."
-    },
-    "assignBuildings": {
-      "title": "Asignar edificios al transformador",
-      "description": "Reasigne edificios a un transformador diferente. Primero seleccione los edificios que desea mover, luego haga clic en el transformador de destino. Útil para el equilibrio de carga o la corrección de transformadores sobrecargados.",
-      "example": "Seleccione edificios sobrecargados (cables rojos) y asígnelos a un transformador cercano con capacidad disponible."
-    },
-    "buildingType": {
-      "title": "Tipo de edificio",
-      "description": "La clasificación del edificio de OpenStreetMap (OSM). Determina el perfil de energía predeterminado y la clase de perfil de carga estándar (SLP).",
-      "example": "Tipos comunes: \"casa\", \"apartamentos\", \"comercial\", \"industrial\"."
-    },
-    "constructionYear": {
-      "title": "Año de construcción",
-      "description": "El año de construcción del edificio, obtenido de OpenStreetMap. Se utiliza para aplicar factores de corrección energética dependientes de la edad.",
-      "example": "Edificios antes de 1978 usan factor 1.40×, edificios modernos (2016+) usan 0.55×."
-    },
-    "floorArea": {
-      "title": "Área de planta",
-      "description": "El área de la huella del polígono del edificio calculada a partir de la geometría del mapa. Es la entrada principal para la estimación de energía con IA.",
-      "example": "Un edificio residencial de 100 m² consume ~3.500 kWh/año."
-    },
-    "buildingHeight": {
-      "title": "Altura del edificio",
-      "description": "Altura máxima del edificio a partir de datos de geometría OpenStreetMap. Desde el nivel del suelo hasta el punto más alto incluyendo el techo.",
-      "example": "Un edificio residencial típico de 2 pisos tiene ~8–10 m de altura."
-    },
-    "peakLoad": {
-      "title": "Carga pico",
-      "description": "Demanda máxima instantánea de potencia eléctrica. Calculada dividiendo el consumo anual entre las horas de plena carga (FLH).",
-      "example": "Un edificio que consume 3.500 kWh/año con 1800 FLH tiene una carga pico de ~1,94 kW."
-    },
-    "energyDemandProfile": {
-      "title": "Perfil de demanda energética",
-      "description": "Consumo energético anual de este edificio. Los valores se pueden ajustar manualmente. Para edificios de múltiples clases, cada clase se muestra por separado.",
-      "example": "Valores en kWh/año. La estimación IA proporciona valores iniciales."
-    },
-    "buildingUsageType": {
-      "title": "Tipo de uso del edificio",
-      "description": "Clasificación funcional de las etiquetas de OpenStreetMap. Determina la clase de perfil de carga estándar (SLP).",
-      "example": "Tipos residenciales usan SLP H0. Comercial usa G0-G6. Industrial usa G3."
-    },
-    "windSpeed": {
-      "title": "Wind Speed",
-      "description": "Average wind speed over the selected area for the given time period.",
-      "example": "Higher wind speeds provide more energy to the process and can rapidly propagate effects, significantly increasing the rate of spread."
-    },
-    "windDirection": {
-      "title": "Wind Direction",
-      "description": "Average wind direction over the selected area, represented in degrees and compass points.",
-      "example": "N (North), E (East), S (South), W (West), and intermediate points like NNE (North-Northeast) or WSW (West-Southwest)."
-    },
-    "temperature": {
-      "title": "Temperature",
-      "description": "Average ambient temperature over the selected area for the given time period.",
-      "example": "High temperatures dry out vegetation inputs, making them more reactive and amplifying the effect."
-    },
-    "humidity": {
-      "title": "Relative Humidity",
-      "description": "Average relative humidity over the selected area for the given time period.",
-      "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
-    }
-  },
   "locations": {
     "Spain": "Spain",
     "sampleRegion": "Sample Region",
@@ -2087,7 +1924,11 @@
       "veryHigh": "Protección extra necesaria",
       "extreme": "Evitar exposición solar"
     },
-    "dataBy": "Datos meteorológicos de"
+    "dataBy": "Datos meteorológicos de",
+    "settings": "Configuración meteorológica",
+    "title": "Información meteorológica",
+    "uvUnavailable": "Datos UV no disponibles (de noche)",
+    "windSpeedTooltip": "Cambia la unidad en Configuración → Visualización de datos."
   },
   "settings": {
     "title": "Configuración",
@@ -2098,7 +1939,8 @@
       "general": "General",
       "display": "Visualización",
       "notifications": "Notificaciones",
-      "advanced": "Avanzado"
+      "advanced": "Avanzado",
+      "privacyTerms": "Privacidad y condiciones"
     },
     "stats": {
       "language": "Idioma",
@@ -2147,7 +1989,13 @@
       "windSpeed": "Velocidad del Viento",
       "knots": "nudos",
       "dataRefresh": "Actualización de Datos",
-      "min": "min"
+      "min": "min",
+      "textSize": "Tamaño del texto",
+      "textSizes": {
+        "large": "Grande",
+        "normal": "Normal",
+        "small": "Pequeño"
+      }
     },
     "notifications": {
       "title": "Notificaciones",
@@ -2176,29 +2024,6 @@
       "sent": "¡Notificación enviada!",
       "failedToSend": "Error al enviar"
     },
-    "pylovo": {
-      "title": "Pipeline Pylovo",
-      "subtitle": "Generación de datos y red",
-      "dataPipeline": "Pipeline de Datos",
-      "dataPipelineDesc": "Descargar y procesar datos OSM",
-      "databaseConstructor": "Constructor de Base de Datos",
-      "databaseConstructorDesc": "Crear tablas de base de datos compute engine",
-      "gridGeneration": "Generación de Red",
-      "gridGenerationDesc": "Generar red eléctrica sintética",
-      "fullPipeline": "Pipeline Completo",
-      "fullPipelineDesc": "Ejecutar todos los pasos secuencialmente",
-      "selectCountry": "Seleccionar país",
-      "selectState": "Seleccionar estado",
-      "run": "Ejecutar",
-      "running": "Ejecutando",
-      "viewLogs": "Ver registros",
-      "hideLogs": "Ocultar registros",
-      "pending": "Pendiente",
-      "completed": "Completado",
-      "failed": "Fallido",
-      "recentJobs": "Trabajos Recientes",
-      "noRecentJobs": "Sin trabajos recientes"
-    },
     "polygonLimits": {
       "title": "Límites de Polígono",
       "subtitle": "Selección de edificios",
@@ -2217,131 +2042,28 @@
         "manager": "Gestor",
         "expert": "Experto"
       }
+    },
+    "accessLevels": {
+      "basic": "Básico",
+      "expert": "Experto",
+      "intermediate": "Intermedio",
+      "manager": "Gestor"
+    },
+    "modelCreation": {
+      "checking": "Comprobando la preferencia...",
+      "description": "Controla la tarjeta de configuración que se muestra antes de los pasos guiados de creación del modelo.",
+      "enabled": "La introducción está activada",
+      "enabledHint": "El resumen de configuración aparecerá antes de crear un nuevo modelo.",
+      "enabledMessage": "La tarjeta de introducción se mostrará la próxima vez que crees un modelo.",
+      "guidancePreferences": "Preferencias de ayuda",
+      "hidden": "La introducción está oculta",
+      "hiddenHint": "Actívala de nuevo cuando los usuarios necesiten el resumen de configuración antes de crear un modelo.",
+      "loadError": "No se ha podido cargar esta preferencia.",
+      "sectionTitle": "Creación de modelos",
+      "showAgain": "Mostrar de nuevo",
+      "title": "Tarjeta de introducción al modelo",
+      "updateError": "No se ha podido actualizar la preferencia de la tarjeta de introducción."
     }
-  },
-  "simulationComparison": {
-    "title": "Comparación de Simulaciones",
-    "subtitle": "Comparar resultados de múltiples ejecuciones de simulación",
-    "baseline": "Línea base",
-    "comparison": "Comparación",
-    "workspace": "Espacio de trabajo",
-    "model": "Modelo",
-    "selectBaselineModel": "Seleccionar modelo de línea base",
-    "selectComparisonModel": "Seleccionar modelo de comparación",
-    "noCompletedModels": "No se encontraron modelos completados",
-    "noRegion": "Sin región",
-    "hideMaps": "Ocultar mapas",
-    "showMaps": "Mostrar mapas",
-    "exportPdf": "Exportar PDF",
-    "locationMaps": "Mapas de ubicación",
-    "performanceComparison": "Comparación de rendimiento",
-    "loading": "Cargando datos de simulación...",
-    "selectModels": "Seleccionar modelos para comparar",
-    "selectModelsDescription": "Elija dos modelos de simulación completados arriba para analizar sus diferencias en generación de energía, costos e indicadores clave de rendimiento.",
-    "startBySelectingBaseline": "Comience seleccionando un modelo de línea base",
-    "nowSelectComparison": "Ahora seleccione un modelo de comparación",
-    "unableToLoadResults": "No se pudieron cargar los resultados",
-    "errors": {
-      "baseline": "Línea base",
-      "comparison": "Comparación"
-    },
-    "metrics": {
-      "demandBaseline": "Demanda (Línea base)",
-      "renewableGen": "Generación renovable",
-      "gridImport": "Importación de red",
-      "selfSufficiency": "Autosuficiencia",
-      "peakDemand": "Demanda pico",
-      "totalCost": "Costo total",
-      "totalDemand": "Demanda total",
-      "co2Savings": "Ahorro de CO₂"
-    },
-    "summary": {
-      "baseline": "Línea base"
-    },
-    "charts": {
-      "generationByTechnology": "Generación por tecnología",
-      "sideBySideComparison": "Comparación lado a lado (kWh)",
-      "costDifferenceByCategory": "Diferencia de costo por categoría",
-      "comparisonVsBaseline": "Comparación vs Línea base (EUR)",
-      "keyPerformanceIndicators": "Indicadores clave de rendimiento",
-      "selfSufficiencyBaseline": "Autosuficiencia\n(Línea base)",
-      "selfSufficiencyComparison": "Autosuficiencia\n(Comparación)",
-      "avgLcoe": "LCOE Prom.",
-      "installedCapacityComparison": "Comparación de capacidad instalada",
-      "technologyCapacity": "Capacidad tecnológica (kW)",
-      "overallPerformance": "Rendimiento general",
-      "multiDimensionalComparison": "Comparación multidimensional",
-      "totalCostBreakdown": "Desglose del costo total",
-      "stackedByTechnology": "Apilado por tecnología (EUR)",
-      "total": "Total",
-      "difference": "Diferencia",
-      "renewableProduction": "Producción\nrenovable",
-      "gridIndependence": "Independencia\nde red",
-      "costEfficiency": "Eficiencia\nde costos",
-      "demandCoverage": "Cobertura de\ndemanda"
-    },
-    "technologies": {
-      "solar": "Solar",
-      "wind": "Eólica",
-      "biomass": "Biomasa",
-      "geothermal": "Geotérmica",
-      "storageDischarge": "Descarga de almacenamiento",
-      "storage": "Almacenamiento",
-      "gridConnection": "Conexión a red",
-      "transformer": "Transformador",
-      "grid": "Red",
-      "other": "Otros"
-    },
-    "pdfTitle": "Informe de comparación de simulación",
-    "summaryWorse": "Risk increased",
-    "summaryBetter": "Risk reduced",
-    "summaryStable": "Risk is broadly stable",
-    "loadingMetrics": "Loading risk metrics…",
-    "summaryTitle": "Comparison Summary",
-    "summarySub": "Key changes between the baseline and comparison model.",
-    "criticalShare": "High + Very High share",
-    "dominantClass": "Dominant class",
-    "dominantClassSub": "Largest share of valid pixels: {{baseline}}% in baseline, {{comparison}}% in comparison.",
-    "dominantClassUnavailable": "Distribution data is not available.",
-    "analyzedArea": "Analyzed area",
-    "analyzedAreaSub": "Area is calculated from valid non-nodata pixels, so it can differ between model outputs.",
-    "readingDirection": "Interpretation",
-    "badDeltaLabel": "More High/Very High",
-    "badDeltaText": "means the comparison model is more severe.",
-    "goodDeltaLabel": "More Very Low/Low",
-    "goodDeltaText": "usually means risk shifted toward safer classes.",
-    "distribution": "Distribution Comparison",
-    "distributionSub": "Share of area per risk class in each model.",
-    "changeAnalysis": "Risk Change Analysis",
-    "changeAnalysisSub": "How risk shifted between the baseline and the comparison model, cell by cell on the sampled grid.",
-    "riskFlow": "Risk Flow",
-    "riskFlowSub": "Bands show the share of the area moving from a baseline class (left) to a comparison class (right).",
-    "scoreDistribution": "Risk Score Distribution",
-    "scoreDistributionSub": "Frequency of the continuous risk score across sampled cells. A curve shifted to the right means a more severe model; the coloured bands mark the risk classes.",
-    "areaByClass": "Area by Risk Class",
-    "areaByClassSub": "Area assigned to each risk class — comparable even when the two models cover differently sized areas.",
-    "topTransitions": "Biggest Changes",
-    "topTransitionsSub": "Largest class-to-class shifts by share of the area.",
-    "unchangedShare": "kept the same class",
-    "increasedShare": "moved to higher risk",
-    "decreasedShare": "moved to lower risk",
-    "ofArea": "of the area",
-    "noTransitions": "No class changes detected — both models assign the same risk class everywhere.",
-    "differentAreas": "The two models cover different areas or grids, so a cell-by-cell change analysis is not possible. Use the side-by-side maps above and the distribution below instead.",
-    "validCells": "valid cells",
-    "loadingMapSamples": "Loading geographic raster samples…",
-    "noMapSamples": "Geographic map samples are not available yet.",
-    "cells": "cells",
-    "noConfiguredLayer": "No GeoServer layer is configured for this model yet.",
-    "incompleteLayer": "Layer configuration is incomplete",
-    "loadLayerFailed": "Failed to load layer from GeoServer",
-    "mapHint": "Pan/zoom either map — views stay in sync.",
-    "mapHintIndependent": "These models cover different areas — each map shows its own model.",
-    "synced": "Synced",
-    "independent": "Independent",
-    "loadingLayer": "Loading layer…",
-    "fullscreen": "Fullscreen",
-    "exitFullscreen": "Exit fullscreen"
   },
   "map": {
     "zoomIn": "Acercar",
@@ -2353,7 +2075,22 @@
     "regions": "regiones",
     "myModels": "mis modelos",
     "grids": "cuadrículas",
-    "countries": "países"
+    "countries": "países",
+    "bookmarks": {
+      "namePlaceholder": "Nombre del marcador...",
+      "none": "Aún no hay marcadores",
+      "saveCurrentView": "Guardar la vista actual",
+      "title": "Marcadores del mapa"
+    },
+    "latestModel": "último modelo",
+    "legend": {
+      "title": "Contornos del mapa",
+      "yourModels": "Área verde: tu último modelo — selecciónalo para abrir los resultados",
+      "availableRegions": "Índigo discontinuo: regiones administrativas disponibles",
+      "zoomDetail": "El mapa base muestra más detalle al acercar."
+    },
+    "newModelShortcut": "Atajo: N",
+    "privacyRequired": "Acepta los términos de datos y privacidad para ver el mapa"
   },
   "privacy": {
     "dataAndPrivacy": "Datos y privacidad",
@@ -2369,7 +2106,6 @@
     "reviewPolicies": "Para más información, revise las políticas de privacidad respectivas:",
     "cartoPolicy": "Política de privacidad de Carto",
     "osmfPolicy": "Política de privacidad de OSMF",
-    "firePolicy": "Política de privacidad de App",
     "deny": "Rechazar",
     "accept": "Aceptar",
     "dataPolicy": "App Analysis Privacy Policy"
@@ -2407,75 +2143,6 @@
       "complete": "Completar",
       "completing": "Completando...",
       "skip": "Omitir"
-    }
-  },
-  "pylovoManagement": {
-    "title": "Gestión de Compute Engine",
-    "subtitle": "Gestionar instancias de Compute Engine",
-    "searchPlaceholder": "Buscar por nombre, IP...",
-    "refresh": "Actualizar",
-    "registerNew": "Registrar nueva instancia",
-    "loadingInstances": "Cargando instancias...",
-    "noInstancesFound": "No se encontraron instancias de compute engine",
-    "noInstancesDescription": "Comience registrando su primera instancia de Compute Engine.",
-    "noInstancesAvailable": "No hay instancias de compute engine configuradas actualmente. Contacte a un administrador.",
-    "healthCheck": "Compute Engine",
-    "summary": {
-      "total": "Total",
-      "online": "En línea",
-      "available": "Disponible",
-      "offline": "Fuera de línea"
-    },
-    "filters": {
-      "allStatus": "Todos los estados",
-      "active": "Activo",
-      "inactive": "Inactivo",
-      "maintenance": "Mantenimiento",
-      "allAvailability": "Toda la disponibilidad",
-      "available": "Disponible",
-      "unavailable": "No disponible"
-    },
-    "table": {
-      "service": "Servicio",
-      "endpoint": "Punto final",
-      "status": "Estado",
-      "availability": "Disponibilidad",
-      "primary": "Primario",
-      "lastCheck": "Última verificación",
-      "actions": "Acciones",
-      "never": "Nunca"
-    },
-    "status": {
-      "online": "En línea",
-      "offline": "Fuera de línea",
-      "available": "Disponible",
-      "unavailable": "No disponible"
-    },
-    "actions": {
-      "pingInstance": "Hacer ping a la instancia",
-      "editInstance": "Editar instancia",
-      "deleteInstance": "Eliminar instancia",
-      "setPrimary": "Establecer como primario",
-      "currentPrimary": "Instancia primaria actual"
-    },
-    "dialog": {
-      "editTitle": "Editar instancia de Compute Engine",
-      "createTitle": "Registrar nuevo Compute Engine",
-      "editDescription": "Actualizar la configuración del compute engine",
-      "createDescription": "Configurar una nueva instancia de Compute Engine",
-      "editButton": "Actualizar instancia",
-      "createButton": "Registrar instancia"
-    },
-    "notifications": {
-      "created": "¡Instancia de compute engine registrada exitosamente!",
-      "updated": "¡Instancia de compute engine actualizada exitosamente!",
-      "deleted": "¡Instancia de compute engine eliminada exitosamente!",
-      "primarySet": "¡Instancia primaria actualizada exitosamente!",
-      "statusChanged": "Estado de la instancia cambiado a {{status}}",
-      "failedToCreate": "Error al registrar la instancia",
-      "failedToUpdate": "Error al actualizar la instancia",
-      "failedToDelete": "Error al eliminar la instancia",
-      "failedToPing": "Error al hacer ping a la instancia"
     }
   },
   "regionSelector": {
@@ -2663,40 +2330,12 @@
     "loadingModels": "Loading models…",
     "noCompletedModels": "No completed models",
     "selectModel": "Select a model",
-    "layer": {
-      "visible": "Visible",
-      "hidden": "Hidden",
-      "opacity": "Opacity",
-      "publishing": "Publishing layer to GeoServer…",
-      "day": "Day",
-      "view3d": "3D Terrain",
-      "view2d": "2D Map",
-      "playDaily": "Animate daily risk maps",
-      "fullscreen": "Fullscreen",
-      "exitFullscreen": "Exit fullscreen"
-    },
     "map": {
       "initializing": "Initializing map…"
     },
     "empty": {
       "title": "No result for this model yet.",
       "hint": "The simulation output will appear here once processing finishes."
-    },
-    "layers": {
-      "title": "Overlays",
-      "roads": "Roads",
-      "labels": "Labels & places"
-    },
-    "legend": {
-      "title": "Result",
-      "allLevels": "All available levels",
-      "levels": {
-        "very_low": "Very Low",
-        "low": "Low",
-        "moderate": "Moderate",
-        "high": "High",
-        "very_high": "Very High"
-      }
     },
     "details": {
       "description": "Description",
@@ -2733,12 +2372,6 @@
       "meanRiskScore": "Mean risk score",
       "highVeryHighArea": "High + very high area",
       "analyzedArea": "Analyzed area"
-    },
-    "timeline": {
-      "title": "Risk Over Time",
-      "subtitle": "Analyzed area per risk class for each day of the run. Click a day to show it on the map.",
-      "loading": "Computing daily distributions… the first load can take a minute.",
-      "empty": "No daily risk maps in this run."
     }
   },
   "configurator": {
@@ -2791,7 +2424,9 @@
       "suggestedName1": "Evaluación regional de CO₂",
       "suggestedName2": "Estudio de clúster industrial",
       "suggestedName3": "Cribado de emplazamientos de almacenamiento",
-      "suggestedName4": "Perspectiva trimestral de captura"
+      "suggestedName4": "Perspectiva trimestral de captura",
+      "modelNameQuestion": "¿Cómo quieres llamar a este modelo?",
+      "periodQuestion": "¿Qué periodo debe evaluar?"
     },
     "layer2": {
       "purpose": "Elija las fuentes y sumideros de CO₂ entre los que enruta este modelo.",
@@ -2803,33 +2438,14 @@
     "layer3": {
       "purpose": "CO2RouteX examina los nodos seleccionados en busca de conexiones, y luego las traza y calcula su coste.",
       "nextStepHint": "A continuación verás lo que cuestan esas rutas.",
-      "fwiLabel": "Weather signal (optional)",
-      "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
-      "fwiWeight": "30% weight",
-      "terrainLabel": "Terrain & slope",
-      "terrainHint": "Elevation, slope and aspect influence on spread",
-      "terrainWeight": "6% weight",
-      "historicalLabel": "Historical events",
-      "historicalHint": "Recurrence based on past incidents in the area",
-      "historicalWeight": "4% weight",
-      "weatherWarning": "Weather is the main risk signal. Disabling it makes the date selection irrelevant and produces a drastically under-estimated risk map. Keep it on unless you specifically need a baseline without weather.",
       "customData": "Custom data (optional)",
       "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
       "weatherStationData": "Weather station data",
       "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
-      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used.",
-      "fwiInfo": "El índice meteorológico combina viento, humedad relativa, temperatura y sequía en una sola medida. Tiene el mayor peso porque el tiempo cambia más rápido e influye más en el resultado.",
-      "terrainInfo": "La pendiente, la elevación y la orientación determinan cómo varían las condiciones en el área: las laderas soleadas se secan antes. Derivado del modelo digital del terreno de su área.",
-      "historicalInfo": "Donde ya han ocurrido eventos suelen repetirse, porque las causas subyacentes —uso del suelo y accesibilidad— persisten. Basado en incidentes pasados registrados en el área.",
-      "signalsQuestion": "¿Qué señales deben alimentar el modelo?",
-      "coreSignalsNote": "La vegetación (NDVI) y la infraestructura forman siempre parte del modelo y no pueden desactivarse. Desactivar una señal arriba elimina su contribución a la ponderación: la ejecución continúa con las señales restantes.",
       "lockedByPrecomputed": "Incluido en el mapa regional precalculado. Desactive el interruptor de arriba para personalizar las capas.",
       "precomputedLabel": "Mapa regional precalculado",
       "precomputedInfoLabel": "Acerca del mapa regional precalculado",
-      "precomputedInfo": "Cada noche se analiza toda la región con todas las capas activadas. Si su fecha está cubierta, el resultado de su área se recorta de ese mapa y llega en segundos. Desactívelo (o alterne capas individuales abajo) para calcular todos los pasos específicamente para su área (~1-2 minutos).",
-      "precomputedRange": "Los mapas precalculados cubren exactamente un día: seleccione la misma fecha de inicio y fin para usar uno. Para un rango, el modelo calcula cada día de su área y devuelve el día pico (~1-2 minutos).",
       "precomputedUnavailable": "El análisis nocturno aún no ha procesado esta fecha. El modelo calculará todos los pasos para su área.",
-      "precomputedOnHint": "Resultado en segundos, recortado del análisis nocturno de toda la región. Las tres capas de abajo están incluidas y por tanto bloqueadas.",
       "precomputedOffHint": "Cálculo completo para su área exacta (~1-2 minutos); puede alternar capas individuales abajo.",
       "routesQuestion": "¿Cómo se conectan?",
       "routesInfo": "Una ruta por par emisor-sumidero, por tubería, camión o ferrocarril."
@@ -2848,7 +2464,6 @@
       "uploadIncomplete": "GeoJSON upload incomplete.",
       "areaDetails": "{{count}} regions · {{area}}",
       "areaDetailsSingle": "1 region · {{area}}",
-      "weatherDisabledWarn": "Weather signal (optional) is disabled — risk will be significantly under-estimated and the date becomes irrelevant.",
       "allSignalsActive": "All risk signals active (weather + terrain + history).",
       "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
       "bufferDistance": "{{buffer}} m around the AOI.",
@@ -2862,10 +2477,12 @@
         "timeframe": "Timeframe",
         "areaOfInterest": "Area of interest",
         "riskComponents": "Risk components",
-        "bufferDistance": "Buffer distance"
+        "bufferDistance": "Buffer distance",
+        "nodes": "Nodos"
       },
       "costsQuestion": "¿Cuánto cuestan estas rutas?",
-      "costsInfo": "Calculado a partir de las rutas del paso anterior."
+      "costsInfo": "Calculado a partir de las rutas del paso anterior.",
+      "noNodes": "No hay nodos seleccionados: vuelve al paso 2."
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -2881,8 +2498,10 @@
         "dailyRun": "Daily run",
         "buffer": "Buffer",
         "area": "Area",
-        "riskComponents": "Risk components"
-      }
+        "riskComponents": "Risk components",
+        "nodes": "Nodos"
+      },
+      "dailyRunInfo": "Cada día simulado se evalúa con la meteorología de esta franja horaria: la parte más calurosa y seca de la tarde."
     },
     "coverage": {
       "title": "Data coverage",
@@ -2900,6 +2519,26 @@
     },
     "mapHeader": {
       "clearNodes": "Borrar"
+    },
+    "blocking": {
+      "and": " y ",
+      "dateRange": "una fecha de inicio y de fin",
+      "dynamicEmpty": "No hay fechas dinámicas disponibles actualmente.",
+      "dynamicLoading": "Cargando fechas dinámicas disponibles.",
+      "dynamicRange": "Selecciona un rango de fechas dinámicas totalmente disponible.",
+      "modelName": "un nombre de modelo",
+      "dynamicOrder": "La fecha de inicio debe ser anterior o igual a la de fin."
+    },
+    "save": {
+      "calculationFailed": "El modelo se guardó, pero no se pudo iniciar el cálculo.",
+      "createFailed": "No se pudo crear el modelo. Inténtalo de nuevo.",
+      "updateFailed": "No se pudo guardar el modelo. Inténtalo de nuevo.",
+      "uploadFailed": "El modelo se guardó, pero no se pudieron subir sus archivos de entrada."
+    },
+    "stepPurposeHide": "Ocultar la información del paso",
+    "stepPurposeShow": "¿Qué es este paso?",
+    "wizard": {
+      "steps": "Pasos del modelo"
     }
   },
   "co2Nodes": {
@@ -2931,7 +2570,8 @@
     "legend": {
       "emitters": "Fuentes de emisión",
       "sinks": "Almacenamiento y utilización",
-      "routes": "Rutas de transporte candidatas"
+      "routes": "Rutas de transporte candidatas",
+      "size": "Tamaño de burbuja = emisiones anuales de CO₂"
     },
     "catalogueEmpty": "El catálogo de nodos está vacío.",
     "runConnections": "Buscar conexiones",
@@ -2952,14 +2592,109 @@
     "selectAll": "Seleccionar los {{count}}",
     "clearCategory": "Borrar",
     "needEmitter": "Añade al menos un emisor: las rutas empiezan ahí.",
-    "needDestination": "Añade un nodo de almacenamiento, utilización o transporte: las rutas deben terminar en algún sitio."
+    "needDestination": "Añade un nodo de almacenamiento, utilización o transporte: las rutas deben terminar en algún sitio.",
+    "advancedFilters": "Filtros avanzados",
+    "clearAllFilters": "Borrar todos los filtros",
+    "clearFilters": "Borrar filtros",
+    "filterListPlaceholder": "Escribe para filtrar…",
+    "fluxCustom": "Rango personalizado (kt/año)",
+    "fluxFilterTitle": "Emisiones anuales de CO₂",
+    "fluxMax": "Máx",
+    "fluxMin": "Mín",
+    "municipalitiesFilter": "Ciudades / municipios",
+    "noMatches": "Sin coincidencias.",
+    "noSinks": "Aún no hay sumideros en el catálogo.",
+    "noState": "Sin región registrada",
+    "sortAsc": "Menor CO₂ primero",
+    "sortDesc": "Mayor CO₂ primero",
+    "statesFilter": "Regiones"
   },
   "co2Routing": {
-    "run": "Buscar rutas"
+    "run": "Buscar rutas",
+    "cancel": "Cancelar",
+    "capex": "CAPEX (€2021)",
+    "connection": "Conexión",
+    "distance": "Distancia",
+    "download": "Descargar el libro",
+    "modes": "Modos de transporte",
+    "noRoutes": "No se encontraron rutas entre los nodos seleccionados.",
+    "preview": "Vista previa: descarga el libro, o guarda el modelo y vuelve a ejecutarlo para conservar las rutas.",
+    "resistance": "Resistencia",
+    "stationDistances": "Distancias entre estaciones",
+    "stationPair": "De estación a estación",
+    "unitCost": "Coste (€/t/km)",
+    "unrouted": "Sin trazar",
+    "uploading": "Subiendo datos de rutas…"
   },
   "co2Costs": {
     "running": "La ejecución sigue en curso: los costes aparecen cuando termine el trazado.",
     "noRun": "Vuelve a Rutas y busca conexiones primero: los costes se calculan a partir de ellas.",
     "noCosts": "No hay rutas con coste. El CAPEX de tubería necesita una tubería trazada; las tarifas de camión y ferrocarril necesitan distancias trazadas."
+  },
+  "apiTokens": {
+    "create": "Crear nuevo token",
+    "createdOnce": "Copia este token ahora: no se volverá a mostrar.",
+    "errors": {
+      "create": "No se pudo crear el token",
+      "load": "No se pudieron cargar los tokens",
+      "revoke": "No se pudo revocar el token"
+    },
+    "existing": "Tokens existentes",
+    "expires": "caduca",
+    "expiry": "Caducidad",
+    "expiry30": "Caduca en 30 días",
+    "expiry365": "Caduca en 1 año",
+    "expiry90": "Caduca en 90 días",
+    "expiryNever": "No caduca nunca",
+    "generate": "Generar token",
+    "lastUsed": "último uso",
+    "namePlaceholder": "Nombre del token (p. ej. script de análisis)",
+    "none": "Aún no hay tokens.",
+    "revoke": "Revocar",
+    "scope": "Alcance",
+    "scopeFull": "Lectura y escritura",
+    "scopeFullShort": "lectura y escritura",
+    "scopeRead": "Solo lectura (recomendado)",
+    "scopeReadShort": "solo lectura",
+    "status": {
+      "active": "Activo",
+      "expired": "Caducado",
+      "revoked": "Revocado"
+    },
+    "subtitle": "Gestiona los tokens de acceso a la API de",
+    "title": "Tokens de API"
+  },
+  "co2Source": {
+    "allCountries": "Todos",
+    "allIndustries": "Todas",
+    "allStatuses": "Todos",
+    "annual": "t CO₂/año",
+    "browse": "Ver todas las fuentes",
+    "catalogue": "Catálogo de fuentes STORE_CO2",
+    "catalogueInfo": "Incluye fuentes sin coordenadas. Selecciona instalaciones mapeables en el paso 2.",
+    "clearFilters": "Borrar filtros",
+    "country": "País",
+    "details": "Detalles de la fuente",
+    "detailsError": "No se pudieron cargar los detalles de la fuente.",
+    "detailsInfo": "Registro STORE_CO2 completo. Las emisiones son toneladas de CO₂ al año; los valores ausentes siguen siendo desconocidos.",
+    "empty": "0 fuentes",
+    "error": "No se pudieron cargar las fuentes.",
+    "filters": "Filtrar fuentes",
+    "history": "Histórico de emisiones anuales (t CO₂/año)",
+    "industry": "Industria",
+    "loading": "Cargando fuentes…",
+    "loadingDetails": "Cargando fuente",
+    "location": "Ubicación",
+    "name": "Fuente",
+    "next": "Siguiente",
+    "no": "No",
+    "noCoordinates": "Sin coordenadas de mapa",
+    "noMatches": "Ninguna fuente coincide con la búsqueda.",
+    "previous": "Anterior",
+    "refresh": "Actualizar datos de fuentes",
+    "refreshError": "No se pudieron actualizar las fuentes. Se conservaron los datos existentes.",
+    "search": "Buscar fuentes",
+    "status": "Estado",
+    "yes": "Sí"
   }
 }
