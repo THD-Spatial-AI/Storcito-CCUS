@@ -1,9 +1,6 @@
 import {
 	User,
 	Mail,
-	Building,
-	Briefcase,
-	Phone,
 	Shield,
 	Lock,
 	Cloud,
@@ -51,37 +48,6 @@ export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFuncti
 				icon: formIcon(Mail),
 			},
 			{
-				key: "organization",
-				label: t?.("forms.user.fields.organization") ?? "Organization",
-				type: "text",
-				value: "",
-				placeholder: t?.("forms.user.placeholders.organization") ?? "Enter organization name",
-				icon: formIcon(Building),
-			},
-			{
-				key: "position",
-				label: t?.("forms.user.fields.position") ?? "Position",
-				type: "text",
-				value: "",
-				placeholder: t?.("forms.user.placeholders.position") ?? "Enter job position",
-				icon: formIcon(Briefcase),
-			},
-			{
-				key: "phone",
-				label: t?.("forms.user.fields.phone") ?? "Phone Number",
-				type: "tel",
-				value: "",
-				placeholder: "+49 123 456 789",
-				icon: formIcon(Phone),
-				validation: (value: FormValue) => {
-					const v = typeof value === 'string' ? value : '';
-					if (v && !/^[\d\s\-+()]+$/.test(v)) {
-						return t?.("forms.user.validation.phoneInvalid") ?? "Phone number can only contain digits, spaces, dashes, plus signs, and parentheses";
-					}
-					return null;
-				},
-			},
-			{
 				key: "access_level",
 				label: t?.("forms.user.fields.accessLevel") ?? "Access Level",
 				type: "select",
@@ -108,7 +74,7 @@ export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFuncti
 					},
 							] as FormSection["fields"])
 				: []),
-			// Model limit field - only shown for experts when editing
+			// Experts editing.
 			...(isEdit && currentUserAccessLevel === "expert"
 				? ([
 					{
@@ -326,10 +292,10 @@ function validateUserBasicFields(errors: Record<string, string>, values: Record<
 }
 
 function validateUserPasswords(errors: Record<string, string>, values: Record<string, unknown>, t?: TranslateFunction) {
-	// This is password validation logic, not a hard-coded password
-	const password = typeof values.password === 'string' ? values.password : ''; // Not a hard-coded password, this is form validation
+	// Not a secret.
+	const password = typeof values.password === 'string' ? values.password : ''; // Not a secret.
 	if (!password) {
-		errors.password = t?.("forms.user.validation.passwordRequired") ?? "Password is required"; //  This is an error message, not a credential
+		errors.password = t?.("forms.user.validation.passwordRequired") ?? "Password is required"; //  Message, not a credential.
 	} else if (password.length < 8) {
 		errors.password = t?.("forms.user.validation.passwordLength") ?? "Password must be at least 8 characters long";
 	}

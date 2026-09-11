@@ -1,6 +1,15 @@
 /// <reference types="vite/client" />
 
-// Allow importing CSS modules without TS errors
+interface ImportMetaEnv {
+  readonly VITE_CARTO_BASEMAP_API_KEY?: string;
+  readonly VITE_DUMMY_DATES?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
+// CSS module typing
 declare module "*.module.css" {
   const classes: { readonly [key: string]: string };
   export default classes;

@@ -164,10 +164,7 @@
     "sidebar": {
       "energySimulations": "Simulazioni CCUS",
       "map": "Mappa",
-      "locations": "Posizioni",
       "simulationReports": "Confronto Modelli",
-      "technologies": "Tecnologie",
-      "transport": "Transport",
       "simulations": "Analysis Runs"
     },
     "menu": {
@@ -827,7 +824,11 @@
     "cannotCalculate": "Impossibile calcolare – nessun modello idoneo selezionato",
     "noWebserviceAvailable": "Nessun motore di simulazione disponibile",
     "cancelled": "Annullato",
-    "modified": "Modificato"
+    "modified": "Modificato",
+    "estimateApproximate": "Quelle esecuzioni precedono il tracciamento della coda, quindi l'attesa reale sarà maggiore.",
+    "estimateOverdue": "sta richiedendo più tempo del solito",
+    "estimateRemaining": "~{{duration}} rimanenti",
+    "estimateUnavailable": "Esecuzioni comparabili completate insufficienti per una stima"
   },
   "polygon": {
     "drawRegion": "Disegna la tua regione",
@@ -1495,18 +1496,9 @@
         "title": "Mappa Interattiva",
         "description": "Il tuo spazio di lavoro principale per l'analisi geografica. Visualizza livelli mappa, seleziona aree per la valutazione e visualizza dati di rischio energetico."
       },
-      "locations": {
-        "title": "Posizioni Salvate",
-        "description": "Gestisci le tue posizioni salvate e aree di interesse. Accesso rapido alle regioni frequentemente analizzate."
-      },
       "reports": {
         "title": "Report di Simulazione",
         "description": "Visualizza report dettagliati di simulazione, esporta dati e analizza tendenze e pattern storici."
-      },
-      "technologies": {
-        "title": "Tecnologie",
-        "description": "Gestisci tecnologie energetiche come pannelli solari, batterie e pompe di calore. Configura parametri e assegnali agli edifici.",
-        "tip": "Le tecnologie possono essere personalizzate per edificio per simulazioni CCUS accurate."
       },
       "layers": {
         "title": "Livelli Mappa",
@@ -1551,11 +1543,6 @@
         "description": "Imposta l'intervallo di tempo per i calcoli. Una risoluzione più alta fornisce risultati più dettagliati ma richiede più tempo per l'elaborazione.",
         "tip": "60 minuti è consigliato per la maggior parte delle simulazioni"
       },
-      "technologies": {
-        "title": "Tecnologie e Parametri",
-        "description": "Configura tecnologie energetiche (solare, batterie, pompe di calore) e ottimizza parametri avanzati di simulazione.",
-        "tip": "Clicca per visualizzare e personalizzare le impostazioni per la tua simulazione"
-      },
       "mapContainer": {
         "title": "Mappa Interattiva",
         "description": "Questo è il tuo spazio di lavoro principale. Disegna poligoni sulla mappa per selezionare aree per la tua simulazione CCUS.",
@@ -1593,11 +1580,6 @@
       "areaStatus": {
         "title": "AOI status",
         "description": "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
-      },
-      "optionalLayers": {
-        "title": "Risk signals",
-        "description": "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events.",
-        "tip": "Keep weather enabled for normal analysis runs; disabling it is useful only for a baseline comparison."
       },
       "finalReview": {
         "title": "Validation status",
@@ -1681,226 +1663,7 @@
     "chars": "chars",
     "previewEmpty": "Nothing to preview"
   },
-  "technologies": {
-    "title": "Tecnologie",
-    "subtitle": "Tecnologie energetiche per le tue simulazioni",
-    "loading": "Caricamento tecnologie...",
-    "refresh": "Aggiorna tecnologie",
-    "reseed": "Ricarica tecnologie di sistema",
-    "documentation": "Documentazione",
-    "importJson": "Importa JSON",
-    "addTechnology": "Aggiungi Tecnologia",
-    "addParameter": "Aggiungi Parametro",
-    "parameters": "Parametri",
-    "total": "totale",
-    "mine": "Mia",
-    "user": "Utente",
-    "youCreatedThis": "Hai creato questa tecnologia",
-    "userDefined": "Tecnologia definita dall'utente",
-    "viewParameters": "Visualizza parametri",
-    "copyTechnology": "Copia tecnologia",
-    "deleteTechnology": "Elimina tecnologia",
-    "editParameter": "Modifica parametro",
-    "deleteParameter": "Elimina parametro",
-    "systemTechnologies": "Tecnologie di Sistema",
-    "userDefinedTechnologies": "Tecnologie Definite dall'Utente",
-    "dragDropHint": "Trascina e rilascia le tecnologie tra le sezioni per cambiare la proprietà",
-    "dropToMakeSystem": "Rilascia qui per rendere tecnologia di sistema",
-    "dropToMakeUser": "Rilascia qui per rendere tecnologia utente",
-    "movedTo": "\"{{name}}\" spostato in Tecnologie {{target}}",
-    "failedToMove": "Impossibile spostare la tecnologia",
-    "stats": {
-      "totalTechnologies": "Totale Tecnologie",
-      "systemTechnologies": "Sistema",
-      "userTechnologies": "Definite dall'Utente",
-      "totalParameters": "Totale Parametri"
-    },
-    "form": {
-      "key": "Chiave",
-      "keyRequired": "La chiave è obbligatoria",
-      "keyPlaceholder": "es., solar_supply",
-      "displayName": "Nome Visualizzato",
-      "displayNameRequired": "Il nome visualizzato è obbligatorio",
-      "displayNamePlaceholder": "es., Fornitura di Energia Solare",
-      "description": "Descrizione",
-      "descriptionPlaceholder": "Breve descrizione della tecnologia...",
-      "icon": "Icona",
-      "parametersOptional": "Parametri (Opzionale)",
-      "parameter": "Parametro",
-      "alias": "Alias",
-      "defaultValue": "Valore Predefinito",
-      "unit": "Unità",
-      "range": "Intervallo",
-      "min": "Min",
-      "max": "Max",
-      "keyFieldPlaceholder": "Chiave",
-      "aliasFieldPlaceholder": "Alias",
-      "defaultValuePlaceholder": "Valore Predefinito",
-      "unitPlaceholder": "Unità (opzionale)",
-      "minPlaceholder": "Min (opzionale)",
-      "maxPlaceholder": "Max (opzionale)"
-    },
-    "addModal": {
-      "title": "Aggiungi Nuova Tecnologia",
-      "description": "Crea una nuova tecnologia con parametri personalizzati"
-    },
-    "copyModal": {
-      "title": "Copia Tecnologia",
-      "description": "Crea una copia di {{name}} con un nuovo nome",
-      "uniqueIdentifier": "Identificatore unico (minuscole, senza spazi)",
-      "name": "Nome",
-      "copyAllParameters": "Questo copierà tutti i {{count}} parametri da \"{{name}}\""
-    },
-    "importModal": {
-      "title": "Importa Tecnologie",
-      "description": "Scegli come importare le {{count}} tecnologie",
-      "found": "{{count}} tecnologie trovate nel file",
-      "existingSkipped": "Le tecnologie esistenti con la stessa chiave verranno ignorate.",
-      "importAsSystem": "Importa come Tecnologie di Sistema",
-      "systemDescription": "Le tecnologie di sistema sono visibili a tutti gli utenti e non possono essere modificate da non esperti."
-    },
-    "paramModal": {
-      "title": "Aggiungi Nuovo Parametro",
-      "description": "Aggiungi un nuovo parametro a {{name}}",
-      "keyPlaceholder": "es., cont_efficiency",
-      "aliasPlaceholder": "es., Tasso di Efficienza",
-      "descriptionPlaceholder": "Breve descrizione di cosa controlla questo parametro...",
-      "unitPlaceholder": "kW, %, ecc."
-    },
-    "detailsModal": {
-      "viewAndEdit": "Visualizza e modifica i parametri della tecnologia",
-      "selectFromOptions": "Seleziona da {{count}} opzioni",
-      "cancel": "Annulla",
-      "close": "Chiudi",
-      "saveChanges": "Salva Modifiche"
-    },
-    "confirm": {
-      "deleteTitle": "Elimina Tecnologia",
-      "deleteMessage": "Sei sicuro di voler eliminare \"{{name}}\"? Questa azione non può essere annullata.",
-      "deleteParamTitle": "Elimina Parametro",
-      "deleteParamMessage": "Sei sicuro di voler eliminare il parametro \"{{name}}\"?"
-    },
-    "success": {
-      "added": "Tecnologia \"{{name}}\" creata con successo",
-      "copied": "Tecnologia copiata come \"{{name}}\"",
-      "deleted": "Tecnologia \"{{name}}\" eliminata",
-      "imported": "{{count}} tecnologie importate con successo",
-      "paramAdded": "Parametro \"{{name}}\" aggiunto",
-      "paramDeleted": "Parametro \"{{name}}\" eliminato",
-      "saved": "Modifiche salvate con successo",
-      "reseeded": "Tecnologie di sistema ricaricate con successo"
-    },
-    "error": {
-      "loadFailed": "Impossibile caricare le tecnologie",
-      "addFailed": "Impossibile aggiungere la tecnologia",
-      "copyFailed": "Impossibile copiare la tecnologia",
-      "deleteFailed": "Impossibile eliminare la tecnologia",
-      "importFailed": "Impossibile importare le tecnologie",
-      "paramAddFailed": "Impossibile aggiungere il parametro",
-      "paramDeleteFailed": "Impossibile eliminare il parametro",
-      "saveFailed": "Impossibile salvare le modifiche",
-      "reseedFailed": "Impossibile ricaricare le tecnologie",
-      "invalidFile": "Formato file non valido"
-    },
-    "items": {
-      "battery_storage": {
-        "name": "Accumulo a Batteria",
-        "description": "Sistema di accumulo energetico con batterie per bilanciamento del carico e alimentazione di backup"
-      },
-      "pv_supply": {
-        "name": "Fornitura Fotovoltaica",
-        "description": "Sistema di generazione di energia solare fotovoltaica"
-      },
-      "wind_onshore": {
-        "name": "Fornitura Turbina Eolica",
-        "description": "Sistema di generazione di energia eolica terrestre"
-      },
-      "biomass_supply": {
-        "name": "Fornitura Biomassa",
-        "description": "Centrale a biomassa per la generazione di energia rinnovabile da materiali organici"
-      },
-      "geothermal_supply": {
-        "name": "Fornitura Geotermica",
-        "description": "Centrale geotermica che sfrutta il calore della terra per la generazione di energia"
-      },
-      "water_supply": {
-        "name": "Fornitura Idroelettrica",
-        "description": "Centrale idroelettrica per la generazione di energia rinnovabile dal flusso d'acqua"
-      },
-      "households_supply": {
-        "name": "Fornitura consumatori domestici",
-        "description": "Profilo di consumo energetico residenziale"
-      },
-      "non_households_supply": {
-        "name": "Fornitura consumatori non domestici",
-        "description": "Profilo di consumo energetico commerciale e industriale"
-      }
-    },
-    "dragInstruction": "Trascina le tecnologie qui per aggiungerle al tuo modello",
-    "noTechnologies": "Nessuna tecnologia aggiunta",
-    "categories": {
-      "supply": "Produzione",
-      "storage": "Accumulo",
-      "other": "Altro"
-    }
-  },
   "locations": {
-    "title": "Posizioni Personalizzate",
-    "subtitle": "Crea e gestisci posizioni con classificazioni degli edifici",
-    "refresh": "Aggiorna posizioni",
-    "newLocation": "Nuova Posizione",
-    "newLocationTooltip": "Crea una nuova posizione personalizzata",
-    "searchPlaceholder": "Cerca posizioni...",
-    "tabs": {
-      "my": "Le Mie Posizioni",
-      "public": "Pubbliche"
-    },
-    "stats": {
-      "total": "Totale",
-      "totalArea": "Area Totale",
-      "totalDemand": "Domanda Totale",
-      "public": "Pubblico",
-      "private": "Privato"
-    },
-    "empty": {
-      "title": "Nessuna posizione trovata",
-      "description": "Crea la tua prima posizione personalizzata per iniziare",
-      "publicTitle": "Nessuna posizione pubblica",
-      "publicDescription": "Le posizioni pubbliche condivise da altri utenti appariranno qui. Imposta una posizione come pubblica per condividerla."
-    },
-    "toggle": {
-      "makePublic": "Privata - Clicca per rendere pubblica",
-      "makePrivate": "Pubblica - Clicca per rendere privata",
-      "nowPublic": "La posizione è ora pubblica",
-      "nowPrivate": "La posizione è ora privata"
-    },
-    "share": {
-      "title": "Condividi posizione",
-      "description": "Condividi \"{{name}}\" con utenti, spazi di lavoro o gruppi",
-      "tabs": {
-        "users": "Utenti",
-        "workspaces": "Spazi di lavoro",
-        "groups": "Gruppi"
-      },
-      "userEmail": "Email utente",
-      "selectWorkspace": "Seleziona spazio di lavoro",
-      "selectGroup": "Seleziona gruppo",
-      "addUser": "Condividi con utente",
-      "addWorkspace": "Condividi con spazio di lavoro",
-      "addGroup": "Condividi con gruppo",
-      "sharedWithUsers": "Condiviso con utenti",
-      "sharedWithWorkspaces": "Condiviso con spazi di lavoro",
-      "sharedWithGroups": "Condiviso con gruppi",
-      "noUsersYet": "Non ancora condiviso con utenti",
-      "noWorkspacesYet": "Non ancora condiviso con spazi di lavoro",
-      "noGroupsYet": "Non ancora condiviso con gruppi",
-      "removeAccess": "Rimuovi accesso",
-      "totalShares": "{{count}} condivisione/i in totale",
-      "alreadySharedWithUser": "Questa posizione è già condivisa con questo utente",
-      "alreadySharedWithWorkspace": "Questa posizione è già condivisa con questo spazio di lavoro",
-      "alreadySharedWithGroup": "Questa posizione è già condivisa con questo gruppo",
-      "failedToShare": "Condivisione fallita. Riprova."
-    },
     "Spain": "Spain",
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
@@ -2988,14 +2751,16 @@
     "registry": {
       "layer1Title": "Model Initialization",
       "layer1Subtitle": "Name and simulation timeframe",
-      "layer2Title": "Area Selection",
-      "layer2Subtitle": "Define where the model lives",
-      "layer3Title": "Risk Components",
-      "layer3Subtitle": "Choose which signals feed the model",
-      "layer4Title": "Final Review",
-      "layer4Subtitle": "Sanity check before run",
-      "layer5Title": "Save & Calculate",
-      "layer5Subtitle": "Persist and start the run"
+      "layer2Title": "Selezione dei nodi",
+      "layer2Subtitle": "Scegli le sorgenti e i pozzi di CO₂",
+      "layer3Title": "Percorsi",
+      "layer3Subtitle": "Trovare connessioni tra i nodi",
+      "layer4Title": "Costi",
+      "layer4Subtitle": "Costo di trasporto per connessione",
+      "layer5Title": "Revisione finale",
+      "layer5Subtitle": "Controllo prima dell'esecuzione",
+      "layer6Title": "Salva e Calcola",
+      "layer6Subtitle": "Salvare e avviare l'esecuzione"
     },
     "stepper": {
       "stepOf": "Step {{step}} of {{total}}",
@@ -3027,40 +2792,23 @@
       "dynamicSelected": "Selected range: {{start}} to {{end}} ({{days}} days).",
       "dynamicSelectedOne": "Selected range: {{start}} to {{end}} (1 day).",
       "dynamicSelectInside": "Select a range inside available dynamic dates: {{start}} to {{end}}",
-      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}"
+      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}",
+      "suggestedNamesLabel": "Scelte rapide",
+      "suggestedName1": "Valutazione regionale della CO₂",
+      "suggestedName2": "Studio del cluster industriale",
+      "suggestedName3": "Selezione dei siti di stoccaggio",
+      "suggestedName4": "Prospettiva trimestrale di cattura"
     },
     "layer2": {
-      "purpose": "Optionally upload a DTM to see its coverage, then draw inside it — or just draw on the bundled data.",
-      "nextStepHint": "Next we'll validate the selected area and model inputs.",
-      "terrainModel": "Terrain model (DTM)",
-      "dtmHint": "Optional GeoTIFF (.tif) — its coverage is shown on the map",
-      "dtmInfo": "A Digital Terrain Model — a GeoTIFF where each pixel is the ground elevation. Upload it first to see its coverage outline on the map, then draw your area inside it. Used to derive slope/aspect and as the spatial reference grid. If omitted, the bundled regional terrain is used.",
-      "readingDtm": "Reading DTM coverage…",
-      "coverageShown": "Coverage shown on the map — draw your area inside the outline.",
-      "drawArea": "Draw area",
-      "uploadGeoJson": "Upload GeoJSON",
-      "notSureFormat": "Not sure about the format?",
-      "formatDesc": "Polygon or MultiPolygon, WGS84 (EPSG:4326), [lon, lat] order.",
-      "sample": "Sample",
-      "statusUploaded": "GeoJSON boundary loaded from {{fileName}}.",
-      "statusUploadedNoName": "GeoJSON boundary loaded.",
-      "statusUploadPrompt": "Upload a GeoJSON file with Polygon or MultiPolygon geometry.",
-      "statusDrawn": "Area defined. You can keep adjusting it or move on.",
-      "statusDrawPrompt": "Click on the map to draw your area. Close the polygon to finish.",
-      "areaSummary": "Area summary",
-      "regions": "{{count}} regions",
-      "status": "Status",
-      "statusUploadedLabel": "Uploaded",
-      "statusDrawnLabel": "Drawn",
-      "statusNotSet": "Not set",
-      "area": "Area",
-      "perimeter": "Perimeter",
-      "blockingUploadGeoJson": "Upload a GeoJSON boundary file or switch back to draw.",
-      "blockingDrawArea": "Draw an area on the map to continue."
+      "purpose": "Scegli le sorgenti e i pozzi di CO₂ tra cui questo modello instrada.",
+      "nextStepHint": "Poi CO2RouteX cerca connessioni tra di essi.",
+      "nodesQuestion": "Quali nodi deve usare il modello?",
+      "nodesInfo": "Selezionali qui o direttamente sulla mappa.",
+      "blockingSelectNodes": "Seleziona almeno un nodo per continuare."
     },
     "layer3": {
-      "purpose": "These signals feed the AHP-weighted risk model. All three are enabled by default and recommended for an accurate analysis.",
-      "nextStepHint": "Next we'll do a final review before saving.",
+      "purpose": "CO2RouteX analizza i nodi selezionati per trovare connessioni, poi le traccia e ne calcola i costi.",
+      "nextStepHint": "Poi vedrai quanto costano quei percorsi.",
       "fwiLabel": "Weather signal (optional)",
       "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
       "fwiWeight": "30% weight",
@@ -3075,11 +2823,26 @@
       "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
       "weatherStationData": "Weather station data",
       "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
-      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used."
+      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used.",
+      "fwiInfo": "L'indice meteorologico combina vento, umidità relativa, temperatura e siccità in un'unica misura. Ha il peso maggiore perché il meteo cambia più rapidamente e influenza di più il risultato.",
+      "terrainInfo": "Pendenza, quota ed esposizione determinano come variano le condizioni nell'area: i versanti soleggiati si asciugano prima. Derivato dal modello digitale del terreno della tua area.",
+      "historicalInfo": "Dove gli eventi si sono già verificati tendono a ripetersi, perché le cause di fondo — uso del suolo e accessibilità — persistono. Basato sugli incidenti passati registrati nell'area.",
+      "signalsQuestion": "Quali segnali devono alimentare il modello?",
+      "coreSignalsNote": "Vegetazione (NDVI) e infrastrutture fanno sempre parte del modello e non possono essere disattivate. Disattivare un segnale sopra ne rimuove il contributo dalla ponderazione: l'esecuzione prosegue con i segnali rimanenti.",
+      "lockedByPrecomputed": "Incluso nella mappa regionale precalcolata. Disattiva l'interruttore sopra per personalizzare i livelli.",
+      "precomputedLabel": "Mappa regionale precalcolata",
+      "precomputedInfoLabel": "Informazioni sulla mappa regionale precalcolata",
+      "precomputedInfo": "Ogni notte l'intera regione viene analizzata con tutti i livelli attivi. Se la tua data è coperta, il risultato della tua area viene ritagliato da quella mappa e arriva in pochi secondi. Disattivalo (o commuta i singoli livelli sotto) per calcolare ogni passaggio specificamente per la tua area (~1-2 minuti).",
+      "precomputedRange": "Le mappe precalcolate coprono esattamente un giorno - seleziona la stessa data di inizio e fine per usarne una. Per un intervallo il modello calcola ogni giorno della tua area e restituisce il giorno di picco (~1-2 minuti).",
+      "precomputedUnavailable": "L'analisi notturna non ha ancora elaborato questa data. Il modello calcolerà tutti i passaggi per la tua area.",
+      "precomputedOnHint": "Risultato in pochi secondi, ritagliato dall'analisi notturna dell'intera regione. Tutti e tre i livelli sotto sono inclusi e quindi bloccati.",
+      "precomputedOffHint": "Calcolo completo per la tua area esatta (~1-2 minuti); puoi commutare i singoli livelli sotto.",
+      "routesQuestion": "Come sono collegati?",
+      "routesInfo": "Un percorso per coppia sorgente-pozzo, via condotta, camion o ferrovia."
     },
     "layer4": {
-      "purpose": "Real-time validation of the model configuration. Blockers must be cleared in their respective steps before the run can start.",
-      "nextStepHint": "Then you'll save the model and kick off the calculation.",
+      "purpose": "Il CAPEX della condotta scala con la resistenza del percorso; camion e ferrovia usano tariffe a distanza.",
+      "nextStepHint": "Poi faremo una revisione finale prima di salvare.",
       "missingModelName": "Missing — go back to Step 1.",
       "missingDates": "Start or end date missing.",
       "loadingDynamic": "Loading available dynamic dates…",
@@ -3106,7 +2869,9 @@
         "areaOfInterest": "Area of interest",
         "riskComponents": "Risk components",
         "bufferDistance": "Buffer distance"
-      }
+      },
+      "costsQuestion": "Quanto costano questi percorsi?",
+      "costsInfo": "Calcolato dai percorsi trovati nel passaggio precedente."
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -3138,6 +2903,69 @@
       "avoidBlank": "Avoid blank gaps",
       "blankDesc": "Blank areas have no valid source raster data for calculation.",
       "availableData": "Data available"
+    },
+    "mapHeader": {
+      "clearNodes": "Cancella"
     }
+  },
+  "co2Nodes": {
+    "loading": "Caricamento nodi…",
+    "loadError": "Impossibile caricare il catalogo dei nodi.",
+    "searchPlaceholder": "Cerca per nome o id…",
+    "empty": "Nessun nodo corrisponde.",
+    "selectionSummary": "{{count}} selezionati — {{emitters}} emettitori, {{sinks}} pozzi",
+    "types": {
+      "cement": "Cemento",
+      "refinery": "Raffineria",
+      "waste_to_energy": "Termovalorizzazione",
+      "storage": "Stoccaggio",
+      "utilisation": "Utilizzo",
+      "transport": "Trasporto",
+      "bioenergy": "Bioenergia",
+      "biogas": "Biogas",
+      "chemicals": "Chimica",
+      "coal_power": "Energia a carbone",
+      "emitter": "Altri emettitori",
+      "fossil_power": "Energia fossile",
+      "gas_power": "Energia a gas",
+      "gas_processing": "Trattamento del gas",
+      "glass": "Vetro",
+      "industry": "Industria generale",
+      "iron_and_steel": "Ferro e acciaio",
+      "pulp_and_paper": "Carta e cellulosa"
+    },
+    "legend": {
+      "emitters": "Sorgenti di emissione",
+      "sinks": "Stoccaggio e utilizzo",
+      "routes": "Rotte di trasporto candidate"
+    },
+    "catalogueEmpty": "Il catalogo dei nodi è vuoto.",
+    "runConnections": "Trova connessioni",
+    "runFailed": "L'esecuzione di CO2RouteX non è riuscita.",
+    "noRoutes": "Nessuna connessione candidata tra i nodi selezionati.",
+    "candidate": "candidata",
+    "modes": {
+      "pipeline": "Condotta",
+      "truck": "Camion",
+      "railway": "Ferrovia"
+    },
+    "needTwoNodes": "Seleziona almeno due nodi.",
+    "previewOnly": "Anteprima — i risultati si salvano con il modello.",
+    "countrySection": "Paese",
+    "emittersSection": "Categorie di emettitori",
+    "sinksSection": "Categorie di pozzi",
+    "expandCategory": "Mostra impianti",
+    "selectAll": "Seleziona tutti ({{count}})",
+    "clearCategory": "Cancella",
+    "needEmitter": "Aggiungi almeno un emettitore: i percorsi partono da lì.",
+    "needDestination": "Aggiungi un nodo di stoccaggio, utilizzo o trasporto: i percorsi devono finire da qualche parte."
+  },
+  "co2Routing": {
+    "run": "Trova percorsi"
+  },
+  "co2Costs": {
+    "running": "L'esecuzione è in corso — i costi compaiono al termine del calcolo dei percorsi.",
+    "noRun": "Torna a Percorsi e trova prima le connessioni — i costi derivano da quelle.",
+    "noCosts": "Nessun percorso con costo. Il CAPEX della condotta richiede una condotta tracciata; le tariffe di camion e ferrovia richiedono distanze tracciate."
   }
 }

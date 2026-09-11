@@ -210,10 +210,7 @@
     "sidebar": {
       "energySimulations": "CCUS-Simulationen",
       "map": "Karte",
-      "locations": "Standorte",
       "simulationReports": "Modellvergleich",
-      "technologies": "Technologien",
-      "transport": "Transport",
       "simulations": "Analysis Runs"
     },
     "menu": {
@@ -1069,7 +1066,11 @@
     "failedDefaultMessage": "Berechnung fehlgeschlagen - Webservice nicht verfügbar oder Zeitüberschreitung",
     "waiting": "Wartend",
     "queuedTooltip": "Ihr Modell ist in der Warteschlange - der Simulationsmotor verarbeitet andere Berechnungen",
-    "compareRequires2Completed": "Wählen Sie genau 2 abgeschlossene Modelle zum Vergleichen aus"
+    "compareRequires2Completed": "Wählen Sie genau 2 abgeschlossene Modelle zum Vergleichen aus",
+    "estimateApproximate": "Diese Läufe stammen aus der Zeit vor der Warteschlangenerfassung; die echte Wartezeit ist länger.",
+    "estimateOverdue": "dauert länger als üblich",
+    "estimateRemaining": "noch ~{{duration}}",
+    "estimateUnavailable": "Zu wenige vergleichbare erfolgreiche Läufe für eine Schätzung"
   },
   "polygon": {
     "drawRegion": "Zeichnen Sie Ihre Region",
@@ -1733,18 +1734,9 @@
         "title": "Interaktive Karte",
         "description": "Ihr Hauptarbeitsbereich für geografische Analysen. Zeigen Sie Kartenebenen an, wählen Sie Bereiche für die Bewertung aus und visualisieren Sie Energierisikodaten."
       },
-      "locations": {
-        "title": "Gespeicherte Standorte",
-        "description": "Verwalten Sie Ihre gespeicherten Standorte und interessanten Bereiche. Schneller Zugriff auf häufig analysierte Regionen."
-      },
       "reports": {
         "title": "Simulationsberichte",
         "description": "Zeigen Sie detaillierte Simulationsberichte an, exportieren Sie Daten und analysieren Sie historische Trends und Muster."
-      },
-      "technologies": {
-        "title": "Technologien",
-        "description": "Verwalten Sie Energietechnologien wie Solarmodule, Batterien und Wärmepumpen. Konfigurieren Sie Parameter und weisen Sie sie Gebäuden zu.",
-        "tip": "Technologien können pro Gebäude für genaue CCUS-Simulationen angepasst werden."
       },
       "layers": {
         "title": "Kartenebenen",
@@ -1789,11 +1781,6 @@
         "description": "Legen Sie das Zeitintervall für Berechnungen fest. Höhere Auflösung liefert detailliertere Ergebnisse, dauert aber länger.",
         "tip": "60 Minuten wird für die meisten Simulationen empfohlen"
       },
-      "technologies": {
-        "title": "Technologien & Parameter",
-        "description": "Konfigurieren Sie Energietechnologien (Solar, Batterien, Wärmepumpen) und optimieren Sie erweiterte Simulationsparameter.",
-        "tip": "Klicken Sie, um Einstellungen für Ihre Simulation anzuzeigen und anzupassen"
-      },
       "mapContainer": {
         "title": "Interaktive Karte",
         "description": "Dies ist Ihr Hauptarbeitsbereich. Zeichnen Sie Polygone auf der Karte, um Bereiche für Ihre CCUS-Simulation auszuwählen.",
@@ -1831,11 +1818,6 @@
       "areaStatus": {
         "title": "AOI status",
         "description": "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
-      },
-      "optionalLayers": {
-        "title": "Risk signals",
-        "description": "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events.",
-        "tip": "Keep weather enabled for normal analysis runs; disabling it is useful only for a baseline comparison."
       },
       "finalReview": {
         "title": "Validation status",
@@ -2066,226 +2048,7 @@
       "example": "Low relative humidity means the air is dry, which draws moisture out of the vegetation, creating highly reactive inputs."
     }
   },
-  "technologies": {
-    "title": "Technologien",
-    "subtitle": "Energietechnologien für Ihre Simulationen",
-    "loading": "Technologien werden geladen...",
-    "refresh": "Technologien aktualisieren",
-    "reseed": "Systemtechnologien neu laden",
-    "documentation": "Dokumentation",
-    "importJson": "JSON importieren",
-    "addTechnology": "Technologie hinzufügen",
-    "addParameter": "Parameter hinzufügen",
-    "parameters": "Parameter",
-    "total": "gesamt",
-    "mine": "Meine",
-    "user": "Benutzer",
-    "youCreatedThis": "Sie haben diese Technologie erstellt",
-    "userDefined": "Benutzerdefinierte Technologie",
-    "viewParameters": "Parameter anzeigen",
-    "copyTechnology": "Technologie kopieren",
-    "deleteTechnology": "Technologie löschen",
-    "editParameter": "Parameter bearbeiten",
-    "deleteParameter": "Parameter löschen",
-    "systemTechnologies": "Systemtechnologien",
-    "userDefinedTechnologies": "Benutzerdefinierte Technologien",
-    "dragDropHint": "Technologien zwischen Bereichen ziehen, um die Zuordnung zu ändern",
-    "dropToMakeSystem": "Hier ablegen für Systemtechnologie",
-    "dropToMakeUser": "Hier ablegen für Benutzertechnologie",
-    "movedTo": "\"{{name}}\" nach {{target}} verschoben",
-    "failedToMove": "Technologie konnte nicht verschoben werden",
-    "stats": {
-      "totalTechnologies": "Gesamttechnologien",
-      "systemTechnologies": "System",
-      "userTechnologies": "Benutzerdefiniert",
-      "totalParameters": "Gesamtparameter"
-    },
-    "dragInstruction": "Ziehen Sie eine Technologie auf ein Gebäude auf der Karte",
-    "noTechnologies": "Keine Technologien verfügbar",
-    "categories": {
-      "supply": "Versorgung",
-      "storage": "Speicher",
-      "other": "Sonstige"
-    },
-    "form": {
-      "key": "Schlüssel",
-      "keyRequired": "Schlüssel ist erforderlich",
-      "keyPlaceholder": "z.B. solar_supply",
-      "displayName": "Anzeigename",
-      "displayNameRequired": "Anzeigename ist erforderlich",
-      "displayNamePlaceholder": "z.B. Solarenergieversorgung",
-      "description": "Beschreibung",
-      "descriptionPlaceholder": "Kurze Beschreibung der Technologie...",
-      "icon": "Symbol",
-      "parametersOptional": "Parameter (Optional)",
-      "parameter": "Parameter",
-      "alias": "Alias",
-      "defaultValue": "Standardwert",
-      "unit": "Einheit",
-      "range": "Bereich",
-      "min": "Min",
-      "max": "Max",
-      "keyFieldPlaceholder": "Schlüssel",
-      "aliasFieldPlaceholder": "Alias",
-      "defaultValuePlaceholder": "Standardwert",
-      "unitPlaceholder": "Einheit (optional)",
-      "minPlaceholder": "Min (optional)",
-      "maxPlaceholder": "Max (optional)"
-    },
-    "addModal": {
-      "title": "Neue Technologie hinzufügen",
-      "description": "Erstellen Sie eine neue Technologie mit benutzerdefinierten Parametern"
-    },
-    "copyModal": {
-      "title": "Technologie kopieren",
-      "description": "Erstellen Sie eine Kopie von {{name}} mit einem neuen Namen",
-      "uniqueIdentifier": "Eindeutiger Bezeichner (Kleinbuchstaben, keine Leerzeichen)",
-      "name": "Name",
-      "copyAllParameters": "Dies kopiert alle {{count}} Parameter von \"{{name}}\""
-    },
-    "importModal": {
-      "title": "Technologien importieren",
-      "description": "Wählen Sie, wie die {{count}} Technologien importiert werden sollen",
-      "found": "{{count}} Technologien in Datei gefunden",
-      "existingSkipped": "Vorhandene Technologien mit demselben Schlüssel werden übersprungen.",
-      "importAsSystem": "Als Systemtechnologien importieren",
-      "systemDescription": "Systemtechnologien sind für alle Benutzer sichtbar und können von Nicht-Experten nicht bearbeitet werden."
-    },
-    "paramModal": {
-      "title": "Neuen Parameter hinzufügen",
-      "description": "Parameter zu {{name}} hinzufügen",
-      "keyPlaceholder": "z.B. cont_efficiency",
-      "aliasPlaceholder": "z.B. Effizienzrate",
-      "descriptionPlaceholder": "Kurze Beschreibung, was dieser Parameter steuert...",
-      "unitPlaceholder": "kW, %, usw."
-    },
-    "detailsModal": {
-      "viewAndEdit": "Technologieparameter anzeigen und bearbeiten",
-      "selectFromOptions": "Aus {{count}} Optionen auswählen",
-      "cancel": "Abbrechen",
-      "close": "Schließen",
-      "saveChanges": "Änderungen speichern"
-    },
-    "confirm": {
-      "deleteTitle": "Technologie löschen",
-      "deleteMessage": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
-      "deleteParamTitle": "Parameter löschen",
-      "deleteParamMessage": "Sind Sie sicher, dass Sie den Parameter \"{{name}}\" löschen möchten?"
-    },
-    "success": {
-      "added": "Technologie \"{{name}}\" erfolgreich erstellt",
-      "copied": "Technologie als \"{{name}}\" kopiert",
-      "deleted": "Technologie \"{{name}}\" gelöscht",
-      "imported": "{{count}} Technologien erfolgreich importiert",
-      "paramAdded": "Parameter \"{{name}}\" hinzugefügt",
-      "paramDeleted": "Parameter \"{{name}}\" gelöscht",
-      "saved": "Änderungen erfolgreich gespeichert",
-      "reseeded": "Systemtechnologien erfolgreich neu geladen"
-    },
-    "error": {
-      "loadFailed": "Technologien konnten nicht geladen werden",
-      "addFailed": "Technologie konnte nicht hinzugefügt werden",
-      "copyFailed": "Technologie konnte nicht kopiert werden",
-      "deleteFailed": "Technologie konnte nicht gelöscht werden",
-      "importFailed": "Technologien konnten nicht importiert werden",
-      "paramAddFailed": "Parameter konnte nicht hinzugefügt werden",
-      "paramDeleteFailed": "Parameter konnte nicht gelöscht werden",
-      "saveFailed": "Änderungen konnten nicht gespeichert werden",
-      "reseedFailed": "Technologien konnten nicht neu geladen werden",
-      "invalidFile": "Ungültiges Dateiformat"
-    },
-    "items": {
-      "battery_storage": {
-        "name": "Batteriespeicher",
-        "description": "Energiespeichersystem mit Batterien für Lastausgleich und Notstromversorgung"
-      },
-      "pv_supply": {
-        "name": "Photovoltaik-Anlage",
-        "description": "Solare Photovoltaik-Energieerzeugungsanlage"
-      },
-      "wind_onshore": {
-        "name": "Windkraftanlage",
-        "description": "Onshore-Windkraftanlage zur Energieerzeugung"
-      },
-      "biomass_supply": {
-        "name": "Biomasse-Anlage",
-        "description": "Biomassekraftwerk zur erneuerbaren Energieerzeugung aus organischen Materialien"
-      },
-      "geothermal_supply": {
-        "name": "Geothermie-Anlage",
-        "description": "Geothermiekraftwerk zur Nutzung der Erdwärme für die Energieerzeugung"
-      },
-      "water_supply": {
-        "name": "Wasserkraftwerk",
-        "description": "Wasserkraftwerk zur erneuerbaren Energieerzeugung aus Wasserströmung"
-      },
-      "households_supply": {
-        "name": "Haushaltsverbraucher",
-        "description": "Energieverbrauchsprofil für Wohnhaushalte"
-      },
-      "non_households_supply": {
-        "name": "Nicht-Haushaltsverbraucher",
-        "description": "Energieverbrauchsprofil für Gewerbe und Industrie"
-      }
-    }
-  },
   "locations": {
-    "title": "Benutzerdefinierte Standorte",
-    "subtitle": "Standorte mit Gebäudeklassifikationen erstellen und verwalten",
-    "refresh": "Standorte aktualisieren",
-    "newLocation": "Neuer Standort",
-    "newLocationTooltip": "Neuen benutzerdefinierten Standort erstellen",
-    "searchPlaceholder": "Standorte suchen...",
-    "tabs": {
-      "my": "Meine Standorte",
-      "public": "Öffentlich"
-    },
-    "stats": {
-      "total": "Gesamt",
-      "totalArea": "Gesamtfläche",
-      "totalDemand": "Gesamtbedarf",
-      "public": "Öffentlich",
-      "private": "Privat"
-    },
-    "empty": {
-      "title": "Keine Standorte gefunden",
-      "description": "Erstellen Sie Ihren ersten benutzerdefinierten Standort",
-      "publicTitle": "Keine öffentlichen Standorte",
-      "publicDescription": "Öffentliche Standorte von anderen Nutzern werden hier angezeigt. Schalten Sie einen Standort auf öffentlich um ihn zu teilen."
-    },
-    "toggle": {
-      "makePublic": "Privat - Klicken um öffentlich zu machen",
-      "makePrivate": "Öffentlich - Klicken um privat zu machen",
-      "nowPublic": "Standort ist jetzt öffentlich",
-      "nowPrivate": "Standort ist jetzt privat"
-    },
-    "share": {
-      "title": "Standort teilen",
-      "description": "\"{{name}}\" mit Benutzern, Arbeitsbereichen oder Gruppen teilen",
-      "tabs": {
-        "users": "Benutzer",
-        "workspaces": "Arbeitsbereiche",
-        "groups": "Gruppen"
-      },
-      "userEmail": "Benutzer-E-Mail",
-      "selectWorkspace": "Arbeitsbereich auswählen",
-      "selectGroup": "Gruppe auswählen",
-      "addUser": "Mit Benutzer teilen",
-      "addWorkspace": "Mit Arbeitsbereich teilen",
-      "addGroup": "Mit Gruppe teilen",
-      "sharedWithUsers": "Mit Benutzern geteilt",
-      "sharedWithWorkspaces": "Mit Arbeitsbereichen geteilt",
-      "sharedWithGroups": "Mit Gruppen geteilt",
-      "noUsersYet": "Noch nicht mit Benutzern geteilt",
-      "noWorkspacesYet": "Noch nicht mit Arbeitsbereichen geteilt",
-      "noGroupsYet": "Noch nicht mit Gruppen geteilt",
-      "removeAccess": "Zugriff entfernen",
-      "totalShares": "{{count}} Freigabe(n) insgesamt",
-      "alreadySharedWithUser": "Dieser Standort wird bereits mit diesem Benutzer geteilt",
-      "alreadySharedWithWorkspace": "Dieser Standort wird bereits mit diesem Arbeitsbereich geteilt",
-      "alreadySharedWithGroup": "Dieser Standort wird bereits mit dieser Gruppe geteilt",
-      "failedToShare": "Standort konnte nicht geteilt werden. Bitte versuchen Sie es erneut."
-    },
     "Spain": "Spain",
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
@@ -2978,14 +2741,16 @@
     "registry": {
       "layer1Title": "Model Initialization",
       "layer1Subtitle": "Name and simulation timeframe",
-      "layer2Title": "Area Selection",
-      "layer2Subtitle": "Define where the model lives",
-      "layer3Title": "Risk Components",
-      "layer3Subtitle": "Choose which signals feed the model",
-      "layer4Title": "Final Review",
-      "layer4Subtitle": "Sanity check before run",
-      "layer5Title": "Save & Calculate",
-      "layer5Subtitle": "Persist and start the run"
+      "layer2Title": "Knotenauswahl",
+      "layer2Subtitle": "CO₂-Quellen und -Senken wählen",
+      "layer3Title": "Routen",
+      "layer3Subtitle": "Verbindungen zwischen den Knoten finden",
+      "layer4Title": "Kosten",
+      "layer4Subtitle": "Transportkosten je Verbindung",
+      "layer5Title": "Abschließende Prüfung",
+      "layer5Subtitle": "Kontrolle vor dem Lauf",
+      "layer6Title": "Speichern & Berechnen",
+      "layer6Subtitle": "Sichern und Lauf starten"
     },
     "stepper": {
       "stepOf": "Step {{step}} of {{total}}",
@@ -3017,40 +2782,23 @@
       "dynamicSelected": "Selected range: {{start}} to {{end}} ({{days}} days).",
       "dynamicSelectedOne": "Selected range: {{start}} to {{end}} (1 day).",
       "dynamicSelectInside": "Select a range inside available dynamic dates: {{start}} to {{end}}",
-      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}"
+      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}",
+      "suggestedNamesLabel": "Schnellauswahl",
+      "suggestedName1": "Regionale CO₂-Bewertung",
+      "suggestedName2": "Industriecluster-Studie",
+      "suggestedName3": "Speicherstandort-Screening",
+      "suggestedName4": "Quartalsausblick Abscheidung"
     },
     "layer2": {
-      "purpose": "Optionally upload a DTM to see its coverage, then draw inside it — or just draw on the bundled data.",
-      "nextStepHint": "Next we'll validate the selected area and model inputs.",
-      "terrainModel": "Terrain model (DTM)",
-      "dtmHint": "Optional GeoTIFF (.tif) — its coverage is shown on the map",
-      "dtmInfo": "A Digital Terrain Model — a GeoTIFF where each pixel is the ground elevation. Upload it first to see its coverage outline on the map, then draw your area inside it. Used to derive slope/aspect and as the spatial reference grid. If omitted, the bundled regional terrain is used.",
-      "readingDtm": "Reading DTM coverage…",
-      "coverageShown": "Coverage shown on the map — draw your area inside the outline.",
-      "drawArea": "Draw area",
-      "uploadGeoJson": "Upload GeoJSON",
-      "notSureFormat": "Not sure about the format?",
-      "formatDesc": "Polygon or MultiPolygon, WGS84 (EPSG:4326), [lon, lat] order.",
-      "sample": "Sample",
-      "statusUploaded": "GeoJSON boundary loaded from {{fileName}}.",
-      "statusUploadedNoName": "GeoJSON boundary loaded.",
-      "statusUploadPrompt": "Upload a GeoJSON file with Polygon or MultiPolygon geometry.",
-      "statusDrawn": "Area defined. You can keep adjusting it or move on.",
-      "statusDrawPrompt": "Click on the map to draw your area. Close the polygon to finish.",
-      "areaSummary": "Area summary",
-      "regions": "{{count}} regions",
-      "status": "Status",
-      "statusUploadedLabel": "Uploaded",
-      "statusDrawnLabel": "Drawn",
-      "statusNotSet": "Not set",
-      "area": "Area",
-      "perimeter": "Perimeter",
-      "blockingUploadGeoJson": "Upload a GeoJSON boundary file or switch back to draw.",
-      "blockingDrawArea": "Draw an area on the map to continue."
+      "purpose": "Wählen Sie die CO₂-Quellen und -Senken, zwischen denen dieses Modell routet.",
+      "nextStepHint": "Als Nächstes sucht CO2RouteX Verbindungen zwischen ihnen.",
+      "nodesQuestion": "Welche Knoten soll das Modell verwenden?",
+      "nodesInfo": "Hier oder direkt auf der Karte auswählen.",
+      "blockingSelectNodes": "Wählen Sie mindestens einen Knoten aus."
     },
     "layer3": {
-      "purpose": "These signals feed the AHP-weighted risk model. All three are enabled by default and recommended for an accurate analysis.",
-      "nextStepHint": "Next we'll do a final review before saving.",
+      "purpose": "CO2RouteX prüft die gewählten Knoten auf mögliche Verbindungen und berechnet Route und Kosten.",
+      "nextStepHint": "Als Nächstes sehen Sie die Kosten dieser Routen.",
       "fwiLabel": "Weather signal (optional)",
       "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
       "fwiWeight": "30% weight",
@@ -3065,11 +2813,26 @@
       "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
       "weatherStationData": "Weather station data",
       "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
-      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used."
+      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used.",
+      "fwiInfo": "Der Wetterindex fasst Wind, relative Luftfeuchte, Temperatur und Trockenheit zu einem Wert zusammen. Er hat das größte Gewicht, weil sich das Wetter am schnellsten ändert und das Ergebnis am stärksten beeinflusst.",
+      "terrainInfo": "Hangneigung, Höhe und Exposition bestimmen, wie die Bedingungen im Gebiet variieren — sonnenzugewandte Hänge trocknen schneller aus. Abgeleitet aus dem digitalen Geländemodell Ihres Gebiets.",
+      "historicalInfo": "Wo Ereignisse bereits aufgetreten sind, wiederholen sie sich häufig, da die Ursachen — Landnutzung und Zugang — fortbestehen. Basierend auf erfassten früheren Vorfällen im Gebiet.",
+      "signalsQuestion": "Welche Signale sollen in das Modell einfließen?",
+      "coreSignalsNote": "Vegetation (NDVI) und Infrastruktur sind immer Teil des Modells und können nicht deaktiviert werden. Wird ein Signal oben deaktiviert, entfällt sein Beitrag zur Gewichtung — der Lauf wird mit den übrigen Signalen fortgesetzt.",
+      "lockedByPrecomputed": "In der vorberechneten Regionalkarte enthalten. Deaktivieren Sie den Schalter oben, um Ebenen anzupassen.",
+      "precomputedLabel": "Vorberechnete Regionalkarte",
+      "precomputedInfoLabel": "Über die vorberechnete Regionalkarte",
+      "precomputedInfo": "Jede Nacht wird die gesamte Region mit allen Ebenen analysiert. Ist Ihr Datum abgedeckt, wird das Ergebnis für Ihr Gebiet aus dieser Karte ausgeschnitten und liegt in Sekunden vor. Deaktivieren Sie sie (oder schalten Sie einzelne Ebenen unten um), um alle Schritte gezielt für Ihr Gebiet zu berechnen (~1-2 Minuten).",
+      "precomputedRange": "Vorberechnete Karten decken genau einen Tag ab - wählen Sie dasselbe Start- und Enddatum, um eine zu nutzen. Bei einem Zeitraum berechnet das Modell jeden Tag für Ihr Gebiet und liefert den Spitzentag (~1-2 Minuten).",
+      "precomputedUnavailable": "Die nächtliche Analyse hat dieses Datum noch nicht verarbeitet. Das Modell berechnet alle Schritte für Ihr Gebiet.",
+      "precomputedOnHint": "Ergebnis in Sekunden, ausgeschnitten aus der nächtlichen Analyse der gesamten Region. Alle drei Ebenen unten sind enthalten und daher gesperrt.",
+      "precomputedOffHint": "Vollständige Berechnung für genau Ihr Gebiet (~1-2 Minuten); Sie können einzelne Ebenen unten umschalten.",
+      "routesQuestion": "Wie sind sie verbunden?",
+      "routesInfo": "Eine Route je Quelle-Senke-Paar, per Pipeline, Lkw oder Bahn."
     },
     "layer4": {
-      "purpose": "Real-time validation of the model configuration. Blockers must be cleared in their respective steps before the run can start.",
-      "nextStepHint": "Then you'll save the model and kick off the calculation.",
+      "purpose": "Pipeline-CAPEX skaliert mit dem Routenwiderstand; Lkw und Bahn nutzen Entfernungstarife.",
+      "nextStepHint": "Als Nächstes folgt die abschließende Prüfung vor dem Speichern.",
       "missingModelName": "Missing — go back to Step 1.",
       "missingDates": "Start or end date missing.",
       "loadingDynamic": "Loading available dynamic dates…",
@@ -3096,7 +2859,9 @@
         "areaOfInterest": "Area of interest",
         "riskComponents": "Risk components",
         "bufferDistance": "Buffer distance"
-      }
+      },
+      "costsQuestion": "Was kosten diese Routen?",
+      "costsInfo": "Berechnet aus den Routen des vorherigen Schritts."
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -3128,6 +2893,69 @@
       "avoidBlank": "Avoid blank gaps",
       "blankDesc": "Blank areas have no valid source raster data for calculation.",
       "availableData": "Data available"
+    },
+    "mapHeader": {
+      "clearNodes": "Zurücksetzen"
     }
+  },
+  "co2Nodes": {
+    "loading": "Knoten werden geladen…",
+    "loadError": "Der Knotenkatalog konnte nicht geladen werden.",
+    "searchPlaceholder": "Nach Name oder ID suchen…",
+    "empty": "Keine Knoten gefunden.",
+    "selectionSummary": "{{count}} ausgewählt — {{emitters}} Emittenten, {{sinks}} Senken",
+    "types": {
+      "cement": "Zement",
+      "refinery": "Raffinerie",
+      "waste_to_energy": "Abfallverwertung",
+      "storage": "Speicher",
+      "utilisation": "Nutzung",
+      "transport": "Transport",
+      "bioenergy": "Bioenergie",
+      "biogas": "Biogas",
+      "chemicals": "Chemie",
+      "coal_power": "Kohlekraft",
+      "emitter": "Sonstige Emittenten",
+      "fossil_power": "Fossile Kraftwerke",
+      "gas_power": "Gaskraftwerke",
+      "gas_processing": "Gasaufbereitung",
+      "glass": "Glas",
+      "industry": "Allgemeine Industrie",
+      "iron_and_steel": "Eisen und Stahl",
+      "pulp_and_paper": "Zellstoff und Papier"
+    },
+    "legend": {
+      "emitters": "Emissionsquellen",
+      "sinks": "Speicher & Nutzung",
+      "routes": "Mögliche Transportrouten"
+    },
+    "catalogueEmpty": "Der Knotenkatalog ist leer.",
+    "runConnections": "Verbindungen suchen",
+    "runFailed": "Der CO2RouteX-Lauf ist fehlgeschlagen.",
+    "noRoutes": "Keine möglichen Verbindungen zwischen den gewählten Knoten.",
+    "candidate": "möglich",
+    "modes": {
+      "pipeline": "Pipeline",
+      "truck": "Lkw",
+      "railway": "Bahn"
+    },
+    "needTwoNodes": "Wählen Sie mindestens zwei Knoten.",
+    "previewOnly": "Vorschau — Ergebnisse werden beim Speichern gesichert.",
+    "countrySection": "Land",
+    "emittersSection": "Emittentenkategorien",
+    "sinksSection": "Senkenkategorien",
+    "expandCategory": "Anlagen anzeigen",
+    "selectAll": "Alle {{count}} auswählen",
+    "clearCategory": "Zurücksetzen",
+    "needEmitter": "Mindestens einen Emittenten hinzufügen — dort beginnen Routen.",
+    "needDestination": "Speicher-, Nutzungs- oder Transportknoten hinzufügen — Routen brauchen ein Ziel."
+  },
+  "co2Routing": {
+    "run": "Routen suchen"
+  },
+  "co2Costs": {
+    "running": "Der Lauf läuft noch — Kosten erscheinen nach dem Routing.",
+    "noRun": "Gehen Sie zurück zu Routen und suchen Sie zuerst Verbindungen — die Kosten folgen daraus.",
+    "noCosts": "Keine bewerteten Routen. Pipeline-CAPEX braucht eine geroutete Pipeline; Lkw- und Bahntarife brauchen geroutete Entfernungen."
   }
 }

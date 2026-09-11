@@ -19,12 +19,9 @@ const ProfilePage = lazy(() => import("@/features/profile").then(module => ({ de
 const NotificationsPage = lazy(() => import("@/features/notifications/NotificationsPage"));
 const AreaSelect = lazy(() => import("@/features/configurator/region-selector/AreaSelect").then(module => ({ default: module.AreaSelect })));
 const ModelResultsViewer = lazy(() => import("@/features/model-results").then(module => ({ default: module.ModelResultsViewer })));
+const ComparisonPage = lazy(() => import("@/features/comparison").then(module => ({ default: module.ComparisonPage })));
 const LegalPage = lazy(() => import("@/pages/legal/LegalPage"));
 const LandingPage = lazy(() => import("@/features/landing").then(module => ({ default: module.LandingPage })));
-const TechnologyLibraryPage = lazy(() => import("@/features/technologies").then(module => ({ default: module.TechnologyLibraryPage })));
-const TransportNetworkPage = lazy(() => import("@/features/transport").then(module => ({ default: module.TransportNetworkPage })));
-const LocationsPage = lazy(() => import("@/features/locations").then(module => ({ default: module.LocationsPage })));
-const ExplorerPage = lazy(() => import("@/features/model-configurator").then(module => ({ default: module.ExplorerPage })));
 
 import { ProductTour } from "@/features/guided-tour/ProductTour";
 import NotificationProvider from "@/features/notifications/components/NotificationProvider";
@@ -63,7 +60,7 @@ const App: React.FC<AppProps> = () => {
                   <Route path="/forgot-password" element={<ForgotPasswordForm />} />
                 </Route>
 
-                {/* Public map with sign-in */}
+                {/* Public map. */}
                 <Route path="/app/map" element={<AppLayout><MapComponent /></AppLayout>} />
 
                 <Route element={<Middleware type="auth" />}>
@@ -79,7 +76,7 @@ const App: React.FC<AppProps> = () => {
 
                 <Route element={<Middleware type="auth" />}>
                   <Route path="/app/model-dashboard" element={<ModelDashboard />} />
-                  <Route path="/app/model-dashboard/new-model" element={<ExplorerPage />} />
+                  <Route path="/app/model-dashboard/new-model" element={<AreaSelect />} />
                   <Route path="/app/model-dashboard/edit/:id" element={<AreaSelect editMode={true} />} />
                   <Route path="/app/model-results/:id" element={<ModelResultsViewer />} />
                   <Route path="/app/profile" element={<ProfilePage />} />
@@ -87,9 +84,19 @@ const App: React.FC<AppProps> = () => {
                   <Route path="/app/settings" element={<SettingsPage />} />
                   <Route path="/app/settings/weather" element={<WeatherSettings />} />
                   <Route path="/app/notifications" element={<NotificationsPage />} />
-                  <Route path="/app/technologies" element={<TechnologyLibraryPage />} />
-                  <Route path="/app/transport" element={<TransportNetworkPage />} />
-                  <Route path="/app/locations" element={<LocationsPage />} />
+                </Route>
+
+                <Route
+                  element={(
+                    <Middleware
+                      type="auth"
+                      minimumAccess="manager"
+                      accessDeniedTo="/app/model-dashboard"
+                    />
+                  )}
+                >
+                  <Route path="/app/comparison" element={<ComparisonPage />} />
+                  <Route path="/app/comparison/:modelId" element={<ComparisonPage />} />
                 </Route>
               </Routes>
             </Suspense>

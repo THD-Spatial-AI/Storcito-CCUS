@@ -1,4 +1,4 @@
-// Consolidated status type used across analysis models and other model types
+// Shared model status.
 export type ModelStatus = 
 	| 'draft' 
 	| 'queue' 

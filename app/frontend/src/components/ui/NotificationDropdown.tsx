@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@spatialhub/ui";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { TimeAgo } from "@/components/ui/TimeAgo";
@@ -19,6 +20,7 @@ import {
   useClearAllNotificationsMutation,
   type Notification,
 } from "@/features/notifications/hooks/useNotificationsQuery";
+import { getNotificationResultPath } from "@/features/notifications/notification-navigation";
 import {
   NotificationDetailDialog,
   getNotificationTypeStyles,
@@ -27,12 +29,13 @@ import {
 
 export const NotificationDropdown: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
   const lastUnreadCountRef = useRef(0);
 
-  // Fetch notifications with React Query (auto-polls every 30 seconds)
+  // Poll every 30s.
   const { data } = useNotificationsQuery();
   const notifications = data?.notifications || [];
 
@@ -43,7 +46,7 @@ export const NotificationDropdown: React.FC = () => {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // Show pulse animation for 15 seconds when new notifications arrive
+  // Pulse on arrival.
   useEffect(() => {
     if (unreadCount > lastUnreadCountRef.current) {
       setShowPulse(true);
@@ -53,7 +56,7 @@ export const NotificationDropdown: React.FC = () => {
     lastUnreadCountRef.current = unreadCount;
   }, [unreadCount]);
 
-  // Show only the 3 most recent notifications in dropdown
+  // Three most recent.
   const recentNotifications = notifications.slice(0, 3);
 
   const markAsRead = async (id: string | number) => {
@@ -83,6 +86,13 @@ export const NotificationDropdown: React.FC = () => {
   const handleNotificationClick = async (notification: Notification) => {
     // Mark as read
     await markAsRead(notification.id);
+
+    // Straight to results.
+    const resultPath = getNotificationResultPath(notification);
+    if (resultPath) {
+      navigate(resultPath);
+      return;
+    }
 
     // Show notification details
     setSelectedNotification(notification);
@@ -197,7 +207,7 @@ export const NotificationDropdown: React.FC = () => {
               );
             })}
             
-            {/* Show count of remaining notifications */}
+            {/* Remaining count. */}
             {notifications.length > 3 && (
               <div className="px-4 py-2 text-center text-xs text-muted-foreground bg-muted">
                 {t(notifications.length - 3 === 1 ? 'notifications.moreNotification' : 'notifications.moreNotifications', { count: notifications.length - 3 })}

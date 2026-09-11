@@ -1,7 +1,6 @@
 import SidebarButton from "@/components/ui/SidebarButton";
 import { Authorized } from "@/middleware/authorized";
-import { LayerInfo } from "@/features/interactive-map/store/map-store";
-import { LayoutGrid, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, type LucideIcon } from "lucide-react";
 import { ADMIN_PATH } from "./constants";
 import { LayersSheet } from "./LayersSheet";
 import { ProfileMenu } from "./ProfileMenu";
@@ -17,8 +16,7 @@ type BaseLayerInfo = {
 
 interface AppLayoutSidebarProps {
   accessibleBaseLayers: BaseLayerInfo[];
-  changeBaseLayer: (index: number) => void;
-  hasAccessToLayer: (layer: LayerInfo) => boolean;
+  changeBaseLayer: (layerId: string) => void;
   isActive: (path: string) => boolean;
   navigationHandlers: NavigationHandlers;
   onRestartTour: () => void;
@@ -37,7 +35,6 @@ interface AppLayoutSidebarProps {
 export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
   accessibleBaseLayers,
   changeBaseLayer,
-  hasAccessToLayer,
   isActive,
   navigationHandlers,
   onRestartTour,
@@ -49,7 +46,7 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
   getUserInitial,
 }) => {
   return (
-    <aside className="fixed left-0 bottom-0 bg-card border-r border-border shadow-lg z-[51] w-[var(--sidebar-width)] top-[var(--topbar-height)]">
+    <aside className="fixed left-0 bottom-0 bg-card border-r border-border z-[51] w-[var(--sidebar-width)] top-[var(--topbar-height)]">
       <div className="flex flex-col items-center gap-3 py-4">
         <Authorized>
           {sidebarItems.map((item) => (
@@ -64,7 +61,7 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
           ))}
         </Authorized>
 
-        {/* Separate primary navigation (above) from the Layers map tool (below) */}
+        {/* Separate from navigation. */}
         <Authorized>
           <div className="w-6 h-px bg-border" />
         </Authorized>
@@ -73,7 +70,6 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
           baseLayers={accessibleBaseLayers}
           selectedBaseLayerId={selectedBaseLayerId}
           changeBaseLayer={changeBaseLayer}
-          hasAccessToLayer={hasAccessToLayer}
         />
       </div>
 
@@ -89,7 +85,7 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
 
         <Authorized>
           <SidebarButton
-            icon={LayoutGrid}
+            icon={LayoutDashboard}
             tooltip="Dashboard"
             onClick={navigationHandlers.dashboard}
             isActive={isActive(ADMIN_PATH)}
@@ -99,7 +95,10 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
 
         <ProfileMenu userMenuItems={userMenuItems} getUserInitial={getUserInitial} />
 
-        <span className="text-[9px] font-medium tabular-nums text-muted-foreground/60" title={`App version ${APP_VERSION}`}>
+        <span
+          className="text-[9px] font-medium tabular-nums text-muted-foreground/60"
+          title={`App version ${APP_VERSION}`}
+        >
           v{APP_VERSION}
         </span>
       </div>

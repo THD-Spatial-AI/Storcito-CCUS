@@ -164,10 +164,7 @@
     "sidebar": {
       "energySimulations": "CCUS Simulace",
       "map": "Mapa",
-      "locations": "Polohy",
       "simulationReports": "Porovnání Modelů",
-      "technologies": "Technologie",
-      "transport": "Transport",
       "simulations": "Analysis Runs"
     },
     "menu": {
@@ -827,7 +824,11 @@
     "cannotCalculate": "Nelze vypočítat – nejsou vybrány žádné vhodné modely",
     "noWebserviceAvailable": "Simulační engine není k dispozici",
     "cancelled": "Zrušeno",
-    "modified": "Upraveno"
+    "modified": "Upraveno",
+    "estimateApproximate": "Tyto běhy předcházejí sledování fronty, skutečné čekání bude delší.",
+    "estimateOverdue": "trvá déle než obvykle",
+    "estimateRemaining": "zbývá ~{{duration}}",
+    "estimateUnavailable": "Nedostatek srovnatelných úspěšných běhů pro odhad"
   },
   "polygon": {
     "drawRegion": "Nakreslete svůj region",
@@ -1495,18 +1496,9 @@
         "title": "Interaktivní Mapa",
         "description": "Váš hlavní pracovní prostor pro geografickou analýzu. Prohlížejte vrstvy mapy, vybírejte oblasti pro hodnocení a vizualizujte data o energetickém riziku."
       },
-      "locations": {
-        "title": "Uložené Lokace",
-        "description": "Spravujte uložené lokace a oblasti zájmu. Rychlý přístup k často analyzovaným regionům."
-      },
       "reports": {
         "title": "Zprávy o Simulaci",
         "description": "Prohlížejte podrobné zprávy o simulaci, exportujte data a analyzujte historické trendy a vzorce."
-      },
-      "technologies": {
-        "title": "Technologie",
-        "description": "Spravujte energetické technologie jako solární panely, baterie a tepelná čerpadla. Konfigurujte parametry a přiřazujte je budovám.",
-        "tip": "Technologie mohou být přizpůsobeny pro každou budovu pro přesné CCUS simulace."
       },
       "layers": {
         "title": "Vrstvy Mapy",
@@ -1551,11 +1543,6 @@
         "description": "Nastavte časový interval pro výpočty. Vyšší rozlišení poskytuje podrobnější výsledky, ale zpracování trvá déle.",
         "tip": "60 minut je doporučeno pro většinu simulací"
       },
-      "technologies": {
-        "title": "Technologie a Parametry",
-        "description": "Konfigurujte energetické technologie (solární, baterie, tepelná čerpadla) a upravte pokročilé parametry simulace.",
-        "tip": "Klikněte pro zobrazení a přizpůsobení nastavení pro vaši simulaci"
-      },
       "mapContainer": {
         "title": "Interaktivní Mapa",
         "description": "Toto je váš hlavní pracovní prostor. Kreslte polygony na mapě pro výběr oblastí pro vaši CCUS simulaci.",
@@ -1593,11 +1580,6 @@
       "areaStatus": {
         "title": "AOI status",
         "description": "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
-      },
-      "optionalLayers": {
-        "title": "Risk signals",
-        "description": "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events.",
-        "tip": "Keep weather enabled for normal analysis runs; disabling it is useful only for a baseline comparison."
       },
       "finalReview": {
         "title": "Validation status",
@@ -1681,226 +1663,7 @@
     "chars": "chars",
     "previewEmpty": "Nothing to preview"
   },
-  "technologies": {
-    "title": "Technologie",
-    "subtitle": "Energetické technologie pro vaše simulace",
-    "loading": "Načítání technologií...",
-    "refresh": "Obnovit technologie",
-    "reseed": "Znovu načíst systémové technologie",
-    "documentation": "Dokumentace",
-    "importJson": "Importovat JSON",
-    "addTechnology": "Přidat Technologii",
-    "addParameter": "Přidat Parametr",
-    "parameters": "Parametry",
-    "total": "celkem",
-    "mine": "Moje",
-    "user": "Uživatel",
-    "youCreatedThis": "Vytvořili jste tuto technologii",
-    "userDefined": "Uživatelem definovaná technologie",
-    "viewParameters": "Zobrazit parametry",
-    "copyTechnology": "Kopírovat technologii",
-    "deleteTechnology": "Smazat technologii",
-    "editParameter": "Upravit parametr",
-    "deleteParameter": "Smazat parametr",
-    "systemTechnologies": "Systémové Technologie",
-    "userDefinedTechnologies": "Uživatelem Definované Technologie",
-    "dragDropHint": "Přetáhněte technologie mezi sekcemi pro změnu vlastnictví",
-    "dropToMakeSystem": "Přetáhněte sem pro systémovou technologii",
-    "dropToMakeUser": "Přetáhněte sem pro uživatelskou technologii",
-    "movedTo": "\"{{name}}\" přesunuto do {{target}} Technologií",
-    "failedToMove": "Nepodařilo se přesunout technologii",
-    "stats": {
-      "totalTechnologies": "Celkem Technologií",
-      "systemTechnologies": "Systémové",
-      "userTechnologies": "Uživatelem Definované",
-      "totalParameters": "Celkem Parametrů"
-    },
-    "form": {
-      "key": "Klíč",
-      "keyRequired": "Klíč je povinný",
-      "keyPlaceholder": "např., solar_supply",
-      "displayName": "Zobrazovaný Název",
-      "displayNameRequired": "Zobrazovaný název je povinný",
-      "displayNamePlaceholder": "např., Dodávka Solární Energie",
-      "description": "Popis",
-      "descriptionPlaceholder": "Stručný popis technologie...",
-      "icon": "Ikona",
-      "parametersOptional": "Parametry (Volitelné)",
-      "parameter": "Parametr",
-      "alias": "Alias",
-      "defaultValue": "Výchozí Hodnota",
-      "unit": "Jednotka",
-      "range": "Rozsah",
-      "min": "Min",
-      "max": "Max",
-      "keyFieldPlaceholder": "Klíč",
-      "aliasFieldPlaceholder": "Alias",
-      "defaultValuePlaceholder": "Výchozí Hodnota",
-      "unitPlaceholder": "Jednotka (volitelné)",
-      "minPlaceholder": "Min (volitelné)",
-      "maxPlaceholder": "Max (volitelné)"
-    },
-    "addModal": {
-      "title": "Přidat Novou Technologii",
-      "description": "Vytvořte novou technologii s vlastními parametry"
-    },
-    "copyModal": {
-      "title": "Kopírovat Technologii",
-      "description": "Vytvořte kopii {{name}} s novým názvem",
-      "uniqueIdentifier": "Jedinečný identifikátor (malá písmena, bez mezer)",
-      "name": "Název",
-      "copyAllParameters": "Toto zkopíruje všech {{count}} parametrů z \"{{name}}\""
-    },
-    "importModal": {
-      "title": "Importovat Technologie",
-      "description": "Vyberte, jak importovat {{count}} technologií",
-      "found": "V souboru nalezeno {{count}} technologií",
-      "existingSkipped": "Existující technologie se stejným klíčem budou přeskočeny.",
-      "importAsSystem": "Importovat jako Systémové Technologie",
-      "systemDescription": "Systémové technologie jsou viditelné pro všechny uživatele a nemohou být upravovány neodborníky."
-    },
-    "paramModal": {
-      "title": "Přidat Nový Parametr",
-      "description": "Přidat nový parametr k {{name}}",
-      "keyPlaceholder": "např., cont_efficiency",
-      "aliasPlaceholder": "např., Míra Účinnosti",
-      "descriptionPlaceholder": "Stručný popis toho, co tento parametr ovládá...",
-      "unitPlaceholder": "kW, %, atd."
-    },
-    "detailsModal": {
-      "viewAndEdit": "Zobrazit a upravit parametry technologie",
-      "selectFromOptions": "Vyberte z {{count}} možností",
-      "cancel": "Zrušit",
-      "close": "Zavřít",
-      "saveChanges": "Uložit Změny"
-    },
-    "confirm": {
-      "deleteTitle": "Smazat Technologii",
-      "deleteMessage": "Opravdu chcete smazat \"{{name}}\"? Tuto akci nelze vrátit zpět.",
-      "deleteParamTitle": "Smazat Parametr",
-      "deleteParamMessage": "Opravdu chcete smazat parametr \"{{name}}\"?"
-    },
-    "success": {
-      "added": "Technologie \"{{name}}\" úspěšně vytvořena",
-      "copied": "Technologie zkopírována jako \"{{name}}\"",
-      "deleted": "Technologie \"{{name}}\" smazána",
-      "imported": "Úspěšně importováno {{count}} technologií",
-      "paramAdded": "Parametr \"{{name}}\" přidán",
-      "paramDeleted": "Parametr \"{{name}}\" smazán",
-      "saved": "Změny úspěšně uloženy",
-      "reseeded": "Systémové technologie úspěšně znovu načteny"
-    },
-    "error": {
-      "loadFailed": "Nepodařilo se načíst technologie",
-      "addFailed": "Nepodařilo se přidat technologii",
-      "copyFailed": "Nepodařilo se zkopírovat technologii",
-      "deleteFailed": "Nepodařilo se smazat technologii",
-      "importFailed": "Nepodařilo se importovat technologie",
-      "paramAddFailed": "Nepodařilo se přidat parametr",
-      "paramDeleteFailed": "Nepodařilo se smazat parametr",
-      "saveFailed": "Nepodařilo se uložit změny",
-      "reseedFailed": "Nepodařilo se znovu načíst technologie",
-      "invalidFile": "Neplatný formát souboru"
-    },
-    "items": {
-      "battery_storage": {
-        "name": "Bateriové Úložiště",
-        "description": "Systém ukládání energie pomocí baterií pro vyrovnávání zátěže a záložní napájení"
-      },
-      "pv_supply": {
-        "name": "Fotovoltaické Zásobování",
-        "description": "Systém výroby solární fotovoltaické energie"
-      },
-      "wind_onshore": {
-        "name": "Zásobování Větrnou Turbínou",
-        "description": "Systém výroby energie z pobřežní větrné turbíny"
-      },
-      "biomass_supply": {
-        "name": "Zásobování Biomasou",
-        "description": "Elektrárna na biomasu pro výrobu obnovitelné energie z organických materiálů"
-      },
-      "geothermal_supply": {
-        "name": "Geotermální Zásobování",
-        "description": "Geotermální elektrárna využívající teplo země pro výrobu energie"
-      },
-      "water_supply": {
-        "name": "Vodní Zásobování",
-        "description": "Vodní elektrárna pro výrobu obnovitelné energie z proudu vody"
-      },
-      "households_supply": {
-        "name": "Zásobování domácích spotřebitelů",
-        "description": "Profil spotřeby energie pro domácnosti"
-      },
-      "non_households_supply": {
-        "name": "Zásobování nedomácích spotřebitelů",
-        "description": "Profil spotřeby energie pro komerční a průmyslový sektor"
-      }
-    },
-    "dragInstruction": "Přetáhněte technologie sem pro přidání do modelu",
-    "noTechnologies": "Žádné technologie přidány",
-    "categories": {
-      "supply": "Výroba",
-      "storage": "Úložiště",
-      "other": "Ostatní"
-    }
-  },
   "locations": {
-    "title": "Vlastní Polohy",
-    "subtitle": "Vytvářejte a spravujte polohy s klasifikacemi budov",
-    "refresh": "Obnovit polohy",
-    "newLocation": "Nová Poloha",
-    "newLocationTooltip": "Vytvořit novou vlastní polohu",
-    "searchPlaceholder": "Hledat polohy...",
-    "tabs": {
-      "my": "Moje Polohy",
-      "public": "Veřejné"
-    },
-    "stats": {
-      "total": "Celkem",
-      "totalArea": "Celková Plocha",
-      "totalDemand": "Celková Poptávka",
-      "public": "Veřejné",
-      "private": "Soukromé"
-    },
-    "empty": {
-      "title": "Nebyly nalezeny žádné polohy",
-      "description": "Vytvořte svou první vlastní polohu pro začátek",
-      "publicTitle": "Žádné veřejné polohy",
-      "publicDescription": "Veřejné polohy sdílené ostatními uživateli se zobrazí zde. Přepněte polohu na veřejnou pro sdílení."
-    },
-    "toggle": {
-      "makePublic": "Soukromá - Klikněte pro zveřejnění",
-      "makePrivate": "Veřejná - Klikněte pro změnu na soukromou",
-      "nowPublic": "Poloha je nyní veřejná",
-      "nowPrivate": "Poloha je nyní soukromá"
-    },
-    "share": {
-      "title": "Sdílet místo",
-      "description": "Sdílet \"{{name}}\" s uživateli, pracovními prostory nebo skupinami",
-      "tabs": {
-        "users": "Uživatelé",
-        "workspaces": "Pracovní prostory",
-        "groups": "Skupiny"
-      },
-      "userEmail": "E-mail uživatele",
-      "selectWorkspace": "Vybrat pracovní prostor",
-      "selectGroup": "Vybrat skupinu",
-      "addUser": "Sdílet s uživatelem",
-      "addWorkspace": "Sdílet s pracovním prostorem",
-      "addGroup": "Sdílet se skupinou",
-      "sharedWithUsers": "Sdíleno s uživateli",
-      "sharedWithWorkspaces": "Sdíleno s pracovními prostory",
-      "sharedWithGroups": "Sdíleno se skupinami",
-      "noUsersYet": "Zatím nesdíleno s uživateli",
-      "noWorkspacesYet": "Zatím nesdíleno s pracovními prostory",
-      "noGroupsYet": "Zatím nesdíleno se skupinami",
-      "removeAccess": "Odebrat přístup",
-      "totalShares": "{{count}} sdílení celkem",
-      "alreadySharedWithUser": "Toto místo je již s tímto uživatelem sdíleno",
-      "alreadySharedWithWorkspace": "Toto místo je již s tímto pracovním prostorem sdíleno",
-      "alreadySharedWithGroup": "Toto místo je již s touto skupinou sdíleno",
-      "failedToShare": "Sdílení se nezdařilo. Zkuste to prosím znovu."
-    },
     "Spain": "Spain",
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
@@ -2988,14 +2751,16 @@
     "registry": {
       "layer1Title": "Model Initialization",
       "layer1Subtitle": "Name and simulation timeframe",
-      "layer2Title": "Area Selection",
-      "layer2Subtitle": "Define where the model lives",
-      "layer3Title": "Risk Components",
-      "layer3Subtitle": "Choose which signals feed the model",
-      "layer4Title": "Final Review",
-      "layer4Subtitle": "Sanity check before run",
-      "layer5Title": "Save & Calculate",
-      "layer5Subtitle": "Persist and start the run"
+      "layer2Title": "Výběr uzlů",
+      "layer2Subtitle": "Vyberte zdroje a úložiště CO₂",
+      "layer3Title": "Trasy",
+      "layer3Subtitle": "Najít spojení mezi uzly",
+      "layer4Title": "Náklady",
+      "layer4Subtitle": "Náklady na dopravu podle spojení",
+      "layer5Title": "Závěrečná kontrola",
+      "layer5Subtitle": "Kontrola před spuštěním",
+      "layer6Title": "Uložit a Spočítat",
+      "layer6Subtitle": "Uložit a spustit výpočet"
     },
     "stepper": {
       "stepOf": "Step {{step}} of {{total}}",
@@ -3027,40 +2792,23 @@
       "dynamicSelected": "Selected range: {{start}} to {{end}} ({{days}} days).",
       "dynamicSelectedOne": "Selected range: {{start}} to {{end}} (1 day).",
       "dynamicSelectInside": "Select a range inside available dynamic dates: {{start}} to {{end}}",
-      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}"
+      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}",
+      "suggestedNamesLabel": "Rychlý výběr",
+      "suggestedName1": "Regionální hodnocení CO₂",
+      "suggestedName2": "Studie průmyslového klastru",
+      "suggestedName3": "Screening úložných lokalit",
+      "suggestedName4": "Čtvrtletní výhled zachytávání"
     },
     "layer2": {
-      "purpose": "Optionally upload a DTM to see its coverage, then draw inside it — or just draw on the bundled data.",
-      "nextStepHint": "Next we'll validate the selected area and model inputs.",
-      "terrainModel": "Terrain model (DTM)",
-      "dtmHint": "Optional GeoTIFF (.tif) — its coverage is shown on the map",
-      "dtmInfo": "A Digital Terrain Model — a GeoTIFF where each pixel is the ground elevation. Upload it first to see its coverage outline on the map, then draw your area inside it. Used to derive slope/aspect and as the spatial reference grid. If omitted, the bundled regional terrain is used.",
-      "readingDtm": "Reading DTM coverage…",
-      "coverageShown": "Coverage shown on the map — draw your area inside the outline.",
-      "drawArea": "Draw area",
-      "uploadGeoJson": "Upload GeoJSON",
-      "notSureFormat": "Not sure about the format?",
-      "formatDesc": "Polygon or MultiPolygon, WGS84 (EPSG:4326), [lon, lat] order.",
-      "sample": "Sample",
-      "statusUploaded": "GeoJSON boundary loaded from {{fileName}}.",
-      "statusUploadedNoName": "GeoJSON boundary loaded.",
-      "statusUploadPrompt": "Upload a GeoJSON file with Polygon or MultiPolygon geometry.",
-      "statusDrawn": "Area defined. You can keep adjusting it or move on.",
-      "statusDrawPrompt": "Click on the map to draw your area. Close the polygon to finish.",
-      "areaSummary": "Area summary",
-      "regions": "{{count}} regions",
-      "status": "Status",
-      "statusUploadedLabel": "Uploaded",
-      "statusDrawnLabel": "Drawn",
-      "statusNotSet": "Not set",
-      "area": "Area",
-      "perimeter": "Perimeter",
-      "blockingUploadGeoJson": "Upload a GeoJSON boundary file or switch back to draw.",
-      "blockingDrawArea": "Draw an area on the map to continue."
+      "purpose": "Vyberte zdroje a úložiště CO₂, mezi kterými model vede trasy.",
+      "nextStepHint": "Poté CO2RouteX vyhledá spojení mezi nimi.",
+      "nodesQuestion": "Které uzly má model použít?",
+      "nodesInfo": "Vyberte je zde nebo přímo v mapě.",
+      "blockingSelectNodes": "Pokračujte výběrem alespoň jednoho uzlu."
     },
     "layer3": {
-      "purpose": "These signals feed the AHP-weighted risk model. All three are enabled by default and recommended for an accurate analysis.",
-      "nextStepHint": "Next we'll do a final review before saving.",
+      "purpose": "CO2RouteX prověří vybrané uzly na možná spojení, poté je trasuje a spočítá náklady.",
+      "nextStepHint": "Dále uvidíte, kolik tyto trasy stojí.",
       "fwiLabel": "Weather signal (optional)",
       "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
       "fwiWeight": "30% weight",
@@ -3075,11 +2823,26 @@
       "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
       "weatherStationData": "Weather station data",
       "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
-      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used."
+      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used.",
+      "fwiInfo": "Index počasí spojuje vítr, relativní vlhkost, teplotu a sucho do jediné hodnoty. Má největší váhu, protože počasí se mění nejrychleji a výsledek ovlivňuje nejsilněji.",
+      "terrainInfo": "Sklon, nadmořská výška a orientace určují, jak se podmínky v oblasti liší — přivrácené svahy vysychají rychleji. Odvozeno z digitálního modelu terénu vaší oblasti.",
+      "historicalInfo": "Tam, kde už události nastaly, se obvykle opakují, protože přetrvávají jejich příčiny — využití území a dostupnost. Na základě zaznamenaných minulých incidentů v oblasti.",
+      "signalsQuestion": "Které signály mají vstupovat do modelu?",
+      "coreSignalsNote": "Vegetace (NDVI) a infrastruktura jsou vždy součástí modelu a nelze je vypnout. Vypnutím signálu výše se odebere jeho příspěvek k vážení — výpočet pokračuje se zbývajícími signály.",
+      "lockedByPrecomputed": "Zahrnuto v předpočítané regionální mapě. Vypněte přepínač výše, chcete-li vrstvy upravit.",
+      "precomputedLabel": "Předpočítaná regionální mapa",
+      "precomputedInfoLabel": "O předpočítané regionální mapě",
+      "precomputedInfo": "Každou noc se analyzuje celý region se všemi vrstvami. Pokud je vaše datum pokryto, výsledek pro vaši oblast se z této mapy vyřízne a je k dispozici během několika sekund. Vypněte ji (nebo přepněte jednotlivé vrstvy níže) a model spočítá všechny kroky přímo pro vaši oblast (~1-2 minuty).",
+      "precomputedRange": "Předpočítané mapy pokrývají přesně jeden den - zvolte stejné datum začátku a konce. U rozsahu model spočítá každý den vaší oblasti a vrátí den s maximem (~1-2 minuty).",
+      "precomputedUnavailable": "Noční analýza toto datum zatím nezpracovala. Model spočítá všechny kroky pro vaši oblast.",
+      "precomputedOnHint": "Výsledek během sekund, vyříznutý z noční analýzy celého regionu. Všechny tři vrstvy níže jsou zahrnuty, a proto uzamčeny.",
+      "precomputedOffHint": "Úplný výpočet přesně pro vaši oblast (~1-2 minuty); jednotlivé vrstvy níže můžete přepínat.",
+      "routesQuestion": "Jak jsou propojeny?",
+      "routesInfo": "Jedna trasa na dvojici zdroj-úložiště: potrubí, kamion nebo železnice."
     },
     "layer4": {
-      "purpose": "Real-time validation of the model configuration. Blockers must be cleared in their respective steps before the run can start.",
-      "nextStepHint": "Then you'll save the model and kick off the calculation.",
+      "purpose": "CAPEX potrubí roste s odporem trasy; kamion a železnice používají vzdálenostní tarify.",
+      "nextStepHint": "Následuje závěrečná kontrola před uložením.",
       "missingModelName": "Missing — go back to Step 1.",
       "missingDates": "Start or end date missing.",
       "loadingDynamic": "Loading available dynamic dates…",
@@ -3106,7 +2869,9 @@
         "areaOfInterest": "Area of interest",
         "riskComponents": "Risk components",
         "bufferDistance": "Buffer distance"
-      }
+      },
+      "costsQuestion": "Kolik tyto trasy stojí?",
+      "costsInfo": "Spočítáno z tras nalezených v předchozím kroku."
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -3138,6 +2903,69 @@
       "avoidBlank": "Avoid blank gaps",
       "blankDesc": "Blank areas have no valid source raster data for calculation.",
       "availableData": "Data available"
+    },
+    "mapHeader": {
+      "clearNodes": "Vymazat"
     }
+  },
+  "co2Nodes": {
+    "loading": "Načítání uzlů…",
+    "loadError": "Katalog uzlů se nepodařilo načíst.",
+    "searchPlaceholder": "Hledat podle názvu nebo id…",
+    "empty": "Žádné uzly neodpovídají.",
+    "selectionSummary": "Vybráno {{count}} — {{emitters}} zdrojů, {{sinks}} úložišť",
+    "types": {
+      "cement": "Cement",
+      "refinery": "Rafinerie",
+      "waste_to_energy": "Energetické využití odpadu",
+      "storage": "Úložiště",
+      "utilisation": "Využití",
+      "transport": "Doprava",
+      "bioenergy": "Bioenergie",
+      "biogas": "Bioplyn",
+      "chemicals": "Chemie",
+      "coal_power": "Uhelné elektrárny",
+      "emitter": "Ostatní zdroje",
+      "fossil_power": "Fosilní elektrárny",
+      "gas_power": "Plynové elektrárny",
+      "gas_processing": "Zpracování plynu",
+      "glass": "Sklo",
+      "industry": "Obecný průmysl",
+      "iron_and_steel": "Železo a ocel",
+      "pulp_and_paper": "Celulóza a papír"
+    },
+    "legend": {
+      "emitters": "Zdroje emisí",
+      "sinks": "Úložiště a využití",
+      "routes": "Možné přepravní trasy"
+    },
+    "catalogueEmpty": "Katalog uzlů je prázdný.",
+    "runConnections": "Najít spojení",
+    "runFailed": "Běh CO2RouteX selhal.",
+    "noRoutes": "Mezi vybranými uzly nejsou žádná možná spojení.",
+    "candidate": "možné",
+    "modes": {
+      "pipeline": "Potrubí",
+      "truck": "Kamion",
+      "railway": "Železnice"
+    },
+    "needTwoNodes": "Vyberte alespoň dva uzly.",
+    "previewOnly": "Náhled — výsledky se uloží s modelem.",
+    "countrySection": "Země",
+    "emittersSection": "Kategorie zdrojů",
+    "sinksSection": "Kategorie úložišť",
+    "expandCategory": "Zobrazit zařízení",
+    "selectAll": "Vybrat vše ({{count}})",
+    "clearCategory": "Zrušit",
+    "needEmitter": "Přidejte alespoň jeden zdroj — tam trasy začínají.",
+    "needDestination": "Přidejte uzel úložiště, využití nebo dopravy — trasy musí někde končit."
+  },
+  "co2Routing": {
+    "run": "Najít trasy"
+  },
+  "co2Costs": {
+    "running": "Výpočet stále běží — náklady se objeví po dokončení trasování.",
+    "noRun": "Vraťte se na Trasy a nejprve najděte spojení — náklady z nich vycházejí.",
+    "noCosts": "Žádné oceněné trasy. CAPEX potrubí vyžaduje trasované potrubí; tarify kamionu a železnice vyžadují trasované vzdálenosti."
   }
 }

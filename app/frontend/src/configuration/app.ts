@@ -7,7 +7,7 @@ export const config = {
     timeout: API_CONFIG.TIMEOUT,
   },
   app: {
-    name: 'app',
+    name: 'fire',
     version: APP_VERSION,
     environment: import.meta.env.MODE || 'development',
   },

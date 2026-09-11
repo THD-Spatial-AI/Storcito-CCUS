@@ -164,10 +164,7 @@
     "sidebar": {
       "energySimulations": "CCUS-simulaties",
       "map": "Kaart",
-      "locations": "Locaties",
       "simulationReports": "Modelvergelijking",
-      "technologies": "Technologieën",
-      "transport": "Transport",
       "simulations": "Analysis Runs"
     },
     "menu": {
@@ -827,7 +824,11 @@
     "cannotCalculate": "Kan niet berekenen – geen geschikte modellen geselecteerd",
     "noWebserviceAvailable": "Geen simulatie-engine beschikbaar",
     "cancelled": "Geannuleerd",
-    "modified": "Gewijzigd"
+    "modified": "Gewijzigd",
+    "estimateApproximate": "Die runs dateren van voor de wachtrijregistratie, dus de echte wachttijd is langer.",
+    "estimateOverdue": "duurt langer dan gebruikelijk",
+    "estimateRemaining": "~{{duration}} resterend",
+    "estimateUnavailable": "Te weinig vergelijkbare geslaagde runs voor een schatting"
   },
   "polygon": {
     "drawRegion": "Teken je regio",
@@ -1495,18 +1496,9 @@
         "title": "Interactieve Kaart",
         "description": "Uw belangrijkste werkruimte voor geografische analyse. Bekijk kaartlagen, selecteer gebieden voor beoordeling en visualiseer energierisicogegevens."
       },
-      "locations": {
-        "title": "Opgeslagen Locaties",
-        "description": "Beheer uw opgeslagen locaties en interessegebieden. Snelle toegang tot vaak geanalyseerde regio's."
-      },
       "reports": {
         "title": "Simulatierapporten",
         "description": "Bekijk gedetailleerde simulatierapporten, exporteer gegevens en analyseer historische trends en patronen."
-      },
-      "technologies": {
-        "title": "Technologieën",
-        "description": "Beheer energietechnologieën zoals zonnepanelen, batterijen en warmtepompen. Configureer parameters en wijs ze toe aan gebouwen.",
-        "tip": "Technologieën kunnen per gebouw worden aangepast voor nauwkeurige CCUS-simulaties."
       },
       "layers": {
         "title": "Kaartlagen",
@@ -1551,11 +1543,6 @@
         "description": "Stel het tijdsinterval in voor berekeningen. Hogere resolutie geeft gedetailleerdere resultaten maar duurt langer om te verwerken.",
         "tip": "60 minuten wordt aanbevolen voor de meeste simulaties"
       },
-      "technologies": {
-        "title": "Technologieën & Parameters",
-        "description": "Configureer energietechnologieën (zonne-energie, batterijen, warmtepompen) en verfijn geavanceerde simulatieparameters.",
-        "tip": "Klik om instellingen voor uw simulatie te bekijken en aan te passen"
-      },
       "mapContainer": {
         "title": "Interactieve Kaart",
         "description": "Dit is uw belangrijkste werkruimte. Teken polygonen op de kaart om gebieden te selecteren voor uw CCUS-simulatie.",
@@ -1593,11 +1580,6 @@
       "areaStatus": {
         "title": "AOI status",
         "description": "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
-      },
-      "optionalLayers": {
-        "title": "Risk signals",
-        "description": "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events.",
-        "tip": "Keep weather enabled for normal analysis runs; disabling it is useful only for a baseline comparison."
       },
       "finalReview": {
         "title": "Validation status",
@@ -1681,226 +1663,7 @@
     "chars": "chars",
     "previewEmpty": "Nothing to preview"
   },
-  "technologies": {
-    "title": "Technologieën",
-    "subtitle": "Energietechnologieën voor uw simulaties",
-    "loading": "Technologieën laden...",
-    "refresh": "Technologieën vernieuwen",
-    "reseed": "Systeemtechnologieën herladen",
-    "documentation": "Documentatie",
-    "importJson": "JSON importeren",
-    "addTechnology": "Technologie Toevoegen",
-    "addParameter": "Parameter Toevoegen",
-    "parameters": "Parameters",
-    "total": "totaal",
-    "mine": "Mijn",
-    "user": "Gebruiker",
-    "youCreatedThis": "U heeft deze technologie gemaakt",
-    "userDefined": "Door gebruiker gedefinieerde technologie",
-    "viewParameters": "Parameters bekijken",
-    "copyTechnology": "Technologie kopiëren",
-    "deleteTechnology": "Technologie verwijderen",
-    "editParameter": "Parameter bewerken",
-    "deleteParameter": "Parameter verwijderen",
-    "systemTechnologies": "Systeemtechnologieën",
-    "userDefinedTechnologies": "Door Gebruiker Gedefinieerde Technologieën",
-    "dragDropHint": "Sleep technologieën tussen secties om eigenaarschap te wijzigen",
-    "dropToMakeSystem": "Hier neerzetten om systeemtechnologie te maken",
-    "dropToMakeUser": "Hier neerzetten om gebruikerstechnologie te maken",
-    "movedTo": "\"{{name}}\" verplaatst naar {{target}} Technologieën",
-    "failedToMove": "Kan technologie niet verplaatsen",
-    "stats": {
-      "totalTechnologies": "Totaal Technologieën",
-      "systemTechnologies": "Systeem",
-      "userTechnologies": "Door Gebruiker Gedefinieerd",
-      "totalParameters": "Totaal Parameters"
-    },
-    "form": {
-      "key": "Sleutel",
-      "keyRequired": "Sleutel is verplicht",
-      "keyPlaceholder": "bijv., solar_supply",
-      "displayName": "Weergavenaam",
-      "displayNameRequired": "Weergavenaam is verplicht",
-      "displayNamePlaceholder": "bijv., Zonne-energievoorziening",
-      "description": "Beschrijving",
-      "descriptionPlaceholder": "Korte beschrijving van de technologie...",
-      "icon": "Pictogram",
-      "parametersOptional": "Parameters (Optioneel)",
-      "parameter": "Parameter",
-      "alias": "Alias",
-      "defaultValue": "Standaardwaarde",
-      "unit": "Eenheid",
-      "range": "Bereik",
-      "min": "Min",
-      "max": "Max",
-      "keyFieldPlaceholder": "Sleutel",
-      "aliasFieldPlaceholder": "Alias",
-      "defaultValuePlaceholder": "Standaardwaarde",
-      "unitPlaceholder": "Eenheid (optioneel)",
-      "minPlaceholder": "Min (optioneel)",
-      "maxPlaceholder": "Max (optioneel)"
-    },
-    "addModal": {
-      "title": "Nieuwe Technologie Toevoegen",
-      "description": "Maak een nieuwe technologie met aangepaste parameters"
-    },
-    "copyModal": {
-      "title": "Technologie Kopiëren",
-      "description": "Maak een kopie van {{name}} met een nieuwe naam",
-      "uniqueIdentifier": "Unieke identificatie (kleine letters, geen spaties)",
-      "name": "Naam",
-      "copyAllParameters": "Dit kopieert alle {{count}} parameters van \"{{name}}\""
-    },
-    "importModal": {
-      "title": "Technologieën Importeren",
-      "description": "Kies hoe de {{count}} technologieën geïmporteerd moeten worden",
-      "found": "{{count}} technologieën gevonden in bestand",
-      "existingSkipped": "Bestaande technologieën met dezelfde sleutel worden overgeslagen.",
-      "importAsSystem": "Importeren als Systeemtechnologieën",
-      "systemDescription": "Systeemtechnologieën zijn zichtbaar voor alle gebruikers en kunnen niet worden bewerkt door niet-experts."
-    },
-    "paramModal": {
-      "title": "Nieuwe Parameter Toevoegen",
-      "description": "Voeg een nieuwe parameter toe aan {{name}}",
-      "keyPlaceholder": "bijv., cont_efficiency",
-      "aliasPlaceholder": "bijv., Efficiëntiegraad",
-      "descriptionPlaceholder": "Korte beschrijving van wat deze parameter bestuurt...",
-      "unitPlaceholder": "kW, %, enz."
-    },
-    "detailsModal": {
-      "viewAndEdit": "Technologieparameters bekijken en bewerken",
-      "selectFromOptions": "Selecteer uit {{count}} opties",
-      "cancel": "Annuleren",
-      "close": "Sluiten",
-      "saveChanges": "Wijzigingen Opslaan"
-    },
-    "confirm": {
-      "deleteTitle": "Technologie Verwijderen",
-      "deleteMessage": "Weet u zeker dat u \"{{name}}\" wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
-      "deleteParamTitle": "Parameter Verwijderen",
-      "deleteParamMessage": "Weet u zeker dat u de parameter \"{{name}}\" wilt verwijderen?"
-    },
-    "success": {
-      "added": "Technologie \"{{name}}\" succesvol aangemaakt",
-      "copied": "Technologie gekopieerd als \"{{name}}\"",
-      "deleted": "Technologie \"{{name}}\" verwijderd",
-      "imported": "{{count}} technologieën succesvol geïmporteerd",
-      "paramAdded": "Parameter \"{{name}}\" toegevoegd",
-      "paramDeleted": "Parameter \"{{name}}\" verwijderd",
-      "saved": "Wijzigingen succesvol opgeslagen",
-      "reseeded": "Systeemtechnologieën succesvol herladen"
-    },
-    "error": {
-      "loadFailed": "Kan technologieën niet laden",
-      "addFailed": "Kan technologie niet toevoegen",
-      "copyFailed": "Kan technologie niet kopiëren",
-      "deleteFailed": "Kan technologie niet verwijderen",
-      "importFailed": "Kan technologieën niet importeren",
-      "paramAddFailed": "Kan parameter niet toevoegen",
-      "paramDeleteFailed": "Kan parameter niet verwijderen",
-      "saveFailed": "Kan wijzigingen niet opslaan",
-      "reseedFailed": "Kan technologieën niet herladen",
-      "invalidFile": "Ongeldig bestandsformaat"
-    },
-    "items": {
-      "battery_storage": {
-        "name": "Batterijopslag",
-        "description": "Energieopslagsysteem met batterijen voor lastbalancering en noodstroom"
-      },
-      "pv_supply": {
-        "name": "Fotovoltaïsche Voorziening",
-        "description": "Zonne-energie fotovoltaïsch opwekkingssysteem"
-      },
-      "wind_onshore": {
-        "name": "Windturbine Voorziening",
-        "description": "Onshore windturbine energieopwekkingssysteem"
-      },
-      "biomass_supply": {
-        "name": "Biomassa Voorziening",
-        "description": "Biomassacentrale voor duurzame energieopwekking uit organisch materiaal"
-      },
-      "geothermal_supply": {
-        "name": "Geothermische Voorziening",
-        "description": "Geothermische centrale die aardwarmte benut voor energieopwekking"
-      },
-      "water_supply": {
-        "name": "Waterkracht Voorziening",
-        "description": "Waterkrachtcentrale voor duurzame energieopwekking uit waterstroming"
-      },
-      "households_supply": {
-        "name": "Huishoudelijke verbruikers voorziening",
-        "description": "Energieverbruiksprofiel voor woningen"
-      },
-      "non_households_supply": {
-        "name": "Niet-huishoudelijke verbruikers voorziening",
-        "description": "Energieverbruiksprofiel voor commerciële en industriële gebouwen"
-      }
-    },
-    "dragInstruction": "Sleep technologieën hierheen om ze aan uw model toe te voegen",
-    "noTechnologies": "Geen technologieën toegevoegd",
-    "categories": {
-      "supply": "Productie",
-      "storage": "Opslag",
-      "other": "Overig"
-    }
-  },
   "locations": {
-    "title": "Aangepaste Locaties",
-    "subtitle": "Maak en beheer locaties met gebouwclassificaties",
-    "refresh": "Locaties vernieuwen",
-    "newLocation": "Nieuwe Locatie",
-    "newLocationTooltip": "Maak een nieuwe aangepaste locatie",
-    "searchPlaceholder": "Zoek locaties...",
-    "tabs": {
-      "my": "Mijn Locaties",
-      "public": "Openbaar"
-    },
-    "stats": {
-      "total": "Totaal",
-      "totalArea": "Totale Oppervlakte",
-      "totalDemand": "Totale Vraag",
-      "public": "Openbaar",
-      "private": "Privé"
-    },
-    "empty": {
-      "title": "Geen locaties gevonden",
-      "description": "Maak uw eerste aangepaste locatie om te beginnen",
-      "publicTitle": "Geen openbare locaties",
-      "publicDescription": "Openbare locaties gedeeld door andere gebruikers verschijnen hier. Zet een locatie op openbaar om te delen."
-    },
-    "toggle": {
-      "makePublic": "Privé - Klik om openbaar te maken",
-      "makePrivate": "Openbaar - Klik om privé te maken",
-      "nowPublic": "Locatie is nu openbaar",
-      "nowPrivate": "Locatie is nu privé"
-    },
-    "share": {
-      "title": "Locatie delen",
-      "description": "\"{{name}}\" delen met gebruikers, werkruimtes of groepen",
-      "tabs": {
-        "users": "Gebruikers",
-        "workspaces": "Werkruimtes",
-        "groups": "Groepen"
-      },
-      "userEmail": "E-mail gebruiker",
-      "selectWorkspace": "Werkruimte selecteren",
-      "selectGroup": "Groep selecteren",
-      "addUser": "Delen met gebruiker",
-      "addWorkspace": "Delen met werkruimte",
-      "addGroup": "Delen met groep",
-      "sharedWithUsers": "Gedeeld met gebruikers",
-      "sharedWithWorkspaces": "Gedeeld met werkruimtes",
-      "sharedWithGroups": "Gedeeld met groepen",
-      "noUsersYet": "Nog niet gedeeld met gebruikers",
-      "noWorkspacesYet": "Nog niet gedeeld met werkruimtes",
-      "noGroupsYet": "Nog niet gedeeld met groepen",
-      "removeAccess": "Toegang verwijderen",
-      "totalShares": "{{count}} deling(en) in totaal",
-      "alreadySharedWithUser": "Deze locatie is al gedeeld met deze gebruiker",
-      "alreadySharedWithWorkspace": "Deze locatie is al gedeeld met deze werkruimte",
-      "alreadySharedWithGroup": "Deze locatie is al gedeeld met deze groep",
-      "failedToShare": "Delen mislukt. Probeer het opnieuw."
-    },
     "Spain": "Spain",
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
@@ -2988,14 +2751,16 @@
     "registry": {
       "layer1Title": "Model Initialization",
       "layer1Subtitle": "Name and simulation timeframe",
-      "layer2Title": "Area Selection",
-      "layer2Subtitle": "Define where the model lives",
-      "layer3Title": "Risk Components",
-      "layer3Subtitle": "Choose which signals feed the model",
-      "layer4Title": "Final Review",
-      "layer4Subtitle": "Sanity check before run",
-      "layer5Title": "Save & Calculate",
-      "layer5Subtitle": "Persist and start the run"
+      "layer2Title": "Knooppuntselectie",
+      "layer2Subtitle": "Kies de CO₂-bronnen en -putten",
+      "layer3Title": "Routes",
+      "layer3Subtitle": "Verbindingen tussen de knooppunten zoeken",
+      "layer4Title": "Kosten",
+      "layer4Subtitle": "Transportkosten per verbinding",
+      "layer5Title": "Laatste controle",
+      "layer5Subtitle": "Controle voor de run",
+      "layer6Title": "Opslaan & Berekenen",
+      "layer6Subtitle": "Bewaren en de run starten"
     },
     "stepper": {
       "stepOf": "Step {{step}} of {{total}}",
@@ -3027,40 +2792,23 @@
       "dynamicSelected": "Selected range: {{start}} to {{end}} ({{days}} days).",
       "dynamicSelectedOne": "Selected range: {{start}} to {{end}} (1 day).",
       "dynamicSelectInside": "Select a range inside available dynamic dates: {{start}} to {{end}}",
-      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}"
+      "dynamicAvailable": "Available dynamic dates: {{start}} to {{end}}",
+      "suggestedNamesLabel": "Snelle keuzes",
+      "suggestedName1": "Regionale CO₂-beoordeling",
+      "suggestedName2": "Studie industriecluster",
+      "suggestedName3": "Screening opslaglocaties",
+      "suggestedName4": "Kwartaalvooruitzicht afvang"
     },
     "layer2": {
-      "purpose": "Optionally upload a DTM to see its coverage, then draw inside it — or just draw on the bundled data.",
-      "nextStepHint": "Next we'll validate the selected area and model inputs.",
-      "terrainModel": "Terrain model (DTM)",
-      "dtmHint": "Optional GeoTIFF (.tif) — its coverage is shown on the map",
-      "dtmInfo": "A Digital Terrain Model — a GeoTIFF where each pixel is the ground elevation. Upload it first to see its coverage outline on the map, then draw your area inside it. Used to derive slope/aspect and as the spatial reference grid. If omitted, the bundled regional terrain is used.",
-      "readingDtm": "Reading DTM coverage…",
-      "coverageShown": "Coverage shown on the map — draw your area inside the outline.",
-      "drawArea": "Draw area",
-      "uploadGeoJson": "Upload GeoJSON",
-      "notSureFormat": "Not sure about the format?",
-      "formatDesc": "Polygon or MultiPolygon, WGS84 (EPSG:4326), [lon, lat] order.",
-      "sample": "Sample",
-      "statusUploaded": "GeoJSON boundary loaded from {{fileName}}.",
-      "statusUploadedNoName": "GeoJSON boundary loaded.",
-      "statusUploadPrompt": "Upload a GeoJSON file with Polygon or MultiPolygon geometry.",
-      "statusDrawn": "Area defined. You can keep adjusting it or move on.",
-      "statusDrawPrompt": "Click on the map to draw your area. Close the polygon to finish.",
-      "areaSummary": "Area summary",
-      "regions": "{{count}} regions",
-      "status": "Status",
-      "statusUploadedLabel": "Uploaded",
-      "statusDrawnLabel": "Drawn",
-      "statusNotSet": "Not set",
-      "area": "Area",
-      "perimeter": "Perimeter",
-      "blockingUploadGeoJson": "Upload a GeoJSON boundary file or switch back to draw.",
-      "blockingDrawArea": "Draw an area on the map to continue."
+      "purpose": "Kies de CO₂-bronnen en -putten waartussen dit model routeert.",
+      "nextStepHint": "Daarna zoekt CO2RouteX verbindingen tussen de knooppunten.",
+      "nodesQuestion": "Welke knooppunten moet het model gebruiken?",
+      "nodesInfo": "Kies ze hier of direct op de kaart.",
+      "blockingSelectNodes": "Selecteer minstens één knooppunt om door te gaan."
     },
     "layer3": {
-      "purpose": "These signals feed the AHP-weighted risk model. All three are enabled by default and recommended for an accurate analysis.",
-      "nextStepHint": "Next we'll do a final review before saving.",
+      "purpose": "CO2RouteX onderzoekt de gekozen knooppunten op mogelijke verbindingen en berekent route en kosten.",
+      "nextStepHint": "Daarna ziet u wat die routes kosten.",
       "fwiLabel": "Weather signal (optional)",
       "fwiHint": "Wind, humidity, temperature, drought — the strongest driver",
       "fwiWeight": "30% weight",
@@ -3075,11 +2823,26 @@
       "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
       "weatherStationData": "Weather station data",
       "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
-      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used."
+      "weatherStationInfo": "Hourly weather measurements from a local station — temperature, humidity, wind and precipitation. Used to compute the Weather Index for this area. Upload an Excel or CSV export; if omitted, the bundled regional weather data is used.",
+      "fwiInfo": "De weerindex combineert wind, relatieve luchtvochtigheid, temperatuur en droogte tot één maat. Deze weegt het zwaarst omdat het weer het snelst verandert en het resultaat het sterkst beïnvloedt.",
+      "terrainInfo": "Helling, hoogte en expositie bepalen hoe de omstandigheden binnen het gebied variëren — hellingen op het zuiden drogen sneller uit. Afgeleid van het digitale terreinmodel van uw gebied.",
+      "historicalInfo": "Waar zich eerder gebeurtenissen voordeden, herhalen die zich vaak, omdat de onderliggende oorzaken — landgebruik en bereikbaarheid — blijven bestaan. Op basis van geregistreerde eerdere incidenten in het gebied.",
+      "signalsQuestion": "Welke signalen moeten het model voeden?",
+      "coreSignalsNote": "Vegetatie (NDVI) en infrastructuur maken altijd deel uit van het model en kunnen niet worden uitgeschakeld. Een signaal hierboven uitschakelen verwijdert de bijdrage aan de weging — de run gaat verder met de overige signalen.",
+      "lockedByPrecomputed": "Opgenomen in de voorberekende regiokaart. Schakel de schakelaar hierboven uit om lagen aan te passen.",
+      "precomputedLabel": "Voorberekende regiokaart",
+      "precomputedInfoLabel": "Over de voorberekende regiokaart",
+      "precomputedInfo": "Elke nacht wordt de hele regio geanalyseerd met alle lagen ingeschakeld. Als uw datum gedekt is, wordt het resultaat voor uw gebied uit die kaart geknipt en is het binnen seconden beschikbaar. Schakel het uit (of zet losse lagen hieronder aan/uit) om alle stappen specifiek voor uw gebied te berekenen (~1-2 minuten).",
+      "precomputedRange": "Voorberekende kaarten dekken precies één dag - kies dezelfde begin- en einddatum om er een te gebruiken. Bij een bereik berekent het model elke dag voor uw gebied en geeft de piekdag terug (~1-2 minuten).",
+      "precomputedUnavailable": "De nachtelijke analyse heeft deze datum nog niet verwerkt. Het model berekent alle stappen voor uw gebied.",
+      "precomputedOnHint": "Resultaat in seconden, geknipt uit de nachtelijke analyse van de hele regio. Alle drie de lagen hieronder zijn opgenomen en daarom vergrendeld.",
+      "precomputedOffHint": "Volledige berekening voor precies uw gebied (~1-2 minuten); u kunt losse lagen hieronder aan- of uitzetten.",
+      "routesQuestion": "Hoe zijn ze verbonden?",
+      "routesInfo": "Eén route per bron-putpaar, via pijpleiding, vrachtwagen of spoor."
     },
     "layer4": {
-      "purpose": "Real-time validation of the model configuration. Blockers must be cleared in their respective steps before the run can start.",
-      "nextStepHint": "Then you'll save the model and kick off the calculation.",
+      "purpose": "Pijpleiding-CAPEX schaalt met routeweerstand; vrachtwagen en spoor gebruiken afstandstarieven.",
+      "nextStepHint": "Daarna volgt de laatste controle voor het opslaan.",
       "missingModelName": "Missing — go back to Step 1.",
       "missingDates": "Start or end date missing.",
       "loadingDynamic": "Loading available dynamic dates…",
@@ -3106,7 +2869,9 @@
         "areaOfInterest": "Area of interest",
         "riskComponents": "Risk components",
         "bufferDistance": "Buffer distance"
-      }
+      },
+      "costsQuestion": "Wat kosten deze routes?",
+      "costsInfo": "Berekend uit de routes uit de vorige stap."
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -3138,6 +2903,69 @@
       "avoidBlank": "Avoid blank gaps",
       "blankDesc": "Blank areas have no valid source raster data for calculation.",
       "availableData": "Data available"
+    },
+    "mapHeader": {
+      "clearNodes": "Wissen"
     }
+  },
+  "co2Nodes": {
+    "loading": "Knooppunten laden…",
+    "loadError": "De knooppuntcatalogus kon niet worden geladen.",
+    "searchPlaceholder": "Zoek op naam of id…",
+    "empty": "Geen knooppunten gevonden.",
+    "selectionSummary": "{{count}} geselecteerd — {{emitters}} emitters, {{sinks}} putten",
+    "types": {
+      "cement": "Cement",
+      "refinery": "Raffinaderij",
+      "waste_to_energy": "Afvalverwerking",
+      "storage": "Opslag",
+      "utilisation": "Benutting",
+      "transport": "Transport",
+      "bioenergy": "Bio-energie",
+      "biogas": "Biogas",
+      "chemicals": "Chemie",
+      "coal_power": "Kolencentrales",
+      "emitter": "Overige emittenten",
+      "fossil_power": "Fossiele centrales",
+      "gas_power": "Gascentrales",
+      "gas_processing": "Gasverwerking",
+      "glass": "Glas",
+      "industry": "Algemene industrie",
+      "iron_and_steel": "IJzer en staal",
+      "pulp_and_paper": "Pulp en papier"
+    },
+    "legend": {
+      "emitters": "Emissiebronnen",
+      "sinks": "Opslag en benutting",
+      "routes": "Mogelijke transportroutes"
+    },
+    "catalogueEmpty": "De knooppuntcatalogus is leeg.",
+    "runConnections": "Verbindingen zoeken",
+    "runFailed": "De CO2RouteX-run is mislukt.",
+    "noRoutes": "Geen mogelijke verbindingen tussen de gekozen knooppunten.",
+    "candidate": "mogelijk",
+    "modes": {
+      "pipeline": "Pijpleiding",
+      "truck": "Vrachtwagen",
+      "railway": "Spoor"
+    },
+    "needTwoNodes": "Selecteer minstens twee knooppunten.",
+    "previewOnly": "Voorbeeld — resultaten worden opgeslagen met het model.",
+    "countrySection": "Land",
+    "emittersSection": "Emittentcategorieën",
+    "sinksSection": "Putcategorieën",
+    "expandCategory": "Locaties tonen",
+    "selectAll": "Alle {{count}} selecteren",
+    "clearCategory": "Wissen",
+    "needEmitter": "Voeg minstens één emittent toe — daar beginnen routes.",
+    "needDestination": "Voeg een opslag-, gebruiks- of transportknooppunt toe — routes moeten ergens eindigen."
+  },
+  "co2Routing": {
+    "run": "Routes zoeken"
+  },
+  "co2Costs": {
+    "running": "De run loopt nog — kosten verschijnen zodra het routeren klaar is.",
+    "noRun": "Ga terug naar Routes en zoek eerst verbindingen — de kosten volgen daaruit.",
+    "noCosts": "Geen berekende routes. Pijpleiding-CAPEX vraagt een geroute pijpleiding; vrachtwagen- en spoortarieven vragen geroute afstanden."
   }
 }
