@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { dateRangeHasOnlyAvailableDates } from "@/features/configurator/utils/dateAvailability";
 
 import { LayerShell } from "./shared/LayerShell";
+import { QuestionSection } from "../wizard";
 import type { ConfiguratorContext } from "./types";
 
 function formatDateValue(value: { year: number; month: number; day: number }) {
@@ -101,71 +102,94 @@ export const Layer1ModelInit: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => {
 
     return (
         <LayerShell
-            purpose={t("configurator.layer1.purpose", "Name this analysis run and choose the date window you want to assess.")}
+            purpose={t("configurator.layer1.purpose", "Name this simulation and choose the date window you want to assess.")}
             nextStepHint={t("configurator.layer1.nextStepHint", "Next you'll outline the geographic area on the map.")}
         >
-            <div className="space-y-3">
-                <div data-tour="model-name">
-                    <label htmlFor="layer-model-name" className="block text-xs font-medium text-foreground mb-1">
-                        {t("configurator.layer1.modelNameLabel", "Model name")} <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                        id="layer-model-name"
-                        type="text"
-                        value={state.modelName}
-                        onChange={handleModelNameChange}
-                        placeholder={t("configurator.layer1.modelNamePlaceholder", "e.g. Sample Area Summer 2026")}
-                        className="w-full px-2.5 py-1.5 border border-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none bg-background dark:bg-gray-700 text-foreground text-sm transition-colors"
-                    />
-                    <p className="text-[11px] text-muted-foreground mt-1">{t("configurator.layer1.modelNameHint", "A descriptive name so you can find this model later.")}</p>
-                </div>
+            <div className="space-y-8">
+                <QuestionSection
+                    index={1}
+                    title={t("configurator.layer1.modelNameQuestion", "What do you want to call this model?")}
+                    description={t("configurator.layer1.modelNameHint", "So you can find it later.")}
+                >
+                    <div data-tour="model-name">
+                        <input
+                            id="layer-model-name"
+                            type="text"
+                            value={state.modelName}
+                            onChange={handleModelNameChange}
+                            placeholder={t("configurator.layer1.modelNamePlaceholder", "e.g. Summer 2026 Assessment")}
+                            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-colors duration-150 hover:border-muted-foreground/40 focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                        {!state.modelName.trim() && (
+                            <div className="md-fade-in mt-2 flex flex-wrap items-center gap-1.5">
+                                <span className="text-[11px] text-muted-foreground">
+                                    {t("configurator.layer1.suggestedNamesLabel", "Quick picks")}:
+                                </span>
+                                {[1, 2, 3, 4].map((n) => {
+                                    const suggestion = t(`configurator.layer1.suggestedName${n}`);
+                                    return (
+                                        <button
+                                            key={n}
+                                            type="button"
+                                            onClick={() => actions.setModelName(suggestion)}
+                                            className="rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors duration-150 hover:border-muted-foreground/40 hover:bg-muted hover:text-foreground"
+                                        >
+                                            {suggestion}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </QuestionSection>
 
+                <QuestionSection
+                    index={2}
+                    title={t("configurator.layer1.periodQuestion", "Which period should it assess?")}
+                >
                 <div data-tour="date-range">
-                    <DateRangePicker
-                        value={dynamicRangeValue}
-                        minValue={dynamicBounds.minValue}
-                        maxValue={dynamicBounds.maxValue}
-                        isDateUnavailable={isDynamicDateUnavailable}
-                        allowsNonContiguousRanges={false}
-                        isDisabled={isDynamicPickerDisabled}
-                        onChange={handleDynamicRangeChange}
-                        className="*:not-first:mt-1"
-                    >
-                        <Label className="text-foreground text-xs font-medium">
-                            {t("simulation.simulationPeriod")} <span className="text-red-500">*</span>
-                        </Label>
-                        <p className="mb-1 mt-0.5 text-[11px] leading-snug text-muted-foreground">
-                            {t("configurator.layer1.dynamicHint", "Dynamic runs keep the selected date range and use the 16:00 to 17:00 window.")}
+                        <DateRangePicker
+                            value={dynamicRangeValue}
+                            minValue={dynamicBounds.minValue}
+                            maxValue={dynamicBounds.maxValue}
+                            isDateUnavailable={isDynamicDateUnavailable}
+                            allowsNonContiguousRanges={false}
+                            isDisabled={isDynamicPickerDisabled}
+                            onChange={handleDynamicRangeChange}
+                            className="*:not-first:mt-1"
+                        >
+                            <Label className="text-foreground text-xs font-medium">
+                                {t("simulation.simulationPeriod")} <span className="text-destructive">*</span>
+                            </Label>
+                            <div className="flex">
+                                <Group className={cn(DATE_INPUT_STYLE, "xl:px-0 lg:px-2 relative")}>
+                                    <DateInput slot="start" unstyled className="text-xs pl-2.5 pr-1 py-1.5 flex-1" />
+                                    <span aria-hidden="true" className="text-muted-foreground/70 px-1.5 py-1.5">–</span>
+                                    <DateInput slot="end" unstyled className="text-xs pl-1 pr-9 py-1.5 flex-1" />
+                                    <Trigger className="text-muted-foreground/80 hover:text-foreground absolute inset-0 flex items-center justify-end pr-2.5 cursor-pointer">
+                                        <CalendarIcon size={14} />
+                                    </Trigger>
+                                </Group>
+                            </div>
+                            <Popover className="bg-popover z-50 rounded-md border border-border shadow-lg outline-hidden" offset={4}>
+                                <Dialog className="max-h-[inherit] overflow-auto p-2">
+                                    <RangeCalendar
+                                        onChange={handleDynamicRangeChange}
+                                        minValue={dynamicBounds.minValue}
+                                        maxValue={dynamicBounds.maxValue}
+                                        minYear={dynamicBounds.minYear}
+                                        maxYear={dynamicBounds.maxYear}
+                                        isDateUnavailable={isDynamicDateUnavailable}
+                                        allowsNonContiguousRanges={false}
+                                    />
+                                </Dialog>
+                            </Popover>
+                        </DateRangePicker>
+                        <p className="md-fade-in mt-1 text-[11px] text-muted-foreground" data-tour="calculation-status">
+                            {dynamicDateStatus}
                         </p>
-                        <div className="flex">
-                            <Group className={cn(DATE_INPUT_STYLE, "xl:px-0 lg:px-2 relative dark:bg-gray-700 dark:border-gray-600")}>
-                                <DateInput slot="start" unstyled className="text-xs pl-2.5 pr-1 py-1.5 flex-1" />
-                                <span aria-hidden="true" className="text-muted-foreground/70 px-1.5 py-1.5">–</span>
-                                <DateInput slot="end" unstyled className="text-xs pl-1 pr-9 py-1.5 flex-1" />
-                                <Trigger className="text-muted-foreground/80 hover:text-foreground absolute inset-0 flex items-center justify-end pr-2.5 cursor-pointer">
-                                    <CalendarIcon size={14} />
-                                </Trigger>
-                            </Group>
-                        </div>
-                        <Popover className="bg-background dark:bg-gray-800 z-50 rounded-md border border-border shadow-lg outline-hidden" offset={4}>
-                            <Dialog className="max-h-[inherit] overflow-auto p-2">
-                                <RangeCalendar
-                                    onChange={handleDynamicRangeChange}
-                                    minValue={dynamicBounds.minValue}
-                                    maxValue={dynamicBounds.maxValue}
-                                    minYear={dynamicBounds.minYear}
-                                    maxYear={dynamicBounds.maxYear}
-                                    isDateUnavailable={isDynamicDateUnavailable}
-                                    allowsNonContiguousRanges={false}
-                                />
-                            </Dialog>
-                        </Popover>
-                    </DateRangePicker>
-                    <p className="mt-1 text-[11px] text-muted-foreground" data-tour="calculation-status">
-                        {dynamicDateStatus}
-                    </p>
                 </div>
-
+                </QuestionSection>
             </div>
         </LayerShell>
     );

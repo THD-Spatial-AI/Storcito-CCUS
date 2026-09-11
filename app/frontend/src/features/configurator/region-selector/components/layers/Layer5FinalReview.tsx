@@ -27,7 +27,7 @@ const TONES: Record<CheckStatus, string> = {
 };
 
 const buildChecks = (ctx: ConfiguratorContext, t: (key: string, data?: any) => string): CheckResult[] => {
-    const { state, allPolygonsCount, areaStats, optionalLayers } = ctx;
+    const { state, selectedNodeCount } = ctx;
     const checks: CheckResult[] = [];
 
     checks.push(
@@ -44,7 +44,7 @@ const buildChecks = (ctx: ConfiguratorContext, t: (key: string, data?: any) => s
         } else if (state.dynamicDatesError) {
             checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "fail", detail: state.dynamicDatesError });
         } else if (state.fromDate > state.toDate) {
-            checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "fail", detail: t("configurator.layer4.dynamicRequiresBefore", "Dynamic mode requires start before end.") });
+            checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "fail", detail: t("configurator.layer4.dynamicRequiresBefore", "Start date must be before end date.") });
         } else if (!dateRangeHasOnlyAvailableDates(state.fromDate, state.toDate, state.availableDynamicDates)) {
             checks.push({
                 label: t("configurator.layer4.labels.timeframe", "Timeframe"),
@@ -60,53 +60,23 @@ const buildChecks = (ctx: ConfiguratorContext, t: (key: string, data?: any) => s
         }
     }
 
-    if (allPolygonsCount === 0) {
+    if (selectedNodeCount === 0) {
         checks.push({
-            label: t("configurator.layer4.labels.areaOfInterest", "Area of interest"),
+            label: t("configurator.layer4.labels.nodes", "Nodes"),
             status: "fail",
-            detail:
-                state.areaInputMode === "upload"
-                    ? t("configurator.layer4.noGeoJson", "No GeoJSON uploaded.")
-                    : t("configurator.layer4.noPolygon", "No polygon drawn on the map."),
-        });
-    } else if (state.areaInputMode === "upload" && !state.uploadedGeoJsonName) {
-        checks.push({ label: t("configurator.layer4.labels.areaOfInterest", "Area of interest"), status: "fail", detail: t("configurator.layer4.uploadIncomplete", "GeoJSON upload incomplete.") });
-    } else {
-        checks.push({
-            label: t("configurator.layer4.labels.areaOfInterest", "Area of interest"),
-            status: "pass",
-            detail: allPolygonsCount === 1 ? t("configurator.layer4.areaDetailsSingle", { area: areaStats?.area ?? "—", defaultValue: `1 region · ${areaStats?.area ?? "—"}` }) : t("configurator.layer4.areaDetails", { count: allPolygonsCount, area: areaStats?.area ?? "—", defaultValue: `${allPolygonsCount} regions · ${areaStats?.area ?? "—"}` }),
-        });
-    }
-
-    const active = (Object.keys(optionalLayers) as (keyof typeof optionalLayers)[]).filter(
-        (k) => optionalLayers[k],
-    );
-    if (!optionalLayers.weather_overlay) {
-        checks.push({
-            label: t("configurator.layer4.labels.riskComponents", "Risk components"),
-            status: "warn",
-            detail: t("configurator.layer4.weatherDisabledWarn", "The weather signal is disabled — the result may be less accurate and the date becomes less relevant."),
-        });
-    } else if (active.length === 3) {
-        checks.push({
-            label: t("configurator.layer4.labels.riskComponents", "Risk components"),
-            status: "pass",
-            detail: t("configurator.layer4.allSignalsActive", "All risk signals active (weather + terrain + history)."),
+            detail: t("configurator.layer4.noNodes", "No nodes selected — go back to Step 2."),
         });
     } else {
         checks.push({
-            label: t("configurator.layer4.labels.riskComponents", "Risk components"),
-            status: "warn",
-            detail: t("configurator.layer4.someSignalsActive", { count: active.length, defaultValue: `Running with ${active.length} of 3 optional signals — output will differ from the full model.` }),
+            label: t("configurator.layer4.labels.nodes", "Nodes"),
+            status: "pass",
+            detail: t("configurator.layer4.nodeCount", {
+                count: selectedNodeCount,
+                defaultValue_one: "1 node selected",
+                defaultValue_other: "{{count}} nodes selected",
+            }),
         });
     }
-
-    checks.push({
-        label: t("configurator.layer4.labels.bufferDistance", "Buffer distance"),
-        status: state.bufferDistance >= 0 ? "pass" : "fail",
-        detail: t("configurator.layer4.bufferDistance", { buffer: state.bufferDistance, defaultValue: `${state.bufferDistance} m around the AOI.` }),
-    });
 
     return checks;
 };
@@ -134,19 +104,20 @@ export const Layer5FinalReview: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => 
             <div data-tour="final-review">
                 <div
                     className={cn(
-                        "mb-3 rounded-lg border px-3 py-2 text-[11px] font-medium leading-snug",
+                        "md-fade-in mb-3 rounded-lg border px-3 py-2 text-[11px] font-medium leading-snug transition-colors duration-300",
                         TONES[summaryTone],
                     )}
                 >
                     {summary}
                 </div>
                 <ul className="space-y-1.5">
-                    {checks.map((c) => {
+                    {checks.map((c, index) => {
                         const Icon = ICONS[c.status];
                         return (
                             <li
                                 key={c.label}
-                                className="flex items-start gap-2.5 rounded-md border border-border bg-background px-2.5 py-2"
+                                style={{ animationDelay: `${Math.min(index * 30, 240)}ms` }}
+                                className="md-row-in flex items-start gap-2.5 rounded-md border border-border bg-background px-2.5 py-2 transition-colors duration-150 hover:bg-muted/40"
                             >
                                 <Icon
                                     className={cn(
