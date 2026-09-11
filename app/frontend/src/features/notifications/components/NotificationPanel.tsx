@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { X } from "lucide-react";
 import { CheckCircle2, AlertCircle, Info, AlertTriangle } from 'lucide-react';
-import { IconX } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/i18n';
 
@@ -17,7 +17,7 @@ interface NotificationPanelProps {
   onClose: () => void;
 }
 
-// Translation key mappings for known notification patterns
+// Known pattern keys.
 const NOTIFICATION_TITLE_KEYS: Record<string, string> = {
   'Model Calculation Complete': 'notifications.messages.modelCalculationComplete',
   'Model Calculation Failed': 'notifications.messages.modelCalculationFailed',
@@ -90,7 +90,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ notification, onC
   const isClosingRef = useRef(false);
   const lastShownIdRef = useRef<number | null>(null);
   
-  // Translate notification title if a known pattern exists
+  // Translate the title.
   const getTranslatedTitle = useCallback((title: string): string => {
     const translationKey = NOTIFICATION_TITLE_KEYS[title];
     if (translationKey) {
@@ -99,7 +99,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ notification, onC
     return title;
   }, [t]);
   
-  // Translate notification message if a known pattern exists
+  // Translate the message.
   const getTranslatedMessage = useCallback((message: string): string => {
     for (const { pattern, key, extractParams } of NOTIFICATION_MESSAGE_PATTERNS) {
       const match = message.match(pattern);
@@ -220,7 +220,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ notification, onC
               onClick={handleClose}
               className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-gray-400 dark:text-gray-300 hover:text-white transition-colors"
             >
-              <IconX className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>

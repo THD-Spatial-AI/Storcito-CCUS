@@ -1,12 +1,12 @@
 import axios from '@/lib/axios';
 import type { Notification } from '@/features/notifications/hooks/useNotificationsQuery';
 
-interface NotificationsResponse {
+export interface NotificationsResponse {
     success: boolean;
     notifications: Notification[];
 }
 
-interface NotificationActionResponse {
+export interface NotificationActionResponse {
     success: boolean;
     message?: string;
 }
@@ -31,6 +31,17 @@ class NotificationsService {
     async clearAll(): Promise<NotificationActionResponse> {
         const { data } = await axios.delete<NotificationActionResponse>('/notifications/clear-all');
         return data;
+    }
+
+    /** Schedule maintenance. */
+    async sendMaintenance(payload: {
+        service: string;
+        scheduled_date: string;
+        scheduled_time: string;
+        message: string;
+        type: "maintenance";
+    }): Promise<void> {
+        await axios.post('/notifications/send', payload);
     }
 }
 

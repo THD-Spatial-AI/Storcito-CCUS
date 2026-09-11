@@ -154,18 +154,18 @@ export const useBrowserNotifications = (enabled: boolean, useInAppPanel = true) 
   }, [handleNotificationEvent]);
 
   const connectSSE = useCallback(() => {
-    // Connect if enabled, regardless of notification permission when using in-app panel
+    // In-app panel needs no permission.
     if (!enabled) {
       return;
     }
     
-    // Don't connect if user is not authenticated
+    // Authenticated only.
     const user = useAuthStore.getState().user;
     if (!user) {
       return;
     }
     
-    // Only require permission when not using in-app panel
+    // Permission for browser only.
     if (!useInAppPanel && permission !== 'granted') {
       return;
     }
@@ -188,14 +188,14 @@ export const useBrowserNotifications = (enabled: boolean, useInAppPanel = true) 
         eventSource.close();
         clearReconnectTimeout();
         
-        // Only reconnect if user is still authenticated
+        // Authenticated only.
         const user = useAuthStore.getState().user;
         if (!user) {
           return;
         }
         
         reconnectTimeoutRef.current = setTimeout(() => {
-          // Double-check user is still authenticated before reconnecting
+          // Recheck before reconnecting.
           const currentUser = useAuthStore.getState().user;
           if (currentUser) {
             connectSSE();
@@ -217,7 +217,7 @@ export const useBrowserNotifications = (enabled: boolean, useInAppPanel = true) 
       return;
     }
     
-    // Close if not using in-app panel and no permission
+    // No permission, close.
     if (!useInAppPanel && permission !== 'granted') {
       closeEventSource();
       clearReconnectTimeout();

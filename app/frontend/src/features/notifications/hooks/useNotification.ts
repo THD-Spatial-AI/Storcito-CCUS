@@ -8,7 +8,7 @@ interface NotificationState {
     severity: NotificationSeverity;
 }
 
-/** Hook to manage notification state and helpers (success, error, warning, info). */
+/** Notification state. */
 export const useNotification = () => {
     const [notification, setNotification] = useState<NotificationState>({
         open: false,
@@ -16,7 +16,7 @@ export const useNotification = () => {
         severity: "success",
     });
 
-    /** Show a notification with message and severity */
+    /** Show one. */
     const show = useCallback((message: string, severity: NotificationSeverity = "info") => {
         setNotification({ open: true, message, severity });
     }, []);
@@ -38,7 +38,7 @@ export const useNotification = () => {
         show(message, "info");
     }, [show]);
 
-    /** Hide the current notification */
+    /** Hide it. */
     const hide = useCallback(() => {
         setNotification(prev => ({ ...prev, open: false }));
     }, []);
