@@ -30,12 +30,12 @@ func validateHost(hostStr string) error {
 		return fmt.Errorf("host is required")
 	}
 
-	// Allow valid IP addresses
+	// Allow IP addresses.
 	if ip := net.ParseIP(hostStr); ip != nil {
 		return nil
 	}
 
-	// Allow valid hostnames (e.g. sim-haproxy, my-service.local)
+	// Allow hostnames.
 	if len(hostStr) > 253 {
 		return fmt.Errorf("hostname too long")
 	}
@@ -77,7 +77,7 @@ func (h *WebserviceHandler) buildWebserviceInstance(payload struct {
 		ws.MaxConcurrency = *payload.MaxConcurrency
 	}
 
-	// If auto_scaling is disabled, enforce max_concurrency = 1
+	// No autoscaling: pin concurrency.
 	if !ws.AutoScaling && ws.MaxConcurrency != 1 {
 		ws.MaxConcurrency = 1
 	}
@@ -95,7 +95,7 @@ func (h *WebserviceHandler) buildWebserviceInstance(payload struct {
 	return ws
 }
 
-// requireExpertAndGetID is a helper that validates expert access and parses ID parameter
+// requireExpertAndGetID checks access and parses the id.
 func requireExpertAndGetID(c *gin.Context) (uint, bool) {
 	userCtx, ok := httputil.GetUserContext(c)
 	if !ok {
@@ -192,7 +192,7 @@ func NewWebserviceHandler(db *gorm.DB) *WebserviceHandler {
 	}
 }
 
-// CreateWebservice creates a new webservice instance
+// CreateWebservice adds an instance.
 func (h *WebserviceHandler) CreateWebservice(c *gin.Context) {
 	userCtx, ok := httputil.GetUserContext(c)
 	if !ok {
@@ -233,7 +233,7 @@ func (h *WebserviceHandler) CreateWebservice(c *gin.Context) {
 	httputil.Created(c, toWebserviceDTO(result))
 }
 
-// GetWebserviceByID returns a webservice by ID
+// GetWebserviceByID loads one.
 func (h *WebserviceHandler) GetWebserviceByID(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -247,7 +247,7 @@ func (h *WebserviceHandler) GetWebserviceByID(c *gin.Context) {
 	httputil.SuccessResponse(c, toWebserviceDTO(result))
 }
 
-// GetWebserviceList lists webservices with optional filters
+// GetWebserviceList lists instances.
 func (h *WebserviceHandler) GetWebserviceList(c *gin.Context) {
 	pagination := httputil.ParsePagination(c, nil)
 
@@ -277,7 +277,7 @@ func (h *WebserviceHandler) GetWebserviceList(c *gin.Context) {
 	httputil.SuccessResponse(c, list)
 }
 
-// UpdateWebservice updates a webservice
+// UpdateWebservice patches one.
 func (h *WebserviceHandler) UpdateWebservice(c *gin.Context) {
 	id, ok := requireExpertAndGetID(c)
 	if !ok {
@@ -299,7 +299,7 @@ func (h *WebserviceHandler) UpdateWebservice(c *gin.Context) {
 		}
 	}
 
-	// If auto_scaling is being disabled, enforce max_concurrency = 1
+	// Disabling autoscaling: pin concurrency.
 	if autoScaling, ok := updates["auto_scaling"].(bool); ok && !autoScaling {
 		updates["max_concurrency"] = 1
 	}
@@ -319,7 +319,7 @@ func (h *WebserviceHandler) UpdateWebservice(c *gin.Context) {
 	httputil.SuccessResponse(c, toWebserviceDTO(updated))
 }
 
-// DeleteWebservice deletes a webservice
+// DeleteWebservice drops one.
 func (h *WebserviceHandler) DeleteWebservice(c *gin.Context) {
 	id, ok := requireExpertAndGetID(c)
 	if !ok {
@@ -333,7 +333,7 @@ func (h *WebserviceHandler) DeleteWebservice(c *gin.Context) {
 	httputil.NoContent(c)
 }
 
-// MarkAvailable marks a webservice available
+// MarkAvailable flags available.
 func (h *WebserviceHandler) MarkAvailable(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -353,7 +353,7 @@ func (h *WebserviceHandler) MarkAvailable(c *gin.Context) {
 	httputil.SuccessResponse(c, toWebserviceDTO(updated))
 }
 
-// MarkUnavailable marks a webservice unavailable
+// MarkUnavailable flags unavailable.
 func (h *WebserviceHandler) MarkUnavailable(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -373,7 +373,7 @@ func (h *WebserviceHandler) MarkUnavailable(c *gin.Context) {
 	httputil.SuccessResponse(c, toWebserviceDTO(updated))
 }
 
-// MarkBusy marks a webservice busy (legacy, no longer used with concurrency tracking)
+// MarkBusy is legacy.
 func (h *WebserviceHandler) MarkBusy(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -393,7 +393,7 @@ func (h *WebserviceHandler) MarkBusy(c *gin.Context) {
 	httputil.SuccessResponse(c, toWebserviceDTO(updated))
 }
 
-// MarkIdle marks a webservice idle (legacy, no longer used with concurrency tracking)
+// MarkIdle is legacy.
 func (h *WebserviceHandler) MarkIdle(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -413,7 +413,7 @@ func (h *WebserviceHandler) MarkIdle(c *gin.Context) {
 	httputil.SuccessResponse(c, toWebserviceDTO(updated))
 }
 
-// CheckHealth returns health status for a webservice
+// CheckHealth reports health.
 func (h *WebserviceHandler) CheckHealth(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -427,7 +427,7 @@ func (h *WebserviceHandler) CheckHealth(c *gin.Context) {
 	httputil.SuccessResponse(c, gin.H{"healthy": okHealth})
 }
 
-// PingWebservice pings a webservice and returns details
+// PingWebservice pings one.
 func (h *WebserviceHandler) PingWebservice(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -441,7 +441,7 @@ func (h *WebserviceHandler) PingWebservice(c *gin.Context) {
 	httputil.SuccessResponse(c, gin.H{"available": okPing, "details": data})
 }
 
-// SendRequest sends an arbitrary JSON request to a webservice
+// SendRequest forwards JSON.
 func (h *WebserviceHandler) SendRequest(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -476,7 +476,7 @@ func (h *WebserviceHandler) SendRequest(c *gin.Context) {
 	httputil.SuccessResponse(c, gin.H{"response": result})
 }
 
-// GetSummary returns summary statistics for webservices
+// GetSummary aggregates instances.
 func (h *WebserviceHandler) GetSummary(c *gin.Context) {
 	summary, err := h.service.GetSummary(c.Request.Context())
 	if err != nil {
@@ -484,15 +484,6 @@ func (h *WebserviceHandler) GetSummary(c *gin.Context) {
 		return
 	}
 	httputil.SuccessResponse(c, summary)
-}
-
-func (h *WebserviceHandler) GetAvailableStaticDates(c *gin.Context) {
-	dates, err := h.service.GetAvailableStaticDates(c.Request.Context())
-	if err != nil {
-		httputil.HandleError(c, err)
-		return
-	}
-	httputil.SuccessResponse(c, gin.H{"dates": dates})
 }
 
 func (h *WebserviceHandler) GetAvailableDynamicDates(c *gin.Context) {
@@ -537,7 +528,7 @@ func (h *WebserviceHandler) GetFWIAreaSummary(c *gin.Context) {
 	httputil.SuccessResponse(c, summary)
 }
 
-// Heartbeat updates last_heartbeat for a webservice instance
+// Heartbeat refreshes last_heartbeat.
 func (h *WebserviceHandler) Heartbeat(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -553,7 +544,7 @@ func (h *WebserviceHandler) Heartbeat(c *gin.Context) {
 	httputil.SuccessResponse(c, gin.H{"message": "heartbeat received"})
 }
 
-// ReleaseInstance handles internal release requests coming from the backend.
+// ReleaseInstance frees a slot.
 func (h *WebserviceHandler) ReleaseInstance(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {
@@ -568,7 +559,7 @@ func (h *WebserviceHandler) ReleaseInstance(c *gin.Context) {
 	httputil.SuccessResponse(c, gin.H{"message": "webservice released"})
 }
 
-// CancelSession handles internal cancel session requests from the backend.
+// CancelSession stops a session.
 func (h *WebserviceHandler) CancelSession(c *gin.Context) {
 	id, ok := httputil.ParseUintParam(c, "id", errInvalidID)
 	if !ok {

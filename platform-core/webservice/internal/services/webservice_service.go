@@ -28,14 +28,11 @@ import (
 const (
 	endpointStatus = "/status"
 
-	// maxResponseBytes limits the size of response bodies read from
-	// webservice instances to prevent unbounded memory allocation.
+	// maxResponseBytes caps response bodies.
 	maxResponseBytes = 10 * 1024 * 1024 // 10 MB
 )
 
-// sharedTransport is reused across all WebserviceService instances so that
-// idle TCP connections are pooled and reused across scheduler ticks and
-// concurrent dispatch workers.
+// sharedTransport pools idle connections.
 var sharedTransport = &http.Transport{
 	MaxIdleConns:        100,
 	MaxIdleConnsPerHost: 20,
@@ -51,7 +48,7 @@ type WebserviceService struct {
 func NewWebserviceService(db *gorm.DB) *WebserviceService {
 	return &WebserviceService{
 		client: &http.Client{
-			Timeout:   0, // no timeout – match old app behaviour; model fails only on file verification or stuck-model scheduler
+			Timeout:   0, // no timeout; scheduler recovers
 			Transport: sharedTransport,
 		},
 		repo: store.NewWebserviceRepository(db),
@@ -164,8 +161,7 @@ func (s *WebserviceService) ReserveAvailableInstanceTx(ctx context.Context, tx *
 	log := logger.ForComponent("webservice")
 	var instance models.WebserviceInstance
 
-	// Lock one eligible row and reserve a slot atomically.
-	// Skip instances whose last-reported CPU usage exceeds the threshold.
+	// Reserve a slot atomically.
 	query := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
 		Where("status = ? AND available = ? AND current_concurrency < max_concurrency",
 			models.StatusActive, true)
@@ -325,10 +321,6 @@ func (s *WebserviceService) GetSummary(ctx context.Context) (map[string]interfac
 		"active":    active,
 		"available": available,
 	}, nil
-}
-
-func (s *WebserviceService) GetAvailableStaticDates(ctx context.Context) ([]string, error) {
-	return s.getAvailableDates(ctx, "/available-static-dates", "static")
 }
 
 func (s *WebserviceService) GetAvailableDynamicDates(ctx context.Context) ([]string, error) {

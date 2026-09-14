@@ -31,10 +31,12 @@ type CO2Node struct {
 	// Flux or capacity.
 	AnnualFlux *float64 `gorm:"column:annual_flux" json:"annual_flux"`
 
-	NodeType    string  `gorm:"column:node_type;not null;size:64" json:"node_type"`
-	Industry    *string `gorm:"column:industry;size:128" json:"industry,omitempty"`
-	CountryCode *string `gorm:"column:country_code;size:8" json:"country_code"`
-	Source      string  `gorm:"not null;size:64;default:'co2routex'" json:"source"`
+	NodeType     string  `gorm:"column:node_type;not null;size:64" json:"node_type"`
+	Industry     *string `gorm:"column:industry;size:128" json:"industry,omitempty"`
+	CountryCode  *string `gorm:"column:country_code;size:8" json:"country_code"`
+	State        *string `gorm:"column:state;size:128" json:"state,omitempty"`
+	Municipality *string `gorm:"column:municipality;size:255" json:"municipality,omitempty"`
+	Source       string  `gorm:"not null;size:64;default:'co2routex'" json:"source"`
 
 	Metadata datatypes.JSON `gorm:"type:jsonb" json:"metadata,omitempty"`
 
@@ -47,7 +49,9 @@ func (CO2Node) TableName() string { return "co2_nodes" }
 // IsEmitter produces CO2.
 func (n CO2Node) IsEmitter() bool {
 	switch n.NodeType {
-	case NodeTypeCement, NodeTypeRefinery, NodeTypeWasteToEnergy:
+	case NodeTypeCement, NodeTypeRefinery, NodeTypeWasteToEnergy,
+		"bioenergy", "biogas", "chemicals", "coal_power", "emitter", "fossil_power",
+		"gas_power", "gas_processing", "glass", "industry", "iron_and_steel", "pulp_and_paper":
 		return true
 	}
 	return false

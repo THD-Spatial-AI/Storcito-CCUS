@@ -129,7 +129,6 @@ up-app:
 	@echo "Services running:"
 	@echo "  Energy Backend: http://localhost:8000"
 	@echo "  Energy Frontend: http://localhost:3000"
-	@echo "  Pylovo: http://localhost:8086"
 
 .PHONY: down-app
 down-app:

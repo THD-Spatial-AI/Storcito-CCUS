@@ -100,7 +100,7 @@ func mustInitDependencies(cfg *config.Config, log *logrus.Logger) *appDependenci
 		},
 		RetryDelayFunc: func(n int, err error, task *asynq.Task) time.Duration {
 			if task.Type() == "dispatch_model_calculation" {
-				// Retry quickly when capacity is temporarily full.
+				// Retry when full.
 				if err != nil && strings.Contains(strings.ToLower(err.Error()), "no webservice available") {
 					return time.Duration(cfg.Dispatch.NoCapacityRetryMs) * time.Millisecond
 				}
@@ -143,7 +143,7 @@ func mustInitDependencies(cfg *config.Config, log *logrus.Logger) *appDependenci
 }
 
 func deriveDispatchWorkerConcurrency(db *gorm.DB, log *logrus.Logger) int {
-	// Read total dispatch capacity from Webservice Management data.
+	// Capacity from management data.
 	type capacityRow struct {
 		Total int64
 	}
@@ -210,7 +210,6 @@ func registerRoutes(r *gin.Engine, deps *appDependencies) {
 		wsHandler := webhandler.NewWebserviceHandler(deps.DB)
 		api.POST("/webservices", wsHandler.CreateWebservice)
 		api.GET("/webservices", wsHandler.GetWebserviceList)
-		api.GET("/webservices/available-static-dates", wsHandler.GetAvailableStaticDates)
 		api.GET("/webservices/available-dynamic-dates", wsHandler.GetAvailableDynamicDates)
 		api.GET("/webservices/available-precomputed-dates", wsHandler.GetAvailablePrecomputedDates)
 		api.GET("/webservices/available-data-coverage", wsHandler.GetAvailableDataCoverage)
