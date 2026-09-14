@@ -1,24 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { settingsService } from "@/features/settings/services/settings";
+import { settingsService } from "@/features/settings";
 import {
   DEFAULT_BUFFER_DISTANCE,
   clampBuffer,
 } from "@/features/configurator/constants/buffer-distance";
-import { webservicesService } from "@/features/admin-dashboard/services/webservices";
+import {
+  DUMMY_DYNAMIC_DATES,
+  DUMMY_PRECOMPUTED_DATES,
+  dummyDatesEnabled,
+} from "@/features/configurator/utils/dummyDates";
+import { webservicesService } from "@/features/admin-dashboard";
 import type {
-  AreaInputMode,
   DateRangeSelection,
 } from "@/features/configurator/types/area-select";
-import type { OptionalLayerKey } from "@/features/configurator/region-selector/components/layers/types";
-import { readDtmPreview } from "@/features/configurator/utils/dtmFootprint";
 
-const DEFAULT_OPTIONAL_LAYERS: Record<OptionalLayerKey, boolean> = {
-  weather_overlay: true,
-  terrain_analysis: true,
-  historical_fires: true,
-};
-
-interface UseAreaSelectStateOptions {
+export interface UseAreaSelectStateOptions {
   editMode: boolean;
 }
 
@@ -36,33 +32,10 @@ export const useAreaSelectState = ({ editMode }: UseAreaSelectStateOptions) => {
     undefined
   );
 
-  const [areaInputMode, setAreaInputModeRaw] = useState<AreaInputMode>("draw");
-  const [uploadedGeoJsonName, setUploadedGeoJsonName] = useState<string | undefined>();
-  const [geoJsonUploadError, setGeoJsonUploadError] = useState<string | undefined>();
-
-  const [optionalLayers, setOptionalLayersState] = useState<Record<OptionalLayerKey, boolean>>(
-    () => ({ ...DEFAULT_OPTIONAL_LAYERS })
-  );
-  const setOptionalLayers = useCallback((value: Record<OptionalLayerKey, boolean>) => {
-    setOptionalLayersState({ ...DEFAULT_OPTIONAL_LAYERS, ...value });
-  }, []);
-  const toggleOptionalLayer = useCallback((key: OptionalLayerKey) => {
-    setOptionalLayersState((prev) => ({ ...prev, [key]: !prev[key] }));
-  }, []);
-
-  // Optional per-model data uploads
+  // Optional uploads.
   const [stationDataFile, setStationDataFileRaw] = useState<File | null>(null);
   const [stationDataName, setStationDataName] = useState<string | undefined>();
   const [stationDataError, setStationDataError] = useState<string | undefined>();
-  const [dtmFile, setDtmFileRaw] = useState<File | null>(null);
-  const [dtmName, setDtmName] = useState<string | undefined>();
-  const [dtmError, setDtmError] = useState<string | undefined>();
-  const [dtmFootprint, setDtmFootprint] = useState<[number, number][] | undefined>();
-  const [dtmImageUrl, setDtmImageUrl] = useState<string | undefined>();
-  const [dtmImageExtent, setDtmImageExtent] = useState<
-    [number, number, number, number] | undefined
-  >();
-  const [dtmProcessing, setDtmProcessing] = useState(false);
 
   const setStationDataFile = useCallback((file: File | null) => {
     if (!file) {
@@ -86,64 +59,12 @@ export const useAreaSelectState = ({ editMode }: UseAreaSelectStateOptions) => {
     setStationDataError(undefined);
   }, []);
 
-  const setDtmFile = useCallback((file: File | null) => {
-    if (!file) {
-      setDtmFileRaw(null);
-      setDtmName(undefined);
-      setDtmError(undefined);
-      setDtmFootprint(undefined);
-      setDtmImageUrl(undefined);
-      setDtmImageExtent(undefined);
-      return;
-    }
-    if (!/\.(tif|tiff)$/i.test(file.name)) {
-      setDtmError("Use a GeoTIFF (.tif/.tiff) elevation raster.");
-      return;
-    }
-    setDtmError(undefined);
-    setDtmFileRaw(file);
-    setDtmName(file.name);
-    setDtmFootprint(undefined);
-    setDtmImageUrl(undefined);
-    setDtmImageExtent(undefined);
-    setDtmProcessing(true);
-    void readDtmPreview(file)
-      .then((preview) => {
-        if (!preview) {
-          setDtmError("Could not read this GeoTIFF’s coverage/CRS; map preview is unavailable.");
-          return;
-        }
-        if (preview.footprint) setDtmFootprint(preview.footprint);
-        if (preview.imageDataUrl && preview.imageExtent3857) {
-          setDtmImageUrl(preview.imageDataUrl);
-          setDtmImageExtent(preview.imageExtent3857);
-        }
-      })
-      .finally(() => setDtmProcessing(false));
-  }, []);
-
-  const setStoredDtmName = useCallback((name?: string) => {
-    setDtmFileRaw(null);
-    setDtmName(name);
-    setDtmError(undefined);
-    setDtmFootprint(undefined);
-    setDtmImageUrl(undefined);
-    setDtmImageExtent(undefined);
-    setDtmProcessing(false);
-  }, []);
-
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
+  const [selectedNodeIds, setSelectedNodeIds] = useState<number[]>([]);
 
   const [showAreaSelectTour, setShowAreaSelectTour] = useState(false);
 
   const setBufferDistance = useCallback((value: number) => {
     setBufferDistanceRaw(clampBuffer(value));
-  }, []);
-
-  const setAreaInputMode = useCallback((mode: AreaInputMode) => {
-    setAreaInputModeRaw(mode);
-    setGeoJsonUploadError(undefined);
   }, []);
 
   const handleUpdateRange = useCallback((e: DateRangeSelection) => {
@@ -164,13 +85,24 @@ export const useAreaSelectState = ({ editMode }: UseAreaSelectStateOptions) => {
           webservicesService.getAvailablePrecomputedDates().catch(() => []),
         ]);
         if (!cancelled) {
-          setAvailableDynamicDates([...new Set(dynamicDates)].sort());
-          setAvailablePrecomputedDates([...new Set(precomputedDates)].sort());
+          const useDummy = dummyDatesEnabled();
+          const withFallback = (dates: string[], fallback: () => string[]) =>
+            dates.length === 0 && useDummy ? fallback() : dates;
+
+          setAvailableDynamicDates([...new Set(withFallback(dynamicDates, DUMMY_DYNAMIC_DATES))].sort());
+          setAvailablePrecomputedDates(
+            [...new Set(withFallback(precomputedDates, DUMMY_PRECOMPUTED_DATES))].sort(),
+          );
         }
       } catch {
         if (!cancelled) {
-          setAvailableDynamicDates([]);
-          setDynamicDatesError("Unable to load available dynamic dates.");
+          if (dummyDatesEnabled()) {
+            setAvailableDynamicDates(DUMMY_DYNAMIC_DATES());
+            setAvailablePrecomputedDates(DUMMY_PRECOMPUTED_DATES());
+          } else {
+            setAvailableDynamicDates([]);
+            setDynamicDatesError("Unable to load available dynamic dates.");
+          }
         }
       } finally {
         if (!cancelled) {
@@ -182,6 +114,17 @@ export const useAreaSelectState = ({ editMode }: UseAreaSelectStateOptions) => {
       cancelled = true;
     };
   }, []);
+
+  // Preselect dummy date.
+  useEffect(() => {
+    if (editMode || !dummyDatesEnabled() || fromDate || toDate) return;
+    const start = availableDynamicDates.at(-3) ?? availableDynamicDates[0];
+    const end = availableDynamicDates.at(-1);
+    if (start && end) {
+      setFromDate(start);
+      setToDate(end);
+    }
+  }, [availableDynamicDates, editMode, fromDate, toDate]);
 
   useEffect(() => {
     if (editMode) return;
@@ -236,38 +179,16 @@ export const useAreaSelectState = ({ editMode }: UseAreaSelectStateOptions) => {
     dynamicDatesError,
     originalConfig,
     setOriginalConfig,
-    // area input
-    areaInputMode,
-    setAreaInputMode,
-    setAreaInputModeRaw,
-    uploadedGeoJsonName,
-    setUploadedGeoJsonName,
-    geoJsonUploadError,
-    setGeoJsonUploadError,
-    // Engine optional layers
-    optionalLayers,
-    setOptionalLayers,
-    toggleOptionalLayer,
-    // optional per-model data uploads
+    // node input
+    selectedNodeIds,
+    setSelectedNodeIds,
+    // Optional layers.
+    // Optional uploads.
     stationDataFile,
     stationDataName,
     stationDataError,
     setStationDataFile,
     setStoredStationDataName,
-    dtmFile,
-    dtmName,
-    dtmError,
-    dtmFootprint,
-    dtmImageUrl,
-    dtmImageExtent,
-    dtmProcessing,
-    setDtmFile,
-    setStoredDtmName,
-    // drawing flags
-    isDrawing,
-    setIsDrawing,
-    cursorPos,
-    setCursorPos,
     // tour
     showAreaSelectTour,
     setShowAreaSelectTour,

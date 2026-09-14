@@ -1,13 +1,11 @@
-import { useMapStore } from '@/features/interactive-map/store/map-store';
-import { useMapProvider } from '@/providers/map-context';
-import { useNotification } from '@/features/notifications/hooks/useNotification';
+import { useNotification } from '@/features/notifications';
+import { useTranslation } from '@/i18n';
 import type {
     AreaSelectState,
     AreaSelectActions,
     UseAreaSelectProps,
 } from '@/features/configurator/types/area-select';
 import { useAreaSelectState } from './area-select/useAreaSelectState';
-import { useMapDrawing } from './area-select/useMapDrawing';
 import { useModelCreation } from './area-select/useModelCreation';
 
 export { type AreaData } from '@/features/configurator/types/area-select';
@@ -19,19 +17,23 @@ export const useAreaSelect = ({
     existingModelId,
 }: UseAreaSelectProps) => {
     const state = useAreaSelectState({ editMode });
-    const drawing = useMapDrawing({ state });
+    const { t } = useTranslation();
+    const { notification, showSuccess, showError, hide } = useNotification();
+
     const creation = useModelCreation({
         state,
-        drawing,
         onAreaSelected,
         onCancel,
         editMode,
         existingModelId,
+        onError: showError,
+        errorMessages: {
+            create: t('configurator.save.createFailed', 'The model could not be created. Please try again.'),
+            save: t('configurator.save.updateFailed', 'The model could not be saved. Please try again.'),
+            uploadInputs: t('configurator.save.uploadFailed', 'The model was saved, but its input files could not be uploaded.'),
+            startCalculation: t('configurator.save.calculationFailed', 'The model was saved, but the calculation could not be started.'),
+        },
     });
-
-    const { notification, showSuccess, showError, hide } = useNotification();
-    const { map } = useMapStore();
-    const { mapRef } = useMapProvider();
 
     const exposedState: AreaSelectState = {
         modelName: state.modelName,
@@ -46,27 +48,14 @@ export const useAreaSelect = ({
         isSaving: creation.isSaving,
         isLoadingModel: creation.isLoadingModel,
         showAreaSelectTour: state.showAreaSelectTour,
-        loadedCoordinates: drawing.loadedCoordinates,
-        allPolygons: drawing.allPolygons,
-        areaInputMode: state.areaInputMode,
-        uploadedGeoJsonName: state.uploadedGeoJsonName,
-        geoJsonUploadError: state.geoJsonUploadError,
-        isDrawing: state.isDrawing,
-        clearTrigger: drawing.clearTrigger,
-        cursorPos: state.cursorPos,
-        optionalLayers: state.optionalLayers,
+        selectedNodeIds: state.selectedNodeIds,
         stationDataName: state.stationDataName,
         stationDataError: state.stationDataError,
-        dtmName: state.dtmName,
-        dtmError: state.dtmError,
-        dtmFootprint: state.dtmFootprint,
-        dtmImageUrl: state.dtmImageUrl,
-        dtmImageExtent: state.dtmImageExtent,
-        dtmProcessing: state.dtmProcessing,
     };
 
     const actions: AreaSelectActions = {
         setModelName: state.setModelName,
+        setSelectedNodeIds: state.setSelectedNodeIds,
         setBufferDistance: state.setBufferDistance,
         setUsePrecomputed: state.setUsePrecomputed,
         handleUpdateRange: state.handleUpdateRange,
@@ -75,24 +64,12 @@ export const useAreaSelect = ({
         handleTourSkip: state.handleTourSkip,
         handleSave: creation.handleSave,
         handleCancel: creation.handleCancel,
-        setAllPolygons: drawing.setAllPolygons,
-        setAreaInputMode: state.setAreaInputMode,
-        handleGeoJsonUpload: drawing.handleGeoJsonUpload,
-        handlePolygonDrawn: drawing.handlePolygonDrawn,
-        handlePolygonModified: drawing.handlePolygonModified,
-        handleClearAllPolygons: drawing.handleClearAllPolygons,
-        setIsDrawing: state.setIsDrawing,
-        toggleOptionalLayer: state.toggleOptionalLayer,
         setStationDataFile: state.setStationDataFile,
-        setDtmFile: state.setDtmFile,
     };
 
     return {
         state: exposedState,
         actions,
         notification: { data: notification, showSuccess, showError, hide },
-        setCursorPos: state.setCursorPos,
-        map,
-        mapRef,
     };
 };

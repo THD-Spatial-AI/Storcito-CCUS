@@ -1,14 +1,13 @@
 import { WorkspaceSelector } from "@/components/workspace";
-import { RegionSelector, type AvailableRegion } from "./RegionSelector";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@spatialhub/ui";
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "@/i18n";
 import type { Workspace } from "@/components/workspace";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 
 interface MapHeaderProps {
-    allPolygonsCount: number;
-    onClearAllPolygons: () => void;
+    selectedNodeCount: number;
+    onClearNodes: () => void;
     isLoadingPreference: boolean;
     wsReloadKey: number;
     currentWorkspace: Workspace | null;
@@ -16,13 +15,13 @@ interface MapHeaderProps {
     normalizedWorkspaceId?: number;
     onWorkspaceChange: (workspace: Workspace | null) => void;
     onOpenCreateWorkspace: () => void;
-    availableRegions?: AvailableRegion[];
-    onRegionSelect?: (region: AvailableRegion) => void;
+    /** Step breadcrumb. */
+    steps?: ReactNode;
 }
 
 export const MapHeader: FC<MapHeaderProps> = ({
-    allPolygonsCount,
-    onClearAllPolygons,
+    selectedNodeCount,
+    onClearNodes,
     isLoadingPreference,
     wsReloadKey,
     currentWorkspace,
@@ -30,13 +29,12 @@ export const MapHeader: FC<MapHeaderProps> = ({
     normalizedWorkspaceId,
     onWorkspaceChange,
     onOpenCreateWorkspace,
-    availableRegions = [],
-    onRegionSelect,
+    steps,
 }) => {
     const { t } = useTranslation();
     return (
-        <div className="bg-background dark:bg-gray-800 border-b border-border px-2 py-1 flex items-center justify-between h-10">
-            <div className="flex items-center gap-2">
+        <div className="bg-background border-b border-border px-3 py-1.5 flex items-center justify-between gap-3 h-11">
+            <div className="flex min-w-0 items-center gap-2">
                 {!isLoadingPreference && (
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -52,32 +50,28 @@ export const MapHeader: FC<MapHeaderProps> = ({
                             </div>
                         </TooltipTrigger>
                         <TooltipContent>
-                            Select or create a workspace to organize your models
+                            {t("workspace.selectorHint", "Select or create a workspace to organize your models")}
                         </TooltipContent>
                     </Tooltip>
                 )}
-                {onRegionSelect && availableRegions.length > 0 && (
-                    <RegionSelector
-                        regions={availableRegions}
-                        onRegionSelect={onRegionSelect}
-                    />
-                )}
                 {isLoadingPreference && (
-                    <div className="flex items-center gap-2 px-2 py-1 border border-border rounded bg-background dark:bg-gray-700 text-xs">
+                    <div className="md-fade-in flex items-center gap-2 px-2 py-1 border border-border rounded bg-background text-xs">
                         <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
-                        <span className="font-medium text-foreground">Loading workspace...</span>
+                        <span className="font-medium text-foreground">{t("model.loadingWorkspace", "Loading workspace...")}</span>
                     </div>
                 )}
             </div>
 
-            <div className="flex items-center gap-2">
-                {allPolygonsCount > 0 && (
-                    <div className="bg-muted border border-border rounded px-2 py-1 flex items-center gap-2">
+            {steps && <div className="min-w-0 flex-1 overflow-x-auto">{steps}</div>}
+
+            <div className="flex shrink-0 items-center gap-2">
+                {selectedNodeCount > 0 && (
+                    <div className="md-fade-in bg-muted border border-border rounded-lg px-2 py-1 flex items-center gap-2">
                         <button
-                            onClick={onClearAllPolygons}
-                            className="text-xs font-medium text-foreground hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                            onClick={onClearNodes}
+                            className="text-xs font-medium text-foreground transition-colors duration-150 hover:text-destructive"
                         >
-                            {t('simulation.mapHeader.clearAll')} ({allPolygonsCount})
+                            {t("configurator.mapHeader.clearNodes", "Clear")} ({selectedNodeCount})
                         </button>
                     </div>
                 )}
