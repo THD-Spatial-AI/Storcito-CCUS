@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BookOpen, GitCompareArrows, Globe2, GraduationCap, Info, LayoutDashboard, LogOut, Settings, User } from "lucide-react";
+import { BookOpen, Globe2, GraduationCap, Info, LogOut, Settings, User, Waypoints } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 import { useAuth } from "@/providers/auth-provider";
@@ -100,7 +100,7 @@ export const useAppLayoutState = () => {
     () => ([
       {
         path: "/app/model-dashboard",
-        icon: LayoutDashboard,
+        icon: Waypoints,
         title: t("common.sidebar.simulations"),
         color: "#8b5cf6",
         bgColor: "#ede9fe",
@@ -113,16 +113,6 @@ export const useAppLayoutState = () => {
         color: "#3b82f6",
         bgColor: "#dbeafe",
         dataTour: "map",
-      },
-      {
-        // Analyst task only.
-        path: "/app/comparison",
-        icon: GitCompareArrows,
-        title: t("common.sidebar.simulationReports"),
-        color: "#10b981",
-        bgColor: "#d1fae5",
-        dataTour: "reports",
-        minAccessLevel: "manager",
       },
     ] as SidebarItem[]).filter((item) => !item.minAccessLevel || hasAccessLevel(item.minAccessLevel)),
     [hasAccessLevel, t]

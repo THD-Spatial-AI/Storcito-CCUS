@@ -55,11 +55,7 @@ export function getAvailableLayers(level: string, t: TranslateFn): string[] {
     return [t('adminDashboard.accessPermissions.allLayersAvailable'), t('adminDashboard.accessPermissions.fullSystemAccess')];
   }
   if (level === 'intermediate') {
-    return [
-      t('adminDashboard.accessPermissions.resultFinal'),
-      t('adminDashboard.accessPermissions.vegetationRisk'),
-      t('adminDashboard.accessPermissions.topographyRisk'),
-    ];
+    return [t('adminDashboard.accessPermissions.resultFinal')];
   }
   if (level === 'very_low') {
     return [t('adminDashboard.accessPermissions.resultFinal')];

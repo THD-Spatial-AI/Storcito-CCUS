@@ -88,7 +88,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 					...(modal ? { paddingTop: `${headerOffsetPx}px` } : {}),
 					// Overlay offset.
 					['--sidebar-offset']: showSidebar ? '18rem' : '0rem',
-				}}
+				} as React.CSSProperties}
 			>
 				<div className={`flex-shrink-0 ${showSidebar ? 'pr-72' : ''}`}>
 					{topBar}

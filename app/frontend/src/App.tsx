@@ -19,7 +19,6 @@ const ProfilePage = lazy(() => import("@/features/profile").then(module => ({ de
 const NotificationsPage = lazy(() => import("@/features/notifications/NotificationsPage"));
 const AreaSelect = lazy(() => import("@/features/configurator/region-selector/AreaSelect").then(module => ({ default: module.AreaSelect })));
 const ModelResultsViewer = lazy(() => import("@/features/model-results").then(module => ({ default: module.ModelResultsViewer })));
-const ComparisonPage = lazy(() => import("@/features/comparison").then(module => ({ default: module.ComparisonPage })));
 const LegalPage = lazy(() => import("@/pages/legal/LegalPage"));
 const LandingPage = lazy(() => import("@/features/landing").then(module => ({ default: module.LandingPage })));
 
@@ -95,8 +94,6 @@ const App: React.FC<AppProps> = () => {
                     />
                   )}
                 >
-                  <Route path="/app/comparison" element={<ComparisonPage />} />
-                  <Route path="/app/comparison/:modelId" element={<ComparisonPage />} />
                 </Route>
               </Routes>
             </Suspense>

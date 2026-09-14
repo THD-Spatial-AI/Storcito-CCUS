@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { X } from "lucide-react";
 import { Users, Building2, Trash2, UserPlus } from 'lucide-react';
-import { IconX } from '@tabler/icons-react';
 import { workspaceService, type Workspace } from '@/components/workspace/services/workspaceService';
 import { GroupSelector } from '@/components/group/GroupSelector';
 import type { Group } from '@/components/workspace/services/groupService';
@@ -162,7 +162,7 @@ export const ShareWorkspaceModal: React.FC<ShareWorkspaceModalProps> = ({
             onClick={onClose}
             className="absolute right-3 top-3 p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
           >
-            <IconX className="w-4 h-4" />
+            <X className="w-4 h-4" />
           </button>
         </AlertDialogHeader>
 

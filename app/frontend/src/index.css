@@ -1,4 +1,4 @@
-/* Joyride tour dark mode styles */
+/* Joyride dark mode. */
 .dark .react-joyride__tooltip {
   background-color: hsl(var(--background)) !important;
   color: hsl(var(--foreground)) !important;
@@ -35,7 +35,7 @@
   --tw-gradient-to: hsl(var(--muted)) !important;
 }
 
-/* Fix joyride spotlight blinking/white space */
+/* Fix spotlight blinking. */
 .react-joyride__spotlight {
   background-color: transparent !important;
   border: none !important;
@@ -63,7 +63,38 @@
   will-change: auto !important;
 }
 
-/* Prevent any repaints on hover within tour */
+/* No hover repaint. */
 [data-tour] {
   contain: layout style;
+}
+
+/* Node hover tooltip. */
+.ol-node-tooltip {
+  pointer-events: none;
+  background: var(--card, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 10px;
+  padding: 6px 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+  font-family: Inter, system-ui, sans-serif;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ol-node-tooltip-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--foreground, #111827);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ol-node-tooltip-meta {
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--muted-foreground, #6b7280);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
