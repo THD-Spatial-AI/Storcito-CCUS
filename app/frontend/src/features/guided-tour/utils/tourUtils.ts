@@ -5,7 +5,7 @@ export const buildCurvedPath = (
 ) => {
   let startX: number, startY: number, endX: number, endY: number;
 
-  // Determine start point (edge of tooltip based on placement)
+  // Start from placement.
   switch (placement) {
     case 'left':
       startX = tooltipRect.right;
@@ -34,7 +34,7 @@ export const buildCurvedPath = (
       break;
   }
 
-  // Calculate control points for bezier curve
+  // Bezier control points.
   const dx = endX - startX;
   const dy = endY - startY;
 
@@ -42,13 +42,13 @@ export const buildCurvedPath = (
   let cx1: number, cy1: number, cx2: number, cy2: number;
 
   if (Math.abs(dx) > Math.abs(dy)) {
-    // Horizontal dominant - curve vertically
+    // Curve vertically.
     cx1 = startX + dx * 0.3;
     cy1 = startY;
     cx2 = endX - dx * 0.3;
     cy2 = endY;
   } else {
-    // Vertical dominant - curve horizontally
+    // Curve horizontally.
     cx1 = startX;
     cy1 = startY + dy * 0.3;
     cx2 = endX;

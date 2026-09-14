@@ -1,4 +1,4 @@
-// Pure helpers for the results viewer (safe to unit test).
+// Pure viewer helpers.
 import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import type Map from "ol/Map";

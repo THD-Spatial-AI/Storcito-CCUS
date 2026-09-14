@@ -50,7 +50,7 @@ export const TourController: React.FC<TourControllerProps> = ({
   );
 
   const updateConnector = useCallback(() => {
-    // Small delay to ensure DOM is updated
+    // Let the DOM settle.
     requestAnimationFrame(() => {
       const tooltip = document.querySelector(".react-joyride__tooltip");
       if (!tooltip) {
@@ -58,7 +58,7 @@ export const TourController: React.FC<TourControllerProps> = ({
         return;
       }
 
-      // Find target from current step
+      // Current step target.
       const currentStep = steps[stepIndex];
       if (!currentStep?.target) {
         applyConnector(null);
@@ -85,10 +85,10 @@ export const TourController: React.FC<TourControllerProps> = ({
     });
   }, [applyConnector, stepIndex, steps]);
 
-  // Update connector when step changes or window resizes
+  // Redraw on change.
   useEffect(() => {
     if (run) {
-      // Debounced update to prevent flickering
+      // Debounced, avoids flicker.
       let timeoutId: ReturnType<typeof setTimeout>;
       const debouncedUpdate = () => {
         clearTimeout(timeoutId);
@@ -99,11 +99,7 @@ export const TourController: React.FC<TourControllerProps> = ({
       window.addEventListener("resize", debouncedUpdate);
       window.addEventListener("scroll", debouncedUpdate, true);
 
-      // Watch only the configurator panel, not document.body. The map canvas
-      // and react-joyride's own portal mutate the body subtree constantly, and
-      // observing all of it made the connector recompute (and the floater arrow
-      // re-animate) non-stop — that was the blinking. The panel is where the
-      // tour targets live and switch, so it is the only thing worth watching.
+      // Watch the panel only; the body mutates constantly.
       const observed = document.querySelector('[data-tour="configurator-panel"]') ?? document.body;
       const observer = new MutationObserver(debouncedUpdate);
       observer.observe(observed, { childList: true, subtree: true, attributes: false });
@@ -119,7 +115,7 @@ export const TourController: React.FC<TourControllerProps> = ({
     }
   }, [run, stepIndex, updateConnector]);
 
-  // Advance forward from `index`, completing the tour past the last step.
+  // Advance, completing at the end.
   const goForward = useCallback(
     (index: number) => {
       const nextIndex = index + 1;
@@ -146,9 +142,7 @@ export const TourController: React.FC<TourControllerProps> = ({
       return;
     }
 
-    // Skip a missing target in the direction the user is travelling. Always
-    // stepping forward here would trap the Back button on any step whose target
-    // has not mounted yet.
+    // Skip missing targets in the travel direction.
     if (type === EVENTS.TARGET_NOT_FOUND) {
       if (lastActionRef.current === ACTIONS.PREV) {
         if (index > 0) setStepIndex(index - 1);

@@ -123,80 +123,28 @@ const useAreaSelectSteps = (): Step[] => {
         placement: "left",
       },
       {
-        target: '[data-tour="map-container"]',
+        target: '[data-tour="node-selection"]',
         content: (
           <TourStepContent>
             <TourStepHeader
-              icon={TourIcons.map("w-4 h-4 text-background")}
-              title={t("tour.areaSelect.mapContainer.title")}
-            />
-            <TourDescription>{t("tour.areaSelect.mapContainer.description")}</TourDescription>
-            <TourTipBox icon={TourIcons.search("w-4 h-4 text-muted-foreground")} variant="compact">
-              {t("tour.areaSelect.mapContainer.tip")}
-            </TourTipBox>
-          </TourStepContent>
-        ),
-        placement: "center",
-        spotlightClicks: true,
-        disableScrolling: false,
-      },
-      {
-        target: '[data-tour="municipality-search"]',
-        content: (
-          <TourStepContent>
-            <TourStepHeader
-              icon={TourIcons.search("w-4 h-4 text-background")}
-              title={t("tour.areaSelect.search.title")}
-            />
-            <TourDescription>{t("tour.areaSelect.search.description")}</TourDescription>
-            <TourTipBox icon={TourIcons.search("w-4 h-4 text-muted-foreground")} variant="compact">
-              {t("tour.areaSelect.search.tip")}
-            </TourTipBox>
-          </TourStepContent>
-        ),
-        placement: "right",
-      },
-      {
-        target: '[data-tour="area-input-mode"]',
-        content: (
-          <TourStepContent>
-            <TourStepHeader
-              icon={TourIcons.pencil("w-4 h-4 text-background")}
-              title={t("tour.areaSelect.areaInput.title", "Area input")}
+              icon={TourIcons.location("w-4 h-4 text-background")}
+              title={t("tour.areaSelect.nodes.title", "Node selection")}
             />
             <TourDescription>
               {t(
-                "tour.areaSelect.areaInput.description",
-                "Draw the area directly on the map or upload a GeoJSON Polygon/MultiPolygon boundary."
+                "tour.areaSelect.nodes.description",
+                "Choose the CO2 sources and sinks the model routes between."
               )}
             </TourDescription>
             <TourTipBox
-              icon={TourIcons.location("w-4 h-4 text-muted-foreground")}
+              icon={TourIcons.info("w-4 h-4 text-muted-foreground")}
               variant="compact"
             >
               {t(
-                "tour.areaSelect.areaInput.tip",
-                "The model can continue only after one valid area of interest is available."
+                "tour.areaSelect.nodes.tip",
+                "At least one node is required before the model can continue."
               )}
             </TourTipBox>
-          </TourStepContent>
-        ),
-        placement: "right",
-      },
-      {
-        target: '[data-tour="area-status"]',
-        content: (
-          <TourStepContent>
-            <TourStepHeader
-              icon={TourIcons.info("w-4 h-4 text-background")}
-              title={t("tour.areaSelect.areaStatus.title", "AOI status")}
-            />
-            <TourDescription>
-              {t(
-                "tour.areaSelect.areaStatus.description",
-                "This status confirms whether the boundary is missing, drawn, uploaded, or blocked by an upload error."
-              )}
-            </TourDescription>
           </TourStepContent>
         ),
         placement: "right",
@@ -219,30 +167,6 @@ const useAreaSelectSteps = (): Step[] => {
               {t(
                 "tour.areaSelect.precomputed.tip",
                 "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-              )}
-            </TourTipBox>
-          </TourStepContent>
-        ),
-        placement: "right",
-      },
-      {
-        target: '[data-tour="optional-layers"]',
-        content: (
-          <TourStepContent>
-            <TourStepHeader
-              icon={TourIcons.layers("w-4 h-4 text-background")}
-              title={t("tour.areaSelect.optionalLayers.title", "Risk signals")}
-            />
-            <TourDescription>
-              {t(
-                "tour.areaSelect.optionalLayers.description",
-                "These toggles control which optional signals are sent with the model request, including weather, terrain, and historical events."
-              )}
-            </TourDescription>
-            <TourTipBox icon={TourIcons.activity("w-4 h-4 text-muted-foreground")} variant="compact">
-              {t(
-                "tour.areaSelect.optionalLayers.tip",
-                "Keep the weather signal enabled for normal runs; disabling it is useful only for a baseline comparison."
               )}
             </TourTipBox>
           </TourStepContent>
@@ -338,18 +262,13 @@ export const AreaSelectTour: React.FC<AreaSelectTourProps> = ({
   const [isStepReady, setIsStepReady] = useState(true);
   const areaSelectSteps = useAreaSelectSteps();
 
-  // Change steps through this so `run` (isStepReady) drops to false in the SAME
-  // batched update as the step change. Otherwise react-joyride briefly sees the
-  // new stepIndex while run is still true, searches for a target whose panel
-  // hasn't switched yet, fires TARGET_NOT_FOUND, and the controller jumps
-  // forward — which made the Back button appear to do nothing across a
-  // configurator-step boundary.
+  // Same batch as the step.
   const changeStep = useCallback((next: number) => {
     setIsStepReady(false);
     setStepIndex(next);
   }, []);
 
-  // Reset step index when tour opens
+  // Reset on open.
   useEffect(() => {
     if (isOpen) {
       setStepIndex(0);
@@ -375,7 +294,7 @@ export const AreaSelectTour: React.FC<AreaSelectTourProps> = ({
     return () => window.clearTimeout(timeout);
   }, [isOpen, onConfiguratorStepChange, stepIndex]);
 
-  // Keep the current tour target visible after the configurator panel changes.
+  // Keep target visible.
   useEffect(() => {
     if (!isOpen || !isStepReady) return;
     const currentTarget = areaSelectSteps[stepIndex]?.target;

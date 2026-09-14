@@ -1,458 +1,157 @@
-import {
-  FC,
-  Fragment,
-  Suspense,
-  lazy,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState, type FC } from "react";
 import { useParams } from "react-router-dom";
-import { useTranslation } from "@/i18n";
+import { AlertCircle, Loader2 } from "lucide-react";
 
-import axios from "@/lib/axios";
+import { useTranslation } from "@/i18n";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import { MapContainer } from "@/components/shared/MapContainer";
-import { isMapLibreDarkLayerId, useMapStore } from "@/features/interactive-map/store/map-store";
-import MapSearchBar from "@/features/interactive-map/MapSearchBar";
+import { useMapStore } from "@/features/interactive-map/store/map-store";
 import { modelService, Model } from "@/features/model-dashboard/services/modelService";
-import { CreateWorkspaceModal } from "@/components/workspace";
-
-import { useRiskMetrics } from "./hooks/useRiskMetrics";
-import { useRiskLayers } from "./hooks/useRiskLayers";
-import { useFrameWeather } from "./hooks/useFrameWeather";
-import { useReferenceLayers } from "./hooks/useReferenceLayers";
-import { useDailyRiskDistribution } from "./hooks/useDailyRiskDistribution";
-import { useWorkspaceModelSelector } from "./hooks/useWorkspaceModelSelector";
+import { getSelectedNodeIdsFromConfig } from "@/features/configurator/hooks/area-select/utils";
 import {
-  DAILY_FRAME_KEY_PATTERN,
-  DEFAULT_VISIBLE_RISK_LEVELS,
-  RESULT_DEFAULT_OPACITY,
-  POLL_INTERVAL_MS,
-  RISK_LEVELS,
-  type ModelResult,
-  type RiskLevelValue,
-  type VisibleRiskLevels,
-} from "./viewer-config";
+  routeService,
+  useNodeOLLayers,
+  useNodesQuery,
+  useFitToNodes,
+  type CO2Route,
+} from "@/features/co2-nodes";
+import { formatNumber } from "@/features/co2-nodes/utils/format";
+
 import { extractErrorMessage } from "./viewer-helpers";
-import { ViewerHeader } from "./components/ViewerHeader";
-import { ViewerPlayerOverlay } from "./components/ViewerPlayerOverlay";
-import { ViewerSidebarRail } from "./components/ViewerSidebarRail";
 import { ViewerStatusBanners } from "./components/ViewerStatusBanners";
-import { OverlaysPanel, RiskLegendPanel } from "./components/ViewerMapPanels";
-import { RiskTimelinePanel } from "./components/RiskTimelinePanel";
 
-// Cesium is several MB, so load the 3D view (and Cesium with it) only when opened.
-const Cesium3DView = lazy(() =>
-  import("./components/Cesium3DView").then((m) => ({ default: m.Cesium3DView }))
-);
+const FIT_PADDING: [number, number, number, number] = [48, 48, 48, 48];
 
-interface ModelResultsViewerProps {
-  modelId?: number;
-}
-
-export const ModelResultsViewer: FC<ModelResultsViewerProps> = ({ modelId: propModelId }) => {
-  const { id: paramId } = useParams<{ id: string }>();
+/** One model's nodes and routes. */
+export const ModelResultsViewer: FC = () => {
   const { t } = useTranslation();
-  useDocumentTitle(t("modelResults.title", "Model Results"));
-
-  const resolvedModelId = propModelId ?? (paramId ? Number(paramId) : undefined);
-
-  const { map } = useMapStore();
-  const selectedBaseLayerId = useMapStore((s) => s.selectedBaseLayerId);
-  const isDarkBaseLayer = isMapLibreDarkLayerId(selectedBaseLayerId);
+  const { id } = useParams<{ id: string }>();
+  const modelId = Number(id);
 
   const [model, setModel] = useState<Model | null>(null);
-  const [results, setResults] = useState<ModelResult[]>([]);
+  const [routes, setRoutes] = useState<CO2Route[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [layerVisible, setLayerVisible] = useState(true);
-  const [layerOpacity, setLayerOpacity] = useState(RESULT_DEFAULT_OPACITY);
-  const [visibleRiskLevels, setVisibleRiskLevels] = useState<VisibleRiskLevels>(
-    DEFAULT_VISIBLE_RISK_LEVELS
-  );
-  const [show3D, setShow3D] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const playFrameRef = useRef(0);
-  const [showTimeline, setShowTimeline] = useState(false);
-  const [roadsVisible, setRoadsVisible] = useState(true);
-  const [labelsVisible, setLabelsVisible] = useState(false);
+  const map = useMapStore((state) => state.map);
+  const { data: nodes = [] } = useNodesQuery();
 
-  // Fullscreen the document, not the viewer div: body portals stay visible.
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  useEffect(() => {
-    const onChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
-    document.addEventListener("fullscreenchange", onChange);
-    return () => document.removeEventListener("fullscreenchange", onChange);
-  }, []);
-  const toggleFullscreen = () => {
-    if (document.fullscreenElement) {
-      void document.exitFullscreen();
-    } else {
-      void document.documentElement.requestFullscreen();
-    }
-  };
-
-  const workspaceSelector = useWorkspaceModelSelector(model, resolvedModelId);
-  const { metrics: legendMetrics } = useRiskMetrics(resolvedModelId);
-
-  const activeResult = results[0];
-  const layerReady = activeResult?.geoserver_status === "configured";
-  const layerPending = Boolean(activeResult && !layerReady);
-  const pollTimerRef = useRef<number | null>(null);
-
-  const {
-    riskLayerEntries,
-    riskLayerEntriesRef,
-    availableLayers,
-    selectedLayerKey,
-    selectedLayerKeyRef,
-    tileErrors,
-    wms3D,
-    attachLayer,
-    selectLayer,
-    applyDailyFrame,
-    scheduleMapRenderRefresh,
-  } = useRiskLayers({
-    map,
-    modelId: resolvedModelId,
-    layerVisible,
-    layerOpacity,
-    visibleRiskLevels,
-    onError: setError,
-  });
-
-  useReferenceLayers(map, isDarkBaseLayer, roadsVisible, labelsVisible, scheduleMapRenderRefresh);
-
-  // ----- Data loading -----
-
-  const loadData = useCallback(async () => {
-    if (!resolvedModelId) {
-      setError(t("modelResults.errors.noId", "No model ID provided"));
-      setLoading(false);
-      return;
-    }
-    try {
-      setError(null);
-      setLoading(true);
-      const [modelRes, resultsRes] = await Promise.all([
-        modelService.getModelById(resolvedModelId),
-        axios.get(`/models/${resolvedModelId}/results`),
-      ]);
-
-      if (modelRes.success && modelRes.data) setModel(modelRes.data);
-
-      const raw = resultsRes.data?.data;
-      const list: ModelResult[] = Array.isArray(raw) ? raw : [];
-      setResults(list);
-    } catch (err) {
-      setError(
-        extractErrorMessage(
-          err,
-          t("modelResults.errors.loadFailed", "Failed to load model results")
-        )
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [resolvedModelId, t]);
+  useDocumentTitle(model?.title ?? t("modelResults.title", "Model results"));
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
-
-  // Attach the layer once both the map is ready and the result is configured.
-  useEffect(() => {
-    if (!map || !activeResult || riskLayerEntriesRef.current.length > 0) return;
-    if (activeResult.geoserver_status !== "configured") return;
-    attachLayer(activeResult);
-  }, [map, activeResult, attachLayer, riskLayerEntriesRef]);
-
-  // Poll for readiness while the layer is still being processed server-side.
-  useEffect(() => {
-    if (!layerPending) return;
-    pollTimerRef.current = window.setInterval(() => {
-      loadData();
-    }, POLL_INTERVAL_MS);
+    if (!Number.isFinite(modelId)) return;
+    let cancelled = false;
+    setLoading(true);
+    Promise.all([modelService.getModel(modelId), routeService.getRoutes(modelId)])
+      .then(([loaded, saved]) => {
+        if (cancelled) return;
+        setModel(loaded);
+        setRoutes(saved);
+        setError(null);
+      })
+      .catch((caught: unknown) => {
+        if (!cancelled) setError(extractErrorMessage(caught));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
     return () => {
-      if (pollTimerRef.current !== null) {
-        clearInterval(pollTimerRef.current);
-        pollTimerRef.current = null;
-      }
+      cancelled = true;
     };
-  }, [layerPending, loadData]);
+  }, [modelId]);
 
-  const handleSelectLayer = useCallback(
-    (key: string) => {
-      setPlaying(false);
-      selectLayer(key, activeResult);
-    },
-    [activeResult, selectLayer]
+  const selectedIds = useMemo(
+    () => (model?.config ? getSelectedNodeIdsFromConfig(model.config) : []),
+    [model],
   );
 
-  // ----- Daily risk animation (dynamic runs publish layers/risk_<date>.tif per day) -----
+  const modelNodes = useMemo(() => {
+    const picked = new Set(selectedIds);
+    return nodes.filter((node) => picked.has(node.id));
+  }, [nodes, selectedIds]);
 
-  const dailyFrames = useMemo(
-    () =>
-      availableLayers
-        .filter((l) => DAILY_FRAME_KEY_PATTERN.test(l.key))
-        .sort((a, b) => a.key.localeCompare(b.key)),
-    [availableLayers]
-  );
-  // Daily frames are driven by the player, so keep them out of the dataset switcher.
-  const switcherLayers = useMemo(
-    () => availableLayers.filter((l) => !DAILY_FRAME_KEY_PATTERN.test(l.key)),
-    [availableLayers]
-  );
-  const playingFrameDate = DAILY_FRAME_KEY_PATTERN.exec(selectedLayerKey)?.[1] ?? null;
-  const dailyFrameIndex = dailyFrames.findIndex((f) => f.key === selectedLayerKey);
+  useNodeOLLayers({ map, nodes: modelNodes, selectedIds, onToggle: () => {} });
+  useFitToNodes({ map, nodes: modelNodes, enabled: modelNodes.length > 0, padding: FIT_PADDING });
 
-  const { currentFrameWeather, rankedRiskDays, riskRankIndex, setRiskRankIndex, riskRankDay } =
-    useFrameWeather(resolvedModelId, dailyFrames, playingFrameDate);
-
-  useEffect(() => {
-    if (!playing) return;
-    if (dailyFrames.length < 2) {
-      setPlaying(false);
-      return;
+  const byMode = useMemo(() => {
+    const grouped = new Map<string, CO2Route[]>();
+    for (const route of routes) {
+      const list = grouped.get(route.mode) ?? [];
+      list.push(route);
+      grouped.set(route.mode, list);
     }
-    // Resume from the frame currently shown (or start at the first day).
-    const current = dailyFrames.findIndex((f) => f.key === selectedLayerKeyRef.current);
-    playFrameRef.current = current >= 0 ? current : -1;
-    const tick = () => {
-      playFrameRef.current = (playFrameRef.current + 1) % dailyFrames.length;
-      applyDailyFrame(dailyFrames[playFrameRef.current]);
-    };
-    tick();
-    const id = window.setInterval(tick, 2000);
-    return () => clearInterval(id);
-  }, [playing, dailyFrames, applyDailyFrame, selectedLayerKeyRef]);
-
-  const [prefetchReady, setPrefetchReady] = useState(false);
-  useEffect(() => {
-    if (dailyFrames.length < 2) return;
-    const id = window.setTimeout(() => setPrefetchReady(true), 15_000);
-    return () => clearTimeout(id);
-  }, [dailyFrames.length]);
-  const dailySeries = useDailyRiskDistribution(
-    resolvedModelId,
-    dailyFrames.length >= 2 && (showTimeline || prefetchReady)
-  );
-
-  const showFrameByDate = useCallback(
-    (date: string, pausePlayback: boolean) => {
-      if (pausePlayback) setPlaying(false);
-      const frame = dailyFrames.find((f) => f.key.slice(5) === date);
-      if (frame) applyDailyFrame(frame);
-    },
-    [applyDailyFrame, dailyFrames]
-  );
-
-  // ----- Derived UI state -----
-
-  const dateRange = useMemo(() => {
-    if (!model?.from_date || !model?.to_date) return null;
-    const from = new Date(model.from_date).toLocaleDateString();
-    const to = new Date(model.to_date).toLocaleDateString();
-    return `${from} – ${to}`;
-  }, [model]);
-
-  const riskDistribution = legendMetrics.riskDistribution;
-  const riskLevelAvailability = useMemo<VisibleRiskLevels>(() => {
-    if (!riskDistribution) {
-      return { 1: true, 2: true, 3: true, 4: true, 5: true };
-    }
-    return {
-      1: riskDistribution.veryLow > 0,
-      2: riskDistribution.low > 0,
-      3: riskDistribution.moderate > 0,
-      4: riskDistribution.high > 0,
-      5: riskDistribution.veryHigh > 0,
-    };
-  }, [riskDistribution]);
-
-  useEffect(() => {
-    if (!riskDistribution) return;
-    setVisibleRiskLevels((current) => {
-      let changed = false;
-      const next = { ...current };
-      RISK_LEVELS.forEach((level) => {
-        if (!riskLevelAvailability[level.value] && next[level.value]) {
-          next[level.value] = false;
-          changed = true;
-        }
-      });
-      return changed ? next : current;
-    });
-  }, [riskDistribution, riskLevelAvailability]);
-
-  const hasRiskLayers = riskLayerEntries.length > 0;
-  const allRiskLevelsVisible = RISK_LEVELS.every(
-    (level) => !riskLevelAvailability[level.value] || visibleRiskLevels[level.value]
-  );
-  const toggleRiskLevel = useCallback((value: RiskLevelValue, checked: boolean) => {
-    setVisibleRiskLevels((current) => ({ ...current, [value]: checked }));
-  }, []);
-  const setAllRiskLevelsVisible = useCallback(
-    (checked: boolean) => {
-      setVisibleRiskLevels({
-        1: checked && riskLevelAvailability[1],
-        2: checked && riskLevelAvailability[2],
-        3: checked && riskLevelAvailability[3],
-        4: checked && riskLevelAvailability[4],
-        5: checked && riskLevelAvailability[5],
-      });
-    },
-    [riskLevelAvailability]
-  );
-
-  // ----- Render -----
+    return [...grouped.entries()];
+  }, [routes]);
 
   const header = (
-    <ViewerHeader
-      model={model}
-      dateRange={dateRange}
-      loading={loading}
-      isLoadingPreference={workspaceSelector.isLoadingPreference}
-      selectedWorkspace={workspaceSelector.selectedWorkspace}
-      currentWorkspace={workspaceSelector.currentWorkspace}
-      preferredWorkspaceId={workspaceSelector.preferredWorkspaceId}
-      workspaceModels={workspaceSelector.workspaceModels}
-      selectedModelId={workspaceSelector.selectedModelId}
-      isLoadingModels={workspaceSelector.isLoadingModels}
-      wsReloadKey={workspaceSelector.wsReloadKey}
-      hasRiskLayers={hasRiskLayers}
-      layerOpacity={layerOpacity}
-      onWorkspaceChange={workspaceSelector.handleWorkspaceChange}
-      onCreateWorkspace={() => workspaceSelector.setIsCreateWsOpen(true)}
-      onModelChange={workspaceSelector.handleModelChange}
-      onOpacityChange={setLayerOpacity}
-      onRefresh={loadData}
-    />
+    <div className="flex h-11 items-center gap-3 border-b border-border bg-background px-3">
+      <h1 className="truncate text-sm font-semibold text-foreground">
+        {model?.title ?? t("modelResults.title", "Model results")}
+      </h1>
+      {loading && <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />}
+      <span className="ml-auto text-[11px] text-muted-foreground">
+        {t("modelResults.summary", {
+          nodes: modelNodes.length,
+          routes: routes.length,
+          defaultValue: `${modelNodes.length} nodes · ${routes.length} routes`,
+        })}
+      </span>
+    </div>
   );
 
-  const mapOverlays = (
-    <>
-      {layerReady && (
-        <ViewerPlayerOverlay
-          dailyFrames={dailyFrames}
-          playing={playing}
-          onTogglePlay={() => setPlaying((v) => !v)}
-          playingFrameDate={playingFrameDate}
-          dailyFrameIndex={dailyFrameIndex}
-          currentFrameWeather={currentFrameWeather}
-          rankedRiskDays={rankedRiskDays}
-          riskRankDay={riskRankDay}
-          riskRankIndex={riskRankIndex}
-          onSelectRankedDay={(day, pausePlayback) => {
-            showFrameByDate(day.date, pausePlayback);
-            setRiskRankIndex((i) => (i + 1) % (rankedRiskDays?.length ?? 1));
-          }}
-          legendMetrics={legendMetrics}
-        />
-      )}
-
-      {/* 3D terrain sits inside the map container below the shared overlays. */}
-      {show3D && wms3D && (
-        <Suspense fallback={null}>
-          <Cesium3DView
-            wmsUrl={wms3D.wmsUrl}
-            layerName={wms3D.layerName}
-            aoi={model?.coordinates}
-            visibleRiskLevels={visibleRiskLevels}
-            roadsVisible={roadsVisible}
-            labelsVisible={labelsVisible}
-          />
-        </Suspense>
-      )}
-
-      <ViewerStatusBanners
-        mapReady={Boolean(map)}
-        loading={loading}
-        error={error}
-        tileErrors={tileErrors}
-        layerPending={layerPending}
-        hasResults={results.length > 0}
-      />
-
-      {map && (
-        <OverlaysPanel
-          roadsVisible={roadsVisible}
-          labelsVisible={labelsVisible}
-          onRoadsChange={setRoadsVisible}
-          onLabelsChange={setLabelsVisible}
-        />
-      )}
-
-      {hasRiskLayers && (
-        <RiskLegendPanel
-          visibleRiskLevels={visibleRiskLevels}
-          riskLevelAvailability={riskLevelAvailability}
-          riskDistribution={riskDistribution}
-          allRiskLevelsVisible={allRiskLevelsVisible}
-          onToggleAll={setAllRiskLevelsVisible}
-          onToggleLevel={toggleRiskLevel}
-        />
-      )}
-
-      {showTimeline && dailyFrames.length >= 2 && (
-        <RiskTimelinePanel
-          days={dailySeries.data?.days ?? null}
-          isLoading={dailySeries.isLoading}
-          error={dailySeries.error}
-          currentDate={playingFrameDate}
-          onSelectDate={(date) => showFrameByDate(date, true)}
-          onClose={() => setShowTimeline(false)}
-        />
-      )}
-
-      <MapSearchBar />
-    </>
+  const overlays = byMode.length > 0 && (
+    <div className="absolute bottom-4 right-4 z-20 max-h-[60%] w-80 overflow-y-auto rounded-xl border border-border bg-card/95 shadow-lg backdrop-blur-md">
+      {byMode.map(([mode, list]) => (
+        <div key={mode}>
+          <div className="border-b border-border bg-muted/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {t(`co2Nodes.modes.${mode}`, mode)} · {list.length}
+          </div>
+          <table className="w-full text-xs">
+            <tbody>
+              {list.map((route) => (
+                <tr key={`${route.mode}-${route.from_node_id}-${route.to_node_id}`} className="border-t border-border/60">
+                  <td className="px-3 py-1.5">
+                    {route.from_node_id} → {route.to_node_id}
+                  </td>
+                  <td className="px-3 py-1.5 text-right tabular-nums text-muted-foreground">
+                    {route.distance_km !== undefined
+                      ? `${formatNumber(route.distance_km, 1)} km`
+                      : t("co2Routing.unrouted", "Not routed")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </div>
   );
+
+  if (error) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <p className="flex items-center gap-2 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+          {error}
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <Fragment>
-      <div className="h-full w-full flex bg-background overflow-hidden relative">
-        <div className="flex-1 h-full min-w-0" style={{ paddingRight: "var(--sidebar-width)" }}>
-          <MapContainer
-            modal={false}
-            showSidebar={false}
-            hideMapControls={show3D}
-            topBar={header}
-            mapHeader={null}
-            mapOverlays={mapOverlays}
-          />
-        </div>
-        <ViewerSidebarRail
-          show3D={show3D}
-          can3D={Boolean(wms3D)}
-          onToggle3D={() => setShow3D((v) => !v)}
-          isFullscreen={isFullscreen}
-          onToggleFullscreen={toggleFullscreen}
-          showTimelineButton={dailyFrames.length >= 2}
-          showTimeline={showTimeline}
-          onToggleTimeline={() => setShowTimeline((v) => !v)}
-          hasRiskLayers={hasRiskLayers}
-          layerVisible={layerVisible}
-          onToggleLayerVisible={() => setLayerVisible((v) => !v)}
-          switcherLayers={switcherLayers}
-          activeLayerKey={playingFrameDate ? "risk" : selectedLayerKey}
-          onSelectLayer={handleSelectLayer}
-        />
-      </div>
-
-      <CreateWorkspaceModal
-        isOpen={workspaceSelector.isCreateWsOpen}
-        onClose={() => workspaceSelector.setIsCreateWsOpen(false)}
-        onSuccess={(newWorkspace) => {
-          workspaceSelector.setIsCreateWsOpen(false);
-          workspaceSelector.handleWorkspaceChange(newWorkspace);
-          workspaceSelector.setWsReloadKey((k) => k + 1);
-        }}
+    <div className="h-full w-full">
+      <MapContainer
+        modal={false}
+        showSidebar={false}
+        topBar={header}
+        mapHeader={null}
+        mapOverlays={
+          <>
+            <ViewerStatusBanners model={model} />
+            {overlays}
+          </>
+        }
       />
-    </Fragment>
+    </div>
   );
 };

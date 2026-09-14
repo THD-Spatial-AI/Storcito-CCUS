@@ -11,7 +11,7 @@ interface ViewerStatusBannersProps {
   hasResults: boolean;
 }
 
-// Floating status messages: map init, errors, tile failures, publishing, empty run.
+// Floating status messages.
 export const ViewerStatusBanners: FC<ViewerStatusBannersProps> = ({
   mapReady,
   loading,

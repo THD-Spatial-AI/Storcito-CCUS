@@ -6,9 +6,7 @@ interface TourStepHeaderProps {
   variant?: "large" | "small";
 }
 
-/**
- * Header component for tour steps with icon and title
- */
+/** Step header. */
 export const TourStepHeader: React.FC<TourStepHeaderProps> = ({ icon, title, variant = "small" }) => {
   if (variant === "large") {
     return (
@@ -37,9 +35,7 @@ interface TourTipBoxProps {
   variant?: "default" | "compact";
 }
 
-/**
- * Info/tip box component for tour steps
- */
+/** Tip box. */
 export const TourTipBox: React.FC<TourTipBoxProps> = ({ icon, children, variant = "default" }) => {
   const padding = variant === "compact" ? "p-2.5" : "p-3";
   const textSize = variant === "compact" ? "text-xs" : "";
@@ -57,9 +53,7 @@ interface TourStepContentProps {
   spacing?: "default" | "large";
 }
 
-/**
- * Wrapper component for tour step content with consistent spacing
- */
+/** Step wrapper. */
 export const TourStepContent: React.FC<TourStepContentProps> = ({ children, spacing = "default" }) => {
   const spacingClass = spacing === "large" ? "space-y-4" : "space-y-3";
   return <div className={spacingClass}>{children}</div>;
@@ -70,16 +64,14 @@ interface TourDescriptionProps {
   variant?: "default" | "muted";
 }
 
-/**
- * Description text component for tour steps
- */
+/** Step description. */
 export const TourDescription: React.FC<TourDescriptionProps> = ({ children, variant = "default" }) => {
   const baseClass = "text-muted-foreground";
   const sizeClass = variant === "default" ? "text-sm leading-relaxed" : "leading-relaxed";
   return <p className={`${baseClass} ${sizeClass}`}>{children}</p>;
 };
 
-// Common SVG icons used across tours
+// Shared tour icons.
 export const TourIcons = {
   plus: (className = "w-4 h-4") => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,6 +165,11 @@ export const TourIcons = {
   calendar: (className = "w-4 h-4") => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  ),
+  fire: (className = "w-4 h-4") => (
+    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
     </svg>
   ),
   activity: (className = "w-4 h-4") => (
