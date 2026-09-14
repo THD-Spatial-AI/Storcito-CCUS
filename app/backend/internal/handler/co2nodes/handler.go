@@ -2,10 +2,14 @@ package co2nodes
 
 import (
 	"context"
+	"errors"
+	"math"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 
@@ -69,7 +73,7 @@ func (h *Handler) List(c *gin.Context) {
 	}
 
 	var nodes []models.CO2Node
-	if err := query.Order("node_id asc").Find(&nodes).Error; err != nil {
+	if err := query.Omit("metadata").Order("node_id asc").Find(&nodes).Error; err != nil {
 		httputil.InternalError(c, "Failed to load CO2 nodes")
 		return
 	}
@@ -78,11 +82,12 @@ func (h *Handler) List(c *gin.Context) {
 }
 
 type importRequest struct {
-	Country string  `json:"country"`
-	MinCO2T float64 `json:"min_co2_t"`
-	BBox    string  `json:"bbox"`
-	Limit   int     `json:"limit"`
-	Offset  int     `json:"offset"`
+	Country string   `json:"country"`
+	MinCO2T *float64 `json:"min_co2_t"`
+	All     bool     `json:"all"`
+	BBox    string   `json:"bbox"`
+	Limit   int      `json:"limit"`
+	Offset  int      `json:"offset"`
 }
 
 // Import pulls from STORE_CO2.
@@ -97,31 +102,44 @@ func (h *Handler) Import(c *gin.Context) {
 		httputil.BadRequest(c, "Invalid request body")
 		return
 	}
-	if req.Limit <= 0 {
-		req.Limit = 500
+	if req.Limit < 0 || req.Limit > 10000 || req.Offset < 0 || (req.MinCO2T != nil && (math.IsNaN(*req.MinCO2T) || math.IsInf(*req.MinCO2T, 0) || *req.MinCO2T < 0)) {
+		httputil.BadRequest(c, "Invalid import bounds")
+		return
+	}
+	if req.Limit == 0 {
+		req.Limit = 1000
+		req.All = true
+	}
+	minFlux := 0.0
+	if req.MinCO2T != nil {
+		minFlux = *req.MinCO2T
 	}
 
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 60*time.Second)
 	defer cancel()
 
-	fetched, err := h.store.Nodes(ctx, storeco2.NodeQuery{
-		Country: req.Country,
-		MinCO2T: req.MinCO2T,
-		BBox:    req.BBox,
-		Limit:   req.Limit,
-		Offset:  req.Offset,
-	})
+	page, err := h.store.ImportNodes(ctx, storeco2.NodeQuery{
+		Country:    req.Country,
+		MinCO2T:    minFlux,
+		HasMinCO2T: req.MinCO2T != nil,
+		BBox:       req.BBox,
+		Limit:      req.Limit,
+		Offset:     req.Offset,
+	}, req.All)
 	if err != nil {
+		var upstream *storeco2.HTTPError
+		if errors.As(err, &upstream) && (upstream.StatusCode == 400 || upstream.StatusCode == 409 || upstream.StatusCode == 422) {
+			c.JSON(upstream.StatusCode, gin.H{"error": upstream.Detail})
+			return
+		}
 		httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
 		return
 	}
+	fetched := page.Nodes
 	if len(fetched) == 0 {
-		httputil.SuccessResponse(c, gin.H{"imported": 0, "total": h.count()})
+		httputil.SuccessResponse(c, gin.H{"imported": 0, "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset, "dataset_version": page.DatasetVersion})
 		return
 	}
-
-	// Add industry classification.
-	industries := h.industryByID(ctx, req)
 
 	rows := make([]models.CO2Node, 0, len(fetched))
 	for _, node := range fetched {
@@ -133,7 +151,8 @@ func (h *Handler) Import(c *gin.Context) {
 			Altitude:     node.Altitude,
 			AnnualFlux:   node.AnnualFlux,
 			NodeType:     node.NodeType,
-			Industry:     industries[node.NodeID],
+			Industry:     node.Industry,
+			Metadata:     datatypes.JSON(node.Metadata),
 			CountryCode:  node.CountryCode,
 			State:        cleanState(node.State, node.CountryCode),
 			Municipality: node.Municipality,
@@ -142,20 +161,22 @@ func (h *Handler) Import(c *gin.Context) {
 	}
 
 	// Re-runnable.
-	err = h.db.Clauses(clause.OnConflict{
-		Columns: []clause.Column{{Name: "source"}, {Name: "node_id"}},
-		DoUpdates: clause.AssignmentColumns([]string{
-			"node_name", "longitude", "latitude", "altitude",
-			"annual_flux", "node_type", "industry", "country_code",
-			"state", "municipality", "updated_at",
-		}),
-	}).CreateInBatches(&rows, 200).Error
+	err = h.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		return tx.Clauses(clause.OnConflict{
+			Columns: []clause.Column{{Name: "source"}, {Name: "node_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{
+				"node_name", "longitude", "latitude", "altitude",
+				"annual_flux", "node_type", "industry", "country_code",
+				"state", "municipality", "metadata", "updated_at",
+			}),
+		}).CreateInBatches(&rows, 200).Error
+	})
 	if err != nil {
 		httputil.InternalError(c, "Failed to save imported nodes")
 		return
 	}
 
-	httputil.SuccessResponse(c, gin.H{"imported": len(rows), "total": h.count()})
+	httputil.SuccessResponse(c, gin.H{"imported": len(rows), "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset + len(rows), "dataset_version": page.DatasetVersion})
 }
 
 func (h *Handler) count() int64 {
@@ -164,21 +185,21 @@ func (h *Handler) count() int64 {
 	return total
 }
 
-// industryByID maps IDs.
-func (h *Handler) industryByID(ctx context.Context, req importRequest) map[string]*string {
-	page, err := h.store.PointSources(ctx, storeco2.PointSourceQuery{
-		Country: req.Country,
-		MinCO2T: req.MinCO2T,
-		BBox:    req.BBox,
-		Limit:   req.Limit,
-		Offset:  req.Offset,
-	})
-	if err != nil {
-		return map[string]*string{}
+// Source snapshot.
+func (h *Handler) Detail(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("nodeID"), 10, 64)
+	if err != nil || id == 0 {
+		httputil.BadRequest(c, "Invalid node id")
+		return
 	}
-	industries := make(map[string]*string, len(page.Items))
-	for _, source := range page.Items {
-		industries[source.EntityID] = source.Industry
+	var node models.CO2Node
+	if err := h.db.First(&node, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			httputil.NotFound(c, "Node not found")
+		} else {
+			httputil.InternalError(c, "Failed to load node")
+		}
+		return
 	}
-	return industries
+	httputil.SuccessResponse(c, node)
 }

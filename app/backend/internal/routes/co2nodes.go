@@ -11,5 +11,6 @@ func registerCO2NodeRoutes(api *gin.RouterGroup, handler *co2nodeshandler.Handle
 		return
 	}
 	api.GET("/co2-nodes", handler.List)
+	api.GET("/co2-nodes/:nodeID", handler.Detail)
 	api.POST("/co2-nodes/import", handler.Import)
 }

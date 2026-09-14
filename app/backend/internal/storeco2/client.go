@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -28,61 +27,93 @@ func NewClient(baseURL string) *Client {
 
 // Node is one sheet row.
 type Node struct {
-	NodeID       string   `json:"node_id"`
-	NodeName     string   `json:"node_name"`
-	Longitude    float64  `json:"longitude"`
-	Latitude     float64  `json:"latitude"`
-	Altitude     *float64 `json:"altitude"`
-	AnnualFlux   *float64 `json:"annual_flux"`
-	NodeType     string   `json:"node_type"`
-	CountryCode  *string  `json:"country_code"`
-	State        *string  `json:"state"`
-	Municipality *string  `json:"municipality"`
+	NodeID       string          `json:"node_id"`
+	NodeName     string          `json:"node_name"`
+	Longitude    float64         `json:"longitude"`
+	Latitude     float64         `json:"latitude"`
+	Altitude     *float64        `json:"altitude"`
+	AnnualFlux   *float64        `json:"annual_flux"`
+	NodeType     string          `json:"node_type"`
+	CountryCode  *string         `json:"country_code"`
+	State        *string         `json:"state"`
+	Municipality *string         `json:"municipality"`
+	Industry     *string         `json:"industry"`
+	Metadata     json.RawMessage `json:"metadata"`
 }
 
-type nodeList struct {
-	Nodes []Node `json:"nodes"`
-	Total int    `json:"total"`
+type NodePage struct {
+	Nodes          []Node `json:"nodes"`
+	Total          int    `json:"total"`
+	Limit          int    `json:"limit"`
+	Offset         int    `json:"offset"`
+	HasMore        bool   `json:"has_more"`
+	DatasetVersion string `json:"dataset_version"`
 }
 
 // PointSource is one facility.
 type PointSource struct {
-	EntityID           string   `json:"entity_id"`
-	Name               *string  `json:"name"`
-	Operator           *string  `json:"operator"`
-	Country            *string  `json:"country"`
-	State              *string  `json:"state"`
-	Municipality       *string  `json:"municipality"`
-	Latitude           *float64 `json:"latitude"`
-	Longitude          *float64 `json:"longitude"`
-	CO2TAnnual         *float64 `json:"co2_t_annual"`
-	CapacityMW         *float64 `json:"capacity_mw"`
-	Granularity        *string  `json:"granularity"`
-	Industry           *string  `json:"industry"`
-	CaptureGroup       *string  `json:"capture_group"`
-	CaptureApplication *string  `json:"capture_application"`
-	Technology         *string  `json:"technology"`
-	FuelNorm           *string  `json:"fuel_norm"`
-	SourceClass        *string  `json:"source_class"`
-	CO2Source          *string  `json:"co2_source"`
-	Status             *string  `json:"status"`
-	CO2Year            *int     `json:"co2_year"`
-	CommissioningYear  *int     `json:"commissioning_year"`
-	CO2IsEstimated     *bool    `json:"co2_is_estimated"`
+	Raw                json.RawMessage `json:"-"`
+	EntityID           string          `json:"entity_id"`
+	Name               *string         `json:"name"`
+	Operator           *string         `json:"operator"`
+	Country            *string         `json:"country"`
+	State              *string         `json:"state"`
+	Municipality       *string         `json:"municipality"`
+	Latitude           *float64        `json:"latitude"`
+	Longitude          *float64        `json:"longitude"`
+	CO2TAnnual         *float64        `json:"co2_t_annual"`
+	CapacityMW         *float64        `json:"capacity_mw"`
+	Granularity        *string         `json:"granularity"`
+	Industry           *string         `json:"industry"`
+	CaptureGroup       *string         `json:"capture_group"`
+	CaptureApplication *string         `json:"capture_application"`
+	Technology         *string         `json:"technology"`
+	FuelNorm           *string         `json:"fuel_norm"`
+	SourceClass        *string         `json:"source_class"`
+	CO2Source          *string         `json:"co2_source"`
+	Status             *string         `json:"status"`
+	CO2Year            *int            `json:"co2_year"`
+	CommissioningYear  *int            `json:"commissioning_year"`
+	CO2IsEstimated     *bool           `json:"co2_is_estimated"`
+}
+
+// Preserve source fields.
+func (p *PointSource) UnmarshalJSON(data []byte) error {
+	type plain PointSource
+	var decoded plain
+	if err := json.Unmarshal(data, &decoded); err != nil {
+		return err
+	}
+	*p = PointSource(decoded)
+	p.Raw = append(json.RawMessage(nil), data...)
+	return nil
+}
+
+func (p PointSource) MarshalJSON() ([]byte, error) {
+	if len(p.Raw) > 0 {
+		return p.Raw, nil
+	}
+	type plain PointSource
+	return json.Marshal(plain(p))
 }
 
 // PointSourcePage is one page.
 type PointSourcePage struct {
-	Items  []PointSource `json:"items"`
-	Total  int           `json:"total"`
-	Limit  int           `json:"limit"`
-	Offset int           `json:"offset"`
+	Items          []PointSource `json:"items"`
+	Total          int           `json:"total"`
+	Limit          int           `json:"limit"`
+	Offset         int           `json:"offset"`
+	HasMore        bool          `json:"has_more"`
+	DatasetVersion string        `json:"dataset_version"`
 }
 
 // PointSourceQuery filters sources.
 type PointSourceQuery struct {
 	Country         string
 	CaptureGroup    string
+	Status          string
+	HasMinCO2T      bool
+	DatasetVersion  string
 	MinCO2T         float64
 	BBox            string
 	Search          string
@@ -93,16 +124,23 @@ type PointSourceQuery struct {
 
 // CountryStat is per country.
 type CountryStat struct {
-	Country    string  `json:"country"`
-	Sources    int     `json:"sources"`
-	CO2TAnnual float64 `json:"co2_t_annual"`
+	Country    string   `json:"country"`
+	Sources    int      `json:"sources"`
+	CO2TAnnual *float64 `json:"co2_t_annual"`
 }
 
 // CaptureGroupStat is per group.
 type CaptureGroupStat struct {
-	CaptureGroup string  `json:"capture_group"`
-	Sources      int     `json:"sources"`
-	CO2TAnnual   float64 `json:"co2_t_annual"`
+	CaptureGroup *string  `json:"capture_group"`
+	Sources      int      `json:"sources"`
+	CO2TAnnual   *float64 `json:"co2_t_annual"`
+}
+
+// StatusStat is per status.
+type StatusStat struct {
+	Status     *string  `json:"status"`
+	Sources    int      `json:"sources"`
+	CO2TAnnual *float64 `json:"co2_t_annual"`
 }
 
 // Stats summarises the dataset.
@@ -111,6 +149,7 @@ type Stats struct {
 	WithCoordinates int                `json:"with_coordinates"`
 	ByCountry       []CountryStat      `json:"by_country"`
 	ByCaptureGroup  []CaptureGroupStat `json:"by_capture_group"`
+	ByStatus        []StatusStat       `json:"by_status"`
 }
 
 // Health is service state.
@@ -122,11 +161,13 @@ type Health struct {
 
 // NodeQuery filters the import.
 type NodeQuery struct {
-	Country string
-	MinCO2T float64
-	BBox    string
-	Limit   int
-	Offset  int
+	Country        string
+	HasMinCO2T     bool
+	DatasetVersion string
+	MinCO2T        float64
+	BBox           string
+	Limit          int
+	Offset         int
 }
 
 // Health probes the API.
@@ -140,11 +181,22 @@ func (c *Client) Health(ctx context.Context) (*Health, error) {
 
 // Nodes fetches sources.
 func (c *Client) Nodes(ctx context.Context, query NodeQuery) ([]Node, error) {
+	page, err := c.NodesPage(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	return page.Nodes, nil
+}
+
+func (c *Client) NodesPage(ctx context.Context, query NodeQuery) (*NodePage, error) {
 	values := url.Values{}
+	if query.DatasetVersion != "" {
+		values.Set("dataset_version", query.DatasetVersion)
+	}
 	if query.Country != "" {
 		values.Set("country", query.Country)
 	}
-	if query.MinCO2T > 0 {
+	if query.HasMinCO2T || query.MinCO2T > 0 {
 		values.Set("min_co2_t", strconv.FormatFloat(query.MinCO2T, 'f', -1, 64))
 	}
 	if query.BBox != "" {
@@ -162,23 +214,29 @@ func (c *Client) Nodes(ctx context.Context, query NodeQuery) ([]Node, error) {
 		path += "?" + encoded
 	}
 
-	var out nodeList
+	var out NodePage
 	if err := c.getJSON(ctx, path, &out); err != nil {
 		return nil, err
 	}
-	return out.Nodes, nil
+	return &out, nil
 }
 
 // PointSources pages the catalogue.
 func (c *Client) PointSources(ctx context.Context, query PointSourceQuery) (*PointSourcePage, error) {
 	values := url.Values{}
+	if query.DatasetVersion != "" {
+		values.Set("dataset_version", query.DatasetVersion)
+	}
 	if query.Country != "" {
 		values.Set("country", query.Country)
 	}
 	if query.CaptureGroup != "" {
 		values.Set("capture_group", query.CaptureGroup)
 	}
-	if query.MinCO2T > 0 {
+	if query.Status != "" {
+		values.Set("status", query.Status)
+	}
+	if query.HasMinCO2T || query.MinCO2T > 0 {
 		values.Set("min_co2_t", strconv.FormatFloat(query.MinCO2T, 'f', -1, 64))
 	}
 	if query.BBox != "" {
@@ -227,8 +285,7 @@ func (c *Client) PointSource(ctx context.Context, entityID string) (*PointSource
 		return nil, http.StatusNotFound, nil
 	}
 	if resp.StatusCode != http.StatusOK {
-		payload, _ := io.ReadAll(io.LimitReader(resp.Body, 2048))
-		return nil, resp.StatusCode, fmt.Errorf("store_co2 returned %s: %s", resp.Status, strings.TrimSpace(string(payload)))
+		return nil, resp.StatusCode, responseError(resp)
 	}
 	var out PointSource
 	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
@@ -269,12 +326,7 @@ func (c *Client) getJSON(ctx context.Context, path string, out any) error {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		payload, _ := io.ReadAll(io.LimitReader(resp.Body, 2048))
-		detail := strings.TrimSpace(string(payload))
-		if detail == "" {
-			return fmt.Errorf("store_co2 returned %s", resp.Status)
-		}
-		return fmt.Errorf("store_co2 returned %s: %s", resp.Status, detail)
+		return responseError(resp)
 	}
 	return json.NewDecoder(resp.Body).Decode(out)
 }

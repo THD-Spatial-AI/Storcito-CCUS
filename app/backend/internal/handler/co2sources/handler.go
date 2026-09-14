@@ -1,6 +1,8 @@
 package co2sources
 
 import (
+	"errors"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -30,18 +32,21 @@ func (h *Handler) List(c *gin.Context) {
 	}
 
 	query := storeco2.PointSourceQuery{
-		Country:      strings.TrimSpace(c.Query("country")),
-		CaptureGroup: strings.TrimSpace(c.Query("capture_group")),
-		BBox:         strings.TrimSpace(c.Query("bbox")),
-		Search:       strings.TrimSpace(c.Query("search")),
+		Country:        strings.TrimSpace(c.Query("country")),
+		CaptureGroup:   strings.TrimSpace(c.Query("capture_group")),
+		Status:         strings.TrimSpace(c.Query("status")),
+		BBox:           strings.TrimSpace(c.Query("bbox")),
+		Search:         strings.TrimSpace(c.Query("search")),
+		DatasetVersion: strings.TrimSpace(c.Query("dataset_version")),
 	}
 	if raw := strings.TrimSpace(c.Query("min_co2_t")); raw != "" {
 		value, err := strconv.ParseFloat(raw, 64)
-		if err != nil || value < 0 {
+		if err != nil || math.IsNaN(value) || math.IsInf(value, 0) || value < 0 {
 			httputil.BadRequest(c, "Invalid min_co2_t")
 			return
 		}
 		query.MinCO2T = value
+		query.HasMinCO2T = true
 	}
 	if raw := strings.TrimSpace(c.Query("with_coordinates")); raw != "" {
 		value, err := strconv.ParseBool(raw)
@@ -53,7 +58,7 @@ func (h *Handler) List(c *gin.Context) {
 	}
 	if raw := strings.TrimSpace(c.Query("limit")); raw != "" {
 		value, err := strconv.Atoi(raw)
-		if err != nil || value <= 0 {
+		if err != nil || value <= 0 || value > 10000 {
 			httputil.BadRequest(c, "Invalid limit")
 			return
 		}
@@ -70,7 +75,7 @@ func (h *Handler) List(c *gin.Context) {
 
 	page, err := h.store.PointSources(c.Request.Context(), query)
 	if err != nil {
-		httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
+		respondError(c, err)
 		return
 	}
 	httputil.SuccessResponse(c, page)
@@ -91,7 +96,7 @@ func (h *Handler) ByID(c *gin.Context) {
 
 	source, status, err := h.store.PointSource(c.Request.Context(), entityID)
 	if err != nil {
-		httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
+		respondError(c, err)
 		return
 	}
 	if status == http.StatusNotFound {
@@ -110,7 +115,7 @@ func (h *Handler) Stats(c *gin.Context) {
 
 	stats, err := h.store.Stats(c.Request.Context())
 	if err != nil {
-		httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
+		respondError(c, err)
 		return
 	}
 	httputil.SuccessResponse(c, stats)
@@ -125,8 +130,17 @@ func (h *Handler) NodeTypes(c *gin.Context) {
 
 	types, err := h.store.NodeTypes(c.Request.Context())
 	if err != nil {
-		httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
+		respondError(c, err)
 		return
 	}
 	httputil.SuccessResponse(c, gin.H{"node_types": types})
+}
+
+func respondError(c *gin.Context, err error) {
+	var upstream *storeco2.HTTPError
+	if errors.As(err, &upstream) && (upstream.StatusCode == 400 || upstream.StatusCode == 409 || upstream.StatusCode == 422) {
+		c.JSON(upstream.StatusCode, gin.H{"error": upstream.Detail})
+		return
+	}
+	httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
 }
