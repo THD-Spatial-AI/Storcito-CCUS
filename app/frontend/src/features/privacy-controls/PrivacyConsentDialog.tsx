@@ -94,7 +94,7 @@ export const PrivacyConsentDialog: React.FC<PrivacyConsentDialogProps> = ({
               onClick={() => window.open('/privacy', '_blank', 'noopener,noreferrer')}
               className="text-muted-foreground hover:text-foreground underline inline-flex items-center gap-1 bg-transparent border-0 cursor-pointer p-0 font-inherit"
             >
-              {t('privacy.firePolicy')} <ExternalLink className="w-3 h-3" aria-hidden="true" />
+              {t('privacy.platformPolicy')} <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </button>
           </p>
         </div>

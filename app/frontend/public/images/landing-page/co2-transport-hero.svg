@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" font-family="system-ui, sans-serif">
+  <!-- Sky CO2 molecules -->
+  <g opacity="0.45" font-weight="700">
+    <g transform="translate(250 265)"><circle r="34" fill="none" stroke="#B0AAA4" stroke-width="3"/><text y="8" text-anchor="middle" font-size="22" fill="#8F897F">CO₂</text></g>
+    <g transform="translate(360 185)"><circle r="24" fill="none" stroke="#B0AAA4" stroke-width="2.5"/><text y="6" text-anchor="middle" font-size="15" fill="#8F897F">CO₂</text></g>
+    <g transform="translate(1180 190)"><circle r="28" fill="none" stroke="#B0AAA4" stroke-width="2.5"/><text y="7" text-anchor="middle" font-size="17" fill="#8F897F">CO₂</text></g>
+  </g>
+
+  <!-- Clouds -->
+  <g fill="#FFFFFF" opacity="0.55">
+    <ellipse cx="540" cy="140" rx="95" ry="26"/>
+    <ellipse cx="600" cy="118" rx="68" ry="22"/>
+    <ellipse cx="1290" cy="105" rx="105" ry="26"/>
+    <ellipse cx="1360" cy="86" rx="66" ry="20"/>
+    <ellipse cx="900" cy="200" rx="70" ry="18"/>
+  </g>
+
+  <!-- Hills -->
+  <path d="M0 600 C 240 520, 420 500, 700 560 C 980 620, 1240 500, 1600 570 L1600 680 L0 680 Z" fill="#D9D5D1"/>
+  <path d="M0 645 C 300 585, 620 565, 900 612 C 1180 658, 1400 592, 1600 632 L1600 700 L0 700 Z" fill="#C7C2BC"/>
+
+  <!-- Ground -->
+  <rect x="0" y="660" width="1600" height="240" fill="#CFCAC4"/>
+  <rect x="0" y="660" width="1600" height="6" fill="#B0AAA4"/>
+
+  <!-- Rock layers -->
+  <g stroke="#B0AAA4" stroke-width="2" opacity="0.55" fill="none">
+    <path d="M1120 800 C 1250 788, 1420 792, 1600 784"/>
+    <path d="M1120 836 C 1260 826, 1430 830, 1600 822"/>
+  </g>
+
+  <!-- Storage dome -->
+  <ellipse cx="1400" cy="884" rx="125" ry="52" fill="#6A5F94"/>
+  <ellipse cx="1400" cy="884" rx="125" ry="52" fill="none" stroke="#4A3F6B" stroke-width="4"/>
+  <text x="1400" y="878" text-anchor="middle" font-size="26" font-weight="800" fill="#EDEAE7">CO₂</text>
+
+  <!-- Injection well -->
+  <rect x="1394" y="620" width="12" height="252" fill="#4A3F6B"/>
+  <path d="M1376 620 L1400 572 L1424 620 Z" fill="#4A3F6B"/>
+  <rect x="1368" y="620" width="64" height="12" rx="4" fill="#544B78"/>
+
+  <!-- Trees -->
+  <g>
+    <rect x="1176" y="634" width="8" height="28" fill="#8F897F"/>
+    <circle cx="1180" cy="622" r="20" fill="#A8B49A"/>
+    <circle cx="1180" cy="606" r="13" fill="#B3C0A5"/>
+    <rect x="1262" y="640" width="7" height="22" fill="#8F897F"/>
+    <circle cx="1265" cy="630" r="15" fill="#A8B49A"/>
+    <rect x="1518" y="636" width="8" height="26" fill="#8F897F"/>
+    <circle cx="1522" cy="624" r="18" fill="#A8B49A"/>
+  </g>
+
+  <!-- Factory -->
+  <g>
+    <circle cx="368" cy="440" r="20" fill="#D9D5D1" opacity="0.85"/>
+    <circle cx="382" cy="408" r="27" fill="#D9D5D1" opacity="0.75"/>
+    <circle cx="398" cy="372" r="34" fill="#D9D5D1" opacity="0.6"/>
+    <rect x="350" y="470" width="26" height="190" fill="#8F897F"/>
+    <rect x="346" y="462" width="34" height="12" rx="3" fill="#6E6862"/>
+    <circle cx="415" cy="472" r="15" fill="#D9D5D1" opacity="0.8"/>
+    <circle cx="426" cy="446" r="21" fill="#D9D5D1" opacity="0.65"/>
+    <rect x="392" y="500" width="22" height="160" fill="#9A948C"/>
+    <rect x="388" y="492" width="30" height="11" rx="3" fill="#6E6862"/>
+    <rect x="90" y="540" width="240" height="120" fill="#B0AAA4"/>
+    <path d="M90 540 L130 508 L170 540 L210 508 L250 540 L290 508 L330 540 Z" fill="#8F897F"/>
+    <g fill="#EDEAE7" opacity="0.55">
+      <rect x="110" y="568" width="26" height="20" rx="2"/>
+      <rect x="152" y="568" width="26" height="20" rx="2"/>
+      <rect x="194" y="568" width="26" height="20" rx="2"/>
+      <rect x="236" y="568" width="26" height="20" rx="2"/>
+      <rect x="278" y="568" width="26" height="20" rx="2"/>
+      <rect x="110" y="608" width="26" height="20" rx="2"/>
+      <rect x="152" y="608" width="26" height="20" rx="2"/>
+      <rect x="194" y="608" width="26" height="20" rx="2"/>
+      <rect x="236" y="608" width="26" height="20" rx="2"/>
+      <rect x="278" y="608" width="26" height="20" rx="2"/>
+    </g>
+    <rect x="440" y="592" width="92" height="68" fill="#B0AAA4"/>
+    <rect x="440" y="584" width="92" height="10" rx="3" fill="#8F897F"/>
+    <rect x="470" y="620" width="24" height="40" rx="2" fill="#8F897F"/>
+  </g>
+
+  <!-- Road -->
+  <rect x="0" y="684" width="1600" height="56" fill="#5B564F"/>
+  <rect x="0" y="684" width="1600" height="4" fill="#4A453F"/>
+  <rect x="0" y="736" width="1600" height="4" fill="#4A453F"/>
+  <line x1="0" y1="712" x2="1600" y2="712" stroke="#EDEAE7" stroke-width="3" stroke-dasharray="28 22"/>
+
+  <!-- Truck -->
+  <g>
+    <rect x="540" y="700" width="222" height="10" fill="#3F3B36"/>
+    <rect x="545" y="636" width="150" height="66" rx="33" fill="#EDEAE7" stroke="#4A3F6B" stroke-width="4"/>
+    <text x="620" y="678" text-anchor="middle" font-size="26" font-weight="800" fill="#4A3F6B">CO₂</text>
+    <path d="M700 702 L700 644 Q700 636 708 636 L742 636 L762 664 L762 702 Z" fill="#4A3F6B"/>
+    <path d="M710 646 L736 646 L750 664 L710 664 Z" fill="#EDEAE7" opacity="0.9"/>
+    <g fill="#1A1A1A">
+      <circle cx="560" cy="722" r="16"/><circle cx="592" cy="722" r="16"/>
+      <circle cx="668" cy="722" r="16"/><circle cx="722" cy="722" r="16"/><circle cx="748" cy="722" r="16"/>
+    </g>
+    <g fill="#B0AAA4">
+      <circle cx="560" cy="722" r="6"/><circle cx="592" cy="722" r="6"/>
+      <circle cx="668" cy="722" r="6"/><circle cx="722" cy="722" r="6"/><circle cx="748" cy="722" r="6"/>
+    </g>
+  </g>
+
+  <!-- Railway -->
+  <line x1="790" y1="801" x2="1600" y2="801" stroke="#8F897F" stroke-width="12" stroke-dasharray="5 18"/>
+  <line x1="790" y1="793" x2="1600" y2="793" stroke="#3F3B36" stroke-width="3"/>
+  <line x1="790" y1="808" x2="1600" y2="808" stroke="#3F3B36" stroke-width="3"/>
+
+  <!-- Train -->
+  <g>
+    <!-- Wagons -->
+    <g font-weight="800" font-size="20" fill="#EDEAE7" text-anchor="middle">
+      <rect x="862" y="726" width="150" height="52" rx="26" fill="#544B78"/>
+      <text x="937" y="759">CO₂</text>
+      <rect x="1026" y="726" width="150" height="52" rx="26" fill="#6A5F94"/>
+      <text x="1101" y="759">CO₂</text>
+      <rect x="1190" y="726" width="150" height="52" rx="26" fill="#544B78"/>
+      <text x="1265" y="759">CO₂</text>
+    </g>
+    <rect x="1012" y="748" width="14" height="8" fill="#1A1A1A"/>
+    <rect x="1176" y="748" width="14" height="8" fill="#1A1A1A"/>
+    <rect x="1340" y="748" width="16" height="8" fill="#1A1A1A"/>
+    <g fill="#1A1A1A">
+      <circle cx="890" cy="784" r="12"/><circle cx="984" cy="784" r="12"/>
+      <circle cx="1054" cy="784" r="12"/><circle cx="1148" cy="784" r="12"/>
+      <circle cx="1218" cy="784" r="12"/><circle cx="1312" cy="784" r="12"/>
+    </g>
+    <!-- Locomotive -->
+    <rect x="1356" y="700" width="152" height="12" rx="6" fill="#544B78"/>
+    <rect x="1364" y="712" width="176" height="66" rx="10" fill="#1A1A1A"/>
+    <rect x="1492" y="724" width="34" height="26" rx="4" fill="#EDEAE7" opacity="0.9"/>
+    <rect x="1364" y="752" width="176" height="8" fill="#6A5F94"/>
+    <g fill="#1A1A1A">
+      <circle cx="1386" cy="784" r="13"/><circle cx="1416" cy="784" r="13"/>
+      <circle cx="1478" cy="784" r="13"/><circle cx="1510" cy="784" r="13"/>
+    </g>
+    <g fill="#B0AAA4">
+      <circle cx="1386" cy="784" r="5"/><circle cx="1416" cy="784" r="5"/>
+      <circle cx="1478" cy="784" r="5"/><circle cx="1510" cy="784" r="5"/>
+    </g>
+  </g>
+</svg>

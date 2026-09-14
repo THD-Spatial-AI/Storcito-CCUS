@@ -713,7 +713,7 @@
       "badge": "CCUS intelligence",
       "title": "Accelerate carbon capture before emissions escalate",
       "subtitle": "Map, model and act on CCUS projects — turning site data and geospatial insight into safe, scalable carbon capture, utilisation and storage across Europe.",
-      "funded": "Funded by the European Union · Built on the App platform"
+      "funded": "Financováno Evropskou unií · Postaveno na platformě STORCITO"
     }
   },
   "workspace": {
@@ -1901,7 +1901,8 @@
     "osmfPolicy": "Zásady ochrany osobních údajů OSMF",
     "deny": "Odmítnout",
     "accept": "Přijmout",
-    "dataPolicy": "App Analysis Privacy Policy"
+    "dataPolicy": "Zásady ochrany osobních údajů hodnocení CCUS",
+    "platformPolicy": "Zásady ochrany osobních údajů platformy CCUS"
   },
   "areaStats": {
     "title": "Přehled oblasti",
@@ -2185,10 +2186,10 @@
       "subtitle": "Mapujte průmyslové emise, modelujte optimální potrubní a lodní přepravní sítě, hodnoťte geologická úložiště a urychlete průmyslovou dekarbonizaci napříč Evropou.",
       "getStarted": "Spustit hodnocení CCUS",
       "seeHow": "Podívejte se, jak to funguje",
-      "metricSites": "Zmapovaná místa zachytávání",
-      "metricStorage": "Kapacita úložišť",
-      "metricNetwork": "Modelovaná síť tras",
-      "metricCost": "Optimalizace nákladů na vyhnutí"
+      "metricSites": "Zmapované zdroje emisí",
+      "metricStorage": "Katalogizované roční CO₂",
+      "metricNetwork": "Pokryté obce",
+      "metricCost": "Země"
     },
     "challenge": {
       "eyebrow": "Výzva dekarbonizace",

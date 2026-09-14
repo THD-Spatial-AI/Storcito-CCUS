@@ -37,7 +37,7 @@ const NAV = [
   { key: "contact", href: "#contact" },
 ] as const;
 
-// Icons only; text pulled from i18n by index.
+// Icons only.
 const STEPS = [
   { icon: Building2 },
   { icon: Network },
@@ -45,12 +45,12 @@ const STEPS = [
   { icon: FileText },
 ] as const;
 
-// Warm-grey icon chip (base palette).
+// Icon chip.
 const CHIP = "text-[#1A1A1A] bg-[#D4D2D0] border-[#B0AAA4]";
 
 const FOOTER_LINK = "text-white/70 hover:text-white transition-colors py-0.5";
 
-// Platform capability cards (text: landing.features.f{n}Title/Desc).
+// Capability cards.
 const FEATURES = [
   { icon: MapIcon, color: CHIP },
   { icon: Network, color: CHIP },
@@ -60,7 +60,7 @@ const FEATURES = [
   { icon: Users, color: CHIP },
 ] as const;
 
-// CCUS value-chain components (text: landing.infrastructure.c{n}...).
+// Value-chain stages.
 const COMPONENTS = [
   { icon: Factory },
   { icon: Ship },
@@ -68,7 +68,7 @@ const COMPONENTS = [
   { icon: Recycle },
 ] as const;
 
-// Text pulled from i18n by index (landing.personas.p{n}Title/Desc).
+// Icons only.
 const PERSONAS = [
   { icon: Building2, color: CHIP },
   { icon: Network, color: CHIP },
@@ -76,7 +76,7 @@ const PERSONAS = [
   { icon: ShieldCheck, color: CHIP },
 ] as const;
 
-// Text pulled from i18n by index (landing.challenge.card{n}Title/Desc).
+// Icons only.
 const CHALLENGE_CARDS = [
   { icon: Factory },
   { icon: Network },
@@ -308,13 +308,13 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section id="top" className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden bg-[#EDEAE7]">
-        {/* Background CCUS Map Image overlay */}
+        {/* Hero illustration. */}
         <div
-          className="absolute inset-0 opacity-40 pointer-events-none bg-cover bg-top bg-no-repeat"
-          style={{ backgroundImage: "url('/images/landing-page/ccus-transport-map.jpg')" }}
+          className="absolute inset-0 opacity-60 pointer-events-none bg-cover bg-bottom bg-no-repeat"
+          style={{ backgroundImage: "url('/images/landing-page/co2-transport-hero.svg')" }}
         />
-        {/* Even off-white veil so the map reads as a subtle backdrop and fades into the page. */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#EDEAE7]/50 via-[#EDEAE7]/65 to-[#EDEAE7]" />
+        {/* Veil over the map. */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#EDEAE7]/50 via-[#EDEAE7]/60 to-[#EDEAE7]/85" />
 
         <div className="relative mx-auto max-w-screen-xl px-6 md:px-10 text-center">
           <div data-reveal className="inline-flex items-center gap-2 rounded-full bg-[#D4D2D0] border border-[#B0AAA4] px-4 py-1.5 text-xs font-semibold text-[#1A1A1A] mb-6 backdrop-blur-sm">
@@ -348,22 +348,22 @@ export default function LandingPage() {
             </a>
           </div>
 
-          {/* Key CCUS Metrics Strip */}
+          {/* Metrics strip. */}
           <div data-reveal className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             <div className="p-5 rounded-2xl bg-white/60 border border-[#D4D2D0] backdrop-blur-md text-center">
-              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">312+</div>
+              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">14,600+</div>
               <div className="text-xs text-[#333333] mt-1 uppercase tracking-wider font-medium">{t("landing.hero.metricSites")}</div>
             </div>
             <div className="p-5 rounded-2xl bg-white/60 border border-[#D4D2D0] backdrop-blur-md text-center">
-              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">1.1 Gt</div>
+              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">608 Mt</div>
               <div className="text-xs text-[#333333] mt-1 uppercase tracking-wider font-medium">{t("landing.hero.metricStorage")}</div>
             </div>
             <div className="p-5 rounded-2xl bg-white/60 border border-[#D4D2D0] backdrop-blur-md text-center">
-              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">10,000+ km</div>
+              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">3,800+</div>
               <div className="text-xs text-[#333333] mt-1 uppercase tracking-wider font-medium">{t("landing.hero.metricNetwork")}</div>
             </div>
             <div className="p-5 rounded-2xl bg-white/60 border border-[#D4D2D0] backdrop-blur-md text-center">
-              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">€/t CO₂</div>
+              <div className="text-2xl md:text-3xl font-extrabold text-[#1A1A1A]">3</div>
               <div className="text-xs text-[#333333] mt-1 uppercase tracking-wider font-medium">{t("landing.hero.metricCost")}</div>
             </div>
           </div>
@@ -510,7 +510,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it Works Workflow */}
+      {/* Workflow. */}
       <section id="how-it-works" className="py-20 md:py-28 bg-gradient-to-b from-[#EDEAE7] via-[#D4D2D0] to-[#EDEAE7]">
         <div className="mx-auto max-w-screen-xl px-6 md:px-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -550,7 +550,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Who it's for (Personas) */}
+      {/* Personas. */}
       <section id="personas" className="py-20 md:py-28 bg-[#EDEAE7]">
         <div className="mx-auto max-w-screen-xl px-6 md:px-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -579,7 +579,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* EU Research & Trust */}
+      {/* EU trust. */}
       <section className="py-16 bg-gradient-to-br from-[#544B78] to-[#38304F] border-y border-[#4A3F6B]">
         <div className="mx-auto max-w-screen-xl px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div className="flex items-center gap-5">
@@ -766,10 +766,8 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* Privacy Consent Dialog & Banner */}
-      {!consentAccepted && (
-        <PrivacyBanner onClick={() => setConsentOpen(true)} hasAccepted={consentAccepted} />
-      )}
+      {/* Persists after consent. */}
+      <PrivacyBanner onClick={() => setConsentOpen(true)} hasAccepted={consentAccepted} />
       <PrivacyConsentDialog
         isOpen={consentOpen}
         onClose={() => setConsentOpen(false)}

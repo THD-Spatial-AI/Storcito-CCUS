@@ -920,7 +920,7 @@
       "badge": "Inteligência CCUS",
       "title": "Acelerar a captura de carbono antes que as emissões aumentem",
       "subtitle": "Mapeie, modele e atue em projetos CCUS — transformando dados de instalações e informação geoespacial em captura, utilização e armazenamento de carbono seguros e escaláveis em toda a Europa.",
-      "funded": "Financiado pela União Europeia · Desenvolvido na plataforma App"
+      "funded": "Financiado pela União Europeia · Desenvolvido na plataforma STORCITO"
     }
   },
   "workspace": {
@@ -2104,7 +2104,8 @@
     "osmfPolicy": "Política de privacidade da OSMF",
     "deny": "Recusar",
     "accept": "Aceitar",
-    "dataPolicy": "Política de privacidade da análise"
+    "dataPolicy": "Política de privacidade da avaliação CCUS",
+    "platformPolicy": "Política de privacidade da plataforma CCUS"
   },
   "onboarding": {
     "welcome": {
@@ -2175,10 +2176,10 @@
       "subtitle": "Mapeie emissões industriais, modele redes ótimas de transporte por conduta e navio, avalie reservatórios geológicos de armazenamento e acelere a descarbonização industrial em toda a Europa.",
       "getStarted": "Iniciar avaliação CCUS",
       "seeHow": "Ver como funciona",
-      "metricSites": "Locais de captura mapeados",
-      "metricStorage": "Capacidade de armazenamento",
-      "metricNetwork": "Rede de rotas modelada",
-      "metricCost": "Otimização do custo evitado"
+      "metricSites": "Fontes de emissão mapeadas",
+      "metricStorage": "CO₂ anual catalogado",
+      "metricNetwork": "Municípios cobertos",
+      "metricCost": "Países"
     },
     "challenge": {
       "eyebrow": "O desafio da descarbonização",
