@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMapLocationStore } from '@/features/interactive-map/store/map-location';
-import { GeocodingResult } from '@/features/interactive-map/services/geocoding';
-import { updateMapToSavedLocation } from '@/features/interactive-map/store/map-store';
+import { GeocodingResult } from '@/features/interactive-map';
+import { updateMapToSavedLocation } from '@/features/interactive-map';
 import { Loader2 } from 'lucide-react';
 import { LocationSearch } from './components/LocationSearch';
 import { SavedLocationsList } from './components/SavedLocationsList';
@@ -47,14 +47,14 @@ const MapLocationSettings: React.FC = () => {
     <div className="space-y-2">
       {/* Status */}
       {storeLoading && (
-        <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted px-3 py-2 rounded-lg">
+        <div className="md-fade-in flex items-center gap-2 text-xs text-muted-foreground bg-muted px-3 py-2 rounded-lg">
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
           <span>{t('settings.mapLocation.syncing')}</span>
         </div>
       )}
 
       {syncError && (
-        <div className="text-xs text-destructive bg-destructive/10 px-3 py-2 rounded-lg">
+        <div className="md-fade-in text-xs text-destructive bg-destructive/10 px-3 py-2 rounded-lg">
           {syncError}
         </div>
       )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Thermometer, Ruler, Wind, Clock } from "lucide-react";
+import { Thermometer, Ruler, Wind, Clock, Type } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDataDisplayStore } from "@/features/settings/store/data-display";
 import { useTranslation } from "@/i18n";
@@ -12,9 +12,9 @@ const OptionButton: React.FC<{
 	<button
 		onClick={onClick}
 		className={cn(
-			"px-2 py-1 text-[10px] font-medium rounded transition-all duration-200",
+			"px-2 py-1 text-[10px] font-medium rounded transition-all duration-200 active:scale-95",
 			active
-				? "bg-primary text-primary-foreground"
+				? "bg-primary text-primary-foreground shadow-sm"
 				: "bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground"
 		)}
 	>
@@ -24,7 +24,7 @@ const OptionButton: React.FC<{
 
 const DataDisplaySettings: React.FC = () => {
 	const { t } = useTranslation();
-	const { temperatureUnit, distanceUnit, windSpeedUnit, refreshInterval, setPreference } = useDataDisplayStore();
+	const { temperatureUnit, distanceUnit, windSpeedUnit, refreshInterval, textSize, setPreference } = useDataDisplayStore();
 
 	return (
 		<div className="space-y-3">
@@ -91,6 +91,29 @@ const DataDisplaySettings: React.FC = () => {
 							onClick={() => setPreference("windSpeedUnit", unit.value)}
 						>
 							{unit.label}
+						</OptionButton>
+					))}
+				</div>
+			</div>
+
+			{/* Text size */}
+			<div className="space-y-1">
+				<div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+					<Type className="w-3 h-3" />
+					<span>{t('settings.dataDisplay.textSize', 'Text size')}</span>
+				</div>
+				<div className="flex gap-1.5">
+					{([
+						{ value: "small" as const, label: t('settings.dataDisplay.textSizes.small', 'Small') },
+						{ value: "normal" as const, label: t('settings.dataDisplay.textSizes.normal', 'Normal') },
+						{ value: "large" as const, label: t('settings.dataDisplay.textSizes.large', 'Large') },
+					]).map((option) => (
+						<OptionButton
+							key={option.value}
+							active={textSize === option.value}
+							onClick={() => setPreference("textSize", option.value)}
+						>
+							{option.label}
 						</OptionButton>
 					))}
 				</div>
