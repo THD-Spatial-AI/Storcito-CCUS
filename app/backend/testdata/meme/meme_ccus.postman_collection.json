@@ -1,0 +1,399 @@
+{
+  "info": {
+    "name": "MEME · CCUS",
+    "description": "CCUS models on MEME's adopt-net0 target. \"AdOpT CO2 network\" is the full model (capture sources, Bremen hub, CO2 storage sinks, pipeline and railway routes); it needs the MEME build with AdOpT network support (rc-testing-adoptnet0 working tree; until the VM is updated, point base_url at a local MEME, e.g. http://localhost:18080). \"AdOpT copperplate\" runs on the current VM but has no routes. Run Simulate, poll status until state = succeeded; the result contract is at runs[0].contract.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://10.1.66.52:8081"
+    },
+    {
+      "key": "meme_api_key",
+      "value": ""
+    },
+    {
+      "key": "network_job_id",
+      "value": ""
+    },
+    {
+      "key": "adopt_job_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Capabilities",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/capabilities",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "capabilities"
+          ]
+        }
+      }
+    },
+    {
+      "name": "AdOpT CO2 network (sources · hub · sinks · routes)",
+      "item": [
+        {
+          "name": "Validate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"{{meme_api_key}}\",\n  \"model\": {\n    \"metadata\": {\n      \"name\": \"ccus_adopt_network\",\n      \"currency\": \"EUR\",\n      \"currency_year\": 2025\n    },\n    \"time\": {\n      \"start\": \"2025-01-01T00:00\",\n      \"end\": \"2025-12-31T12:00\",\n      \"resolution\": \"12H\"\n    },\n    \"discount_rate\": 0.08,\n    \"carriers\": {\n      \"CO2captured\": {\n        \"unit\": \"t\"\n      },\n      \"electricity\": {\n        \"unit\": \"MWh\"\n      }\n    },\n    \"nodes\": {\n      \"src_steel_salzgitter\": {\n        \"coords\": {\n          \"lat\": 52.1586,\n          \"lon\": 10.396\n        }\n      },\n      \"src_cement_laegerdorf\": {\n        \"coords\": {\n          \"lat\": 53.8833,\n          \"lon\": 9.5833\n        }\n      },\n      \"src_chem_ludwigshafen\": {\n        \"coords\": {\n          \"lat\": 49.4958,\n          \"lon\": 8.427\n        }\n      },\n      \"hub_bremen\": {\n        \"coords\": {\n          \"lat\": 53.0793,\n          \"lon\": 8.8017\n        }\n      },\n      \"sink_hub_wilhelmshaven\": {\n        \"coords\": {\n          \"lat\": 53.53,\n          \"lon\": 8.13\n        }\n      },\n      \"sink_hub_brunsbuettel\": {\n        \"coords\": {\n          \"lat\": 53.896,\n          \"lon\": 9.14\n        }\n      }\n    },\n    \"technologies\": {\n      \"store_wilhelmshaven\": {\n        \"role\": \"conversion\",\n        \"node\": \"sink_hub_wilhelmshaven\",\n        \"carrier_in\": \"CO2captured\",\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 10000000\n        },\n        \"costs\": {\n          \"monetary\": {\n            \"variable_om\": 20\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"technology\": \"PermanentStorage_CO2_simple\",\n            \"Flexibility\": {\n              \"injection_rate_max\": 3000\n            }\n          }\n        }\n      },\n      \"store_brunsbuettel\": {\n        \"role\": \"conversion\",\n        \"node\": \"sink_hub_brunsbuettel\",\n        \"carrier_in\": \"CO2captured\",\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 10000000\n        },\n        \"costs\": {\n          \"monetary\": {\n            \"variable_om\": 22\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"technology\": \"PermanentStorage_CO2_simple\",\n            \"Flexibility\": {\n              \"injection_rate_max\": 1800\n            }\n          }\n        }\n      }\n    },\n    \"transmission\": {\n      \"pipe_steel_bremen\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_steel_salzgitter\",\n        \"to\": \"hub_bremen\",\n        \"bidirectional\": false,\n        \"distance\": 150,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_cement_brunsbuettel\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_cement_laegerdorf\",\n        \"to\": \"sink_hub_brunsbuettel\",\n        \"bidirectional\": false,\n        \"distance\": 40,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_bremen_wilhelmshaven\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"hub_bremen\",\n        \"to\": \"sink_hub_wilhelmshaven\",\n        \"bidirectional\": false,\n        \"distance\": 90,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_bremen_brunsbuettel\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"hub_bremen\",\n        \"to\": \"sink_hub_brunsbuettel\",\n        \"bidirectional\": false,\n        \"distance\": 120,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"rail_chem_bremen\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_chem_ludwigshafen\",\n        \"to\": \"hub_bremen\",\n        \"bidirectional\": false,\n        \"distance\": 500,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.8333333333333334\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"network\": \"CO2Railway\",\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        },\n        \"energy_consumption\": {\n          \"carrier\": \"electricity\",\n          \"per_flow\": 0,\n          \"per_flow_distance\": 0\n        }\n      }\n    },\n    \"trade\": {\n      \"capture_steel\": {\n        \"node\": \"src_steel_salzgitter\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 2736,\n          \"price\": -45\n        }\n      },\n      \"capture_cement\": {\n        \"node\": \"src_cement_laegerdorf\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 1644,\n          \"price\": -30\n        }\n      },\n      \"capture_chem\": {\n        \"node\": \"src_chem_ludwigshafen\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 1092,\n          \"price\": -25\n        }\n      },\n      \"grid_wilhelmshaven\": {\n        \"node\": \"sink_hub_wilhelmshaven\",\n        \"carrier\": \"electricity\",\n        \"import\": {\n          \"limit\": 12000,\n          \"price\": 50\n        }\n      },\n      \"grid_brunsbuettel\": {\n        \"node\": \"sink_hub_brunsbuettel\",\n        \"carrier\": \"electricity\",\n        \"import\": {\n          \"limit\": 12000,\n          \"price\": 50\n        }\n      }\n    }\n  },\n  \"experiment\": {\n    \"mode\": \"plan\",\n    \"objective\": \"min_cost\",\n    \"solver\": {\n      \"name\": \"glpk\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/validate?target=adopt-net0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "validate"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "adopt-net0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Convert (dry emit)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"{{meme_api_key}}\",\n  \"model\": {\n    \"metadata\": {\n      \"name\": \"ccus_adopt_network\",\n      \"currency\": \"EUR\",\n      \"currency_year\": 2025\n    },\n    \"time\": {\n      \"start\": \"2025-01-01T00:00\",\n      \"end\": \"2025-12-31T12:00\",\n      \"resolution\": \"12H\"\n    },\n    \"discount_rate\": 0.08,\n    \"carriers\": {\n      \"CO2captured\": {\n        \"unit\": \"t\"\n      },\n      \"electricity\": {\n        \"unit\": \"MWh\"\n      }\n    },\n    \"nodes\": {\n      \"src_steel_salzgitter\": {\n        \"coords\": {\n          \"lat\": 52.1586,\n          \"lon\": 10.396\n        }\n      },\n      \"src_cement_laegerdorf\": {\n        \"coords\": {\n          \"lat\": 53.8833,\n          \"lon\": 9.5833\n        }\n      },\n      \"src_chem_ludwigshafen\": {\n        \"coords\": {\n          \"lat\": 49.4958,\n          \"lon\": 8.427\n        }\n      },\n      \"hub_bremen\": {\n        \"coords\": {\n          \"lat\": 53.0793,\n          \"lon\": 8.8017\n        }\n      },\n      \"sink_hub_wilhelmshaven\": {\n        \"coords\": {\n          \"lat\": 53.53,\n          \"lon\": 8.13\n        }\n      },\n      \"sink_hub_brunsbuettel\": {\n        \"coords\": {\n          \"lat\": 53.896,\n          \"lon\": 9.14\n        }\n      }\n    },\n    \"technologies\": {\n      \"store_wilhelmshaven\": {\n        \"role\": \"conversion\",\n        \"node\": \"sink_hub_wilhelmshaven\",\n        \"carrier_in\": \"CO2captured\",\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 10000000\n        },\n        \"costs\": {\n          \"monetary\": {\n            \"variable_om\": 20\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"technology\": \"PermanentStorage_CO2_simple\",\n            \"Flexibility\": {\n              \"injection_rate_max\": 3000\n            }\n          }\n        }\n      },\n      \"store_brunsbuettel\": {\n        \"role\": \"conversion\",\n        \"node\": \"sink_hub_brunsbuettel\",\n        \"carrier_in\": \"CO2captured\",\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 10000000\n        },\n        \"costs\": {\n          \"monetary\": {\n            \"variable_om\": 22\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"technology\": \"PermanentStorage_CO2_simple\",\n            \"Flexibility\": {\n              \"injection_rate_max\": 1800\n            }\n          }\n        }\n      }\n    },\n    \"transmission\": {\n      \"pipe_steel_bremen\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_steel_salzgitter\",\n        \"to\": \"hub_bremen\",\n        \"bidirectional\": false,\n        \"distance\": 150,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_cement_brunsbuettel\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_cement_laegerdorf\",\n        \"to\": \"sink_hub_brunsbuettel\",\n        \"bidirectional\": false,\n        \"distance\": 40,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_bremen_wilhelmshaven\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"hub_bremen\",\n        \"to\": \"sink_hub_wilhelmshaven\",\n        \"bidirectional\": false,\n        \"distance\": 90,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_bremen_brunsbuettel\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"hub_bremen\",\n        \"to\": \"sink_hub_brunsbuettel\",\n        \"bidirectional\": false,\n        \"distance\": 120,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"rail_chem_bremen\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_chem_ludwigshafen\",\n        \"to\": \"hub_bremen\",\n        \"bidirectional\": false,\n        \"distance\": 500,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.8333333333333334\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"network\": \"CO2Railway\",\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        },\n        \"energy_consumption\": {\n          \"carrier\": \"electricity\",\n          \"per_flow\": 0,\n          \"per_flow_distance\": 0\n        }\n      }\n    },\n    \"trade\": {\n      \"capture_steel\": {\n        \"node\": \"src_steel_salzgitter\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 2736,\n          \"price\": -45\n        }\n      },\n      \"capture_cement\": {\n        \"node\": \"src_cement_laegerdorf\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 1644,\n          \"price\": -30\n        }\n      },\n      \"capture_chem\": {\n        \"node\": \"src_chem_ludwigshafen\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 1092,\n          \"price\": -25\n        }\n      },\n      \"grid_wilhelmshaven\": {\n        \"node\": \"sink_hub_wilhelmshaven\",\n        \"carrier\": \"electricity\",\n        \"import\": {\n          \"limit\": 12000,\n          \"price\": 50\n        }\n      },\n      \"grid_brunsbuettel\": {\n        \"node\": \"sink_hub_brunsbuettel\",\n        \"carrier\": \"electricity\",\n        \"import\": {\n          \"limit\": 12000,\n          \"price\": 50\n        }\n      }\n    }\n  },\n  \"experiment\": {\n    \"mode\": \"plan\",\n    \"objective\": \"min_cost\",\n    \"solver\": {\n      \"name\": \"glpk\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/convert?target=adopt-net0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "convert"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "adopt-net0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Simulate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test('accepted (202)', () => pm.response.to.have.status(202));",
+                  "if (r.id) pm.collectionVariables.set('network_job_id', r.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"{{meme_api_key}}\",\n  \"model\": {\n    \"metadata\": {\n      \"name\": \"ccus_adopt_network\",\n      \"currency\": \"EUR\",\n      \"currency_year\": 2025\n    },\n    \"time\": {\n      \"start\": \"2025-01-01T00:00\",\n      \"end\": \"2025-12-31T12:00\",\n      \"resolution\": \"12H\"\n    },\n    \"discount_rate\": 0.08,\n    \"carriers\": {\n      \"CO2captured\": {\n        \"unit\": \"t\"\n      },\n      \"electricity\": {\n        \"unit\": \"MWh\"\n      }\n    },\n    \"nodes\": {\n      \"src_steel_salzgitter\": {\n        \"coords\": {\n          \"lat\": 52.1586,\n          \"lon\": 10.396\n        }\n      },\n      \"src_cement_laegerdorf\": {\n        \"coords\": {\n          \"lat\": 53.8833,\n          \"lon\": 9.5833\n        }\n      },\n      \"src_chem_ludwigshafen\": {\n        \"coords\": {\n          \"lat\": 49.4958,\n          \"lon\": 8.427\n        }\n      },\n      \"hub_bremen\": {\n        \"coords\": {\n          \"lat\": 53.0793,\n          \"lon\": 8.8017\n        }\n      },\n      \"sink_hub_wilhelmshaven\": {\n        \"coords\": {\n          \"lat\": 53.53,\n          \"lon\": 8.13\n        }\n      },\n      \"sink_hub_brunsbuettel\": {\n        \"coords\": {\n          \"lat\": 53.896,\n          \"lon\": 9.14\n        }\n      }\n    },\n    \"technologies\": {\n      \"store_wilhelmshaven\": {\n        \"role\": \"conversion\",\n        \"node\": \"sink_hub_wilhelmshaven\",\n        \"carrier_in\": \"CO2captured\",\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 10000000\n        },\n        \"costs\": {\n          \"monetary\": {\n            \"variable_om\": 20\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"technology\": \"PermanentStorage_CO2_simple\",\n            \"Flexibility\": {\n              \"injection_rate_max\": 3000\n            }\n          }\n        }\n      },\n      \"store_brunsbuettel\": {\n        \"role\": \"conversion\",\n        \"node\": \"sink_hub_brunsbuettel\",\n        \"carrier_in\": \"CO2captured\",\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 10000000\n        },\n        \"costs\": {\n          \"monetary\": {\n            \"variable_om\": 22\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"technology\": \"PermanentStorage_CO2_simple\",\n            \"Flexibility\": {\n              \"injection_rate_max\": 1800\n            }\n          }\n        }\n      }\n    },\n    \"transmission\": {\n      \"pipe_steel_bremen\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_steel_salzgitter\",\n        \"to\": \"hub_bremen\",\n        \"bidirectional\": false,\n        \"distance\": 150,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_cement_brunsbuettel\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_cement_laegerdorf\",\n        \"to\": \"sink_hub_brunsbuettel\",\n        \"bidirectional\": false,\n        \"distance\": 40,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_bremen_wilhelmshaven\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"hub_bremen\",\n        \"to\": \"sink_hub_wilhelmshaven\",\n        \"bidirectional\": false,\n        \"distance\": 90,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"pipe_bremen_brunsbuettel\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"hub_bremen\",\n        \"to\": \"sink_hub_brunsbuettel\",\n        \"bidirectional\": false,\n        \"distance\": 120,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.4166666666666667\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        }\n      },\n      \"rail_chem_bremen\": {\n        \"carrier\": \"CO2captured\",\n        \"from\": \"src_chem_ludwigshafen\",\n        \"to\": \"hub_bremen\",\n        \"bidirectional\": false,\n        \"distance\": 500,\n        \"capacity\": {\n          \"expandable\": true,\n          \"max\": 12000\n        },\n        \"loss_per_distance\": 0,\n        \"costs\": {\n          \"monetary\": {\n            \"investment_per_capacity_distance\": 0.8333333333333334\n          }\n        },\n        \"native\": {\n          \"adopt-net0\": {\n            \"network\": \"CO2Railway\",\n            \"Economics\": {\n              \"lifetime\": 40,\n              \"OPEX_variable\": 0,\n              \"OPEX_fixed\": 0\n            }\n          }\n        },\n        \"energy_consumption\": {\n          \"carrier\": \"electricity\",\n          \"per_flow\": 0,\n          \"per_flow_distance\": 0\n        }\n      }\n    },\n    \"trade\": {\n      \"capture_steel\": {\n        \"node\": \"src_steel_salzgitter\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 2736,\n          \"price\": -45\n        }\n      },\n      \"capture_cement\": {\n        \"node\": \"src_cement_laegerdorf\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 1644,\n          \"price\": -30\n        }\n      },\n      \"capture_chem\": {\n        \"node\": \"src_chem_ludwigshafen\",\n        \"carrier\": \"CO2captured\",\n        \"import\": {\n          \"limit\": 1092,\n          \"price\": -25\n        }\n      },\n      \"grid_wilhelmshaven\": {\n        \"node\": \"sink_hub_wilhelmshaven\",\n        \"carrier\": \"electricity\",\n        \"import\": {\n          \"limit\": 12000,\n          \"price\": 50\n        }\n      },\n      \"grid_brunsbuettel\": {\n        \"node\": \"sink_hub_brunsbuettel\",\n        \"carrier\": \"electricity\",\n        \"import\": {\n          \"limit\": 12000,\n          \"price\": 50\n        }\n      }\n    }\n  },\n  \"experiment\": {\n    \"mode\": \"plan\",\n    \"objective\": \"min_cost\",\n    \"solver\": {\n      \"name\": \"glpk\"\n    }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/simulate?target=adopt-net0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "simulate"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "adopt-net0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Job status + contract (poll)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "console.log('state:', r.state, r.error || '');",
+                  "pm.test('not failed', () => pm.expect(r.state).to.not.eql('failed'));",
+                  "const c = (r.runs || []).find(x => x.contract)?.contract;",
+                  "if (c) {",
+                  "console.log('objective', c.objective);",
+                  "const step = 12; // payload uses 12h steps: sizes are t per step",
+                  "Object.entries(c.networks || {}).filter(([, v]) => v.size > 1e-6).forEach(([k, v]) => console.log('route', k, (v.size / step).toFixed(1), 't/h'));",
+                  "Object.entries(c.trade || {}).filter(([k]) => k.endsWith('::CO2captured')).forEach(([k, v]) => console.log('captured', k, v.import, 't/yr'));",
+                  "Object.entries(c.capacities || {}).forEach(([k, v]) => console.log('stored', k, v, 't/yr'));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/jobs/{{network_job_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs",
+                "{{network_job_id}}",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Result bundle (zip)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/jobs/{{network_job_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs",
+                "{{network_job_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "AdOpT copperplate (sinks as AdOpT tech)",
+      "item": [
+        {
+          "name": "Validate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"{{meme_api_key}}\",\n  \"model\": {\n    \"metadata\": { \"name\": \"ccus_sinks_as_tech\", \"currency\": \"EUR\", \"currency_year\": 2025 },\n    \"time\": { \"start\": \"2025-01-01T00:00\", \"end\": \"2025-01-01T23:00\", \"resolution\": \"1H\" },\n    \"carriers\": {\n      \"CO2captured\": { \"unit\": \"t\" },\n      \"electricity\": { \"unit\": \"MWh\" }\n    },\n    \"nodes\": {\n      \"src_steel_salzgitter\":   { \"coords\": { \"lat\": 52.1586, \"lon\": 10.3960 } },\n      \"src_cement_laegerdorf\":  { \"coords\": { \"lat\": 53.8833, \"lon\": 9.5833 } },\n      \"src_chem_ludwigshafen\":  { \"coords\": { \"lat\": 49.4958, \"lon\": 8.4270 } },\n      \"sink_hub_wilhelmshaven\": { \"coords\": { \"lat\": 53.5300, \"lon\": 8.1300 },\n                                  \"native\": { \"adopt-net0\": { \"new\": [\"PermanentStorage_CO2_simple\"] } } },\n      \"sink_hub_brunsbuettel\":  { \"coords\": { \"lat\": 53.8960, \"lon\": 9.1400 },\n                                  \"native\": { \"adopt-net0\": { \"new\": [\"PermanentStorage_CO2_simple\"] } } }\n    },\n    \"technologies\": {\n      \"techdir_anchor\": {\n        \"role\": \"storage\",\n        \"node\": [\"sink_hub_wilhelmshaven\", \"sink_hub_brunsbuettel\"],\n        \"carrier_in\": \"electricity\", \"carrier_out\": \"electricity\",\n        \"capacity\": { \"expandable\": false, \"existing\": 0, \"max\": 0 },\n        \"storage\": {}\n      }\n    },\n    \"trade\": {\n      \"capture_steel_salzgitter\":  { \"node\": \"src_steel_salzgitter\",  \"carrier\": \"CO2captured\", \"import\": { \"limit\": 228, \"price\": -45 } },\n      \"capture_cement_laegerdorf\": { \"node\": \"src_cement_laegerdorf\", \"carrier\": \"CO2captured\", \"import\": { \"limit\": 137, \"price\": -30 } },\n      \"capture_chem_ludwigshafen\": { \"node\": \"src_chem_ludwigshafen\", \"carrier\": \"CO2captured\", \"import\": { \"limit\": 91,  \"price\": -25 } },\n      \"grid_wilhelmshaven\": { \"node\": \"sink_hub_wilhelmshaven\", \"carrier\": \"electricity\", \"import\": { \"limit\": 1000, \"price\": 50 } },\n      \"grid_brunsbuettel\":  { \"node\": \"sink_hub_brunsbuettel\",  \"carrier\": \"electricity\", \"import\": { \"limit\": 1000, \"price\": 50 } }\n    }\n  },\n  \"experiment\": {\n    \"mode\": \"plan\",\n    \"objective\": \"min_cost\",\n    \"copperplate\": true,\n    \"solver\": { \"name\": \"glpk\" }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/validate?target=adopt-net0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "validate"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "adopt-net0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Convert (dry emit)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"{{meme_api_key}}\",\n  \"model\": {\n    \"metadata\": { \"name\": \"ccus_sinks_as_tech\", \"currency\": \"EUR\", \"currency_year\": 2025 },\n    \"time\": { \"start\": \"2025-01-01T00:00\", \"end\": \"2025-01-01T23:00\", \"resolution\": \"1H\" },\n    \"carriers\": {\n      \"CO2captured\": { \"unit\": \"t\" },\n      \"electricity\": { \"unit\": \"MWh\" }\n    },\n    \"nodes\": {\n      \"src_steel_salzgitter\":   { \"coords\": { \"lat\": 52.1586, \"lon\": 10.3960 } },\n      \"src_cement_laegerdorf\":  { \"coords\": { \"lat\": 53.8833, \"lon\": 9.5833 } },\n      \"src_chem_ludwigshafen\":  { \"coords\": { \"lat\": 49.4958, \"lon\": 8.4270 } },\n      \"sink_hub_wilhelmshaven\": { \"coords\": { \"lat\": 53.5300, \"lon\": 8.1300 },\n                                  \"native\": { \"adopt-net0\": { \"new\": [\"PermanentStorage_CO2_simple\"] } } },\n      \"sink_hub_brunsbuettel\":  { \"coords\": { \"lat\": 53.8960, \"lon\": 9.1400 },\n                                  \"native\": { \"adopt-net0\": { \"new\": [\"PermanentStorage_CO2_simple\"] } } }\n    },\n    \"technologies\": {\n      \"techdir_anchor\": {\n        \"role\": \"storage\",\n        \"node\": [\"sink_hub_wilhelmshaven\", \"sink_hub_brunsbuettel\"],\n        \"carrier_in\": \"electricity\", \"carrier_out\": \"electricity\",\n        \"capacity\": { \"expandable\": false, \"existing\": 0, \"max\": 0 },\n        \"storage\": {}\n      }\n    },\n    \"trade\": {\n      \"capture_steel_salzgitter\":  { \"node\": \"src_steel_salzgitter\",  \"carrier\": \"CO2captured\", \"import\": { \"limit\": 228, \"price\": -45 } },\n      \"capture_cement_laegerdorf\": { \"node\": \"src_cement_laegerdorf\", \"carrier\": \"CO2captured\", \"import\": { \"limit\": 137, \"price\": -30 } },\n      \"capture_chem_ludwigshafen\": { \"node\": \"src_chem_ludwigshafen\", \"carrier\": \"CO2captured\", \"import\": { \"limit\": 91,  \"price\": -25 } },\n      \"grid_wilhelmshaven\": { \"node\": \"sink_hub_wilhelmshaven\", \"carrier\": \"electricity\", \"import\": { \"limit\": 1000, \"price\": 50 } },\n      \"grid_brunsbuettel\":  { \"node\": \"sink_hub_brunsbuettel\",  \"carrier\": \"electricity\", \"import\": { \"limit\": 1000, \"price\": 50 } }\n    }\n  },\n  \"experiment\": {\n    \"mode\": \"plan\",\n    \"objective\": \"min_cost\",\n    \"copperplate\": true,\n    \"solver\": { \"name\": \"glpk\" }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/convert?target=adopt-net0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "convert"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "adopt-net0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Simulate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "pm.test('accepted (202)', () => pm.response.to.have.status(202));",
+                  "if (r.id) pm.collectionVariables.set('adopt_job_id', r.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"api_key\": \"{{meme_api_key}}\",\n  \"model\": {\n    \"metadata\": { \"name\": \"ccus_sinks_as_tech\", \"currency\": \"EUR\", \"currency_year\": 2025 },\n    \"time\": { \"start\": \"2025-01-01T00:00\", \"end\": \"2025-01-01T23:00\", \"resolution\": \"1H\" },\n    \"carriers\": {\n      \"CO2captured\": { \"unit\": \"t\" },\n      \"electricity\": { \"unit\": \"MWh\" }\n    },\n    \"nodes\": {\n      \"src_steel_salzgitter\":   { \"coords\": { \"lat\": 52.1586, \"lon\": 10.3960 } },\n      \"src_cement_laegerdorf\":  { \"coords\": { \"lat\": 53.8833, \"lon\": 9.5833 } },\n      \"src_chem_ludwigshafen\":  { \"coords\": { \"lat\": 49.4958, \"lon\": 8.4270 } },\n      \"sink_hub_wilhelmshaven\": { \"coords\": { \"lat\": 53.5300, \"lon\": 8.1300 },\n                                  \"native\": { \"adopt-net0\": { \"new\": [\"PermanentStorage_CO2_simple\"] } } },\n      \"sink_hub_brunsbuettel\":  { \"coords\": { \"lat\": 53.8960, \"lon\": 9.1400 },\n                                  \"native\": { \"adopt-net0\": { \"new\": [\"PermanentStorage_CO2_simple\"] } } }\n    },\n    \"technologies\": {\n      \"techdir_anchor\": {\n        \"role\": \"storage\",\n        \"node\": [\"sink_hub_wilhelmshaven\", \"sink_hub_brunsbuettel\"],\n        \"carrier_in\": \"electricity\", \"carrier_out\": \"electricity\",\n        \"capacity\": { \"expandable\": false, \"existing\": 0, \"max\": 0 },\n        \"storage\": {}\n      }\n    },\n    \"trade\": {\n      \"capture_steel_salzgitter\":  { \"node\": \"src_steel_salzgitter\",  \"carrier\": \"CO2captured\", \"import\": { \"limit\": 228, \"price\": -45 } },\n      \"capture_cement_laegerdorf\": { \"node\": \"src_cement_laegerdorf\", \"carrier\": \"CO2captured\", \"import\": { \"limit\": 137, \"price\": -30 } },\n      \"capture_chem_ludwigshafen\": { \"node\": \"src_chem_ludwigshafen\", \"carrier\": \"CO2captured\", \"import\": { \"limit\": 91,  \"price\": -25 } },\n      \"grid_wilhelmshaven\": { \"node\": \"sink_hub_wilhelmshaven\", \"carrier\": \"electricity\", \"import\": { \"limit\": 1000, \"price\": 50 } },\n      \"grid_brunsbuettel\":  { \"node\": \"sink_hub_brunsbuettel\",  \"carrier\": \"electricity\", \"import\": { \"limit\": 1000, \"price\": 50 } }\n    }\n  },\n  \"experiment\": {\n    \"mode\": \"plan\",\n    \"objective\": \"min_cost\",\n    \"copperplate\": true,\n    \"solver\": { \"name\": \"glpk\" }\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/simulate?target=adopt-net0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "simulate"
+              ],
+              "query": [
+                {
+                  "key": "target",
+                  "value": "adopt-net0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Job status + contract (poll)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "console.log('state:', r.state, r.error || '');",
+                  "pm.test('not failed', () => pm.expect(r.state).to.not.eql('failed'));",
+                  "const c = (r.runs || []).find(x => x.contract)?.contract;",
+                  "if (c) {",
+                  "console.log('objective', c.objective);",
+                  "console.log('capacities', JSON.stringify(c.capacities));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/jobs/{{adopt_job_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs",
+                "{{adopt_job_id}}",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Result bundle (zip)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/jobs/{{adopt_job_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "jobs",
+                "{{adopt_job_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

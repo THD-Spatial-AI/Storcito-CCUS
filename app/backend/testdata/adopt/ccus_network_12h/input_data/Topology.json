@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    "src_steel_salzgitter",
+    "src_cement_laegerdorf",
+    "src_chem_ludwigshafen",
+    "hub_bremen",
+    "sink_hub_wilhelmshaven",
+    "sink_hub_brunsbuettel"
+  ],
+  "carriers": [
+    "CO2captured",
+    "electricity"
+  ],
+  "investment_periods": [
+    "period1"
+  ],
+  "start_date": "2025-01-01 00:00",
+  "end_date": "2025-12-31 12:00",
+  "resolution": "12h",
+  "investment_period_length": 1
+}

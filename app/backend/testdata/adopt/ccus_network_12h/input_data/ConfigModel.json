@@ -1,0 +1,121 @@
+{
+  "optimization": {
+    "objective": {
+      "value": "costs"
+    },
+    "emission_limit": {
+      "value": 0
+    },
+    "monte_carlo": {
+      "N": {
+        "value": 0
+      },
+      "type": {
+        "value": "normal_dis"
+      },
+      "sd": {
+        "value": 0.2
+      },
+      "on_what": {
+        "value": [
+          "Technologies"
+        ]
+      }
+    },
+    "typicaldays": {
+      "N": {
+        "value": 0
+      },
+      "method": {
+        "value": 2
+      },
+      "technologies_with_full_res": {
+        "value": [
+          "RES",
+          "STOR",
+          "Hydro_Open"
+        ]
+      }
+    },
+    "multiyear": {
+      "value": 0
+    },
+    "timestaging": {
+      "value": 0
+    },
+    "pareto_points": {
+      "value": 5
+    }
+  },
+  "solveroptions": {
+    "solver": {
+      "value": "glpk"
+    },
+    "mipgap": {
+      "value": 0.001
+    },
+    "timelim": {
+      "value": 1
+    },
+    "threads": {
+      "value": 0
+    },
+    "nodetol": {
+      "value": 1e-09
+    }
+  },
+  "reporting": {
+    "save_path": {
+      "value": "/out/ccus_adopt_12h/results"
+    },
+    "save_summary_path": {
+      "value": "/out/ccus_adopt_12h/results"
+    },
+    "write_results": {
+      "value": 1
+    },
+    "case_name": {
+      "value": -1
+    },
+    "write_solution_diagnostics": {
+      "value": 0
+    }
+  },
+  "energybalance": {
+    "copperplate": {
+      "value": 0
+    },
+    "violation": {
+      "value": -1
+    }
+  },
+  "economic": {
+    "global_discountrate": {
+      "value": 0.08
+    },
+    "global_simple_capex_model": {
+      "value": 0
+    }
+  },
+  "performance": {
+    "dynamics": {
+      "value": 0
+    }
+  },
+  "scaling": {
+    "scaling_on": {
+      "value": 0
+    },
+    "scaling_factors": {
+      "energy_vars": {
+        "value": 0.001
+      },
+      "cost_vars": {
+        "value": 0.001
+      },
+      "objective": {
+        "value": 1
+      }
+    }
+  }
+}

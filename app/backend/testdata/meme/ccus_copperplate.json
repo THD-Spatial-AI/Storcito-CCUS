@@ -1,0 +1,46 @@
+{
+  "api_key": "{{meme_api_key}}",
+  "model": {
+    "metadata": { "name": "ccus_copperplate_smoke", "currency": "EUR", "currency_year": 2025 },
+    "time": { "start": "2025-01-01T00:00", "end": "2025-01-01T23:00", "resolution": "1H" },
+    "carriers": {
+      "CO2captured": { "unit": "t" }
+    },
+    "nodes": {
+      "src_steel_salzgitter":     { "coords": { "lat": 52.1586, "lon": 10.3960 } },
+      "src_cement_laegerdorf":    { "coords": { "lat": 53.8833, "lon": 9.5833 } },
+      "src_chem_ludwigshafen":    { "coords": { "lat": 49.4958, "lon": 8.4270 } },
+      "sink_hub_wilhelmshaven":   { "coords": { "lat": 53.5300, "lon": 8.1300 } },
+      "sink_hub_brunsbuettel":    { "coords": { "lat": 53.8960, "lon": 9.1400 } }
+    },
+    "technologies": {},
+    "trade": {
+      "capture_steel_salzgitter": {
+        "node": "src_steel_salzgitter", "carrier": "CO2captured",
+        "import": { "limit": 228, "price": -45 }
+      },
+      "capture_cement_laegerdorf": {
+        "node": "src_cement_laegerdorf", "carrier": "CO2captured",
+        "import": { "limit": 137, "price": -30 }
+      },
+      "capture_chem_ludwigshafen": {
+        "node": "src_chem_ludwigshafen", "carrier": "CO2captured",
+        "import": { "limit": 91, "price": -25 }
+      },
+      "store_wilhelmshaven": {
+        "node": "sink_hub_wilhelmshaven", "carrier": "CO2captured",
+        "export": { "limit": 250, "price": -20 }
+      },
+      "store_brunsbuettel": {
+        "node": "sink_hub_brunsbuettel", "carrier": "CO2captured",
+        "export": { "limit": 150, "price": -22 }
+      }
+    }
+  },
+  "experiment": {
+    "mode": "plan",
+    "objective": "min_cost",
+    "copperplate": true,
+    "solver": { "name": "glpk" }
+  }
+}

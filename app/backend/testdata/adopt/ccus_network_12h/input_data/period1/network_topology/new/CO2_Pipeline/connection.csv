@@ -1,0 +1,7 @@
+;src_steel_salzgitter;src_cement_laegerdorf;src_chem_ludwigshafen;hub_bremen;sink_hub_wilhelmshaven;sink_hub_brunsbuettel
+src_steel_salzgitter;0;0;0;1;0;0
+src_cement_laegerdorf;0;0;0;0;0;1
+src_chem_ludwigshafen;0;0;0;0;0;0
+hub_bremen;0;0;0;0;1;1
+sink_hub_wilhelmshaven;0;0;0;0;0;0
+sink_hub_brunsbuettel;0;0;0;0;0;0

@@ -1,0 +1,42 @@
+{
+  "api_key": "{{meme_api_key}}",
+  "model": {
+    "metadata": { "name": "ccus_sinks_as_tech", "currency": "EUR", "currency_year": 2025 },
+    "time": { "start": "2025-01-01T00:00", "end": "2025-01-01T23:00", "resolution": "1H" },
+    "carriers": {
+      "CO2captured": { "unit": "t" },
+      "electricity": { "unit": "MWh" }
+    },
+    "nodes": {
+      "src_steel_salzgitter":   { "coords": { "lat": 52.1586, "lon": 10.3960 } },
+      "src_cement_laegerdorf":  { "coords": { "lat": 53.8833, "lon": 9.5833 } },
+      "src_chem_ludwigshafen":  { "coords": { "lat": 49.4958, "lon": 8.4270 } },
+      "sink_hub_wilhelmshaven": { "coords": { "lat": 53.5300, "lon": 8.1300 },
+                                  "native": { "adopt-net0": { "new": ["PermanentStorage_CO2_simple"] } } },
+      "sink_hub_brunsbuettel":  { "coords": { "lat": 53.8960, "lon": 9.1400 },
+                                  "native": { "adopt-net0": { "new": ["PermanentStorage_CO2_simple"] } } }
+    },
+    "technologies": {
+      "techdir_anchor": {
+        "role": "storage",
+        "node": ["sink_hub_wilhelmshaven", "sink_hub_brunsbuettel"],
+        "carrier_in": "electricity", "carrier_out": "electricity",
+        "capacity": { "expandable": false, "existing": 0, "max": 0 },
+        "storage": {}
+      }
+    },
+    "trade": {
+      "capture_steel_salzgitter":  { "node": "src_steel_salzgitter",  "carrier": "CO2captured", "import": { "limit": 228, "price": -45 } },
+      "capture_cement_laegerdorf": { "node": "src_cement_laegerdorf", "carrier": "CO2captured", "import": { "limit": 137, "price": -30 } },
+      "capture_chem_ludwigshafen": { "node": "src_chem_ludwigshafen", "carrier": "CO2captured", "import": { "limit": 91,  "price": -25 } },
+      "grid_wilhelmshaven": { "node": "sink_hub_wilhelmshaven", "carrier": "electricity", "import": { "limit": 1000, "price": 50 } },
+      "grid_brunsbuettel":  { "node": "sink_hub_brunsbuettel",  "carrier": "electricity", "import": { "limit": 1000, "price": 50 } }
+    }
+  },
+  "experiment": {
+    "mode": "plan",
+    "objective": "min_cost",
+    "copperplate": true,
+    "solver": { "name": "glpk" }
+  }
+}

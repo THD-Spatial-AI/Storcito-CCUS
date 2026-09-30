@@ -1,0 +1,8 @@
+{
+  "CO2captured": {
+    "curtailment_possible": 0
+  },
+  "electricity": {
+    "curtailment_possible": 0
+  }
+}
