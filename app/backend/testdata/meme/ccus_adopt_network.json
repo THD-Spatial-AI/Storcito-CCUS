@@ -232,13 +232,17 @@
               "lifetime": 40,
               "OPEX_variable": 0,
               "OPEX_fixed": 0
+            },
+            "Performance": {
+              "energyconsumption": {
+                "electricity": {
+                  "cons_model": 1,
+                  "k_flow": 0,
+                  "k_flowDistance": 0
+                }
+              }
             }
           }
-        },
-        "energy_consumption": {
-          "carrier": "electricity",
-          "per_flow": 0,
-          "per_flow_distance": 0
         }
       }
     },
