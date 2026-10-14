@@ -2427,7 +2427,8 @@
       "suggestedName3": "Présélection de sites de stockage",
       "suggestedName4": "Perspective trimestrielle de captage",
       "modelNameQuestion": "Comment voulez-vous nommer ce modèle ?",
-      "periodQuestion": "Quelle période doit-il évaluer ?"
+      "periodQuestion": "Quelle période doit-il évaluer ?",
+      "assessmentPeriod": "Période d'évaluation"
     },
     "layer2": {
       "purpose": "Choisissez les sources et puits de CO₂ entre lesquels ce modèle achemine.",
@@ -2572,6 +2573,11 @@
       "emitters": "Sources d'émission",
       "sinks": "Stockage et utilisation",
       "routes": "Itinéraires de transport candidats",
+      "routed": {
+        "pipeline": "Tracé pipeline",
+        "truck": "Itinéraire camion",
+        "railway": "Itinéraire ferroviaire"
+      },
       "size": "Taille de la bulle = émissions annuelles de CO₂"
     },
     "catalogueEmpty": "Le catalogue de nœuds est vide.",

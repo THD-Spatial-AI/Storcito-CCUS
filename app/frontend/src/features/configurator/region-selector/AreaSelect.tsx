@@ -6,7 +6,7 @@ import { useTranslation } from "@/i18n";
 import { AreaSelectTour } from "@/features/guided-tour";
 import { useAreaSelect, type AreaData } from "@/features/configurator/hooks/useAreaSelect";
 import { useWizardSteps } from "@/features/configurator/hooks/area-select/useWizardSteps";
-import { useNodeOLLayers, useNodesQuery, useFitToNodes, filterNodes, useNodeFilterStore, EMITTER_COLOR, SINK_COLOR, TRANSPORT_COLOR } from "@/features/co2-nodes";
+import { useNodeOLLayers, useNodesQuery, useFitToNodes, filterNodes, useNodeFilterStore, useRoutingRunStore, EMITTER_COLOR, SINK_COLOR, TRANSPORT_COLOR, MODE_COLORS } from "@/features/co2-nodes";
 import { MAP_STEP_PANEL_WIDTH, WizardStepBar } from "./components/wizard";
 import { CreateWorkspaceModal, useWorkspaceStore, type Workspace } from "@/components/workspace";
 import { useDocumentTitle } from "@/hooks/use-document-title";
@@ -150,7 +150,14 @@ export const AreaSelect: FC<AreaSelectProps> = ({
     return mapNodes.filter((node) => picked.has(node.id));
   }, [isMapStep, mapNodes, state.selectedNodeIds]);
 
-  useNodeOLLayers({ map, nodes: visibleNodes, selectedIds: state.selectedNodeIds, onToggle: toggleNode });
+  // Routed paths.
+  const routes = useRoutingRunStore((store) => store.routes);
+  const routedModes = useMemo(
+    () => [...new Set((routes ?? []).filter((route) => route.metadata?.geometry).map((route) => route.mode))],
+    [routes],
+  );
+
+  useNodeOLLayers({ map, nodes: visibleNodes, selectedIds: state.selectedNodeIds, onToggle: toggleNode, routes });
 
   // Hides loading canvas.
   const [revealVeil, setRevealVeil] = useState(false);
@@ -229,6 +236,12 @@ export const AreaSelect: FC<AreaSelectProps> = ({
                   <span className="h-0.5 w-5" style={{ backgroundColor: TRANSPORT_COLOR }} />
                   {t("co2Nodes.legend.routes", "Candidate transport routes")}
                 </span>
+                {routedModes.map((mode) => (
+                  <span key={mode} className="flex items-center gap-1.5">
+                    <span className="h-1 w-5 rounded-full" style={{ backgroundColor: MODE_COLORS[mode] ?? TRANSPORT_COLOR }} />
+                    {t(`co2Nodes.legend.routed.${mode}`, `${mode[0].toUpperCase()}${mode.slice(1)} route`)}
+                  </span>
+                ))}
                 <span className="mt-0.5 border-t border-border/60 pt-1.5 text-[10px]">
                   {t("co2Nodes.legend.size", "Bubble size = annual CO₂ emissions")}
                 </span>

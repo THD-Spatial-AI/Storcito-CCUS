@@ -2433,7 +2433,8 @@
       "suggestedName3": "Przegląd lokalizacji składowania",
       "suggestedName4": "Kwartalna prognoza wychwytu",
       "modelNameQuestion": "Jak chcesz nazwać ten model?",
-      "periodQuestion": "Jaki okres ma zostać oceniony?"
+      "periodQuestion": "Jaki okres ma zostać oceniony?",
+      "assessmentPeriod": "Okres oceny"
     },
     "layer2": {
       "purpose": "Wybierz źródła i składowiska CO₂, między którymi model wyznacza trasy.",
@@ -2578,6 +2579,11 @@
       "emitters": "Źródła emisji",
       "sinks": "Składowanie i wykorzystanie",
       "routes": "Potencjalne trasy transportu",
+      "routed": {
+        "pipeline": "Trasa rurociągu",
+        "truck": "Trasa ciężarówki",
+        "railway": "Trasa kolejowa"
+      },
       "size": "Wielkość bąbla = roczna emisja CO₂"
     },
     "catalogueEmpty": "Katalog węzłów jest pusty.",

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"spatialhub_backend/internal/api/contracts"
@@ -25,6 +26,12 @@ var (
 )
 
 func (s *ModelService) CreateModel(userID, email string, req contracts.CreateModelRequest) (*models.Model, error) {
+	if req.Country == nil {
+		// Country required.
+		country := s.nodeCountries(req.Config)
+		req.Country = &country
+	}
+
 	model, modelMap, err := buildCreateModelPayload(userID, email, req)
 	if err != nil {
 		return nil, err
@@ -210,4 +217,25 @@ func toJSONOrNull(raw json.RawMessage) datatypes.JSON {
 		return datatypes.JSON(raw)
 	}
 	return datatypes.JSON([]byte("null"))
+}
+
+// Node country codes.
+func (s *ModelService) nodeCountries(config json.RawMessage) string {
+	var parsed struct {
+		Parameters struct {
+			CO2NodeIDs []uint `json:"co2_node_ids"`
+		} `json:"parameters"`
+	}
+	if len(config) == 0 || json.Unmarshal(config, &parsed) != nil || len(parsed.Parameters.CO2NodeIDs) == 0 {
+		return ""
+	}
+	var codes []string
+	err := s.store.DB().Model(&models.CO2Node{}).
+		Where("id IN ? AND country_code IS NOT NULL AND country_code <> ''", parsed.Parameters.CO2NodeIDs).
+		Distinct().Order("country_code").Pluck("country_code", &codes).Error
+	if err != nil {
+		logger.ForComponent("model").Warnf("look up node countries: %v", err)
+		return ""
+	}
+	return strings.Join(codes, ",")
 }

@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -78,6 +80,7 @@ func (h *Handler) start(c *gin.Context, modelID uint) {
 		httputil.BadRequest(c, err.Error())
 		return
 	}
+	req.NodeCountries = nodeCountries(nodes)
 	workbook, err := client.BuildWorkbook(nodes)
 	if err != nil {
 		httputil.BadRequest(c, err.Error())
@@ -200,6 +203,24 @@ func (h *Handler) loadNodes(ids []uint) ([]models.CO2Node, error) {
 		return nil, fmt.Errorf("some selected nodes were not found")
 	}
 	return nodes, nil
+}
+
+// Unique node countries.
+func nodeCountries(nodes []models.CO2Node) []string {
+	seen := map[string]bool{}
+	codes := []string{}
+	for _, node := range nodes {
+		if node.CountryCode == nil {
+			continue
+		}
+		code := strings.ToUpper(strings.TrimSpace(*node.CountryCode))
+		if code != "" && !seen[code] {
+			seen[code] = true
+			codes = append(codes, code)
+		}
+	}
+	sort.Strings(codes)
+	return codes
 }
 
 func (h *Handler) withRun(c *gin.Context, action func(*runState)) {

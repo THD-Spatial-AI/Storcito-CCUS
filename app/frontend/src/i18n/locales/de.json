@@ -2423,7 +2423,8 @@
       "suggestedName3": "Speicherstandort-Screening",
       "suggestedName4": "Quartalsausblick Abscheidung",
       "modelNameQuestion": "Wie soll dieses Modell heißen?",
-      "periodQuestion": "Welchen Zeitraum soll es bewerten?"
+      "periodQuestion": "Welchen Zeitraum soll es bewerten?",
+      "assessmentPeriod": "Bewertungszeitraum"
     },
     "layer2": {
       "purpose": "Wählen Sie die CO₂-Quellen und -Senken, zwischen denen dieses Modell routet.",
@@ -2568,6 +2569,11 @@
       "emitters": "Emissionsquellen",
       "sinks": "Speicher & Nutzung",
       "routes": "Mögliche Transportrouten",
+      "routed": {
+        "pipeline": "Pipeline-Route",
+        "truck": "Lkw-Route",
+        "railway": "Bahnroute"
+      },
       "size": "Blasengröße = jährliche CO₂-Emissionen"
     },
     "catalogueEmpty": "Der Knotenkatalog ist leer.",

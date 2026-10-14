@@ -159,7 +159,7 @@ export const Layer1ModelInit: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => {
                             className="*:not-first:mt-1"
                         >
                             <Label className="text-foreground text-xs font-medium">
-                                {t("simulation.simulationPeriod")} <span className="text-destructive">*</span>
+                                {t("configurator.layer1.assessmentPeriod", "Assessment Period")} <span className="text-destructive">*</span>
                             </Label>
                             <div className="flex">
                                 <Group className={cn(DATE_INPUT_STYLE, "xl:px-0 lg:px-2 relative")}>

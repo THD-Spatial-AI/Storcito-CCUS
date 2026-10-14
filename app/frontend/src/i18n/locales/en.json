@@ -2423,7 +2423,8 @@
       "suggestedName3": "Storage Site Screening",
       "suggestedName4": "Quarterly Capture Outlook",
       "modelNameQuestion": "What do you want to call this model?",
-      "periodQuestion": "Which period should it assess?"
+      "periodQuestion": "Which period should it assess?",
+      "assessmentPeriod": "Assessment Period"
     },
     "layer2": {
       "purpose": "Choose the CO₂ sources and sinks this model routes between.",
@@ -2568,6 +2569,11 @@
       "emitters": "Emission sources",
       "sinks": "Storage & utilisation",
       "routes": "Candidate transport routes",
+      "routed": {
+        "pipeline": "Pipeline route",
+        "truck": "Truck route",
+        "railway": "Railway route"
+      },
       "size": "Bubble size = annual CO₂ emissions"
     },
     "catalogueEmpty": "The node catalogue is empty.",

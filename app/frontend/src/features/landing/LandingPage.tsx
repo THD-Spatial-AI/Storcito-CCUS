@@ -307,14 +307,16 @@ export default function LandingPage() {
       </div>
 
       {/* Hero Section */}
-      <section id="top" className="relative pt-28 pb-20 md:pt-36 md:pb-28 overflow-hidden bg-[#EDEAE7]">
+      <section id="top" className="relative pt-28 pb-60 md:pt-36 md:pb-64 overflow-hidden bg-[#EDEAE7]">
         {/* Hero illustration. */}
-        <div
-          className="absolute inset-0 opacity-60 pointer-events-none bg-cover bg-bottom bg-no-repeat"
-          style={{ backgroundImage: "url('/images/landing-page/co2-transport-hero.svg')" }}
+        <img
+          src="/images/landing-page/co2-transport-hero.svg"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover object-bottom opacity-80 pointer-events-none select-none"
         />
-        {/* Veil over the map. */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#EDEAE7]/50 via-[#EDEAE7]/60 to-[#EDEAE7]/85" />
+        {/* Copy veil. */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_55%_60%_at_50%_40%,#EDEAE7d9_0%,#EDEAE700_100%)]" />
 
         <div className="relative mx-auto max-w-screen-xl px-6 md:px-10 text-center">
           <div data-reveal className="inline-flex items-center gap-2 rounded-full bg-[#D4D2D0] border border-[#B0AAA4] px-4 py-1.5 text-xs font-semibold text-[#1A1A1A] mb-6 backdrop-blur-sm">

@@ -2433,7 +2433,8 @@
       "suggestedName3": "Screening opslaglocaties",
       "suggestedName4": "Kwartaalvooruitzicht afvang",
       "modelNameQuestion": "Hoe wilt u dit model noemen?",
-      "periodQuestion": "Welke periode moet worden beoordeeld?"
+      "periodQuestion": "Welke periode moet worden beoordeeld?",
+      "assessmentPeriod": "Beoordelingsperiode"
     },
     "layer2": {
       "purpose": "Kies de CO₂-bronnen en -putten waartussen dit model routeert.",
@@ -2578,6 +2579,11 @@
       "emitters": "Emissiebronnen",
       "sinks": "Opslag en benutting",
       "routes": "Mogelijke transportroutes",
+      "routed": {
+        "pipeline": "Pijpleidingroute",
+        "truck": "Vrachtwagenroute",
+        "railway": "Spoorroute"
+      },
       "size": "Bolgrootte = jaarlijkse CO₂-uitstoot"
     },
     "catalogueEmpty": "De knooppuntcatalogus is leeg.",

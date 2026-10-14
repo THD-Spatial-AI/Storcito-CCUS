@@ -244,3 +244,27 @@ func routedMatrix(workbook []byte, mode string, routes []models.CO2RouteXRoute) 
 	}
 	return buf.Bytes(), nil
 }
+
+// Pipeline route geometry.
+func AttachPipelineGeometry(job *Job, routes []models.CO2RouteXRoute) {
+	rows, _ := job.Summary["routes"].([]any)
+	geometries := map[string]any{}
+	for _, item := range rows {
+		row, _ := item.(map[string]any)
+		from, _ := row["from_id"].(string)
+		to, _ := row["to_id"].(string)
+		if row["geometry"] != nil {
+			geometries[routeKey("pipeline", from, to)] = row["geometry"]
+		}
+	}
+	for i := range routes {
+		geometry, ok := geometries[routeKey("pipeline", routes[i].FromNodeID, routes[i].ToNodeID)]
+		if !ok {
+			continue
+		}
+		values := map[string]any{}
+		_ = json.Unmarshal(routes[i].Metadata, &values)
+		values["geometry"] = geometry
+		routes[i].Metadata = metadata(values)
+	}
+}
