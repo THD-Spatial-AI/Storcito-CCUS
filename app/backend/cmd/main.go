@@ -22,11 +22,13 @@ import (
 	feedback "spatialhub_backend/internal/handler/feedback"
 	geocodinghandler "spatialhub_backend/internal/handler/geocoding"
 	grouphandler "spatialhub_backend/internal/handler/group"
+	memehandler "spatialhub_backend/internal/handler/meme"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
 	usershandler "spatialhub_backend/internal/handler/users"
 	"spatialhub_backend/internal/handler/weather"
 	"spatialhub_backend/internal/jobs"
+	memeclient "spatialhub_backend/internal/meme"
 	"spatialhub_backend/internal/middleware"
 	modelhandler "spatialhub_backend/internal/model/handler"
 	resulthandler "spatialhub_backend/internal/result/handler"
@@ -315,6 +317,7 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 		CO2NodesHandler:            co2nodeshandler.NewHandler(deps.DB, storeco2client.NewClient(cfg.StoreCO2URL)),
 		CO2RouteXHandler:           co2routexhandler.NewHandler(deps.DB, co2routexclient.NewClient(cfg.CO2RouteXURL)),
 		CO2SourcesHandler:          co2sourceshandler.NewHandler(storeco2client.NewClient(cfg.StoreCO2URL)),
+		MEMEHandler:                memehandler.NewHandler(deps.DB, memeclient.NewClient(cfg.MEMEURL, cfg.MEMEAPIKey)),
 	}
 }
 
