@@ -319,7 +319,7 @@ export default function LandingPage() {
       <main className="pt-16">
         {/* Hero. */}
         <section id="top" className="relative flex w-full flex-col md:flex-row min-h-[calc(100vh-4rem)] overflow-hidden bg-[#EDEAE7]">
-          <div className="relative z-10 flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12 lg:w-3/5 lg:p-16">
+          <div className="relative z-10 flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12 lg:w-3/5 lg:px-16 lg:pt-16 lg:pb-[calc(14vw-2rem)] 2xl:pb-[calc(14vw-4rem)]">
             <div>
               <h1 data-reveal className="text-4xl md:text-5xl font-bold leading-tight text-[#1A1A1A] max-w-2xl">
                 {t("landing.hero.title1")}{" "}
@@ -344,7 +344,7 @@ export default function LandingPage() {
             </div>
 
             {/* Metrics strip. */}
-            <div data-reveal className="mt-16 lg:mt-24 2xl:mt-32 pt-8 border-t border-[#1A1A1A]/10">
+            <div data-reveal className="mt-16 lg:mt-32 2xl:mt-48 pt-8 border-t border-[#1A1A1A]/10">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[#D4D2D0] border border-[#D4D2D0]">
                 {[
                   ["14,600+", "metricSites"],
@@ -377,12 +377,12 @@ export default function LandingPage() {
 
         {/* Straddles hero edge. */}
         <div className="relative h-0 pointer-events-none select-none" aria-hidden="true">
-          <div className="absolute left-0 right-0 top-0 aspect-[12/5] -translate-y-[88%] overflow-hidden opacity-40">
+          <div className="absolute left-0 right-0 top-0 aspect-[12/5] -translate-y-[112%] overflow-hidden opacity-40">
             <img src="/images/landing-page/co2-transport-hero.svg" alt="" className="absolute bottom-0 left-0 w-full aspect-[12/7]" />
           </div>
         </div>
 
-        <section id="how-it-works" className={`pb-32 pt-[calc(5vw+4rem)] px-8 ${BAND}`}>
+        <section id="how-it-works" className={`pb-32 pt-24 px-8 ${BAND}`}>
           <div className="relative z-10 max-w-7xl mx-auto">
             <div className="text-center mb-20">
               <span className="block font-bold text-[10px] tracking-[0.4em] uppercase text-white/50">{t("landing.howItWorks.label")}</span>
