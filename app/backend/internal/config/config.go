@@ -18,6 +18,8 @@ const (
 	defaultCO2RouteXPort = "8010"
 	defaultStoreCO2Host  = "localhost"
 	defaultStoreCO2Port  = "8020"
+	defaultMEMEHost      = "localhost"
+	defaultMEMEPort      = "8081"
 )
 
 type Config struct {
@@ -38,6 +40,8 @@ type Config struct {
 	GeoserverPublicURL   string // Public WMS URL.
 	CO2RouteXURL         string // CO2RouteX API.
 	StoreCO2URL          string // STORE_CO2 API.
+	MEMEURL              string // MEME modelling API.
+	MEMEAPIKey           string // MEME API key.
 	CallbackSecret       string // Callback secret.
 }
 
@@ -76,6 +80,8 @@ func LoadFromEnv() (*Config, error) {
 		GeoserverPublicURL:   platformconfig.GetEnv("GEOSERVER_PUBLIC_URL", defaultGeoserverURL),
 		CO2RouteXURL:         co2routeXURL(),
 		StoreCO2URL:          storeCO2URL(),
+		MEMEURL:              memeURL(),
+		MEMEAPIKey:           strings.TrimSpace(os.Getenv("MEME_API_KEY")),
 		CallbackSecret:       os.Getenv("CALLBACK_SECRET"),
 	}
 	return cfg, nil
@@ -114,5 +120,15 @@ func storeCO2URL() string {
 	}
 	host := platformconfig.GetEnv("STORECO2_HOST", defaultStoreCO2Host)
 	port := platformconfig.GetEnv("STORECO2_PORT", defaultStoreCO2Port)
+	return fmt.Sprintf("http://%s:%s", host, port)
+}
+
+// memeURL prefers MEME_URL.
+func memeURL() string {
+	if url := strings.TrimSpace(os.Getenv("MEME_URL")); url != "" {
+		return strings.TrimRight(url, "/")
+	}
+	host := platformconfig.GetEnv("MEME_HOST", defaultMEMEHost)
+	port := platformconfig.GetEnv("MEME_PORT", defaultMEMEPort)
 	return fmt.Sprintf("http://%s:%s", host, port)
 }

@@ -21,6 +21,10 @@ services:
       STORECO2_HOST: ${STORECO2_HOST:-storeco2}
       STORECO2_PORT: ${STORECO2_PORT:-8000}
       STORECO2_URL: ${STORECO2_URL:-}
+      MEME_HOST: ${MEME_HOST:-meme}
+      MEME_PORT: ${MEME_PORT:-8081}
+      MEME_URL: ${MEME_URL:-}
+      MEME_API_KEY: ${MEME_API_KEY:-}
       RATE_LIMIT_PER_MIN: 1000
     volumes:
       - backend-storage:/app/storage

@@ -173,6 +173,7 @@ Copy `app/backend/.env.example` to `app/backend/.env` and adjust:
 | `KEYCLOAK_URL` / `KEYCLOAK_REALM` | Keycloak OIDC endpoint |
 | `STORECO2_HOST/PORT` or `STORECO2_URL` | Point-source catalogue API |
 | `CO2ROUTEX_HOST/PORT` or `CO2ROUTEX_URL` | Routing and cost API |
+| `MEME_HOST/PORT` or `MEME_URL`, `MEME_API_KEY` | MEME modelling API (copperplate CO2 runs) |
 | `CALLBACK_SECRET` | Shared secret for compute callbacks |
 
 The frontend reads `VITE_API_BASE_URL` and, optionally,
