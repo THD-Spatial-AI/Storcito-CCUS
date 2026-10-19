@@ -70,7 +70,7 @@ export const ModelResultsViewer: FC = () => {
     return nodes.filter((node) => picked.has(node.id));
   }, [nodes, selectedIds]);
 
-  useNodeOLLayers({ map, nodes: modelNodes, selectedIds, onToggle: () => {} });
+  useNodeOLLayers({ map, nodes: modelNodes, selectedIds, onToggle: () => {}, routes });
   useFitToNodes({ map, nodes: modelNodes, enabled: modelNodes.length > 0, padding: FIT_PADDING });
 
   const byMode = useMemo(() => {

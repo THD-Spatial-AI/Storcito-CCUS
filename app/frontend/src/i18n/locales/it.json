@@ -2433,7 +2433,8 @@
       "suggestedName3": "Selezione dei siti di stoccaggio",
       "suggestedName4": "Prospettiva trimestrale di cattura",
       "modelNameQuestion": "Come vuoi chiamare questo modello?",
-      "periodQuestion": "Quale periodo deve valutare?"
+      "periodQuestion": "Quale periodo deve valutare?",
+      "assessmentPeriod": "Periodo di valutazione"
     },
     "layer2": {
       "purpose": "Scegli le sorgenti e i pozzi di CO₂ tra cui questo modello instrada.",
@@ -2578,6 +2579,11 @@
       "emitters": "Sorgenti di emissione",
       "sinks": "Stoccaggio e utilizzo",
       "routes": "Rotte di trasporto candidate",
+      "routed": {
+        "pipeline": "Percorso pipeline",
+        "truck": "Percorso camion",
+        "railway": "Percorso ferroviario"
+      },
       "size": "Dimensione della bolla = emissioni annue di CO₂"
     },
     "catalogueEmpty": "Il catalogo dei nodi è vuoto.",

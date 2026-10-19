@@ -79,12 +79,17 @@ func (c *Client) submit(ctx context.Context, endpoint string, files []filePart, 
 	return job, err
 }
 
-func (c *Client) RoutePipeline(ctx context.Context, workbook []byte, raster Upload, options map[string]any) (*Job, error) {
-	return c.submit(ctx, "/routing/pipeline", []filePart{workbookPart(workbook), {"raster", raster}}, nil, options)
+// Seeded raster fallback.
+func (c *Client) RoutePipeline(ctx context.Context, workbook []byte, raster Upload, country string, options map[string]any) (*Job, error) {
+	if present(raster) {
+		return c.submit(ctx, "/routing/pipeline", []filePart{workbookPart(workbook), {"raster", raster}}, nil, options)
+	}
+	return c.submit(ctx, "/routing/pipeline", []filePart{workbookPart(workbook)}, map[string]string{"country": country}, options)
 }
 
 func (c *Client) RouteTruck(ctx context.Context, workbook []byte, networks []Upload, countries []string, options map[string]any) (*Job, error) {
-	if len(networks) == 0 || len(networks) != len(countries) {
+	// Seeded network fallback.
+	if len(countries) == 0 || (len(networks) > 0 && len(networks) != len(countries)) {
 		return nil, fmt.Errorf("each road network needs a country code")
 	}
 	files := []filePart{workbookPart(workbook)}
@@ -155,6 +160,9 @@ func (c *Client) Await(ctx context.Context, job *Job) (*Job, error) {
 
 func (c *Client) OutputWorkbook(ctx context.Context, job *Job) ([]byte, error) {
 	name, _ := job.Summary["costed_workbook"].(string)
+	if name == "" {
+		name, _ = job.Summary["routed_workbook"].(string)
+	}
 	if name == "" {
 		for _, output := range job.Outputs {
 			if strings.HasSuffix(strings.ToLower(output.Name), ".xlsx") {

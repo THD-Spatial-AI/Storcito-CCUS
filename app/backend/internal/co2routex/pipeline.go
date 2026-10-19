@@ -26,6 +26,32 @@ type Inputs struct {
 	Railway          Upload            `json:"-"`
 	Stations         Upload            `json:"-"`
 	Distances        Upload            `json:"-"`
+	// Node countries.
+	NodeCountries []string `json:"-"`
+}
+
+// Seeded countries.
+var seededCountries = map[string]bool{"DE": true, "NL": true, "NO": true}
+
+// Seeded mode gap.
+func (in Inputs) seededGap(mode string) string {
+	selected := strings.Join(in.NodeCountries, ", ")
+	switch {
+	case mode == "pipeline" && !present(in.Raster):
+		if len(in.NodeCountries) != 1 || !seededCountries[in.NodeCountries[0]] {
+			return "pipeline routing without a resistance raster needs all nodes in one of DE, NL or NO (selected: " + selected + ")"
+		}
+	case mode == "truck" && len(in.Networks) == 0:
+		if len(in.NodeCountries) == 0 {
+			return "truck routing without road networks needs nodes with a country code"
+		}
+		for _, code := range in.NodeCountries {
+			if !seededCountries[code] {
+				return "truck routing without road networks supports DE, NL and NO only (selected: " + selected + ")"
+			}
+		}
+	}
+	return ""
 }
 
 func (in Inputs) Has(mode string) bool {
@@ -123,7 +149,10 @@ func (c *Client) Execute(ctx context.Context, workbook []byte, in Inputs, progre
 		}
 		job, err = c.Await(ctx, job)
 		if err == nil && output {
-			workbook, err = c.OutputWorkbook(ctx, job)
+			var out []byte
+			if out, err = c.OutputWorkbook(ctx, job); err == nil {
+				workbook = out
+			}
 		}
 		if err != nil {
 			if job != nil {
@@ -149,46 +178,79 @@ func (c *Client) Execute(ctx context.Context, workbook []byte, in Inputs, progre
 	if _, err := run(models.StageConnections, func() (*Job, error) { return c.GenerateConnections(ctx, workbook, options) }, true); err != nil {
 		return result, err
 	}
-	if in.Has("pipeline") && present(in.Raster) {
+	// Best-effort seeded modes.
+	var skipped []string
+	attempt := func(mode string, uploaded bool, route func() error) error {
+		if !in.Has(mode) {
+			return nil
+		}
+		if gap := in.seededGap(mode); gap != "" {
+			skipped = append(skipped, gap)
+			return nil
+		}
+		err := route()
+		if err != nil && !uploaded && ctx.Err() == nil {
+			skipped = append(skipped, err.Error())
+			return nil
+		}
+		return err
+	}
+	if err := attempt("pipeline", present(in.Raster), func() error {
+		country := ""
+		if !present(in.Raster) {
+			country = in.NodeCountries[0]
+		}
 		job, err := run(models.StageRoutingPipeline, func() (*Job, error) {
-			return c.RoutePipeline(ctx, workbook, in.Raster, map[string]any{"mode_sheets": []string{"pipeline"}})
+			return c.RoutePipeline(ctx, workbook, in.Raster, country, map[string]any{"mode_sheets": []string{"pipeline"}})
 		}, true)
 		if err != nil {
-			return result, err
+			return err
 		}
 		routes, err := ParsePipelineRoutes(workbook)
 		if err != nil {
-			return result, fmt.Errorf("pipeline results: %w", err)
+			return fmt.Errorf("pipeline results: %w", err)
 		}
 		for i := range routes {
 			id := job.JobID
 			routes[i].JobID = &id
 		}
-		result.Routes = append(result.Routes, routes...)
-		workbook, err = routedMatrix(workbook, "pipeline", routes)
+		AttachPipelineGeometry(job, routes)
+		routed, err := routedMatrix(workbook, "pipeline", routes)
 		if err != nil {
-			return result, err
+			return err
 		}
+		result.Routes = append(result.Routes, routes...)
+		workbook = routed
+		return nil
+	}); err != nil {
+		return result, err
 	}
-	if in.Has("truck") && len(in.Networks) > 0 {
+	if err := attempt("truck", len(in.Networks) > 0, func() error {
+		countries := in.NetworkCountries
+		if len(in.Networks) == 0 {
+			countries = in.NodeCountries
+		}
 		job, err := run(models.StageRoutingTruck, func() (*Job, error) {
-			return c.RouteTruck(ctx, workbook, in.Networks, in.NetworkCountries, map[string]any{
+			return c.RouteTruck(ctx, workbook, in.Networks, countries, map[string]any{
 				"network_layers":   in.NetworkLayers,
 				"connection_rules": map[string]any{"candidate_source": "existing_nonzero"},
 			})
 		}, true)
 		if err != nil {
-			return result, err
+			return err
 		}
 		routes, err := ParseTruckRoutes(job)
 		if err != nil {
-			return result, err
+			return err
 		}
 		for i := range routes {
 			id := job.JobID
 			routes[i].JobID = &id
 		}
 		result.Routes = append(result.Routes, routes...)
+		return nil
+	}); err != nil {
+		return result, err
 	}
 	if in.Has("railway") && present(in.Stations) {
 		railOptions := map[string]any{"country_code": in.RailwayCountry}
@@ -234,6 +296,9 @@ func (c *Client) Execute(ctx context.Context, workbook []byte, in Inputs, progre
 			result.Routes = append(result.Routes, models.CO2RouteXRoute{Mode: "railway", FromNodeID: pair.FromID, ToNodeID: pair.ToID, DistanceKm: &distance, JobID: &id,
 				Metadata: metadata(map[string]any{"status": "ok", "scope": "station_to_station", "selections": job.Summary["selections"]})})
 		}
+	}
+	if len(result.Routes) == 0 && len(skipped) > 0 {
+		return result, fmt.Errorf("no routes produced: %s", strings.Join(skipped, "; "))
 	}
 	hasPipeline := false
 	for _, route := range result.Routes {

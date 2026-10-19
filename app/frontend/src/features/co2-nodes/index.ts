@@ -3,7 +3,7 @@ export { RouteResults } from "./components/RouteResults";
 export { CostResults } from "./components/CostResults";
 export { useNodesQuery, nodeKeys } from "./hooks/useNodesQuery";
 export { useFitToNodes } from "./hooks/useFitToNodes";
-export { useNodeOLLayers, candidateRoutes, groupOf, EMITTER_COLOR, SINK_COLOR, TRANSPORT_COLOR } from "./hooks/useNodeOLLayers";
+export { useNodeOLLayers, candidateRoutes, groupOf, EMITTER_COLOR, SINK_COLOR, TRANSPORT_COLOR, MODE_COLORS } from "./hooks/useNodeOLLayers";
 export { NodeSelector } from "./components/NodeSelector";
 export {
   NODE_CATEGORIES,

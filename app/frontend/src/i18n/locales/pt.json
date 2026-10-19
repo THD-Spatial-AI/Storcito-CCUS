@@ -2423,7 +2423,8 @@
       "suggestedName3": "Triagem de locais de armazenamento",
       "suggestedName4": "Perspetiva trimestral de captura",
       "modelNameQuestion": "Como quer chamar a este modelo?",
-      "periodQuestion": "Que período deve avaliar?"
+      "periodQuestion": "Que período deve avaliar?",
+      "assessmentPeriod": "Período de avaliação"
     },
     "layer2": {
       "purpose": "Escolha as fontes e sumidouros de CO₂ entre os quais o modelo traça rotas.",
@@ -2568,6 +2569,11 @@
       "emitters": "Fontes de emissão",
       "sinks": "Armazenamento e utilização",
       "routes": "Rotas de transporte candidatas",
+      "routed": {
+        "pipeline": "Rota de gasoduto",
+        "truck": "Rota de camião",
+        "railway": "Rota ferroviária"
+      },
       "size": "Tamanho da bolha = emissões anuais de CO₂"
     },
     "catalogueEmpty": "O catálogo de nós está vazio.",

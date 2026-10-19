@@ -13,6 +13,7 @@ import type { FeatureLike } from "ol/Feature";
 import type MapBrowserEvent from "ol/MapBrowserEvent";
 
 import { isEmitterCategory, isSinkCategory, type CO2Node } from "../types";
+import type { CO2Route } from "../services/nodeService";
 
 const NODE_LAYER_NAME = "co2-nodes";
 const LABEL_LAYER_NAME = "co2-node-labels";
@@ -23,6 +24,11 @@ const TOOLTIP_NAME = "co2-node-tooltip";
 export const EMITTER_COLOR = "#ef4444";
 export const SINK_COLOR = "#10b981";
 export const TRANSPORT_COLOR = "#6366f1";
+export const MODE_COLORS: Record<string, string> = {
+  pipeline: "#7c3aed",
+  truck: "#f59e0b",
+  railway: "#0ea5e9",
+};
 
 // Own visual channel.
 const SELECT_RING = "#0f172a";
@@ -137,6 +143,27 @@ const routeStyle = new Style({
   stroke: new Stroke({ color: TRANSPORT_COLOR, width: 2, lineDash: [6, 4] }),
 });
 
+// Mode line style.
+const routedStyles = new Map<string, Style[]>();
+const routedStyle = (mode: string): Style[] => {
+  let styles = routedStyles.get(mode);
+  if (!styles) {
+    styles = [
+      new Style({ stroke: new Stroke({ color: "rgba(255,255,255,0.9)", width: 6 }) }),
+      new Style({ stroke: new Stroke({ color: MODE_COLORS[mode] ?? TRANSPORT_COLOR, width: 3 }) }),
+    ];
+    routedStyles.set(mode, styles);
+  }
+  return styles;
+};
+
+/** Routed path. */
+const routedLine = (route: CO2Route): LineString | null => {
+  const geometry = route.metadata?.geometry as { type?: string; coordinates?: number[][] } | undefined;
+  if (geometry?.type !== "LineString" || !geometry.coordinates || geometry.coordinates.length < 2) return null;
+  return new LineString(geometry.coordinates.map((point) => fromLonLat(point)));
+};
+
 /** Emitter-sink pairs. */
 export const candidateRoutes = (
   nodes: CO2Node[],
@@ -155,6 +182,8 @@ interface UseNodeOLLayersOptions {
   nodes: CO2Node[];
   selectedIds: number[];
   onToggle: (nodeId: number) => void;
+  // Routed paths.
+  routes?: CO2Route[] | null;
 }
 
 export const useNodeOLLayers = ({
@@ -162,6 +191,7 @@ export const useNodeOLLayers = ({
   nodes,
   selectedIds,
   onToggle,
+  routes,
 }: UseNodeOLLayersOptions) => {
   const toggleRef = useRef(onToggle);
   toggleRef.current = onToggle;
@@ -193,20 +223,33 @@ export const useNodeOLLayers = ({
     const selected = new Set(selectedIds);
 
     // Under the nodes.
+    const routed = (routes ?? []).flatMap((route) => {
+      const line = routedLine(route);
+      return line ? [{ route, line }] : [];
+    });
+    const routedPairs = new Set(routed.map(({ route }) => `${route.from_node_id}\u0000${route.to_node_id}`));
     const routeSource = new VectorSource({
-      features: candidateRoutes(nodes, selected).map(
-        ([emitter, sink]) =>
-          new Feature({
-            geometry: new LineString([
-              fromLonLat([emitter.longitude, emitter.latitude]),
-              fromLonLat([sink.longitude, sink.latitude]),
-            ]),
-          }),
-      ),
+      features: [
+        ...candidateRoutes(nodes, selected)
+          .filter(([emitter, sink]) => !routedPairs.has(`${emitter.node_id}\u0000${sink.node_id}`))
+          .map(
+            ([emitter, sink]) =>
+              new Feature({
+                geometry: new LineString([
+                  fromLonLat([emitter.longitude, emitter.latitude]),
+                  fromLonLat([sink.longitude, sink.latitude]),
+                ]),
+              }),
+          ),
+        ...routed.map(({ route, line }) => new Feature({ geometry: line, mode: route.mode })),
+      ],
     });
     const routeLayer = new VectorLayer({
       source: routeSource,
-      style: routeStyle,
+      style: (feature) => {
+        const mode = feature.get("mode") as string | undefined;
+        return mode ? routedStyle(mode) : routeStyle;
+      },
       zIndex: 60,
       properties: { name: ROUTE_LAYER_NAME },
     });
@@ -357,5 +400,5 @@ export const useNodeOLLayers = ({
       map.un("pointermove", handlePointerMove);
       removeExisting(map);
     };
-  }, [map, nodes, selectedIds, removeExisting]);
+  }, [map, nodes, selectedIds, routes, removeExisting]);
 };

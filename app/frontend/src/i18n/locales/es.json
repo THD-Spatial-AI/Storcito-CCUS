@@ -2427,7 +2427,8 @@
       "suggestedName3": "Cribado de emplazamientos de almacenamiento",
       "suggestedName4": "Perspectiva trimestral de captura",
       "modelNameQuestion": "¿Cómo quieres llamar a este modelo?",
-      "periodQuestion": "¿Qué periodo debe evaluar?"
+      "periodQuestion": "¿Qué periodo debe evaluar?",
+      "assessmentPeriod": "Periodo de evaluación"
     },
     "layer2": {
       "purpose": "Elija las fuentes y sumideros de CO₂ entre los que enruta este modelo.",
@@ -2572,6 +2573,11 @@
       "emitters": "Fuentes de emisión",
       "sinks": "Almacenamiento y utilización",
       "routes": "Rutas de transporte candidatas",
+      "routed": {
+        "pipeline": "Ruta de tubería",
+        "truck": "Ruta en camión",
+        "railway": "Ruta ferroviaria"
+      },
       "size": "Tamaño de burbuja = emisiones anuales de CO₂"
     },
     "catalogueEmpty": "El catálogo de nodos está vacío.",
