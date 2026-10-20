@@ -68,7 +68,7 @@ type PointSource struct {
 	CaptureGroup       *string         `json:"capture_group"`
 	CaptureApplication *string         `json:"capture_application"`
 	Technology         *string         `json:"technology"`
-	FuelNorm           *string         `json:"fuel_norm"`
+	Fuel               *string         `json:"fuel"`
 	SourceClass        *string         `json:"source_class"`
 	CO2Source          *string         `json:"co2_source"`
 	Status             *string         `json:"status"`

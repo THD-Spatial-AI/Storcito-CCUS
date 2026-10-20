@@ -147,7 +147,7 @@ export interface CO2PointSource {
   capture_group: string | null;
   capture_application: string | null;
   technology: string | null;
-  fuel_norm: string | null;
+  fuel: string | null;
   source_class: string | null;
   co2_source: string | null;
   status: string | null;

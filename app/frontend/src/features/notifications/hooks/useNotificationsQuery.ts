@@ -1,9 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { QueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
-import { config } from "@/configuration/app";
-import { useAuthStore } from "@/store/auth-store";
+import { useEffect } from "react";
 import { notificationsService } from "@/features/notifications/services/notifications";
+import { subscribeToNotificationStream } from "@/features/notifications/services/notificationStream";
 
 export interface Notification {
   id: number | string;
@@ -30,19 +29,7 @@ const notificationKeys = {
   list: (params?: { last30Days?: boolean }) => [...notificationKeys.lists(), params] as const,
 };
 
-let eventSource: EventSource | null = null;
-
-// Close on logout.
-export function closeNotificationStream() {
-  if (eventSource) {
-    try {
-      eventSource.close();
-    } catch {
-      // Ignore close errors
-    }
-    eventSource = null;
-  }
-}
+export { closeNotificationStream } from "@/features/notifications/services/notificationStream";
 
 export const useNotificationsQuery = (params?: { last30Days?: boolean }) => {
   const queryClient = useQueryClient();
@@ -57,62 +44,16 @@ export const useNotificationsQuery = (params?: { last30Days?: boolean }) => {
     refetchOnWindowFocus: false,
   });
 
-  // One per tab.
-  const mountedRef = useRef(false);
-  useEffect(() => {
-    if (mountedRef.current) return;
-    mountedRef.current = true;
-
-    if (!eventSource) {
-      initializeEventSource(queryClient);
-    }
-
-    return () => {
-      // Keep singleton.
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Live updates over the tab's shared stream.
+  useEffect(
+    () => subscribeToNotificationStream({
+      onNotification: (ev) => handleIncomingNotification(ev, queryClient),
+    }),
+    [queryClient],
+  );
 
   return query;
 };
-
-// Stream URL.
-function buildStreamUrl(): string {
-  const base = config.api.baseUrl || "/api";
-  const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;
-  return `${normalizedBase}/notifications/stream`;
-}
-
-// Open the stream.
-function initializeEventSource(queryClient: QueryClient) {
-  if (eventSource) {
-    return;
-  }
-
-  // Authenticated only.
-  const user = useAuthStore.getState().user;
-  if (!user) {
-    return;
-  }
-
-  try {
-    const streamUrl = buildStreamUrl();
-    const options: EventSourceInit = { withCredentials: true };
-    eventSource = new EventSource(streamUrl, options);
-
-    eventSource.onopen = () => {};
-
-    eventSource.addEventListener("notification", (ev: MessageEvent) => {
-      handleIncomingNotification(ev, queryClient);
-    });
-
-    eventSource.onerror = () => {
-      handleEventSourceError(queryClient);
-    };
-  } catch {
-    // Ignore connection errors
-  }
-}
 
 // Incoming notification.
 function handleIncomingNotification(ev: MessageEvent, queryClient: QueryClient) {
@@ -142,31 +83,6 @@ function updateNotificationsList(incoming: Notification, queryClient: QueryClien
       return { ...old, notifications: next.slice(0, 50) };
     }
   );
-}
-
-// Reconnect on error.
-function handleEventSourceError(queryClient: QueryClient) {
-  try {
-    eventSource?.close();
-  } catch {
-    // Ignore close errors
-  }
-  eventSource = null;
-
-  // Authenticated only.
-  const user = useAuthStore.getState().user;
-  if (!user) {
-    return;
-  }
-
-  // Retry in 5s.
-  setTimeout(() => {
-    // Recheck before reconnecting.
-    const currentUser = useAuthStore.getState().user;
-    if (currentUser) {
-      initializeEventSource(queryClient);
-    }
-  }, 5000);
 }
 
 // Mark one read.
