@@ -22,6 +22,19 @@ import (
 // Import source label.
 const sourceStoreCO2 = "store_co2"
 
+// Countries the application covers.
+var importCountries = map[string]bool{"DE": true, "NL": true, "NO": true}
+
+func inScope(nodes []storeco2.Node) []storeco2.Node {
+	kept := make([]storeco2.Node, 0, len(nodes))
+	for _, node := range nodes {
+		if node.CountryCode != nil && importCountries[strings.ToUpper(*node.CountryCode)] {
+			kept = append(kept, node)
+		}
+	}
+	return kept
+}
+
 // cleanState drops NUTS junk.
 func cleanState(state *string, countryCode *string) *string {
 	if state == nil {
@@ -72,13 +85,39 @@ func (h *Handler) List(c *gin.Context) {
 		query = query.Where("node_name ILIKE ? OR node_id ILIKE ?", "%"+search+"%", "%"+search+"%")
 	}
 
+	// Deferred industry groups.
+	excluded := map[string]int64{}
+	if raw := strings.TrimSpace(c.Query("exclude_industry")); raw != "" {
+		var skip []string
+		for _, industry := range strings.Split(raw, ",") {
+			if industry = strings.TrimSpace(industry); industry != "" {
+				skip = append(skip, industry)
+			}
+		}
+		if len(skip) > 0 {
+			var counts []struct {
+				Industry string
+				Count    int64
+			}
+			if err := query.Session(&gorm.Session{}).Where("industry IN ?", skip).
+				Select("industry, COUNT(*) AS count").Group("industry").Scan(&counts).Error; err != nil {
+				httputil.InternalError(c, "Failed to load CO2 nodes")
+				return
+			}
+			for _, row := range counts {
+				excluded[row.Industry] = row.Count
+			}
+			query = query.Where("industry IS NULL OR industry NOT IN ?", skip)
+		}
+	}
+
 	var nodes []models.CO2Node
 	if err := query.Omit("metadata").Order("node_id asc").Find(&nodes).Error; err != nil {
 		httputil.InternalError(c, "Failed to load CO2 nodes")
 		return
 	}
 
-	httputil.SuccessResponse(c, gin.H{"items": nodes, "total": len(nodes)})
+	httputil.SuccessResponse(c, gin.H{"items": nodes, "total": len(nodes), "excluded": excluded})
 }
 
 type importRequest struct {
@@ -115,68 +154,110 @@ func (h *Handler) Import(c *gin.Context) {
 		minFlux = *req.MinCO2T
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 120*time.Second)
 	defer cancel()
 
-	page, err := h.store.ImportNodes(ctx, storeco2.NodeQuery{
+	query := storeco2.NodeQuery{
 		Country:    req.Country,
 		MinCO2T:    minFlux,
 		HasMinCO2T: req.MinCO2T != nil,
 		BBox:       req.BBox,
 		Limit:      req.Limit,
 		Offset:     req.Offset,
-	}, req.All)
+	}
+	page, err := h.store.ImportNodes(ctx, query, req.All)
 	if err != nil {
-		var upstream *storeco2.HTTPError
-		if errors.As(err, &upstream) && (upstream.StatusCode == 400 || upstream.StatusCode == 409 || upstream.StatusCode == 422) {
-			c.JSON(upstream.StatusCode, gin.H{"error": upstream.Detail})
-			return
-		}
-		httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
+		respondUpstream(c, err)
 		return
 	}
-	fetched := page.Nodes
+	// Full imports include sinks.
+	var sinks []storeco2.Node
+	if req.All && req.Offset == 0 {
+		sinkPage, err := h.store.ImportSinks(ctx, storeco2.NodeQuery{Country: req.Country, BBox: req.BBox, Limit: req.Limit}, true)
+		if err != nil {
+			respondUpstream(c, err)
+			return
+		}
+		sinks = sinkPage.Nodes
+	}
+	emitters, sinks := inScope(page.Nodes), inScope(sinks)
+	fetched := append(emitters, sinks...)
 	if len(fetched) == 0 {
-		httputil.SuccessResponse(c, gin.H{"imported": 0, "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset, "dataset_version": page.DatasetVersion})
+		httputil.SuccessResponse(c, gin.H{"imported": 0, "sinks": 0, "removed": 0, "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset, "dataset_version": page.DatasetVersion})
 		return
 	}
 
+	started := time.Now()
 	rows := make([]models.CO2Node, 0, len(fetched))
 	for _, node := range fetched {
 		rows = append(rows, models.CO2Node{
-			NodeID:       node.NodeID,
-			Name:         node.NodeName,
-			Longitude:    node.Longitude,
-			Latitude:     node.Latitude,
-			Altitude:     node.Altitude,
-			AnnualFlux:   node.AnnualFlux,
-			NodeType:     node.NodeType,
-			Industry:     node.Industry,
-			Metadata:     datatypes.JSON(node.Metadata),
-			CountryCode:  node.CountryCode,
-			State:        cleanState(node.State, node.CountryCode),
-			Municipality: node.Municipality,
-			Source:       sourceStoreCO2,
+			NodeID:         node.NodeID,
+			Name:           node.NodeName,
+			Longitude:      node.Longitude,
+			Latitude:       node.Latitude,
+			Altitude:       node.Altitude,
+			AnnualFlux:     node.AnnualFlux,
+			NodeType:       node.NodeType,
+			Industry:       node.Industry,
+			Metadata:       datatypes.JSON(node.Metadata),
+			CountryCode:    node.CountryCode,
+			State:          cleanState(node.State, node.CountryCode),
+			Municipality:   node.Municipality,
+			NUTS1:          node.NUTS1,
+			NUTS2:          node.NUTS2,
+			NUTS3:          node.NUTS3,
+			Rural:          node.Rural,
+			OperatingFrom:  node.OperatingFrom,
+			OperatingUntil: node.OperatingUntil,
+			Retired:        node.Retired,
+			Source:         sourceStoreCO2,
 		})
 	}
+	// Prune removed nodes.
+	prune := req.All && req.Offset == 0 && req.Country == "" && req.BBox == "" && req.MinCO2T == nil
 
 	// Re-runnable.
+	var removed int64
 	err = h.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		return tx.Clauses(clause.OnConflict{
+		if err := tx.Clauses(clause.OnConflict{
 			Columns: []clause.Column{{Name: "source"}, {Name: "node_id"}},
 			DoUpdates: clause.AssignmentColumns([]string{
 				"node_name", "longitude", "latitude", "altitude",
 				"annual_flux", "node_type", "industry", "country_code",
-				"state", "municipality", "metadata", "updated_at",
+				"state", "municipality", "nuts1", "nuts2", "nuts3", "rural",
+				"operating_from", "operating_until", "retired",
+				"metadata", "updated_at",
 			}),
-		}).CreateInBatches(&rows, 200).Error
+		}).CreateInBatches(&rows, 200).Error; err != nil {
+			return err
+		}
+		if !prune {
+			return nil
+		}
+		// Keep model nodes.
+		result := tx.Exec(`DELETE FROM co2_nodes n
+			WHERE n.source = ? AND n.updated_at < ?
+			  AND NOT EXISTS (SELECT 1 FROM model_co2_nodes l WHERE l.co2_node_id = n.id)
+			  AND NOT EXISTS (SELECT 1 FROM models m WHERE m.config->'parameters'->'co2_node_ids' @> to_jsonb(n.id))`,
+			sourceStoreCO2, started)
+		removed = result.RowsAffected
+		return result.Error
 	})
 	if err != nil {
 		httputil.InternalError(c, "Failed to save imported nodes")
 		return
 	}
 
-	httputil.SuccessResponse(c, gin.H{"imported": len(rows), "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset + len(rows), "dataset_version": page.DatasetVersion})
+	httputil.SuccessResponse(c, gin.H{"imported": len(emitters), "sinks": len(sinks), "removed": removed, "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset + len(page.Nodes), "dataset_version": page.DatasetVersion})
+}
+
+func respondUpstream(c *gin.Context, err error) {
+	var upstream *storeco2.HTTPError
+	if errors.As(err, &upstream) && (upstream.StatusCode == 400 || upstream.StatusCode == 409 || upstream.StatusCode == 422) {
+		c.JSON(upstream.StatusCode, gin.H{"error": upstream.Detail})
+		return
+	}
+	httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
 }
 
 func (h *Handler) count() int64 {

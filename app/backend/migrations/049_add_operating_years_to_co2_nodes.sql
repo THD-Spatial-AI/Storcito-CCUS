@@ -1,0 +1,9 @@
+-- Node operating years.
+
+BEGIN;
+
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS operating_from INTEGER;
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS operating_until INTEGER;
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS retired BOOLEAN NOT NULL DEFAULT FALSE;
+
+COMMIT;

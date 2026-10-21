@@ -34,15 +34,24 @@ func responseError(resp *http.Response) error {
 	return &HTTPError{StatusCode: resp.StatusCode, Detail: detail}
 }
 
-// Complete import page.
+// ImportNodes pages through emitters.
 func (c *Client) ImportNodes(ctx context.Context, query NodeQuery, all bool) (*NodePage, error) {
+	return c.importPages(ctx, c.NodesPage, query, all)
+}
+
+// ImportSinks pages through sinks.
+func (c *Client) ImportSinks(ctx context.Context, query NodeQuery, all bool) (*NodePage, error) {
+	return c.importPages(ctx, c.SinksPage, query, all)
+}
+
+func (c *Client) importPages(ctx context.Context, fetch func(context.Context, NodeQuery) (*NodePage, error), query NodeQuery, all bool) (*NodePage, error) {
 	if query.Limit == 0 {
 		query.Limit = 1000
 	}
 	result := &NodePage{Nodes: []Node{}, Offset: query.Offset, Limit: query.Limit}
 	seen := map[string]bool{}
 	for {
-		page, err := c.NodesPage(ctx, query)
+		page, err := fetch(ctx, query)
 		if err != nil {
 			return nil, err
 		}
