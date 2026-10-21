@@ -14,7 +14,6 @@ import (
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
 	usershandler "spatialhub_backend/internal/handler/users"
-	"spatialhub_backend/internal/handler/weather"
 	"spatialhub_backend/internal/middleware"
 	modelhandler "spatialhub_backend/internal/model/handler"
 	resulthandler "spatialhub_backend/internal/result/handler"
@@ -64,7 +63,6 @@ type Deps struct {
 	WorkspaceHandler      *workspacehandler.WorkspaceHandler
 	GroupHandler          *grouphandler.GroupHandler
 	ModelHandler          *modelhandler.ModelHandler
-	WeatherHandler        *weather.WeatherHandler
 	WebserviceClient      *webservice.Client
 	CO2NodesHandler       *co2nodeshandler.Handler
 	CO2RouteXHandler      *co2routexhandler.Handler
@@ -144,7 +142,6 @@ func RegisterProtected(r *gin.Engine, deps Deps) {
 	registerCO2NodeRoutes(protectedAPI, deps.CO2NodesHandler)
 	registerCO2RouteXRoutes(protectedAPI, deps.CO2RouteXHandler, deps.ModelHandler)
 	registerCO2SourceRoutes(protectedAPI, deps.CO2SourcesHandler)
-	registerWeatherRoutes(protectedAPI, deps.WeatherHandler)
 	registerGeocodingRoutes(protectedAPI, deps.GeocodingHandler)
 }
 

@@ -25,7 +25,6 @@ import (
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
 	usershandler "spatialhub_backend/internal/handler/users"
-	"spatialhub_backend/internal/handler/weather"
 	"spatialhub_backend/internal/jobs"
 	"spatialhub_backend/internal/middleware"
 	modelhandler "spatialhub_backend/internal/model/handler"
@@ -291,7 +290,6 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 	groupHandler := grouphandler.NewGroupHandler(deps.DB, deps.AdminTokenProvider, cfg.Auth.BaseURL, cfg.Auth.Realm, sessionStore)
 	modelHandler := modelhandler.NewModelHandlerWithCache(deps.DB, deps.AsynqClient, deps.AdminTokenProvider, cfg.Auth.BaseURL, cfg.Auth.Realm, deps.WebserviceClient, deps.KeycloakCache, deps.SyncCache, deps.NotificationService)
 	resultHandler := resulthandler.NewResultHandler(deps.DB, deps.NotificationService, deps.WebserviceClient, cfg.CallbackSecret, deps.AsynqClient, deps.GeoserverClient, cfg.GeoserverPublicURL)
-	weatherHandler := weather.NewWeatherHandler()
 	geocodingHandler := geocodinghandler.NewHandler()
 
 	return routes.Deps{
@@ -309,7 +307,6 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 		WorkspaceHandler:           workspaceHandler,
 		GroupHandler:               groupHandler,
 		ModelHandler:               modelHandler,
-		WeatherHandler:             weatherHandler,
 		GeocodingHandler:           geocodingHandler,
 		WebserviceClient:           deps.WebserviceClient,
 		CO2NodesHandler:            co2nodeshandler.NewHandler(deps.DB, storeco2client.NewClient(cfg.StoreCO2URL)),

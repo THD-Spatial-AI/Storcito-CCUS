@@ -101,7 +101,7 @@ func (h *SettingsHandler) UpdateProductTourCompleted(c *gin.Context) {
 	httputil.SuccessMessage(c, "Tour status updated")
 }
 
-// updateLocationSetting is a helper function to update location settings (map or weather)
+// updateLocationSetting updates location settings.
 func (h *SettingsHandler) updateLocationSetting(c *gin.Context, jsonKey, successMsg string, updateFn func(*models.UserSetting, *string)) {
 	userCtx, ok := httputil.GetUserContext(c)
 	if !ok {
@@ -137,11 +137,6 @@ func (h *SettingsHandler) updateLocationSetting(c *gin.Context, jsonKey, success
 func (h *SettingsHandler) UpdateMapLocation(c *gin.Context) {
 	h.updateLocationSetting(c, "map_location", "Map location updated",
 		func(s *models.UserSetting, val *string) { s.MapLocation = val })
-}
-
-func (h *SettingsHandler) UpdateWeatherLocation(c *gin.Context) {
-	h.updateLocationSetting(c, "weather_location", "Weather location updated",
-		func(s *models.UserSetting, val *string) { s.WeatherLocation = val })
 }
 
 func (h *SettingsHandler) UpdateTheme(c *gin.Context) {
