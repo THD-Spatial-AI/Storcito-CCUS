@@ -2,7 +2,6 @@ import * as React from "react";
 import { useAuthStore } from "@/store/auth-store";
 import { createContext, useContext, ReactNode, useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { useAppStore } from "@/store/app-store";
-import { useWeatherLocationStore } from "@/features/weather/store/weather-location";
 import { useMapLocationStore } from "@/features/interactive-map/store/map-location";
 import { updateMapToSavedLocation } from "@/features/interactive-map/store/map-store";
 import { useWorkspaceStore } from "@/components/workspace";
@@ -32,7 +31,6 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	const { user: storeUser } = useAuthStore();
 	const app = useAppStore();
-	const { syncFromBackend: syncWeatherFromBackend } = useWeatherLocationStore();
 	const { syncFromBackend: syncMapFromBackend } = useMapLocationStore();
 	const [isAuthenticated, setIsAuthenticated] = useState(!!storeUser);
 	const [user, setUser] = useState<User | null>(storeUser);
@@ -72,7 +70,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 			setIsAuthenticated(true);
 			setUser(storeUser);
 
-			syncWeatherFromBackend();
 			syncMapFromBackend().then(() => {
 				updateMapToSavedLocation();
 			});
@@ -81,7 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 			setUser(null);
 		}
 		setIsLoading(false);
-	}, [storeUser, syncWeatherFromBackend, syncMapFromBackend]);
+	}, [storeUser, syncMapFromBackend]);
 
 	useEffect(() => {
 		const initApp = async () => {

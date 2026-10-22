@@ -11,7 +11,6 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { NotificationDropdown } from "@/components/ui/NotificationDropdown";
 import { Authorized } from "@/middleware/authorized";
-import WeatherDropdown from "@/features/weather/weather";
 import type { NavigationHandlers } from "./types";
 
 interface AppLayoutTopbarProps {
@@ -56,13 +55,9 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
         <div className="flex-1" />
 
         <div className="flex items-center gap-1 mr-4" data-tour="navigation">
-          {/* Weather is global. */}
           <LanguageSwitcher />
           <Authorized>
             <NotificationDropdown />
-          </Authorized>
-          <Authorized>
-            <WeatherDropdown showSettingsIcon={false} />
           </Authorized>
         </div>
 
