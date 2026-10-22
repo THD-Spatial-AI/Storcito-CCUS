@@ -12,6 +12,7 @@ import {
   routeService,
   useNodeOLLayers,
   useNodesQuery,
+  useEnsureNodes,
   useFitToNodes,
   type CO2Route,
 } from "@/features/co2-nodes";
@@ -42,15 +43,15 @@ export const ModelResultsViewer: FC = () => {
     if (!Number.isFinite(modelId)) return;
     let cancelled = false;
     setLoading(true);
-    Promise.all([modelService.getModel(modelId), routeService.getRoutes(modelId)])
+    Promise.all([modelService.getModelById(modelId), routeService.getRoutes(modelId)])
       .then(([loaded, saved]) => {
         if (cancelled) return;
-        setModel(loaded);
+        setModel(loaded.data);
         setRoutes(saved);
         setError(null);
       })
       .catch((caught: unknown) => {
-        if (!cancelled) setError(extractErrorMessage(caught));
+        if (!cancelled) setError(extractErrorMessage(caught, t("modelResults.loadError", "Could not load this model.")));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -58,12 +59,13 @@ export const ModelResultsViewer: FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [modelId]);
+  }, [modelId, t]);
 
   const selectedIds = useMemo(
     () => (model?.config ? getSelectedNodeIdsFromConfig(model.config) : []),
     [model],
   );
+  useEnsureNodes(selectedIds);
 
   const modelNodes = useMemo(() => {
     const picked = new Set(selectedIds);
@@ -147,7 +149,14 @@ export const ModelResultsViewer: FC = () => {
         mapHeader={null}
         mapOverlays={
           <>
-            <ViewerStatusBanners model={model} />
+            <ViewerStatusBanners
+              mapReady={map !== null}
+              loading={loading}
+              error={null}
+              tileErrors={0}
+              layerPending={false}
+              hasResults={routes.length > 0}
+            />
             {overlays}
           </>
         }

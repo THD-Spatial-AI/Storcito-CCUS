@@ -11,7 +11,15 @@ export interface NodeFilters {
   country?: string;
   node_type?: string;
   industry?: string;
+  exclude_industry?: string;
   search?: string;
+}
+
+export interface NodeList {
+  items: CO2Node[];
+  total: number;
+  /** Excluded counts per industry. */
+  excluded?: Record<string, number>;
 }
 
 export const nodeService = {
@@ -28,11 +36,12 @@ export const nodeService = {
   },
   // List catalogue nodes.
   async getNodes(filters?: NodeFilters): Promise<CO2Node[]> {
-    const { data } = await axios.get<ApiResponse<{ items: CO2Node[]; total: number }>>(
-      "/co2-nodes",
-      { params: filters },
-    );
-    return data?.data?.items ?? [];
+    return (await this.getNodeList(filters)).items;
+  },
+
+  async getNodeList(filters?: NodeFilters): Promise<NodeList> {
+    const { data } = await axios.get<ApiResponse<NodeList>>("/co2-nodes", { params: filters });
+    return data?.data ?? { items: [], total: 0 };
   },
 };
 
@@ -186,6 +195,20 @@ export interface SourceStats {
   by_status?: Array<{ status: string | null; sources: number; co2_t_annual: number | null }>;
 }
 
+/** One capture case. */
+export interface CaptureCase {
+  [field: string]: unknown;
+  capture_application: string | null;
+  capture_technology: string | null;
+  is_primary_application: boolean | null;
+  horizon_year: number | null;
+  cost_case: "low" | "central" | "high" | null;
+  maturity_case: "noak" | "foak_100" | "foak_200" | null;
+  co2_capturable_t_annual: number | null;
+  capture_rate: number | null;
+  lcoc_eur_per_t: number | null;
+}
+
 /** STORE_CO2 catalogue proxy. */
 export const sourceService = {
   // Page the catalogue.
@@ -202,6 +225,14 @@ export const sourceService = {
       params: { id: entityId },
     });
     return data?.data ?? null;
+  },
+
+  // Emitter capture cases.
+  async getCapture(entityId: string): Promise<CaptureCase[]> {
+    const { data } = await axios.get<ApiResponse<{ cases: CaptureCase[] }>>("/co2-sources/capture", {
+      params: { id: entityId },
+    });
+    return data?.data?.cases ?? [];
   },
 
   // Dataset summary.
