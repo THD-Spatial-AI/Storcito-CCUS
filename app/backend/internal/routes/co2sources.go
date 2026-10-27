@@ -15,4 +15,5 @@ func registerCO2SourceRoutes(api *gin.RouterGroup, handler *co2sourceshandler.Ha
 	api.GET("/co2-sources/node-types", handler.NodeTypes)
 	// Slashes force a query param.
 	api.GET("/co2-sources/detail", handler.ByID)
+	api.GET("/co2-sources/capture", handler.Capture)
 }

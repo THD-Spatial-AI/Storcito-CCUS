@@ -106,6 +106,31 @@ func (h *Handler) ByID(c *gin.Context) {
 	httputil.SuccessResponse(c, source)
 }
 
+// Capture returns capture cases.
+func (h *Handler) Capture(c *gin.Context) {
+	if h.store == nil {
+		httputil.InternalError(c, "STORE_CO2 client is not configured")
+		return
+	}
+
+	entityID := strings.TrimSpace(c.Query("id"))
+	if entityID == "" {
+		httputil.BadRequest(c, "Missing id")
+		return
+	}
+
+	cases, status, err := h.store.Capture(c.Request.Context(), entityID)
+	if err != nil {
+		respondError(c, err)
+		return
+	}
+	if status == http.StatusNotFound {
+		httputil.NotFound(c, "No capture data for this emitter")
+		return
+	}
+	httputil.SuccessResponse(c, cases)
+}
+
 // Stats summarises the dataset.
 func (h *Handler) Stats(c *gin.Context) {
 	if h.store == nil {

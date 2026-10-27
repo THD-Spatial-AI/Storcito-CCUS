@@ -2,7 +2,6 @@ package resultservice
 
 import (
 	"archive/zip"
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -67,28 +66,6 @@ func findResultLayers(extractDir string) []commonModels.ResultLayer {
 		})
 	}
 	return out
-}
-
-func findResultMetadata(extractDir string) map[string]interface{} {
-	var weatherSummary map[string]interface{}
-	_ = filepath.Walk(extractDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil || info == nil || info.IsDir() || weatherSummary != nil {
-			return nil
-		}
-		if strings.EqualFold(info.Name(), "weather_summary.json") {
-			var decoded map[string]interface{}
-			if data, readErr := os.ReadFile(path); readErr == nil && json.Unmarshal(data, &decoded) == nil {
-				weatherSummary = decoded
-			}
-		}
-		return nil
-	})
-	if weatherSummary == nil {
-		return nil
-	}
-	return map[string]interface{}{
-		"weather_summary": weatherSummary,
-	}
 }
 
 func isMainResultFilename(name string) bool {

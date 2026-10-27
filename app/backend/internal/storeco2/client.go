@@ -27,18 +27,25 @@ func NewClient(baseURL string) *Client {
 
 // Node is one sheet row.
 type Node struct {
-	NodeID       string          `json:"node_id"`
-	NodeName     string          `json:"node_name"`
-	Longitude    float64         `json:"longitude"`
-	Latitude     float64         `json:"latitude"`
-	Altitude     *float64        `json:"altitude"`
-	AnnualFlux   *float64        `json:"annual_flux"`
-	NodeType     string          `json:"node_type"`
-	CountryCode  *string         `json:"country_code"`
-	State        *string         `json:"state"`
-	Municipality *string         `json:"municipality"`
-	Industry     *string         `json:"industry"`
-	Metadata     json.RawMessage `json:"metadata"`
+	NodeID         string          `json:"node_id"`
+	NodeName       string          `json:"node_name"`
+	Longitude      float64         `json:"longitude"`
+	Latitude       float64         `json:"latitude"`
+	Altitude       *float64        `json:"altitude"`
+	AnnualFlux     *float64        `json:"annual_flux"`
+	NodeType       string          `json:"node_type"`
+	CountryCode    *string         `json:"country_code"`
+	State          *string         `json:"state"`
+	Municipality   *string         `json:"municipality"`
+	Industry       *string         `json:"industry"`
+	NUTS1          *string         `json:"nuts1"`
+	NUTS2          *string         `json:"nuts2"`
+	NUTS3          *string         `json:"nuts3"`
+	Rural          *bool           `json:"rural"`
+	OperatingFrom  *int            `json:"operating_from"`
+	OperatingUntil *int            `json:"operating_until"`
+	Retired        bool            `json:"retired"`
+	Metadata       json.RawMessage `json:"metadata"`
 }
 
 type NodePage struct {
@@ -68,7 +75,7 @@ type PointSource struct {
 	CaptureGroup       *string         `json:"capture_group"`
 	CaptureApplication *string         `json:"capture_application"`
 	Technology         *string         `json:"technology"`
-	FuelNorm           *string         `json:"fuel_norm"`
+	Fuel               *string         `json:"fuel"`
 	SourceClass        *string         `json:"source_class"`
 	CO2Source          *string         `json:"co2_source"`
 	Status             *string         `json:"status"`
@@ -150,6 +157,13 @@ type Stats struct {
 	ByCountry       []CountryStat      `json:"by_country"`
 	ByCaptureGroup  []CaptureGroupStat `json:"by_capture_group"`
 	ByStatus        []StatusStat       `json:"by_status"`
+	BySinkType      []SinkTypeStat     `json:"by_sink_type"`
+}
+
+type SinkTypeStat struct {
+	SinkType      *string  `json:"sink_type"`
+	Sinks         int      `json:"sinks"`
+	CO2MidTAnnual *float64 `json:"co2_mid_t_annual"`
 }
 
 // Health is service state.
@@ -189,6 +203,15 @@ func (c *Client) Nodes(ctx context.Context, query NodeQuery) ([]Node, error) {
 }
 
 func (c *Client) NodesPage(ctx context.Context, query NodeQuery) (*NodePage, error) {
+	return c.nodePage(ctx, "/nodes", query)
+}
+
+// SinksPage fetches sinks.
+func (c *Client) SinksPage(ctx context.Context, query NodeQuery) (*NodePage, error) {
+	return c.nodePage(ctx, "/sinks", query)
+}
+
+func (c *Client) nodePage(ctx context.Context, path string, query NodeQuery) (*NodePage, error) {
 	values := url.Values{}
 	if query.DatasetVersion != "" {
 		values.Set("dataset_version", query.DatasetVersion)
@@ -209,7 +232,6 @@ func (c *Client) NodesPage(ctx context.Context, query NodeQuery) (*NodePage, err
 		values.Set("offset", strconv.Itoa(query.Offset))
 	}
 
-	path := "/nodes"
 	if encoded := values.Encode(); encoded != "" {
 		path += "?" + encoded
 	}
@@ -292,6 +314,31 @@ func (c *Client) PointSource(ctx context.Context, entityID string) (*PointSource
 		return nil, 0, err
 	}
 	return &out, http.StatusOK, nil
+}
+
+// Capture returns capture cases.
+func (c *Client) Capture(ctx context.Context, entityID string) (json.RawMessage, int, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+"/capture/"+url.PathEscape(entityID), nil)
+	if err != nil {
+		return nil, 0, err
+	}
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return nil, 0, fmt.Errorf("store_co2 unreachable: %w", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, http.StatusNotFound, nil
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, resp.StatusCode, responseError(resp)
+	}
+	var out json.RawMessage
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return nil, 0, err
+	}
+	return out, http.StatusOK, nil
 }
 
 // Stats summarises the dataset.

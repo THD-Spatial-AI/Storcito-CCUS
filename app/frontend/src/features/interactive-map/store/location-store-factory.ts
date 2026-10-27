@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/store/auth-store';
 
 /**
- * Generic location interface for map and weather stores
+ * Map location shape.
  */
 export interface BaseLocation {
   id: string;

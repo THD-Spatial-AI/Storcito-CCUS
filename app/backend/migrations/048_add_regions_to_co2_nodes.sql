@@ -1,0 +1,13 @@
+-- NUTS regions, rural flag.
+
+BEGIN;
+
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS nuts1 VARCHAR(8);
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS nuts2 VARCHAR(8);
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS nuts3 VARCHAR(8);
+ALTER TABLE co2_nodes ADD COLUMN IF NOT EXISTS rural BOOLEAN;
+
+CREATE INDEX IF NOT EXISTS idx_co2_nodes_nuts2 ON co2_nodes (nuts2);
+CREATE INDEX IF NOT EXISTS idx_co2_nodes_rural ON co2_nodes (rural);
+
+COMMIT;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/use-document-title";
-import { WeatherSettings } from "@/features/weather";
 import MapSettings from "@/features/settings/MapLocationSettings";
 import NotificationSettings from "@/features/settings/NotificationSettings";
 import DataDisplaySettings from "@/features/settings/DataDisplaySettings";
@@ -13,7 +12,6 @@ import { useAuthStore } from "@/store/auth-store";
 import { useTranslation, getCurrentLanguage } from "@/i18n";
 import {
   Globe,
-  Cloud,
   MapPin,
   Bell,
   Sliders,
@@ -221,27 +219,6 @@ const SettingsPage: React.FC = () => {
                     </div>
                   </div>
                   <LanguageSettings />
-                </div>
-
-                {/* Weather Location */}
-                <div
-                  className="md-rise bg-gradient-to-br from-muted/50 to-card rounded-lg p-3 border border-border transition-shadow duration-200 hover:shadow-md"
-                  style={{ animationDelay: "60ms" }}
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="p-1.5 bg-muted rounded">
-                      <Cloud className="w-3.5 h-3.5 text-foreground" />
-                    </div>
-                    <div>
-                      <h3 className="text-xs font-semibold text-foreground">
-                        {t("settings.weatherLocation.title")}
-                      </h3>
-                      <p className="text-[9px] text-muted-foreground uppercase tracking-wider">
-                        {t("settings.weatherLocation.subtitle")}
-                      </p>
-                    </div>
-                  </div>
-                  <WeatherSettings />
                 </div>
 
                 {/* Map Location */}

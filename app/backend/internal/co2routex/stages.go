@@ -125,9 +125,21 @@ func (c *Client) ContainerCosts(ctx context.Context, workbook []byte, modes []st
 	return c.submit(ctx, "/costs/container", []filePart{workbookPart(workbook)}, map[string]string{"modes": strings.Join(modes, ",")}, options)
 }
 
+// Job polling backoff.
+const (
+	awaitFirstDelay = 250 * time.Millisecond
+	awaitMaxDelay   = 5 * time.Second
+)
+
+// nextAwaitDelay grows by half.
+func nextAwaitDelay(delay time.Duration) time.Duration {
+	return min(delay*3/2, awaitMaxDelay)
+}
+
 func (c *Client) Await(ctx context.Context, job *Job) (*Job, error) {
-	ticker := time.NewTicker(400 * time.Millisecond)
-	defer ticker.Stop()
+	delay := awaitFirstDelay
+	timer := time.NewTimer(delay)
+	defer timer.Stop()
 	for {
 		if job == nil || job.JobID == "" {
 			return nil, fmt.Errorf("missing upstream job ID")
@@ -148,8 +160,10 @@ func (c *Client) Await(ctx context.Context, job *Job) (*Job, error) {
 		select {
 		case <-ctx.Done():
 			return job, ctx.Err()
-		case <-ticker.C:
+		case <-timer.C:
 		}
+		delay = nextAwaitDelay(delay)
+		timer.Reset(delay)
 		polled, err := c.GetJob(ctx, job.JobID)
 		if err != nil {
 			return job, err

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { isEmitter, isSink, type CO2Node } from "../types";
+import { isEmitter, isSink, nodeCategory, type CO2Node } from "../types";
 
 /** Emissions band, kt/yr. */
 export interface FluxRange {
@@ -10,6 +10,22 @@ export interface FluxRange {
 
 export const NO_FLUX_RANGE: FluxRange = { min: null, max: null };
 
+/** Inclusive year range. */
+export interface AssessmentPeriod {
+  start: number;
+  end: number;
+}
+
+/** Period from ISO dates. */
+export const periodOf = (fromDate: string, toDate: string): AssessmentPeriod | null => {
+  const start = Number(fromDate.slice(0, 4));
+  const end = Number(toDate.slice(0, 4));
+  return Number.isInteger(start) && Number.isInteger(end) && start > 0 && start <= end ? { start, end } : null;
+};
+
+/** Rural or urban. */
+export type RuralFilter = "all" | "rural" | "urban";
+
 /** Shared catalogue filters. */
 export interface NodeFilterCriteria {
   countries: ReadonlySet<string>;
@@ -17,7 +33,12 @@ export interface NodeFilterCriteria {
   municipalities: ReadonlySet<string>;
   emitterCategories: ReadonlySet<string>;
   sinkCategories: ReadonlySet<string>;
+  regions: ReadonlySet<string>;
+  rural: RuralFilter;
   fluxRange: FluxRange;
+  /** Hide inactive sites. */
+  periodOnly: boolean;
+  period: AssessmentPeriod | null;
 }
 
 const EMPTY_SET: ReadonlySet<string> = new Set();
@@ -28,7 +49,11 @@ export const NO_FILTER_CRITERIA: NodeFilterCriteria = {
   municipalities: EMPTY_SET,
   emitterCategories: EMPTY_SET,
   sinkCategories: EMPTY_SET,
+  regions: EMPTY_SET,
+  rural: "all",
   fluxRange: NO_FLUX_RANGE,
+  periodOnly: true,
+  period: null,
 };
 
 /** Category filters. */
@@ -39,6 +64,10 @@ interface NodeFilterStore extends NodeFilterCriteria {
   toggleMunicipality: (municipality: string) => void;
   toggleEmitterCategory: (category: string) => void;
   toggleSinkCategory: (category: string) => void;
+  toggleRegion: (nuts2: string) => void;
+  setRural: (rural: RuralFilter) => void;
+  setPeriodOnly: (periodOnly: boolean) => void;
+  setPeriod: (period: AssessmentPeriod | null) => void;
   setFluxRange: (range: FluxRange) => void;
   clear: () => void;
 }
@@ -60,8 +89,16 @@ export const useNodeFilterStore = create<NodeFilterStore>()((set) => ({
     set((state) => ({ emitterCategories: toggleIn(state.emitterCategories, category) })),
   toggleSinkCategory: (category) =>
     set((state) => ({ sinkCategories: toggleIn(state.sinkCategories, category) })),
+  toggleRegion: (value) => set((state) => ({ regions: toggleIn(state.regions, value) })),
+  setRural: (rural) => set({ rural }),
+  setPeriodOnly: (periodOnly) => set({ periodOnly }),
+  setPeriod: (period) =>
+    set((state) =>
+      state.period?.start === period?.start && state.period?.end === period?.end ? state : { period },
+    ),
   setFluxRange: (range) => set({ fluxRange: range }),
-  clear: () => set({ ...NO_FILTER_CRITERIA }),
+  // Model period, not filter.
+  clear: () => set((state) => ({ ...NO_FILTER_CRITERIA, period: state.period })),
 }));
 
 /** Country picks. */
@@ -83,7 +120,7 @@ export const matchesCategory = (
   sinkCategories: ReadonlySet<string>,
 ): boolean => {
   if (isEmitter(node)) return emitterCategories.size === 0 || emitterCategories.has(node.node_type);
-  if (isSink(node)) return sinkCategories.size === 0 || sinkCategories.has(node.node_type);
+  if (isSink(node)) return sinkCategories.size === 0 || sinkCategories.has(nodeCategory(node));
   // No transport section.
   return true;
 };
@@ -99,6 +136,26 @@ export const matchesFlux = (node: CO2Node, range: FluxRange): boolean => {
   return true;
 };
 
+/** NUTS 2 regions. */
+export const matchesRegion = (node: CO2Node, regions: ReadonlySet<string>): boolean =>
+  regions.size === 0 || regions.has(node.nuts2 ?? "");
+
+/** Rural/urban match. */
+export const matchesRural = (node: CO2Node, rural: RuralFilter): boolean =>
+  rural === "all" || (node.rural != null && node.rural === (rural === "rural"));
+
+/** Operates in period. */
+export const operatesIn = (node: CO2Node, period: AssessmentPeriod | null): boolean => {
+  if (node.retired) return false;
+  if (!period) return true;
+  if (node.operating_from != null && node.operating_from > period.end) return false;
+  if (node.operating_until != null && node.operating_until <= period.start) return false;
+  return true;
+};
+
+export const matchesPeriod = (node: CO2Node, period: AssessmentPeriod | null, periodOnly: boolean): boolean =>
+  !periodOnly || operatesIn(node, period);
+
 /** Apply every filter. */
 export const filterNodes = (nodes: CO2Node[], filters: NodeFilterCriteria): CO2Node[] =>
   nodes.filter(
@@ -106,6 +163,9 @@ export const filterNodes = (nodes: CO2Node[], filters: NodeFilterCriteria): CO2N
       matchesCountry(node, filters.countries) &&
       matchesState(node, filters.states) &&
       matchesMunicipality(node, filters.municipalities) &&
+      matchesRegion(node, filters.regions) &&
+      matchesRural(node, filters.rural) &&
+      matchesPeriod(node, filters.period, filters.periodOnly) &&
       matchesCategory(node, filters.emitterCategories, filters.sinkCategories) &&
       matchesFlux(node, filters.fluxRange),
   );

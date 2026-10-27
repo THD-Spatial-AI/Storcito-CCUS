@@ -36,7 +36,17 @@ type CO2Node struct {
 	CountryCode  *string `gorm:"column:country_code;size:8" json:"country_code"`
 	State        *string `gorm:"column:state;size:128" json:"state,omitempty"`
 	Municipality *string `gorm:"column:municipality;size:255" json:"municipality,omitempty"`
-	Source       string  `gorm:"not null;size:64;default:'co2routex'" json:"source"`
+	NUTS1        *string `gorm:"column:nuts1;size:8" json:"nuts1,omitempty"`
+	NUTS2        *string `gorm:"column:nuts2;size:8" json:"nuts2,omitempty"`
+	NUTS3        *string `gorm:"column:nuts3;size:8" json:"nuts3,omitempty"`
+	Rural        *bool   `gorm:"column:rural" json:"rural,omitempty"`
+
+	// Operating years, until exclusive.
+	OperatingFrom  *int `gorm:"column:operating_from" json:"operating_from,omitempty"`
+	OperatingUntil *int `gorm:"column:operating_until" json:"operating_until,omitempty"`
+	Retired        bool `gorm:"column:retired;not null;default:false" json:"retired,omitempty"`
+
+	Source string `gorm:"not null;size:64;default:'co2routex'" json:"source"`
 
 	Metadata datatypes.JSON `gorm:"type:jsonb" json:"metadata,omitempty"`
 

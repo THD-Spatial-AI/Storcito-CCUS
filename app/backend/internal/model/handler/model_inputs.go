@@ -14,14 +14,12 @@ import (
 	"platform.local/common/pkg/httputil"
 )
 
-// modelInputsSubdir holds per-model user uploads (station data + DTM).
+// modelInputsSubdir holds DTM uploads.
 const modelInputsSubdir = "user_inputs"
 
 var (
-	allowedStationExt = map[string]bool{".xlsx": true, ".xls": true, ".csv": true, ".txt": true}
 	allowedDtmExt     = map[string]bool{".tif": true, ".tiff": true}
 	inputAllowedExt   = map[string]map[string]bool{
-		"station_data": allowedStationExt,
 		"dtm":          allowedDtmExt,
 	}
 )
