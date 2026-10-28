@@ -38,6 +38,7 @@ type Config struct {
 	GeoserverPublicURL   string // Public WMS URL.
 	CO2RouteXURL         string // CO2RouteX API.
 	StoreCO2URL          string // STORE_CO2 API.
+	SurveyDataDir        string // RUB survey sheets.
 	CallbackSecret       string // Callback secret.
 }
 
@@ -76,6 +77,7 @@ func LoadFromEnv() (*Config, error) {
 		GeoserverPublicURL:   platformconfig.GetEnv("GEOSERVER_PUBLIC_URL", defaultGeoserverURL),
 		CO2RouteXURL:         co2routeXURL(),
 		StoreCO2URL:          storeCO2URL(),
+		SurveyDataDir:        strings.TrimSpace(os.Getenv("SURVEY_DATA_DIR")),
 		CallbackSecret:       os.Getenv("CALLBACK_SECRET"),
 	}
 	return cfg, nil

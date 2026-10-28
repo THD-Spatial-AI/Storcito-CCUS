@@ -13,6 +13,7 @@ import (
 	grouphandler "spatialhub_backend/internal/handler/group"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
+	surveyhandler "spatialhub_backend/internal/handler/survey"
 	usershandler "spatialhub_backend/internal/handler/users"
 	"spatialhub_backend/internal/middleware"
 	modelhandler "spatialhub_backend/internal/model/handler"
@@ -67,6 +68,7 @@ type Deps struct {
 	CO2NodesHandler       *co2nodeshandler.Handler
 	CO2RouteXHandler      *co2routexhandler.Handler
 	CO2SourcesHandler     *co2sourceshandler.Handler
+	SurveyHandler         *surveyhandler.Handler
 	GeocodingHandler      *geocodinghandler.Handler
 }
 
@@ -142,6 +144,7 @@ func RegisterProtected(r *gin.Engine, deps Deps) {
 	registerCO2NodeRoutes(protectedAPI, deps.CO2NodesHandler)
 	registerCO2RouteXRoutes(protectedAPI, deps.CO2RouteXHandler, deps.ModelHandler)
 	registerCO2SourceRoutes(protectedAPI, deps.CO2SourcesHandler)
+	registerSurveyRoutes(protectedAPI, deps.SurveyHandler)
 	registerGeocodingRoutes(protectedAPI, deps.GeocodingHandler)
 }
 

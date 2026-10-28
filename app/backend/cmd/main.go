@@ -24,6 +24,7 @@ import (
 	grouphandler "spatialhub_backend/internal/handler/group"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
 	settingshandler "spatialhub_backend/internal/handler/settings"
+	surveyhandler "spatialhub_backend/internal/handler/survey"
 	usershandler "spatialhub_backend/internal/handler/users"
 	"spatialhub_backend/internal/jobs"
 	"spatialhub_backend/internal/middleware"
@@ -34,6 +35,7 @@ import (
 	apitokenstore "spatialhub_backend/internal/store/apitoken"
 	feedbackstore "spatialhub_backend/internal/store/feedback"
 	storeco2client "spatialhub_backend/internal/storeco2"
+	"spatialhub_backend/internal/survey"
 	"spatialhub_backend/internal/webservice"
 	"spatialhub_backend/internal/worker"
 	workspacehandler "spatialhub_backend/internal/workspace/handler"
@@ -312,7 +314,27 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 		CO2NodesHandler:            co2nodeshandler.NewHandler(deps.DB, storeco2client.NewClient(cfg.StoreCO2URL)),
 		CO2RouteXHandler:           co2routexhandler.NewHandler(deps.DB, co2routexclient.NewClient(cfg.CO2RouteXURL)),
 		CO2SourcesHandler:          co2sourceshandler.NewHandler(storeco2client.NewClient(cfg.StoreCO2URL)),
+		SurveyHandler:              surveyhandler.NewHandler(loadSurvey(cfg.SurveyDataDir)),
 	}
+}
+
+// loadSurvey reads RUB sheets.
+func loadSurvey(dir string) []survey.Region {
+	log := platformlogger.Logger
+	if dir == "" {
+		log.Info("survey: SURVEY_DATA_DIR not set, survey disabled")
+		return nil
+	}
+	regions, warnings, err := survey.Load(dir)
+	for _, w := range warnings {
+		log.Warnf("survey: %s", w)
+	}
+	if err != nil {
+		log.Errorf("survey: %v", err)
+		return nil
+	}
+	log.Infof("survey: loaded %d regions", len(regions))
+	return regions
 }
 
 func startFeedbackCleanup(db *gorm.DB, log *logrus.Logger) {

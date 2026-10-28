@@ -14,3 +14,6 @@ sonar-project.properties
 # Compiled Go binaries
 main
 bin/
+
+# Partner survey data (keep out of the repo)
+ruhr/
