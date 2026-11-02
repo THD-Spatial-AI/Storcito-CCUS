@@ -3,8 +3,11 @@ import {
   ArrowDownWideNarrow,
   ArrowUpNarrowWide,
   Building2,
+  CalendarRange,
   Flame,
+  Map as MapIcon,
   MapPin,
+  Trees,
   SlidersHorizontal,
   X,
   type LucideIcon,
@@ -16,6 +19,7 @@ import {
   useNodeFilterStore,
   NO_FLUX_RANGE,
   type FluxRange,
+  type RuralFilter,
 } from "../../stores/nodeFilterStore";
 import type { CO2Node } from "../../types";
 import { checkboxClass, formatFlux, sameRange } from "./shared";
@@ -26,6 +30,14 @@ const FLUX_PRESETS: { key: string; range: FluxRange }[] = [
   { key: "high", range: { min: 1000, max: null } },
   { key: "medium", range: { min: 100, max: 1000 } },
   { key: "low", range: { min: null, max: 100 } },
+];
+
+const ACTIVE_CHIP = "border-primary/40 bg-primary/10 text-primary";
+
+const RURAL_OPTIONS: { key: RuralFilter; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "rural", label: "Rural" },
+  { key: "urban", label: "Urban" },
 ];
 
 /** Capped picker rows. */
@@ -129,6 +141,13 @@ export const AdvancedFilters: FC<{ nodes: CO2Node[] }> = ({ nodes }) => {
   const municipalityFilter = useNodeFilterStore((state) => state.municipalities);
   const toggleState = useNodeFilterStore((state) => state.toggleState);
   const toggleMunicipality = useNodeFilterStore((state) => state.toggleMunicipality);
+  const regionFilter = useNodeFilterStore((state) => state.regions);
+  const toggleRegion = useNodeFilterStore((state) => state.toggleRegion);
+  const ruralFilter = useNodeFilterStore((state) => state.rural);
+  const setRural = useNodeFilterStore((state) => state.setRural);
+  const periodOnly = useNodeFilterStore((state) => state.periodOnly);
+  const setPeriodOnly = useNodeFilterStore((state) => state.setPeriodOnly);
+  const period = useNodeFilterStore((state) => state.period);
   const clearFilters = useNodeFilterStore((state) => state.clear);
 
   const [open, setOpen] = useState(false);
@@ -147,6 +166,7 @@ export const AdvancedFilters: FC<{ nodes: CO2Node[] }> = ({ nodes }) => {
   const locationStats = useMemo(() => {
     const states = new Map<string, { count: number; flux: number }>();
     const municipalities = new Map<string, { count: number; flux: number }>();
+    const regions = new Map<string, { count: number; flux: number }>();
     const add = (map: Map<string, { count: number; flux: number }>, key: string, flux: number) => {
       const stat = map.get(key) ?? { count: 0, flux: 0 };
       stat.count += 1;
@@ -159,14 +179,24 @@ export const AdvancedFilters: FC<{ nodes: CO2Node[] }> = ({ nodes }) => {
       if (stateName) add(states, stateName, flux);
       const municipality = node.municipality?.trim();
       if (municipality) add(municipalities, municipality, flux);
+      if (node.nuts2) add(regions, node.nuts2, flux);
     }
     const toSorted = (map: Map<string, { count: number; flux: number }>) =>
       [...map.entries()].sort((a, b) => b[1].flux - a[1].flux);
-    return { states: toSorted(states), municipalities: toSorted(municipalities) };
+    return {
+      states: toSorted(states),
+      municipalities: toSorted(municipalities),
+      regions: toSorted(regions),
+    };
   }, [nodes]);
 
   const activeCount =
-    (sameRange(fluxRange, NO_FLUX_RANGE) ? 0 : 1) + stateFilter.size + municipalityFilter.size;
+    (sameRange(fluxRange, NO_FLUX_RANGE) ? 0 : 1) +
+    stateFilter.size +
+    municipalityFilter.size +
+    regionFilter.size +
+    (ruralFilter === "all" ? 0 : 1) +
+    (periodOnly ? 0 : 1);
   const isCustom = !FLUX_PRESETS.some((preset) => sameRange(preset.range, fluxRange));
 
   const setEdge = (edge: "min" | "max", raw: string) => {
@@ -185,7 +215,7 @@ export const AdvancedFilters: FC<{ nodes: CO2Node[] }> = ({ nodes }) => {
         className={cn(
           "relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors duration-150",
           open || activeCount > 0
-            ? "border-primary/40 bg-primary/10 text-primary"
+            ? ACTIVE_CHIP
             : "border-border bg-background text-muted-foreground hover:bg-muted/50 hover:text-foreground",
         )}
       >
@@ -213,7 +243,7 @@ export const AdvancedFilters: FC<{ nodes: CO2Node[] }> = ({ nodes }) => {
                 className={cn(
                   "rounded-lg border px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
                   sameRange(fluxRange, preset.range)
-                    ? "border-primary/40 bg-primary/10 text-primary"
+                    ? ACTIVE_CHIP
                     : "border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground",
                 )}
               >
@@ -263,6 +293,71 @@ export const AdvancedFilters: FC<{ nodes: CO2Node[] }> = ({ nodes }) => {
               )}
             </p>
           </div>
+
+          <div className="border-t border-border/60" />
+
+          <label className="flex cursor-pointer items-start gap-2 text-xs text-foreground">
+            <input
+              type="checkbox"
+              checked={periodOnly}
+              onChange={(event) => setPeriodOnly(event.target.checked)}
+              className={cn(checkboxClass, "mt-0.5")}
+            />
+            <span className="space-y-0.5">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <CalendarRange className="h-3.5 w-3.5 text-primary" />
+                {t("co2Nodes.periodOnly", "Only sites operating in the assessment period")}
+              </span>
+              <span className="block text-[10px] leading-snug text-muted-foreground">
+                {period
+                  ? t("co2Nodes.periodOnlyHint", {
+                      start: period.start,
+                      end: period.end,
+                      defaultValue: "{{start}}–{{end}}: hides retired plants, plants built later and coal after its phase-out.",
+                    })
+                  : t("co2Nodes.periodMissing", "Set the assessment period in step 1; until then only retired plants are hidden.")}
+              </span>
+            </span>
+          </label>
+
+          <div className="border-t border-border/60" />
+
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+              <Trees className="h-3.5 w-3.5 text-primary" />
+              {t("co2Nodes.ruralFilter", "Settlement type")}
+            </div>
+            <div className="grid grid-cols-3 gap-1.5">
+              {RURAL_OPTIONS.map((option) => (
+                <button
+                  key={option.key}
+                  type="button"
+                  onClick={() => setRural(option.key)}
+                  className={cn(
+                    "rounded-lg border px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
+                    ruralFilter === option.key
+                      ? ACTIVE_CHIP
+                      : "border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                  )}
+                >
+                  {t(`co2Nodes.rural.${option.key}`, option.label)}
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] leading-snug text-muted-foreground">
+              {t("co2Nodes.ruralHint", "Rural by the 2021 census grid (STORE_CO2).")}
+            </p>
+          </div>
+
+          <div className="border-t border-border/60" />
+
+          <LocationPicker
+            title={t("co2Nodes.regionsFilter", "Regions (NUTS 2)")}
+            icon={MapIcon}
+            entries={locationStats.regions}
+            picked={regionFilter}
+            onToggle={toggleRegion}
+          />
 
           <div className="border-t border-border/60" />
 

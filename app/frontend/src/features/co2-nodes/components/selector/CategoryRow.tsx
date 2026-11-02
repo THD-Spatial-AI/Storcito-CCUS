@@ -1,12 +1,25 @@
 import { useRef, useState, type FC } from "react";
 import { ChevronRight, Info } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import type { TFunction } from "i18next";
 import { useTranslation } from "@/i18n";
 import { cn } from "@/lib/utils";
 
 import { SourceDetails } from "../SourceDetails";
-import type { CO2Node } from "../../types";
+import { isSink, type CO2Node } from "../../types";
 import { formatFlux } from "./shared";
+
+/** Operating period tag. */
+const operatingTag = (node: CO2Node, t: TFunction): string | null => {
+  if (node.retired) return t("co2Nodes.tag.retired", "retired");
+  if (node.operating_from != null && node.operating_from > new Date().getFullYear())
+    return t("co2Nodes.tag.from", { year: node.operating_from, defaultValue: "from {{year}}" });
+  if (node.operating_until != null)
+    return t("co2Nodes.tag.until", { year: node.operating_until, defaultValue: "until {{year}}" });
+  if (node.source === "store_co2" && node.node_type === "storage" && node.operating_from == null)
+    return t("co2Nodes.tag.startUnknown", "start unknown");
+  return null;
+};
 
 // Virtualized rows.
 const FACILITY_ROW_HEIGHT = 26;
@@ -41,7 +54,8 @@ export const CategoryRow: FC<{
   expandLabel,
 }) => {
   const { t } = useTranslation();
-  const [sourceId, setSourceId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<CO2Node | null>(null);
+  const detailIsSink = detail !== null && isSink(detail);
   const pickedHere = facilities.reduce((sum, node) => sum + (isSelected(node) ? 1 : 0), 0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const virtualizer = useVirtualizer({
@@ -53,7 +67,11 @@ export const CategoryRow: FC<{
 
   return (
     <div>
-      <SourceDetails sourceId={sourceId} onClose={() => setSourceId(null)} />
+      <SourceDetails
+        sourceId={detail && !detailIsSink ? detail.node_id : null}
+        nodeId={detailIsSink ? detail.id : null}
+        onClose={() => setDetail(null)}
+      />
       <div
         className={cn(
           "flex items-center gap-1 rounded-lg px-1.5 py-1 transition-colors duration-150",
@@ -143,11 +161,16 @@ export const CategoryRow: FC<{
                         className="h-3.5 w-3.5 shrink-0 rounded border-border accent-foreground"
                       />
                       <span className="min-w-0 flex-1 truncate">{node.node_name || node.node_id}</span>
+                      {operatingTag(node, t) && (
+                        <span className="shrink-0 rounded bg-muted px-1 text-[9px] text-muted-foreground">
+                          {operatingTag(node, t)}
+                        </span>
+                      )}
                       <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
                         {formatFlux(node.annual_flux)}
                       </span>
                       </label>
-                      {node.source === "store_co2" && <button type="button" className="shrink-0 rounded p-1 text-muted-foreground hover:text-foreground" aria-label={`${t("co2Source.details", "Source details")}: ${node.node_name || node.node_id}`} onClick={() => setSourceId(node.node_id)}><Info className="h-3 w-3" /></button>}
+                      {node.source === "store_co2" && <button type="button" className="shrink-0 rounded p-1 text-muted-foreground hover:text-foreground" aria-label={`${t("co2Source.details", "Source details")}: ${node.node_name || node.node_id}`} onClick={() => setDetail(node)}><Info className="h-3 w-3" /></button>}
                     </div>
                   );
                 })}

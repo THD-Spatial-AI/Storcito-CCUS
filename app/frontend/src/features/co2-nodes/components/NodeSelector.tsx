@@ -2,23 +2,36 @@ import { useMemo, useState, type FC } from "react";
 import { AlertCircle, Database, Factory, Globe, Loader2, Search } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
-import { useNodesQuery } from "../hooks/useNodesQuery";
+import { useEnsureNodes, useLoadDeferredNodes, useNodesQuery } from "../hooks/useNodesQuery";
 import {
   matchesCategory,
   matchesCountry,
   matchesState,
   matchesMunicipality,
   matchesFlux,
+  matchesRegion,
+  matchesRural,
+  matchesPeriod,
+  operatesIn,
   useNodeFilterStore,
   NO_FLUX_RANGE,
 } from "../stores/nodeFilterStore";
-import { isEmitterCategory, isSinkCategory, type CO2Node } from "../types";
+import { isEmitterCategory, isSinkCategory, nodeCategory, type CO2Node } from "../types";
 import { SourceCatalogue } from "./SourceCatalogue";
 import { AdvancedFilters } from "./selector/AdvancedFilters";
 import { CategoryRow } from "./selector/CategoryRow";
 import { FilterSection } from "./selector/FilterSection";
 import { LocationRows } from "./selector/LocationRows";
 import { sameRange } from "./selector/shared";
+
+// Sink label fallbacks.
+const CATEGORY_LABELS: Record<string, string> = {
+  greenhouse: "Greenhouses",
+  brewery: "Breweries",
+  ccu_chemicals: "CCU chemicals",
+  urea: "Urea plants",
+  mineralization: "Mineralisation",
+};
 
 interface NodeSelectorProps {
   selectedIds: number[];
@@ -29,7 +42,9 @@ interface NodeSelectorProps {
 export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) => {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
-  const { data: nodes = [], isLoading, isError } = useNodesQuery();
+  const { data: nodes = [], isLoading, isError, deferredCounts, loadedGroups, isLoadingDeferred } = useNodesQuery();
+  const loadDeferred = useLoadDeferredNodes();
+  useEnsureNodes(selectedIds);
 
   // Map-linked.
   const countryFilter = useNodeFilterStore((state) => state.countries);
@@ -38,6 +53,10 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const emitterFilter = useNodeFilterStore((state) => state.emitterCategories);
   const sinkFilter = useNodeFilterStore((state) => state.sinkCategories);
   const fluxRange = useNodeFilterStore((state) => state.fluxRange);
+  const regionFilter = useNodeFilterStore((state) => state.regions);
+  const ruralFilter = useNodeFilterStore((state) => state.rural);
+  const periodOnly = useNodeFilterStore((state) => state.periodOnly);
+  const period = useNodeFilterStore((state) => state.period);
   const toggleCountry = useNodeFilterStore((state) => state.toggleCountry);
   const toggleState = useNodeFilterStore((state) => state.toggleState);
   const toggleMunicipality = useNodeFilterStore((state) => state.toggleMunicipality);
@@ -89,9 +108,14 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const locationScope = useMemo(
     () =>
       inFlux.filter(
-        (node) => matchesState(node, stateFilter) && matchesMunicipality(node, municipalityFilter),
+        (node) =>
+          matchesState(node, stateFilter) &&
+          matchesMunicipality(node, municipalityFilter) &&
+          matchesRegion(node, regionFilter) &&
+          matchesRural(node, ruralFilter) &&
+          matchesPeriod(node, period, periodOnly),
       ),
-    [inFlux, stateFilter, municipalityFilter],
+    [inFlux, stateFilter, municipalityFilter, regionFilter, ruralFilter, period, periodOnly],
   );
 
   // Facets exclude themselves.
@@ -126,7 +150,8 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   ) => {
     const seen = new Set<string>();
     for (const node of scope) {
-      if (belongs(node.node_type)) seen.add(node.node_type);
+      const category = nodeCategory(node);
+      if (belongs(category)) seen.add(category);
     }
     for (const category of picked) seen.add(category);
     return [...seen].sort();
@@ -140,6 +165,12 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const sinkCategories = useMemo(
     () => categoriesIn(categoryScope, isSinkCategory, sinkFilter),
     [categoryScope, sinkFilter],
+  );
+
+  // Unloaded large groups.
+  const pendingGroups = Object.entries(deferredCounts).filter(
+    ([category, count]) =>
+      count > 0 && (!loadedGroups.has(category) || (isLoadingDeferred && !sinkCategories.includes(category))),
   );
 
   const countByCountry = useMemo(() => {
@@ -189,7 +220,8 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const countByCategory = useMemo(() => {
     const counts = new Map<string, number>();
     for (const node of categoryScope) {
-      counts.set(node.node_type, (counts.get(node.node_type) ?? 0) + 1);
+      const category = nodeCategory(node);
+      counts.set(category, (counts.get(category) ?? 0) + 1);
     }
     return counts;
   }, [categoryScope]);
@@ -198,9 +230,10 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const facilitiesByCategory = useMemo(() => {
     const byCategory = new Map<string, CO2Node[]>();
     for (const node of filtered) {
-      const list = byCategory.get(node.node_type) ?? [];
+      const category = nodeCategory(node);
+      const list = byCategory.get(category) ?? [];
       list.push(node);
-      byCategory.set(node.node_type, list);
+      byCategory.set(category, list);
     }
     for (const list of byCategory.values()) {
       list.sort((a, b) => (b.annual_flux ?? 0) - (a.annual_flux ?? 0));
@@ -230,6 +263,9 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
     onChange([...next]);
   };
 
+  // Selected, outside period.
+  const outsidePeriod = nodes.filter((n) => selected.has(n.id) && !operatesIn(n, period)).length;
+
   const emitterCount = nodes.filter((n) => selected.has(n.id) && isEmitterCategory(n.node_type)).length;
   const sinkCount = nodes.filter((n) => selected.has(n.id) && isSinkCategory(n.node_type)).length;
 
@@ -239,6 +275,9 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
     municipalityFilter.size > 0 ||
     emitterFilter.size > 0 ||
     sinkFilter.size > 0 ||
+    regionFilter.size > 0 ||
+    ruralFilter !== "all" ||
+    !periodOnly ||
     !sameRange(fluxRange, NO_FLUX_RANGE);
 
   const expandLabel = t("co2Nodes.expandCategory", "Show facilities");
@@ -316,7 +355,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
           {emitterCategories.map((category) => (
             <CategoryRow
               key={category}
-              label={t(`co2Nodes.types.${category}`, category)}
+              label={t(`co2Nodes.types.${category}`, CATEGORY_LABELS[category] ?? category)}
               total={countByCategory.get(category) ?? 0}
               facilities={facilitiesByCategory.get(category) ?? []}
               checked={emitterFilter.has(category)}
@@ -340,7 +379,24 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
           picked={sinkFilter.size}
           total={sinkCategories.length}
         >
-          {sinkCategories.length === 0 ? (
+          {pendingGroups.map(([category, count]) => (
+            <div key={category} className="flex items-center gap-2 rounded-lg px-1.5 py-1 text-xs text-foreground">
+              <span className="min-w-0 flex-1 truncate pl-5">
+                {t(`co2Nodes.types.${category}`, CATEGORY_LABELS[category] ?? category)}
+              </span>
+              <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">{count.toLocaleString()}</span>
+              <button
+                type="button"
+                onClick={() => loadDeferred(category)}
+                disabled={isLoadingDeferred}
+                className="flex shrink-0 items-center gap-1 rounded-md border border-border px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted/50 hover:text-foreground disabled:opacity-60"
+              >
+                {isLoadingDeferred && <Loader2 className="h-3 w-3 animate-spin" />}
+                {t("co2Nodes.loadGroup", "Load")}
+              </button>
+            </div>
+          ))}
+          {sinkCategories.length === 0 && pendingGroups.length === 0 ? (
             <p className="px-1.5 py-1 text-[11px] text-muted-foreground">
               {t("co2Nodes.noSinks", "No sinks in the catalogue yet.")}
             </p>
@@ -348,7 +404,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
             sinkCategories.map((category) => (
               <CategoryRow
                 key={category}
-                label={t(`co2Nodes.types.${category}`, category)}
+                label={t(`co2Nodes.types.${category}`, CATEGORY_LABELS[category] ?? category)}
                 total={countByCategory.get(category) ?? 0}
                 facilities={facilitiesByCategory.get(category) ?? []}
                 checked={sinkFilter.has(category)}
@@ -381,6 +437,27 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
           {nodes.length === 0
             ? t("co2Nodes.catalogueEmpty", "The node catalogue is empty.")
             : t("co2Nodes.empty", "No nodes match your search.")}
+        </p>
+      )}
+
+      {period && (
+        <p className="text-[11px] leading-snug text-muted-foreground">
+          {t("co2Nodes.periodNote", {
+            start: period.start,
+            end: period.end,
+            defaultValue:
+              "Assessment period {{start}}–{{end}}: plants count from their commissioning year, coal until its phase-out. Emissions are each plant's latest value, held constant; STORE_CO2 has no projections.",
+          })}
+        </p>
+      )}
+
+      {outsidePeriod > 0 && (
+        <p role="status" className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-2 py-1.5 text-[11px] text-amber-700 dark:text-amber-400">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+          {t("co2Nodes.outsidePeriod", {
+            count: outsidePeriod,
+            defaultValue: "{{count}} selected sites do not operate in the assessment period.",
+          })}
         </p>
       )}
 

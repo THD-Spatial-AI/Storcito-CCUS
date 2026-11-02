@@ -184,6 +184,10 @@ interface UseNodeOLLayersOptions {
   onToggle: (nodeId: number) => void;
   // Routed paths.
   routes?: CO2Route[] | null;
+  // Extra tooltip line.
+  describe?: (node: CO2Node) => string | null;
+  // Dot clicked, or empty map.
+  onNodeClick?: (node: CO2Node | null, coordinate?: number[]) => void;
 }
 
 export const useNodeOLLayers = ({
@@ -192,9 +196,15 @@ export const useNodeOLLayers = ({
   selectedIds,
   onToggle,
   routes,
+  describe,
+  onNodeClick,
 }: UseNodeOLLayersOptions) => {
   const toggleRef = useRef(onToggle);
   toggleRef.current = onToggle;
+  const describeRef = useRef(describe);
+  describeRef.current = describe;
+  const nodeClickRef = useRef(onNodeClick);
+  nodeClickRef.current = onNodeClick;
 
   // Fade once.
   const fadedRef = useRef(false);
@@ -321,7 +331,9 @@ export const useNodeOLLayers = ({
     tooltipName.className = "ol-node-tooltip-name";
     const tooltipMeta = document.createElement("div");
     tooltipMeta.className = "ol-node-tooltip-meta";
-    tooltip.append(tooltipName, tooltipMeta);
+    const tooltipExtra = document.createElement("div");
+    tooltipExtra.className = "ol-node-tooltip-meta";
+    tooltip.append(tooltipName, tooltipMeta, tooltipExtra);
     const tooltipOverlay = new Overlay({
       element: tooltip,
       offset: [0, -10],
@@ -360,6 +372,9 @@ export const useNodeOLLayers = ({
           .filter(Boolean)
           .join(" · ");
         tooltipMeta.textContent = meta;
+        const extra = describeRef.current?.(node) ?? "";
+        tooltipExtra.textContent = extra;
+        tooltipExtra.hidden = !extra;
       }
       tooltipOverlay.setPosition(coordinate);
     };
@@ -382,6 +397,9 @@ export const useNodeOLLayers = ({
       const feature = pickNode(event);
       const nodeId = feature?.get("nodeId");
       if (typeof nodeId === "number") toggleRef.current(nodeId);
+      const node = feature ? nodeByFeature.get(feature) : undefined;
+      const point = feature?.getGeometry();
+      nodeClickRef.current?.(node ?? null, point instanceof Point ? point.getCoordinates() : undefined);
     };
 
     const handlePointerMove = (event: MapBrowserEvent) => {
