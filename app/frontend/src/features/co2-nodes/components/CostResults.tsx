@@ -2,9 +2,22 @@ import { useMemo, type FC } from "react";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
+import { useChainCosts, type CostRange } from "../hooks/useChainCosts";
+import { useNodesQuery } from "../hooks/useNodesQuery";
 import type { CO2Route } from "../services/nodeService";
+import { useNodeFilterStore } from "../stores/nodeFilterStore";
 import { costedRoutes, useRoutingRunStore } from "../stores/routingRunStore";
 import { formatNumber } from "../utils/format";
+
+// Compact cells.
+const CELL = "px-2 py-1.5 align-top";
+
+const formatRange = (value: CostRange | null): string =>
+  value === null
+    ? "—"
+    : Math.abs(value.high - value.low) < 0.05
+      ? `€${formatNumber(value.low, 1)}`
+      : `€${formatNumber(value.low, 1)}–${formatNumber(value.high, 1)}`;
 
 /** Run costs. */
 export const CostResults: FC = () => {
@@ -12,16 +25,25 @@ export const CostResults: FC = () => {
   const routes = useRoutingRunStore((state) => state.routes);
   const isRunning = useRoutingRunStore((state) => state.isRunning);
   const error = useRoutingRunStore((state) => state.error);
+  const allCosted = useMemo(() => costedRoutes(routes), [routes]);
+  const chainCost = useChainCosts(allCosted);
+  const { data: nodes = [] } = useNodesQuery();
+  // Prefer facility names.
+  const nameOf = useMemo(() => {
+    const names = new Map(nodes.map((node) => [node.node_id, node.node_name]));
+    return (id: string) => names.get(id) || id;
+  }, [nodes]);
+  const period = useNodeFilterStore((state) => state.period);
 
   const byMode = useMemo(() => {
     const grouped = new Map<string, CO2Route[]>();
-    for (const route of costedRoutes(routes)) {
+    for (const route of allCosted) {
       const list = grouped.get(route.mode) ?? [];
       list.push(route);
       grouped.set(route.mode, list);
     }
     return [...grouped.entries()];
-  }, [routes]);
+  }, [allCosted]);
 
   if (isRunning) {
     return (
@@ -59,35 +81,58 @@ export const CostResults: FC = () => {
 
   return (
     <div className="space-y-3">
+      {period && (
+        <p className="text-[11px] font-medium text-foreground">
+          {t("co2Costs.periodBasis", {
+            start: period.start,
+            end: period.end,
+            defaultValue: "Capture and liquefaction averaged over {{start}}–{{end}}, the years each plant runs.",
+          })}
+        </p>
+      )}
+      <p className="text-[11px] leading-snug text-muted-foreground">
+        {t(
+          "co2Costs.chainNote",
+          "Per tonne in €2024, low – high cost case, as STORE_CO2's scenarios price the chain: capture without conditioning (first of a kind; 2030 when no period is set), liquefaction at the emitter for road and rail, the route's tariff, and storage at Porthos's audited cost (none at a utiliser). Pipelines have a CAPEX, not a tariff, so no full-chain figure.",
+        )}
+      </p>
       {byMode.map(([mode, list]) => (
         <div key={mode} className="overflow-x-auto rounded-xl border border-border">
-          <div className="border-b border-border bg-muted/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="border-b border-border bg-muted/30 px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
             {t(`co2Nodes.modes.${mode}`, mode)} · {list.length}
           </div>
-          <table className="w-full text-xs">
+          <table className="w-full text-[11px]">
             <thead>
-              <tr className="text-left text-muted-foreground">
-                <th className="px-3 py-2">{t("co2Routing.connection", "Connection")}</th>
-                <th className="px-3 py-2">{t("co2Routing.distance", "Distance")}</th>
-                <th className="px-3 py-2">
+              <tr className="text-left align-bottom text-[10px] leading-tight text-muted-foreground">
+                <th className={CELL}>{t("co2Routing.connection", "Connection")}</th>
+                <th className={CELL}>
                   {mode === "pipeline"
                     ? t("co2Routing.capex", "CAPEX (€2021)")
                     : t("co2Routing.unitCost", "Cost (€/t/km)")}
                 </th>
+                <th className={CELL}>{t("co2Costs.capture", "Capture (€/t)")}</th>
+                {mode !== "pipeline" && (
+                  <th className={CELL}>{t("co2Costs.liquefaction", "Liquefaction (€/t)")}</th>
+                )}
+                <th className={CELL}>{t("co2Costs.storage", "Storage (€/t)")}</th>
+                {mode !== "pipeline" && (
+                  <th className={CELL}>{t("co2Costs.total", "Full chain (€/t)")}</th>
+                )}
               </tr>
             </thead>
             <tbody>
               {list.map((route) => (
                 <tr key={`${route.mode}-${route.from_node_id}-${route.to_node_id}`} className="border-t border-border/60">
-                  <td className="px-3 py-2 font-medium">
-                    {route.from_node_id} → {route.to_node_id}
+                  <td className={`${CELL} min-w-[8.5rem] max-w-[13rem]`} title={`${route.from_node_id} → ${route.to_node_id}`}>
+                    <div className="break-words font-medium leading-snug text-foreground">{nameOf(route.from_node_id)}</div>
+                    <div className="break-words leading-snug text-muted-foreground">→ {nameOf(route.to_node_id)}</div>
+                    <div className="mt-0.5 text-[10px] tabular-nums text-muted-foreground">
+                      {route.distance_km !== undefined
+                        ? `${formatNumber(route.distance_km, 1)} km`
+                        : t("co2Routing.unrouted", "Not routed")}
+                    </div>
                   </td>
-                  <td className="px-3 py-2 tabular-nums">
-                    {route.distance_km !== undefined
-                      ? `${formatNumber(route.distance_km, 3)} km`
-                      : t("co2Routing.unrouted", "Not routed")}
-                  </td>
-                  <td className="px-3 py-2 tabular-nums">
+                  <td className={`${CELL} tabular-nums`}>
                     {mode === "pipeline" ? (
                       <>
                         {route.capex_eur !== undefined
@@ -117,6 +162,14 @@ export const CostResults: FC = () => {
                       </>
                     )}
                   </td>
+                  <td className={`${CELL} tabular-nums`}>{formatRange(chainCost(route).capture)}</td>
+                  {mode !== "pipeline" && (
+                    <td className={`${CELL} tabular-nums`}>{formatRange(chainCost(route).liquefaction)}</td>
+                  )}
+                  <td className={`${CELL} tabular-nums`}>{formatRange(chainCost(route).storage)}</td>
+                  {mode !== "pipeline" && (
+                    <td className={`${CELL} font-medium tabular-nums`}>{formatRange(chainCost(route).total)}</td>
+                  )}
                 </tr>
               ))}
             </tbody>

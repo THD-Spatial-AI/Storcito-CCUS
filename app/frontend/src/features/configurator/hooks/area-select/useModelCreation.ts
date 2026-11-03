@@ -6,8 +6,7 @@ import {
   useUpdateModelMutation2,
 } from "@/features/model-dashboard";
 import { useWorkspaceStore } from "@/components/workspace";
-import { clampBuffer } from "@/features/configurator/constants/buffer-distance";
-import { dateRangeHasOnlyAvailableDates } from "@/features/configurator/utils/dateAvailability";
+import { yearEnd, yearOf, yearStart } from "@/features/configurator/utils/assessmentYears";
 import type { AreaData, UseAreaSelectProps } from "@/features/configurator/types/area-select";
 import {
   asRecord,
@@ -44,6 +43,11 @@ const describeError = (error: unknown, fallback: string): string => {
   return fallback;
 };
 
+const withoutBuffer = (config: Record<string, unknown> | undefined): Record<string, unknown> => {
+  const { buffer_distance: _unused, ...rest } = config ?? {};
+  return rest;
+};
+
 export const useModelCreation = ({
   state,
   onAreaSelected,
@@ -68,20 +72,14 @@ export const useModelCreation = ({
     modelName,
     fromDate,
     toDate,
-    bufferDistance,
     usePrecomputed,
-    availablePrecomputedDates,
-    availableDynamicDates,
     selectedNodeIds,
     originalConfig,
-    stationDataFile,
     setModelName,
-    setBufferDistanceRaw,
     setOriginalConfig,
     setSelectedNodeIds,
     setFromDate,
     setToDate,
-    setStoredStationDataName,
   } = state;
 
   // Edit-mode load.
@@ -98,23 +96,14 @@ export const useModelCreation = ({
         const cfg = asRecord(model.config);
         if (cfg) {
           setOriginalConfig(cfg);
-          const rawBuffer = cfg.buffer_distance;
-          if (typeof rawBuffer === "number") {
-            setBufferDistanceRaw(clampBuffer(rawBuffer));
-          }
         }
         const loadedNodeIds = cfg ? getSelectedNodeIdsFromConfig(cfg) : [];
         if (loadedNodeIds.length) setSelectedNodeIds(loadedNodeIds);
-        const loadedUserInputs = cfg ? asRecord(cfg.user_inputs) : undefined;
-        if (loadedUserInputs) {
-          if (typeof loadedUserInputs.station_data === "string") {
-            setStoredStationDataName(loadedUserInputs.station_data);
-          }
-        }
-        const loadedFromDate = getDateInputValue(model.from_date);
-        if (loadedFromDate) setFromDate(loadedFromDate);
-        const loadedToDate = getDateInputValue(model.to_date);
-        if (loadedToDate) setToDate(loadedToDate);
+        // Whole years.
+        const loadedFromYear = yearOf(getDateInputValue(model.from_date) ?? "");
+        if (loadedFromYear !== null) setFromDate(yearStart(loadedFromYear));
+        const loadedToYear = yearOf(getDateInputValue(model.to_date) ?? "");
+        if (loadedToYear !== null) setToDate(yearEnd(loadedToYear));
       } catch {
         /* ignore load errors */
       } finally {
@@ -140,14 +129,12 @@ export const useModelCreation = ({
     async (opts?: { runAfterSave?: boolean }): Promise<void> => {
       if (!fromDate || !toDate || !modelName.trim() || selectedNodeIds.length === 0) return;
       if (fromDate > toDate) return;
-      if (!dateRangeHasOnlyAvailableDates(fromDate, toDate, availableDynamicDates)) return;
       setIsSaving(true);
       try {
         await new Promise((resolve) => setTimeout(resolve, SAVE_DELAY_MS));
         const areaData: AreaData = {
           fromDate,
           toDate,
-          bufferDistance,
           usePrecomputed,
           modelName: modelName.trim(),
           timestamp: new Date().toISOString(),
@@ -167,18 +154,14 @@ export const useModelCreation = ({
           to_date: areaData.toDate,
           workspace_id: currentWorkspace?.id,
           config: {
-            ...(originalConfig ?? {}),
-            buffer_distance: areaData.bufferDistance,
+            // Drop old buffer.
+            ...withoutBuffer(originalConfig),
             parameters: {
               ...(originalParameters ?? {}),
               calculation_mode: "dynamic",
               co2_node_ids: selectedNodeIds,
-              // Off: compute fresh.
-              force_compute: !(
-                areaData.usePrecomputed &&
-                fromDate === toDate &&
-                availablePrecomputedDates.includes(fromDate)
-              ),
+              // Always compute.
+              force_compute: true,
             },
           } as Record<string, unknown>,
         };
@@ -192,22 +175,6 @@ export const useModelCreation = ({
           savedModelId = created?.data?.id;
         }
 
-        // Upload optional inputs.
-        if (savedModelId && stationDataFile) {
-          try {
-            await modelService.uploadModelInputs(savedModelId, {
-              stationData: stationDataFile,
-            });
-          } catch (error) {
-            onError?.(
-              describeError(
-                error,
-                errorMessages?.uploadInputs ??
-                  "The model was saved, but its input files could not be uploaded."
-              )
-            );
-          }
-        }
 
         if (opts?.runAfterSave && savedModelId) {
           try {
@@ -243,16 +210,12 @@ export const useModelCreation = ({
       toDate,
       modelName,
       selectedNodeIds,
-      bufferDistance,
       usePrecomputed,
-      availablePrecomputedDates,
-      availableDynamicDates,
       editMode,
       modelId,
       onAreaSelected,
       currentWorkspace?.id,
       originalConfig,
-      stationDataFile,
       updateModelMutation,
       createModelMutation,
       navigate,

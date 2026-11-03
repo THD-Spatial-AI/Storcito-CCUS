@@ -39,24 +39,16 @@ export const useAreaSelect = ({
         modelName: state.modelName,
         fromDate: state.fromDate,
         toDate: state.toDate,
-        bufferDistance: state.bufferDistance,
         usePrecomputed: state.usePrecomputed,
-        availablePrecomputedDates: state.availablePrecomputedDates,
-        availableDynamicDates: state.availableDynamicDates,
-        isLoadingDynamicDates: state.isLoadingDynamicDates,
-        dynamicDatesError: state.dynamicDatesError,
         isSaving: creation.isSaving,
         isLoadingModel: creation.isLoadingModel,
         showAreaSelectTour: state.showAreaSelectTour,
         selectedNodeIds: state.selectedNodeIds,
-        stationDataName: state.stationDataName,
-        stationDataError: state.stationDataError,
     };
 
     const actions: AreaSelectActions = {
         setModelName: state.setModelName,
         setSelectedNodeIds: state.setSelectedNodeIds,
-        setBufferDistance: state.setBufferDistance,
         setUsePrecomputed: state.setUsePrecomputed,
         handleUpdateRange: state.handleUpdateRange,
         setShowAreaSelectTour: state.setShowAreaSelectTour,
@@ -64,7 +56,6 @@ export const useAreaSelect = ({
         handleTourSkip: state.handleTourSkip,
         handleSave: creation.handleSave,
         handleCancel: creation.handleCancel,
-        setStationDataFile: state.setStationDataFile,
     };
 
     return {

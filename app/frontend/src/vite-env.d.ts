@@ -2,7 +2,6 @@
 
 interface ImportMetaEnv {
   readonly VITE_CARTO_BASEMAP_API_KEY?: string;
-  readonly VITE_DUMMY_DATES?: string;
 }
 
 interface ImportMeta {
