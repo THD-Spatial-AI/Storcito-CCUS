@@ -18,9 +18,11 @@ import {
   Database,
   Sparkles,
   TrendingUp,
-  Sliders,
+  CalendarRange,
+  Route,
   FileText,
   Building2,
+  MapPin,
   Network,
 } from "lucide-react";
 import { config } from "@/configuration/app";
@@ -29,6 +31,7 @@ import { PrivacyConsentDialog, PrivacyBanner } from "@/features/privacy-controls
 import { useTranslation, languages, changeLanguage, type LanguageCode } from "@/i18n";
 
 const NAV = [
+  { key: "caseStudy", href: "#case-study" },
   { key: "platform", href: "#platform" },
   { key: "howItWorks", href: "#how-it-works" },
   { key: "contact", href: "#contact" },
@@ -36,9 +39,9 @@ const NAV = [
 
 // Icons only.
 const STEPS = [
+  { icon: CalendarRange },
   { icon: Building2 },
-  { icon: Network },
-  { icon: Sliders },
+  { icon: Route },
   { icon: FileText },
 ] as const;
 
@@ -57,7 +60,7 @@ const FOOTER_LINK = "text-[11px] font-semibold uppercase tracking-widest text-wh
 
 // Section heading.
 const SectionHead: React.FC<{ eyebrow: string; title: string; description?: string }> = ({ eyebrow, title, description }) => (
-  <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+  <div className="mb-16 flex flex-col md:flex-row md:items-start justify-between gap-8">
     <div className="max-w-2xl">
       <span className={EYEBROW}>{eyebrow}</span>
       <h2 className={`${H2} mt-4`}>{title}</h2>
@@ -341,16 +344,20 @@ export default function LandingPage() {
                   {t("landing.hero.seeHow")}
                 </a>
               </div>
+
+              <p data-reveal className="mt-4 max-w-md text-[11px] leading-relaxed text-[#1A1A1A]/50">
+                {t("landing.hero.publicNote")}
+              </p>
             </div>
 
             {/* Metrics strip. */}
             <div data-reveal className="mt-16 lg:mt-32 2xl:mt-48 pt-8 border-t border-[#1A1A1A]/10">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[#D4D2D0] border border-[#D4D2D0]">
                 {[
-                  ["14,600+", "metricSites"],
-                  ["608 Mt", "metricStorage"],
-                  ["3,800+", "metricNetwork"],
-                  ["3", "metricCost"],
+                  ["14,641+", "metricSites"],
+                  ["655 Mt", "metricStorage"],
+                  ["3,809", "metricNetwork"],
+                  ["DE · NO · NL", "metricCost"],
                 ].map(([value, key]) => (
                   <div key={key} className="bg-white p-5">
                     <p className="font-black text-xl tracking-tight text-[#1A1A1A]">{value}</p>
@@ -358,17 +365,16 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-              <img src={EU_LOGO} alt={euAlt} className="mt-6 h-10 w-auto" />
             </div>
           </div>
 
           {/* Route map. */}
           <div className="relative w-full min-h-[300px] md:w-1/2 md:min-h-full lg:w-2/5 bg-[#D4D2D0] md:animate-[hero-clip_1.2s_cubic-bezier(0,0.55,0.45,1)_both] md:[clip-path:polygon(25%_0,100%_0,100%_100%,0%_100%)]">
             <img
-              src="/images/landing-page/ccus-transport-map.jpg"
+              src="/images/landing-page/ccus-routes.jpg"
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover object-[35%_center] pointer-events-none select-none"
+              className="absolute inset-0 h-full w-full object-cover object-[38%_top] pointer-events-none select-none"
             />
             {/* Fade into scene. */}
             <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-b from-[#EDEAE700] via-[#EDEAE7cc] to-[#EDEAE7]" />
@@ -381,6 +387,26 @@ export default function LandingPage() {
             <img src="/images/landing-page/co2-transport-hero.svg" alt="" className="absolute bottom-0 left-0 w-full aspect-[12/7]" />
           </div>
         </div>
+
+        {/* Case study. */}
+        <section id="case-study" className="py-24 px-8 bg-[#E4E1DE] border-y border-[#D4D2D0]">
+          <div className="max-w-7xl mx-auto">
+            <SectionHead eyebrow={t("landing.caseStudy.eyebrow")} title={t("landing.caseStudy.title")} description={t("landing.caseStudy.description")} />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#D4D2D0] border border-[#D4D2D0]">
+              {["germany", "norway", "netherlands"].map((country) => (
+                <div key={country} className="bg-white">
+                  <div data-reveal className="p-8 flex flex-col gap-4">
+                    <MapPin className="w-5 h-5 text-[#1A1A1A]" strokeWidth={1.5} />
+                    <div>
+                      <h4 className="font-black text-[0.875rem] uppercase tracking-tight mb-2">{t(`landing.caseStudy.${country}Title`)}</h4>
+                      <p className="text-[13px] text-[#333333]/80 leading-relaxed">{t(`landing.caseStudy.${country}Desc`)}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <section id="how-it-works" className={`pb-32 pt-24 px-8 ${BAND}`}>
           <div className="relative z-10 max-w-7xl mx-auto">
@@ -413,11 +439,13 @@ export default function LandingPage() {
               {CHALLENGE_CARDS.map((card, i) => {
                 const Icon = card.icon;
                 return (
-                  <div key={i} data-reveal className="bg-white p-8 flex flex-col gap-4">
-                    <Icon className="w-5 h-5 text-[#1A1A1A]" strokeWidth={1.5} />
-                    <div>
-                      <h4 className="font-black text-[0.875rem] uppercase tracking-tight mb-2">{t(`landing.challenge.card${i + 1}Title`)}</h4>
-                      <p className="text-[13px] text-[#333333]/80 leading-relaxed">{t(`landing.challenge.card${i + 1}Desc`)}</p>
+                  <div key={i} className="bg-white">
+                    <div data-reveal className="p-8 flex flex-col gap-4">
+                      <Icon className="w-5 h-5 text-[#1A1A1A]" strokeWidth={1.5} />
+                      <div>
+                        <h4 className="font-black text-[0.875rem] uppercase tracking-tight mb-2">{t(`landing.challenge.card${i + 1}Title`)}</h4>
+                        <p className="text-[13px] text-[#333333]/80 leading-relaxed">{t(`landing.challenge.card${i + 1}Desc`)}</p>
+                      </div>
                     </div>
                   </div>
                 );
@@ -434,10 +462,12 @@ export default function LandingPage() {
               {FEATURES.map((f, i) => {
                 const Icon = f.icon;
                 return (
-                  <div key={i} data-reveal className="p-12 bg-white hover:bg-[#F6F4F2] transition-colors">
-                    <Icon className="w-6 h-6 mb-8 text-[#1A1A1A]" strokeWidth={1.5} />
-                    <h4 className="text-sm font-bold mb-4 uppercase tracking-widest">{t(`landing.features.f${i + 1}Title`)}</h4>
-                    <p className="text-[13px] text-[#333333]/80 leading-relaxed">{t(`landing.features.f${i + 1}Desc`)}</p>
+                  <div key={i} className="bg-white hover:bg-[#F6F4F2] transition-colors">
+                    <div data-reveal className="p-12">
+                      <Icon className="w-6 h-6 mb-8 text-[#1A1A1A]" strokeWidth={1.5} />
+                      <h4 className="text-sm font-bold mb-4 uppercase tracking-widest">{t(`landing.features.f${i + 1}Title`)}</h4>
+                      <p className="text-[13px] text-[#333333]/80 leading-relaxed">{t(`landing.features.f${i + 1}Desc`)}</p>
+                    </div>
                   </div>
                 );
               })}
@@ -502,10 +532,12 @@ export default function LandingPage() {
               {PERSONAS.map((p, i) => {
                 const Icon = p.icon;
                 return (
-                  <div key={i} data-reveal className="bg-white p-10">
-                    <Icon className="w-6 h-6 mb-6 text-[#1A1A1A]" strokeWidth={1.5} />
-                    <p className="font-black text-[0.9375rem] uppercase tracking-tight mb-3">{t(`landing.personas.p${i + 1}Title`)}</p>
-                    <p className="text-[12px] text-[#333333]/80 leading-relaxed">{t(`landing.personas.p${i + 1}Desc`)}</p>
+                  <div key={i} className="bg-white">
+                    <div data-reveal className="p-10">
+                      <Icon className="w-6 h-6 mb-6 text-[#1A1A1A]" strokeWidth={1.5} />
+                      <p className="font-black text-[0.9375rem] uppercase tracking-tight mb-3">{t(`landing.personas.p${i + 1}Title`)}</p>
+                      <p className="text-[12px] text-[#333333]/80 leading-relaxed">{t(`landing.personas.p${i + 1}Desc`)}</p>
+                    </div>
                   </div>
                 );
               })}

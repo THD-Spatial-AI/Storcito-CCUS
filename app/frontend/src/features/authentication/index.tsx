@@ -23,8 +23,8 @@ const AnalysisSidePanel: React.FC = () => {
   return (
     <div className="absolute inset-0 bg-[#16152e]">
       <img
-        src={`${IMG}/ccus-transport-map.png`}
-        alt="CCUS Transport Network Map"
+        src={`${IMG}/ccus-routes.jpg`}
+        alt="CO₂ transport routes in Norway, the Netherlands and Germany"
         aria-hidden
         className="absolute inset-0 h-full w-full object-cover opacity-75 contrast-125"
       />
@@ -105,7 +105,7 @@ export const LoginForm: React.FC<Partial<LoginFormProps>> = (props) => {
         }}
         apiBaseUrl={config.api.baseUrl || "/api"}
         appName={BrandLogo}
-        backgroundImageUrl="/images/landing-page/ccus-transport-map.jpg"
+        backgroundImageUrl="/images/landing-page/ccus-routes.jpg"
         layout="split"
         sideContent={<AnalysisSidePanel />}
         {...props}
@@ -123,7 +123,7 @@ export const RegisterForm: React.FC<Partial<RegisterFormProps>> = (props) => {
       }}
       apiBaseUrl={config.api.baseUrl || "/api"}
       appName={BrandLogo}
-      backgroundImageUrl="/images/landing-page/ccus-transport-map.jpg"
+      backgroundImageUrl="/images/landing-page/ccus-routes.jpg"
       layout="split"
       sideContent={<AnalysisSidePanel />}
       {...props}
@@ -140,7 +140,7 @@ export const ForgotPasswordForm: React.FC<Partial<ForgotPasswordFormProps>> = (p
       }}
       apiBaseUrl={config.api.baseUrl || "/api"}
       appName={BrandLogo}
-      backgroundImageUrl="/images/landing-page/ccus-transport-map.jpg"
+      backgroundImageUrl="/images/landing-page/ccus-routes.jpg"
       layout="split"
       sideContent={<AnalysisSidePanel />}
       {...props}
