@@ -1,7 +1,9 @@
 import SidebarButton from "@/components/ui/SidebarButton";
 import { Authorized } from "@/middleware/authorized";
 import { LayoutDashboard, type LucideIcon } from "lucide-react";
-import { ADMIN_PATH } from "./constants";
+import { GithubIcon } from "@/components/ui/GithubIcon";
+import { ADMIN_PATH, GITHUB_URL } from "./constants";
+import { WhatsNewDialog } from "./WhatsNewDialog";
 import { LayersSheet } from "./LayersSheet";
 import { ProfileMenu } from "./ProfileMenu";
 import { HelpMenu } from "./HelpMenu";
@@ -74,6 +76,13 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
       </div>
 
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-3 text-center">
+        <SidebarButton
+          icon={GithubIcon}
+          tooltip="GitHub repository"
+          onClick={() => window.open(GITHUB_URL, "_blank", "noopener,noreferrer")}
+          dataTour="github"
+        />
+
         <HelpMenu
           documentationIcon={utilityItems.documentation}
           restartTourIcon={utilityItems.restartTour}
@@ -95,12 +104,7 @@ export const AppLayoutSidebar: React.FC<AppLayoutSidebarProps> = ({
 
         <ProfileMenu userMenuItems={userMenuItems} getUserInitial={getUserInitial} />
 
-        <span
-          className="text-[9px] font-medium tabular-nums text-muted-foreground/60"
-          title={`App version ${APP_VERSION}`}
-        >
-          v{APP_VERSION}
-        </span>
+        <WhatsNewDialog version={APP_VERSION} />
       </div>
     </aside>
   );

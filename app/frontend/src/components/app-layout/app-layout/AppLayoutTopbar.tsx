@@ -55,9 +55,13 @@ export const AppLayoutTopbar: React.FC<AppLayoutTopbarProps> = ({
         <div className="flex-1" />
 
         <div className="flex items-center gap-1 mr-4" data-tour="navigation">
-          <LanguageSwitcher />
+          <div data-tour="language">
+            <LanguageSwitcher />
+          </div>
           <Authorized>
-            <NotificationDropdown />
+            <div data-tour="notifications">
+              <NotificationDropdown />
+            </div>
           </Authorized>
         </div>
 
