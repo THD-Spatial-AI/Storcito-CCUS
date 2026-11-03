@@ -155,6 +155,7 @@
       "moveToWorkspace": "Přesunout do Pracovního Prostoru",
       "profile": "Profil",
       "documentation": "Dokumentace",
+      "howItWorks": "Jak to funguje",
       "restartTour": "Restartovat prohlídku",
       "feedback": "Zpětná vazba",
       "theme": "Motiv",
@@ -681,13 +682,6 @@
       "specialChar": "Jeden speciální znak",
       "hasSpaces": "Heslo obsahuje mezery na začátku nebo na konci"
     },
-    "organizationDetails": "Údaje o Organizaci",
-    "organization": "Organizace",
-    "enterOrganization": "Zadejte svou organizaci",
-    "position": "Pozice",
-    "enterPosition": "Zadejte svou pozici",
-    "phoneNumber": "Telefonní Číslo",
-    "enterPhoneNumber": "Zadejte své telefonní číslo",
     "accessLevel": "Úroveň Přístupu",
     "veryLow": "Velmi Nízká",
     "low": "Nízká",
@@ -710,11 +704,15 @@
     "agreeToTerms": "Vytvořením účtu souhlasíte s našimi Podmínkami služby",
     "signInHere": "Sign in here",
     "sidePanel": {
-      "badge": "CCUS intelligence",
+      "badge": "CCUS assessment",
       "title": "Accelerate carbon capture before emissions escalate",
       "subtitle": "Map, model and act on CCUS projects — turning site data and geospatial insight into safe, scalable carbon capture, utilisation and storage across Europe.",
       "funded": "Financováno Evropskou unií · Postaveno na platformě STORCITO"
-    }
+    },
+    "consentText": "Souhlasím se zpracováním a uchováváním mých osobních údajů v souladu s",
+    "declarationOfConsent": "Prohlášením o souhlasu",
+    "and": "a",
+    "privacyPolicy": "Zásadami ochrany osobních údajů"
   },
   "workspace": {
     "workspace": "Pracovní prostor",
@@ -842,7 +840,38 @@
     "peopleWithAccessDescription": "Lidé v tomto seznamu mohou otevřít tento model a jeho vrstvy rizika.",
     "revokeAccess": "Odvolat",
     "revokingAccess": "Odebírání přístupu…",
-    "revokeAccessFor": "Odebrat přístup pro {{email}}"
+    "revokeAccessFor": "Odebrat přístup pro {{email}}",
+    "tabs": {
+      "all": "Vše",
+      "pinned": "Připnuté",
+      "running": "Běží",
+      "completed": "Dokončeno",
+      "drafts": "Koncepty",
+      "failed": "Selhalo"
+    },
+    "area": "Oblast",
+    "period": "Období",
+    "lastActivity": "Poslední aktivita",
+    "pin": "Připnout nahoru",
+    "unpin": "Odepnout",
+    "recentlyCompleted": "Nový",
+    "recentlyCompletedTooltip": "Dokončeno {{time}}. Otevřete jej pro zobrazení výsledků.",
+    "versions_one": "{{count}} verze",
+    "versions_other": "{{count}} verzí",
+    "showVersions_one": "Zobrazit {{count}} verzi",
+    "showVersions_other": "Zobrazit verze: {{count}}",
+    "hideVersions_one": "Skrýt {{count}} verzi",
+    "hideVersions_other": "Skrýt verze: {{count}}",
+    "showVersions_few": "Zobrazit verze: {{count}}",
+    "showVersions_many": "Zobrazit verze: {{count}}",
+    "hideVersions_few": "Skrýt verze: {{count}}",
+    "hideVersions_many": "Skrýt verze: {{count}}",
+    "originalVersion": "Originál",
+    "originalVersionHint": "Tento řádek je původní model. Stav, období a aktivita patří tomuto modelu; každá verze má vlastní řádek.",
+    "estimateBasis_one": "Na základě 1 srovnatelného běhu, který trval {{typical}}",
+    "estimateBasis_other": "Na základě {{count}} srovnatelných běhů, které obvykle trvají {{typical}}",
+    "view": "Zobrazit",
+    "run": "Spustit"
   },
   "polygon": {
     "drawRegion": "Nakreslete svůj region",
@@ -945,10 +974,7 @@
     "userProfile": {
       "title": "Uživatelský Profil",
       "subtitle": "Informace o vašem účtu",
-      "email": "E-mail",
-      "organization": "Organizace",
-      "position": "Pozice",
-      "phone": "Telefon"
+      "email": "E-mail"
     },
     "accessPermissions": {
       "title": "Přístup a Oprávnění",
@@ -992,7 +1018,7 @@
   "userManagement": {
     "title": "Správa uživatelů",
     "subtitle": "Spravujte uživatele, skupiny a oprávnění",
-    "searchPlaceholder": "Hledat jméno, e-mail, organizaci...",
+    "searchPlaceholder": "Hledat jméno nebo e-mail...",
     "refresh": "Obnovit",
     "addNewUser": "Přidat nového uživatele",
     "add": "Přidat",
@@ -1013,12 +1039,9 @@
     },
     "table": {
       "user": "Uživatel",
-      "organization": "Organizace",
-      "position": "Pozice",
       "accessLevel": "Úroveň přístupu",
       "group": "Skupina",
       "emailVerified": "E-mail ověřen",
-      "phone": "Telefon",
       "actions": "Akce"
     },
     "emailStatus": {
@@ -1163,16 +1186,10 @@
     "saveChanges": "Uložit změny",
     "fields": {
       "fullName": "Celé jméno",
-      "email": "E-mailová adresa",
-      "organization": "Organizace",
-      "position": "Pozice",
-      "phone": "Telefon"
+      "email": "E-mailová adresa"
     },
     "placeholders": {
-      "fullName": "Zadejte své celé jméno",
-      "organization": "Vaše společnost nebo organizace",
-      "position": "Vaše pracovní pozice",
-      "phone": "+420 123 456 789"
+      "fullName": "Zadejte své celé jméno"
     },
     "accessLevels": {
       "basic": "Základní",
@@ -1499,8 +1516,8 @@
         "description": "Přístup k vašemu profilu, nastavení účtu a uživatelským preferencím. Spravujte svůj účet a další možnosti."
       },
       "navigation": {
-        "title": "Navigace Řídicího Panelu",
-        "description": "Přístup k hlavnímu řídicímu panelu pro zobrazení projektů, nedávných hodnocení a celkových statistik. Toto je vaše základna."
+        "title": "Administrátorský panel",
+        "description": "Spravujte pracovní prostory, uživatele a všechny modely na platformě. Viditelné pouze pro administrátory."
       },
       "simulations": {
         "title": "CCUS Simulace",
@@ -1534,6 +1551,115 @@
         "nextStepsDescription": "Zkuste vytvořit své první CCUS hodnocení nebo prozkoumejte interaktivní mapu.",
         "restartTour": "Restartovat Prohlídku",
         "restartTourDescription": "Tuto prohlídku můžete kdykoli restartovat z postranního panelu."
+      },
+      "dashboard": {
+        "tabsOverview": {
+          "title": "Filtrování podle stavu",
+          "description": "Tyto záložky filtrují vaše modely podle stavu, s živými počty pro každou skupinu."
+        },
+        "tabAll": {
+          "title": "Všechny modely",
+          "description": "Každá rodina modelů v tomto pracovním prostoru, s připnutými rodinami nahoře."
+        },
+        "tabPinned": {
+          "title": "Připnuté",
+          "description": "Modely, které jste připnuli. Připnutí libovolné verze udrží celou rodinu nahoře."
+        },
+        "tabRunning": {
+          "title": "Běžící",
+          "description": "Modely ve frontě, ve výpočtu, běžící nebo zpracovávané. Seznam se během běhu aktualizuje živě."
+        },
+        "tabCompleted": {
+          "title": "Dokončené",
+          "description": "Dokončené a publikované modely, připravené k otevření a prozkoumání."
+        },
+        "tabDrafts": {
+          "title": "Koncepty",
+          "description": "Koncepty a upravené modely, které ještě potřebují spustit."
+        },
+        "tabFailed": {
+          "title": "Selhaly",
+          "description": "Selhané nebo zrušené běhy. Prohlédněte si chybu a až budete připraveni, spusťte je znovu."
+        },
+        "search": {
+          "title": "Hledání a období",
+          "description": "Hledejte názvy modelů a filtrujte podle období simulace. Výsledky zahrnují i starší verze rodiny."
+        },
+        "familyRow": {
+          "title": "Jeden řádek na model",
+          "description": "Každý řádek je rodina modelů s původním modelem nahoře. Odznak verzí rozbalí kopie, od nejstarší."
+        },
+        "columns": {
+          "title": "Sloupce",
+          "description": "Poslední aktivita řadí nejprve běžící modely, poté naposledy dokončené. Období, oblast a riziko na první pohled."
+        },
+        "pin": {
+          "title": "Připnout modely",
+          "description": "Připněte model, aby jeho rodina zůstala nahoře v každé záložce."
+        },
+        "primaryAction": {
+          "title": "Hlavní akce",
+          "description": "Zobrazte dokončené modely nebo spusťte koncepty přímo z řádku."
+        },
+        "moreMenu": {
+          "title": "Další akce",
+          "description": "Upravte, kopírujte, stáhněte, sdílejte, přesuňte do pracovního prostoru nebo smažte z této nabídky."
+        },
+        "newBadge": {
+          "title": "Nové výsledky",
+          "description": "Nedávno dokončené modely, které jste ještě neotevřeli, jsou označeny jako nové."
+        },
+        "refresh": {
+          "title": "Obnovit, sdílet a kopírovat",
+          "description": "Obnovit znovu načte seznam modelů (běžící modely se obnovují i samy). Sdílet zpřístupní tento prostor vašemu týmu a Kopírovat jej zduplikuje i s modely."
+        }
+      },
+      "ui": {
+        "stepOf": "Krok {{current}} z {{total}}",
+        "skipTour": "Přeskočit prohlídku",
+        "finish": "Dokončit",
+        "whatsNew": "Nové",
+        "sections": {
+          "welcome": "Vítejte",
+          "navigation": "Navigace",
+          "dashboard": "Řídicí panel",
+          "tabs": "Záložky",
+          "rows": "Řádky",
+          "finish": "Dokončit",
+          "tools": "Nástroje"
+        },
+        "chips": {
+          "filters": "Filtry"
+        }
+      },
+      "workspace": {
+        "title": "Pracovní prostor",
+        "description": "Modely patří do pracovního prostoru. Zde prostor přepnete nebo vytvoříte nový pro organizaci projektů a sdílení s týmem."
+      },
+      "demo": {
+        "title": "Doprava CO₂ – Porúří",
+        "example": "Ukázka",
+        "justNow": "Právě teď"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Prohlédněte si otevřený zdrojový kód a nahlaste problémy na GitHubu."
+      },
+      "help": {
+        "title": "Nápověda",
+        "description": "Vše na jednom místě: otevřete dokumentaci, kdykoli znovu spusťte tohoto průvodce nebo nám pošlete zpětnou vazbu."
+      },
+      "language": {
+        "title": "Jazyk",
+        "description": "Změňte jazyk rozhraní. Vaše volba se uloží v tomto prohlížeči."
+      },
+      "notifications": {
+        "title": "Oznámení",
+        "description": "Zde uvidíte dokončené výpočty, sdílení a systémová oznámení."
+      },
+      "version": {
+        "title": "Co je nového",
+        "description": "Klikněte na číslo verze a zobrazte nejnovější funkce a vylepšení."
       }
     },
     "areaSelect": {
@@ -1577,10 +1703,6 @@
         "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
         "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
       },
-      "customData": {
-        "title": "Custom data",
-        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -1607,6 +1729,15 @@
         "description": "Vyberte zdroje a úložiště CO2, mezi nimiž model trasuje.",
         "tip": "Pro pokračování je potřeba alespoň jeden uzel.",
         "title": "Výběr uzlů"
+      },
+      "ui": {
+        "sections": {
+          "intro": "Úvod",
+          "setup": "Nastavení",
+          "map": "Mapa",
+          "layers": "Vrstvy",
+          "review": "Kontrola"
+        }
       }
     },
     "buttons": {
@@ -1687,42 +1818,6 @@
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
   },
-  "weather": {
-    "temperature": "Tep.",
-    "windSpeed": "Vítr",
-    "humidity": "Vlhk.",
-    "uvIndex": "UV",
-    "clickToRefresh": "Klikněte pro obnovení",
-    "clickToRetry": "Klikněte pro opakování",
-    "retry": "Opakovat",
-    "loadWeather": "Načíst počasí",
-    "clickToLoad": "Klikněte pro načtení počasí pro {{location}}",
-    "current": "Aktuální",
-    "searchLocation": "Vyhledat polohu...",
-    "yourLocations": "Vaše Polohy",
-    "syncing": "Synchronizace...",
-    "temperatureTooltip": "Aktuální teplota v Celsius a Fahrenheit",
-    "humidityTooltip": "Relativní vlhkost v procentech",
-    "uvLevels": {
-      "low": "Nízký",
-      "moderate": "Střední",
-      "high": "Vysoký",
-      "veryHigh": "Velmi Vysoký",
-      "extreme": "Extrémní"
-    },
-    "uvDescriptions": {
-      "low": "Ochrana není potřeba",
-      "moderate": "Používejte opalovací krém",
-      "high": "Ochrana nezbytná",
-      "veryHigh": "Potřeba extra ochrana",
-      "extreme": "Vyhněte se slunečnímu záření"
-    },
-    "dataBy": "Meteorologická data od",
-    "settings": "Nastavení počasí",
-    "title": "Informace o počasí",
-    "uvUnavailable": "Data UV nejsou k dispozici (noc)",
-    "windSpeedTooltip": "Jednotku změníte v Nastavení → Zobrazení dat."
-  },
   "settings": {
     "title": "Nastavení",
     "subtitle": "Přizpůsobte si svůj zážitek a preference",
@@ -1748,10 +1843,6 @@
     "language": {
       "title": "Jazyk",
       "subtitle": "Jazyk rozhraní"
-    },
-    "weatherLocation": {
-      "title": "Poloha Počasí",
-      "subtitle": "Výchozí počasí"
     },
     "mapLocation": {
       "title": "Poloha Mapy",
@@ -1931,9 +2022,6 @@
       "fields": {
         "fullName": "Celé Jméno",
         "email": "E-mailová Adresa",
-        "organization": "Organizace",
-        "position": "Pozice",
-        "phone": "Telefonní Číslo",
         "accessLevel": "Úroveň Přístupu",
         "emailVerified": "E-mail Ověřen",
         "password": "Heslo",
@@ -1943,8 +2031,6 @@
       "placeholders": {
         "fullName": "Zadejte celé jméno",
         "email": "Zadejte e-mailovou adresu",
-        "organization": "Zadejte název organizace",
-        "position": "Zadejte pracovní pozici",
         "password": "Zadejte heslo",
         "confirmPassword": "Potvrďte heslo",
         "modelLimit": "Ponechte prázdné pro výchozí hodnotu"
@@ -1960,7 +2046,6 @@
         "expert": "Expert (Plný Přístup)"
       },
       "validation": {
-        "phoneInvalid": "Telefonní číslo může obsahovat pouze číslice, mezery, pomlčky, znaménka plus a závorky",
         "passwordLength": "Heslo musí mít alespoň 8 znaků",
         "nameRequired": "Jméno je povinné",
         "emailRequired": "E-mail je povinný",
@@ -2118,17 +2203,13 @@
       "greeting": "Vítejte na platformě pro CCUS simulaci!",
       "intro": "Věnujme chvíli nastavení vašich preferencí. To nám pomůže přizpůsobit váš zážitek a poskytnout vám nejrelevantnější informace.",
       "step1": "Vyberte svůj preferovaný jazyk",
-      "step2": "Nastavte preference počasí a mapy",
+      "step2": "Nastavte předvolby mapy a oznámení",
       "step3": "Nakonfigurujte nastavení oznámení",
       "timeNote": "Bude to trvat jen minutu"
     },
     "language": {
       "title": "Jazyková preference",
       "description": "Vyberte svůj preferovaný jazyk pro aplikaci"
-    },
-    "weather": {
-      "title": "Preference počasí",
-      "description": "Nastavte preferované umístění pro informace o počasí"
     },
     "map": {
       "title": "Preference mapy",
@@ -2174,6 +2255,7 @@
       "platform": "Platforma",
       "infrastructure": "Infrastruktura",
       "howItWorks": "Jak to funguje",
+      "caseStudy": "Případová studie",
       "personas": "Pro koho",
       "contact": "Kontakt",
       "signIn": "Přihlásit se",
@@ -2181,45 +2263,57 @@
     },
     "hero": {
       "badge": "Výzkumný projekt CCUS Horizon financovaný EU",
-      "title1": "Urychlete zachytávání uhlíku napříč Evropou",
-      "titleHighlight": "inteligence CCUS",
-      "subtitle": "Mapujte průmyslové emise, modelujte optimální potrubní a lodní přepravní sítě, hodnoťte geologická úložiště a urychlete průmyslovou dekarbonizaci napříč Evropou.",
+      "title1": "Hodnoťte projekty CCU v",
+      "titleHighlight": "Německu, Norsku a Nizozemsku",
+      "subtitle": "Mapujte průmyslové emise, modelujte optimální potrubní a lodní přepravní sítě a hodnoťte geologická úložiště — hodnocení projektů CCU v Německu, Norsku a Nizozemsku.",
       "getStarted": "Spustit hodnocení CCUS",
       "seeHow": "Podívejte se, jak to funguje",
+      "publicNote": "Vše na této stránce je veřejné — účet není potřeba. Přihlaste se jen pro vytváření a spouštění vlastních hodnocení; sem se kdykoli vrátíte přes logo STORCITO.",
       "metricSites": "Zmapované zdroje emisí",
       "metricStorage": "Katalogizované roční CO₂",
       "metricNetwork": "Pokryté obce",
       "metricCost": "Země"
     },
+    "caseStudy": {
+      "eyebrow": "Případová studie",
+      "title": "Projekty CCU v Německu, Norsku a Nizozemsku",
+      "description": "Platforma je postavena na případové studii STORE_CO2: hodnocení projektů zachytávání a využití uhlíku (CCU) ve třech zemích, pro které projekt poskytuje data — Německu, Norsku a Nizozemsku. Průmyslové zdroje CO₂ a místa skladování či využití pocházejí z katalogu STORE_CO2 a náklady na zachytávání odpovídají jeho scénářovým horizontům od 2025–2030 do 2050. Platforma směruje zachycené CO₂ mezi lokalitami potrubím, nákladní dopravou nebo železnicí a nacení celý řetězec na tunu.",
+      "germanyTitle": "Německo",
+      "germanyDesc": "Průmyslové bodové zdroje a možnosti využití v největší emitující ekonomice Evropy.",
+      "norwayTitle": "Norsko",
+      "norwayDesc": "Námořní geologické skladování v severomořských akviférech a vyčerpaných ložiscích.",
+      "netherlandsTitle": "Nizozemsko",
+      "netherlandsDesc": "Průmyslové clustery kolem Rotterdamu s potrubním a lodním napojením."
+    },
     "challenge": {
       "eyebrow": "Výzva dekarbonizace",
-      "title": "Řešení evropské průmyslové dekarbonizace",
-      "description": "Přechod těžkého průmyslu na čistou nulu vyžaduje řešení složitých prostorových, logistických a ekonomických výzev napříč evropskými hranicemi.",
+      "title": "Výzva hodnocení projektů CCU",
+      "description": "Každé hodnocení musí spárovat tisíce emisních zdrojů s vhodnými úložišti nebo místy využití, nasměrovat mezi nimi CO₂ a nacenit celý řetězec na tunu.",
       "card1Title": "Průmyslové bodové zdroje",
-      "card1Desc": "Těžký průmysl (cement, ocel, chemie) tvoří přes 25 % evropských emisí a vyžaduje rychlé zavedení zachytávání.",
-      "card2Title": "Složitá přepravní logistika",
-      "card2Desc": "Propojení vnitrozemských průmyslových klastrů s pobřežním úložištěm vyžaduje kombinaci vysokotlakých potrubí a sítí lodí LCO₂.",
-      "card3Title": "Párování geologických úložišť",
-      "card3Desc": "Zajištění dlouhodobé těsnosti a sladění ročních objemů zachytávání s limity vtláčení pobřežních zvodní.",
-      "card4Title": "Ekonomická optimalizace",
-      "card4Desc": "Výpočet nivelizovaných nákladů na vyhnuté CO₂ (€/t CO₂) zahrnující CAPEX, energii komprese, lodní charter a uhlíkové daně."
+      "card1Desc": "14 641 průmyslových zdrojů CO₂ v Německu, Norsku a Nizozemsku — každý s vlastními emisemi, odvětvím a obdobím provozu.",
+      "card2Title": "Přepravní logistika",
+      "card2Desc": "Zachycené CO₂ musí putovat od zdroje k úložišti — potrubím, kamionem nebo železnicí — každý způsob má zcela jiné náklady.",
+      "card3Title": "Párování zdroj–úložiště",
+      "card3Desc": "Každá tuna potřebuje kompatibilní úložiště: spárované podle objemu, vzdálenosti a let provozu obou lokalit.",
+      "card4Title": "Náklady celého řetězce",
+      "card4Desc": "Zachytávání, zkapalnění, přeprava a skladování přidávají € na tunu — a náklady se mění se scénářovým rokem 2025–2050."
     },
     "features": {
       "label": "Možnosti platformy",
       "title": "Vše pro plánování CCUS a optimalizaci tras",
-      "description": "Komplexní geoprostorová sada nástrojů pro modelování zachytávání uhlíku, přepravní logistiky CO₂ a geologických úložišť.",
+      "description": "Geoprostorová sada nástrojů postavená na katalogu STORE_CO2: zdroje, úložiště, trasování a náklady celého řetězce pro Německo, Norsko a Nizozemsko.",
       "f1Title": "Interaktivní geoprostorová mapa",
-      "f1Desc": "Vizualizujte zdroje emisí, potrubní koridory, lodní trasy a úložiště na jedné interaktivní mapě.",
+      "f1Desc": "Vizualizujte 14 641 zdrojů emisí, úložišť a míst využití a kandidátských tras na jedné interaktivní mapě.",
       "f2Title": "Párování zdroj–úložiště",
-      "f2Desc": "Přiřaďte průmyslové emitenty CO₂ k vhodnému geologickému úložišti podle kapacity, vzdálenosti a nákladů.",
+      "f2Desc": "Přiřaďte průmyslové emitenty CO₂ k vhodným úložištím či místům využití podle objemu, vzdálenosti a období provozu.",
       "f3Title": "Optimalizace tras",
-      "f3Desc": "Modelujte potrubní a lodní koridory a vypočítejte nejlevnější, uhlíkově optimální trasování a dimenzování.",
-      "f4Title": "Analytika úložišť",
-      "f4Desc": "Hodnoťte hluboké solné zvodně a vytěžená ropná a plynová pole z hlediska kapacity, tlakových limitů a rychlosti vtláčení.",
+      "f3Desc": "CO2RouteX vypočítá jednu trasu pro každou dvojici zdroj–úložiště — potrubím, kamionem nebo železnicí — se vzdáleností a náklady na tunu.",
+      "f4Title": "Katalog úložišť",
+      "f4Desc": "Procházejte úložiště a místa využití s roční poptávkou (kt CO₂/rok) a kapacitami (Mt CO₂) z datové sady STORE_CO2.",
       "f5Title": "Zprávy o nákladech a CO₂",
-      "f5Desc": "Nivelizované náklady na vyhnuté CO₂ (€/t) s rozpisem CAPEX, komprese a přepravy a Sankeyovými diagramy toků.",
+      "f5Desc": "Náklady na zachytávání, zkapalnění, přepravu a skladování na tunu — rozpětí napříč scénáři 2025–2050, plus sešit ke stažení.",
       "f6Title": "Sdílené pracovní prostory",
-      "f6Desc": "Sdílejte modely, porovnávejte scénáře a spolupracujte s regionálními konsorcii na plánech dekarbonizace."
+      "f6Desc": "Sdílejte modely, porovnávejte scénáře a spolupracujte ve sdílených pracovních prostorech."
     },
     "infrastructure": {
       "eyebrow": "Hodnotový řetězec CCUS",
@@ -2227,57 +2321,57 @@
       "description": "Zachytávání, přeprava, ukládání a využití — modelováno od začátku do konce, aby byl každý projekt plánován jako úplný hodnotový řetězec.",
       "c1Subtitle": "Zachytávání u zdroje",
       "c1Title": "Zachytávání uhlíku",
-      "c1Desc": "Zachytávejte CO₂ v cementárnách, ocelárnách, chemických závodech a elektrárnách pomocí post-combustion a dalších ověřených technologií.",
-      "c1Spec1": "Zachytávání post-combustion a oxy-fuel",
-      "c1Spec2": "Modelování objemu a čistoty spalin",
-      "c1Spec3": "Míra zachytávání vs. energetická penalizace",
-      "c1Spec4": "Hodnocení proveditelnosti modernizace",
-      "c2Subtitle": "Potrubí a loď",
+      "c1Desc": "Náklady na zachytávání pro každý provoz z STORE_CO2 — podle odvětví a aplikace, s mírou zachytávání a náklady na tunu.",
+      "c1Spec1": "Aplikace zachytávání podle odvětví",
+      "c1Spec2": "Míra zachytávání pro každý provoz",
+      "c1Spec3": "Náklady na zachytávání (€2024/t)",
+      "c1Spec4": "Od first-of-a-kind po nth-of-a-kind",
+      "c2Subtitle": "Potrubí, kamion a železnice",
       "c2Title": "Přeprava CO₂",
-      "c2Desc": "Přepravujte zachycené CO₂ z vnitrozemských klastrů do úložiště vysokotlakými potrubími a loděmi se zkapalněným CO₂.",
-      "c2Spec1": "Průměr potrubí a dimenzování tlaku",
-      "c2Spec2": "Námořní trasy LCO₂",
-      "c2Spec3": "Energie komprese a zkapalňování",
-      "c2Spec4": "Nejlevnější trasování koridorů",
+      "c2Desc": "Směrujte zachycené CO₂ od zdrojů k úložištím — potrubím, kamionem nebo železnicí, jedna trasa pro každou dvojici zdroj–úložiště.",
+      "c2Spec1": "CAPEX potrubí podle trasy a terénu (€2021)",
+      "c2Spec2": "Kilometrické tarify pro kamion a železnici",
+      "c2Spec3": "Železniční trasování ze stanice do stanice",
+      "c2Spec4": "Zkapalnění u emitenta pro silnici a koleje",
       "c3Subtitle": "Geologické ukládání",
       "c3Title": "Ukládání CO₂",
-      "c3Desc": "Hodnoťte pobřežní a pevninská úložiště pro bezpečné a trvalé geologické uzavření vtláčeného CO₂.",
-      "c3Spec1": "Solné zvodně a vytěžená pole",
-      "c3Spec2": "Limity vtláčení a tlaku",
-      "c3Spec3": "Kontroly těsnosti uzavření",
-      "c3Spec4": "Sladění roční kapacity",
+      "c3Desc": "Přiřaďte zachycené objemy úložištím se známou kapacitou a ročními limity.",
+      "c3Spec1": "Kapacita úložiště na lokalitu (Mt)",
+      "c3Spec2": "Roční míry (kt CO₂/rok)",
+      "c3Spec3": "Náklady na skladování na tunu",
+      "c3Spec4": "Pozemní i námořní lokality",
       "c4Subtitle": "Využití CO₂",
       "c4Title": "Zhodnocení uhlíku",
-      "c4Desc": "Přeměňujte zachycené CO₂ na e-paliva, chemikálie, stavební materiály a další hodnotné produkty.",
-      "c4Spec1": "E-paliva a syntetické chemikálie",
-      "c4Spec2": "Mineralizace a stavební materiály",
-      "c4Spec3": "Cesty zvýšené těžby",
+      "c4Desc": "Směrujte CO₂ k poptávce po využití — skleníky, močovina, CCU chemikálie a další — a porovnejte se skladováním.",
+      "c4Spec1": "Poptávka po využití na lokalitu (kt/rok)",
+      "c4Spec2": "Skleníky, pivovary a chemie",
+      "c4Spec3": "Močovina a mineralizace",
       "c4Spec4": "Využití vs. ukládání"
     },
     "howItWorks": {
       "label": "Postup ve 4 krocích",
       "title": "Od dat lokality k provozní síti CCUS",
       "description": "Navrhujte, optimalizujte a nasazujte infrastrukturu zachytávání a ukládání uhlíku ve čtyřech krocích.",
-      "s1Title": "1. Vyberte region",
-      "s1Desc": "Nakreslete nebo vyberte oblast na mapě. Emitenti, úložiště a stávající infrastruktura se načtou automaticky.",
-      "s2Title": "2. Nakonfigurujte řetězec",
-      "s2Desc": "Přiřaďte zachytávání k emitentům a poté zvolte potrubní koridory, lodní terminály a kandidátská úložiště.",
-      "s3Title": "3. Optimalizujte trasy",
-      "s3Desc": "Spusťte optimalizační engine pro výpočet nejlevnějšího trasování, kapacity sítě a potřeb komprese.",
-      "s4Title": "4. Analyzujte a sdílejte",
-      "s4Desc": "Prozkoumejte mapy, diagramy toků CO₂ a nivelizované náklady (€/t CO₂), exportujte zprávy a sdílejte scénáře."
+      "s1Title": "1. Název a období",
+      "s1Desc": "Pojmenujte model a zvolte hodnotící období — scénářové horizonty sahají od 2025–2030 do 2050.",
+      "s2Title": "2. Výběr uzlů",
+      "s2Desc": "Vyberte zdroje a úložiště CO₂ v Německu, Norsku a Nizozemsku z katalogu STORE_CO2.",
+      "s3Title": "3. Trasy a náklady",
+      "s3Desc": "CO2RouteX propojí uzly potrubím, nákladní dopravou nebo železnicí a nacení každou trasu na tunu.",
+      "s4Title": "4. Zkontrolovat a spustit",
+      "s4Desc": "Zkontrolujte nastavení, uložte model a spusťte výpočet — pak prozkoumejte mapy, toky a náklady a sdílejte scénáře."
     },
     "personas": {
       "eyebrow": "Pro koho je určena",
-      "title": "Navrženo pro celý ekosystém CCUS",
+      "title": "Navrženo pro hodnotový řetězec CCU",
       "p1Title": "Průmysloví emitenti",
-      "p1Desc": "Cementárny, ocelárny, chemické závody a elektrárny hodnotící proveditelnost zachytávání a regionální páteřní připojení.",
+      "p1Desc": "Cementárny, ocelárny, chemické závody a elektrárny v Německu, Norsku a Nizozemsku, které hodnotí náklady na zachytávání a možnosti využití svých provozů.",
       "p2Title": "Vývojáři potrubí a logistiky",
-      "p2Desc": "Trasujte vysokotlaké páteřní vedení CO₂, dimenzujte kompresní stanice a optimalizujte lodní charter.",
-      "p3Title": "Provozovatelé úložišť",
-      "p3Desc": "Analyzujte hluboké solné zvodně Severního moře, Baltu a Středomoří z hlediska limitů vtláčení.",
+      "p2Desc": "Porovnejte potrubní, kamionové a železniční spoje mezi zdroji a úložišti CO₂ — s náklady na tunu pro každou trasu.",
+      "p3Title": "Provozovatelé úložišť a využití",
+      "p3Desc": "Zjistěte, kteří emitenti by mohli směrovat zachycené CO₂ na vaše úložiště nebo místo využití — a kolik by stál celý řetězec.",
       "p4Title": "Tvůrci politik a konsorcia",
-      "p4Desc": "Simulujte regionální plány čisté nuly, přeshraniční pravidla přepravy CO₂ a soulad s taxonomií EU."
+      "p4Desc": "Prozkoumejte scénáře CCU od 2025–2030 do 2050 a porovnejte možnosti rozvoje ve třech zemích případové studie."
     },
     "trust": {
       "euTitle": "Financováno Evropskou unií",
@@ -2314,7 +2408,7 @@
       "brandDescription": "Pokročilá platforma pro plánování CCUS pro udržitelnou budoucnost. Financováno Evropskou unií.",
       "privacySettings": "Nastavení soukromí",
       "privacyPolicy": "Zásady ochrany osobních údajů",
-      "tagline": "Urychlujeme zachytávání, přepravu a ukládání uhlíku napříč Evropou.",
+      "tagline": "Hodnocení projektů zachytávání, přepravy a ukládání uhlíku v Německu, Norsku a Nizozemsku.",
       "cookies": "Zásady používání cookies",
       "impressum": "Impressum",
       "terms": "Obchodní podmínky",
@@ -2384,7 +2478,7 @@
   "configurator": {
     "registry": {
       "layer1Title": "Model Initialization",
-      "layer1Subtitle": "Name and simulation timeframe",
+      "layer1Subtitle": "Název a období hodnocení",
       "layer2Title": "Výběr uzlů",
       "layer2Subtitle": "Vyberte zdroje a úložiště CO₂",
       "layer3Title": "Trasy",
@@ -2416,9 +2510,9 @@
     },
     "layer1": {
       "purpose": "Name this analysis run and choose the date window you want to assess.",
-      "nextStepHint": "Next you'll outline the geographic area on the map.",
+      "nextStepHint": "Dále vyberete zdroje a propady CO₂.",
       "modelNameLabel": "Model name",
-      "modelNamePlaceholder": "e.g. Sample Area Summer 2026",
+      "modelNamePlaceholder": "např. Ukládání Porýní–Porúří 2030–2040",
       "modelNameHint": "A descriptive name so you can find this model later.",
       "dynamicHint": "Dynamic runs keep the selected date range and use the 16:00 to 17:00 window.",
       "dynamicLoading": "Loading available dynamic dates...",
@@ -2431,7 +2525,7 @@
       "suggestedName1": "Regionální hodnocení CO₂",
       "suggestedName2": "Studie průmyslového klastru",
       "suggestedName3": "Screening úložných lokalit",
-      "suggestedName4": "Čtvrtletní výhled zachytávání",
+      "suggestedName4": "Venkovský CO₂ hub",
       "modelNameQuestion": "Jak chcete tento model pojmenovat?",
       "periodQuestion": "Jaké období se má vyhodnotit?",
       "assessmentPeriod": "Období hodnocení"
@@ -2447,9 +2541,6 @@
       "purpose": "CO2RouteX prověří vybrané uzly na možná spojení, poté je trasuje a spočítá náklady.",
       "nextStepHint": "Dále uvidíte, kolik tyto trasy stojí.",
       "customData": "Custom data (optional)",
-      "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
-      "weatherStationData": "Weather station data",
-      "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
       "lockedByPrecomputed": "Zahrnuto v předpočítané regionální mapě. Vypněte přepínač výše, chcete-li vrstvy upravit.",
       "precomputedLabel": "Předpočítaná regionální mapa",
       "precomputedInfoLabel": "O předpočítané regionální mapě",
@@ -2472,7 +2563,6 @@
       "uploadIncomplete": "GeoJSON upload incomplete.",
       "areaDetails": "{{count}} regions · {{area}}",
       "areaDetailsSingle": "1 region · {{area}}",
-      "allSignalsActive": "All risk signals active (weather + terrain + history).",
       "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
       "bufferDistance": "{{buffer}} m around the AOI.",
       "blockers": "{{count}} blockers — fix before running.",
@@ -2503,13 +2593,11 @@
         "modelName": "Model name",
         "from": "From",
         "to": "To",
-        "dailyRun": "Daily run",
         "buffer": "Buffer",
         "area": "Area",
         "riskComponents": "Risk components",
         "nodes": "Uzly"
-      },
-      "dailyRunInfo": "Každý simulovaný den se vyhodnocuje počasím z tohoto okna — z nejteplejší a nejsušší části odpoledne."
+      }
     },
     "coverage": {
       "title": "Data coverage",
@@ -2709,5 +2797,72 @@
     "search": "Hledat zdroje",
     "status": "Stav",
     "yes": "Ano"
+  },
+  "whatsNew": {
+    "open": "Co je nového v této verzi",
+    "title": "Co je nového",
+    "version": "Verze {{version}}",
+    "released": "Vydáno {{date}}",
+    "intro": "Přehled nejnovějších funkcí, vylepšení a oprav v tomto vydání.",
+    "where": "Kde",
+    "viewAll": "Všechny změny na GitHubu",
+    "close": "Rozumím",
+    "groups": {
+      "new": "Nové",
+      "improved": "Vylepšené",
+      "fixed": "Opravené"
+    },
+    "items": {
+      "families": {
+        "title": "Seskupené verze modelů",
+        "description": "Každý model se nyní zobrazí jen jednou a jeho kopie jsou seskupeny pod ním. Původní model zůstává nahoře a odznak verzí rozbalí kopie, od nejstarší.",
+        "where": "Panel modelů → seznam modelů"
+      },
+      "tabs": {
+        "title": "Karty stavů",
+        "description": "Přepínejte mezi Vše, Připnuté, Běžící, Dokončené, Koncepty a Neúspěšné. Vyhledávání a filtr období fungují v každé kartě.",
+        "where": "Panel modelů → nad seznamem"
+      },
+      "pinning": {
+        "title": "Připnutí modelů",
+        "description": "Připnutý model zůstane nahoře v seznamu. Připnutí libovolné verze drží nahoře celou rodinu a karta Připnuté je shromažďuje na jednom místě.",
+        "where": "Řádek modelu → ikona připnutí"
+      },
+      "newBadge": {
+        "title": "Odznak nových výsledků",
+        "description": "Nedávno dokončené modely dostanou odznak Nové. Najeďte na něj a uvidíte, kdy výpočet skončil.",
+        "where": "Řádek modelu → vedle názvu"
+      },
+      "acceptance": {
+        "title": "Vrstva veřejného přijetí",
+        "description": "Obarví mapu podle podílu venkovských obyvatel, kteří podporují nebo odmítají jednotlivá využití CCUS (průzkum RUB). Kliknutím na region zobrazíte jeho výsledky, nejdůležitější faktory a návrhy pro komunikaci.",
+        "where": "Nový model → mapa v kroku 2"
+      },
+      "siteCard": {
+        "title": "Karta lokality na mapě",
+        "description": "Kliknutím na bod zdroje emisí nebo úložiště zobrazíte jeho typ, polohu a emise, přidáte jej do modelu nebo odeberete, případně otevřete podrobnosti.",
+        "where": "Nový model → mapa v kroku 2"
+      },
+      "tour": {
+        "title": "Přepracovaný průvodce",
+        "description": "Průvodce vás krok za krokem provede panelem, mapou a nástroji, s tečkami sekcí a ovládáním šipkami.",
+        "where": "Nápověda → Restartovat průvodce"
+      },
+      "sinks": {
+        "title": "Úložiště a místa využití",
+        "description": "Katalog uzlů nyní obsahuje úložiště a místa využití CO₂ včetně jejich regionů a let provozu.",
+        "where": "Nový model → krok 2 → kategorie úložišť"
+      },
+      "period": {
+        "title": "Hodnoticí období",
+        "description": "Modely nyní pokrývají celé roky. Zařízení se započítávají jen v letech, kdy v daném období fungují.",
+        "where": "Nový model → krok 1"
+      },
+      "workspaceMenu": {
+        "title": "Nabídka pracovních prostorů",
+        "description": "Seznam pracovních prostorů se nyní otevírá celý nad kartami stavů a seznamem modelů.",
+        "where": "Přehled modelů → výběr pracovního prostoru"
+      }
+    }
   }
 }

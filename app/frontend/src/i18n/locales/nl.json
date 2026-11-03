@@ -155,6 +155,7 @@
       "moveToWorkspace": "Verplaatsen naar Werkruimte",
       "profile": "Profiel",
       "documentation": "Documentatie",
+      "howItWorks": "Hoe het werkt",
       "restartTour": "Tour herstarten",
       "feedback": "Feedback",
       "theme": "Thema",
@@ -681,13 +682,6 @@
       "specialChar": "Eén speciaal teken",
       "hasSpaces": "Wachtwoord bevat spaties aan het begin of einde"
     },
-    "organizationDetails": "Organisatiegegevens",
-    "organization": "Organisatie",
-    "enterOrganization": "Voer uw organisatie in",
-    "position": "Functie",
-    "enterPosition": "Voer uw functie in",
-    "phoneNumber": "Telefoonnummer",
-    "enterPhoneNumber": "Voer uw telefoonnummer in",
     "accessLevel": "Toegangsniveau",
     "veryLow": "Zeer Laag",
     "low": "Laag",
@@ -710,11 +704,15 @@
     "agreeToTerms": "Door een account aan te maken, gaat u akkoord met onze Servicevoorwaarden",
     "signInHere": "Sign in here",
     "sidePanel": {
-      "badge": "CCUS intelligence",
+      "badge": "CCUS assessment",
       "title": "Accelerate carbon capture before emissions escalate",
       "subtitle": "Map, model and act on CCUS projects — turning site data and geospatial insight into safe, scalable carbon capture, utilisation and storage across Europe.",
       "funded": "Gefinancierd door de Europese Unie · Gebouwd op het STORCITO-platform"
-    }
+    },
+    "consentText": "Ik geef toestemming voor de verwerking en opslag van mijn persoonsgegevens in overeenstemming met de",
+    "declarationOfConsent": "Toestemmingsverklaring",
+    "and": "en",
+    "privacyPolicy": "Privacybeleid"
   },
   "workspace": {
     "workspace": "Werkruimte",
@@ -842,7 +840,34 @@
     "peopleWithAccessDescription": "De personen in deze lijst kunnen dit model en de bijbehorende risicolagen openen.",
     "revokeAccess": "Intrekken",
     "revokingAccess": "Bezig met intrekken…",
-    "revokeAccessFor": "Toegang intrekken voor {{email}}"
+    "revokeAccessFor": "Toegang intrekken voor {{email}}",
+    "tabs": {
+      "all": "Alle",
+      "pinned": "Vastgezet",
+      "running": "Actief",
+      "completed": "Voltooid",
+      "drafts": "Concepten",
+      "failed": "Mislukt"
+    },
+    "area": "Gebied",
+    "period": "Periode",
+    "lastActivity": "Laatste activiteit",
+    "pin": "Bovenaan vastzetten",
+    "unpin": "Losmaken",
+    "recentlyCompleted": "Nieuw",
+    "recentlyCompletedTooltip": "Voltooid op {{time}}. Open het om de resultaten te bekijken.",
+    "versions_one": "{{count}} versie",
+    "versions_other": "{{count}} versies",
+    "showVersions_one": "{{count}} versie tonen",
+    "showVersions_other": "{{count}} versies tonen",
+    "hideVersions_one": "{{count}} versie verbergen",
+    "hideVersions_other": "{{count}} versies verbergen",
+    "originalVersion": "Origineel",
+    "originalVersionHint": "Deze rij is het originele model. Status, periode en activiteit horen bij dit model; elke versie heeft een eigen rij.",
+    "estimateBasis_one": "Op basis van 1 vergelijkbare run, die {{typical}} duurde",
+    "estimateBasis_other": "Op basis van {{count}} vergelijkbare runs, die meestal {{typical}} duren",
+    "view": "Bekijken",
+    "run": "Starten"
   },
   "polygon": {
     "drawRegion": "Teken je regio",
@@ -945,10 +970,7 @@
     "userProfile": {
       "title": "Gebruikersprofiel",
       "subtitle": "Uw accountinformatie",
-      "email": "E-mail",
-      "organization": "Organisatie",
-      "position": "Functie",
-      "phone": "Telefoon"
+      "email": "E-mail"
     },
     "accessPermissions": {
       "title": "Toegang & Machtigingen",
@@ -992,7 +1014,7 @@
   "userManagement": {
     "title": "Gebruikersbeheer",
     "subtitle": "Beheer gebruikers, groepen en machtigingen",
-    "searchPlaceholder": "Zoek naam, e-mail, organisatie...",
+    "searchPlaceholder": "Zoek naam of e-mail...",
     "refresh": "Vernieuwen",
     "addNewUser": "Nieuwe gebruiker toevoegen",
     "add": "Toevoegen",
@@ -1013,12 +1035,9 @@
     },
     "table": {
       "user": "Gebruiker",
-      "organization": "Organisatie",
-      "position": "Functie",
       "accessLevel": "Toegangsniveau",
       "group": "Groep",
       "emailVerified": "E-mail geverifieerd",
-      "phone": "Telefoon",
       "actions": "Acties"
     },
     "emailStatus": {
@@ -1163,16 +1182,10 @@
     "saveChanges": "Wijzigingen opslaan",
     "fields": {
       "fullName": "Volledige naam",
-      "email": "E-mailadres",
-      "organization": "Organisatie",
-      "position": "Functie",
-      "phone": "Telefoonnummer"
+      "email": "E-mailadres"
     },
     "placeholders": {
-      "fullName": "Voer uw volledige naam in",
-      "organization": "Uw bedrijf of organisatie",
-      "position": "Uw functietitel",
-      "phone": "+31 6 12345678"
+      "fullName": "Voer uw volledige naam in"
     },
     "accessLevels": {
       "basic": "Basis",
@@ -1499,8 +1512,8 @@
         "description": "Toegang tot uw profiel, accountinstellingen en gebruikersvoorkeuren. Beheer uw account en extra opties."
       },
       "navigation": {
-        "title": "Dashboard Navigatie",
-        "description": "Toegang tot uw hoofddashboard om uw projecten, recente beoordelingen en algemene statistieken te bekijken. Dit is uw thuisbasis."
+        "title": "Beheerdashboard",
+        "description": "Beheer werkruimtes, gebruikers en alle modellen op het platform. Alleen zichtbaar voor beheerders."
       },
       "simulations": {
         "title": "CCUS-simulaties",
@@ -1534,6 +1547,115 @@
         "nextStepsDescription": "Probeer uw eerste CCUS-beoordeling te maken of verken de interactieve kaart.",
         "restartTour": "Rondleiding Herstarten",
         "restartTourDescription": "U kunt deze rondleiding op elk moment herstarten vanuit de zijbalk."
+      },
+      "dashboard": {
+        "tabsOverview": {
+          "title": "Filteren op status",
+          "description": "Deze tabbladen filteren uw modellen op status, met live tellingen voor elke groep."
+        },
+        "tabAll": {
+          "title": "Alle modellen",
+          "description": "Elke modelfamilie in deze werkruimte, met vastgepinde families bovenaan."
+        },
+        "tabPinned": {
+          "title": "Vastgepind",
+          "description": "Modellen die u heeft vastgepind. Eén versie pinnen houdt de hele familie bovenaan."
+        },
+        "tabRunning": {
+          "title": "Actief",
+          "description": "Modellen in de wachtrij, in berekening, actief of in verwerking. De lijst wordt live bijgewerkt terwijl ze lopen."
+        },
+        "tabCompleted": {
+          "title": "Voltooid",
+          "description": "Voltooide en gepubliceerde modellen, klaar om te openen en te verkennen."
+        },
+        "tabDrafts": {
+          "title": "Concepten",
+          "description": "Concepten en gewijzigde modellen die nog uitgevoerd moeten worden."
+        },
+        "tabFailed": {
+          "title": "Mislukt",
+          "description": "Mislukte of geannuleerde runs. Bekijk de foutmelding en voer opnieuw uit wanneer u klaar bent."
+        },
+        "search": {
+          "title": "Zoeken & periode",
+          "description": "Zoek in modeltitels en filter op simulatieperiode. Resultaten omvatten ook oudere versies van een familie."
+        },
+        "familyRow": {
+          "title": "Eén rij per model",
+          "description": "Elke rij is een modelfamilie met het oorspronkelijke model bovenaan. De versiebadge klapt de kopieën uit, oudste eerst."
+        },
+        "columns": {
+          "title": "Kolommen",
+          "description": "Laatste activiteit toont eerst actieve modellen, daarna de meest recent afgeronde. Periode, gebied en risico in één oogopslag."
+        },
+        "pin": {
+          "title": "Modellen pinnen",
+          "description": "Pin een model om zijn familie bovenaan elk tabblad te houden."
+        },
+        "primaryAction": {
+          "title": "Primaire actie",
+          "description": "Open voltooide modellen of voer concepten direct vanuit de rij uit."
+        },
+        "moreMenu": {
+          "title": "Meer acties",
+          "description": "Bewerken, kopiëren, downloaden, delen, verplaatsen naar een werkruimte of verwijderen via dit menu."
+        },
+        "newBadge": {
+          "title": "Nieuwe resultaten",
+          "description": "Recent voltooide modellen die u nog niet heeft geopend, worden als nieuw gemarkeerd."
+        },
+        "refresh": {
+          "title": "Vernieuwen, delen en kopiëren",
+          "description": "Vernieuwen laadt de modellenlijst opnieuw (lopende modellen worden ook vanzelf bijgewerkt). Delen geeft je team toegang tot deze werkruimte en Kopiëren dupliceert hem met zijn modellen."
+        }
+      },
+      "ui": {
+        "stepOf": "Stap {{current}} van {{total}}",
+        "skipTour": "Rondleiding overslaan",
+        "finish": "Afronden",
+        "whatsNew": "Nieuw",
+        "sections": {
+          "welcome": "Welkom",
+          "navigation": "Navigatie",
+          "dashboard": "Dashboard",
+          "tabs": "Tabbladen",
+          "rows": "Rijen",
+          "finish": "Afronden",
+          "tools": "Hulpmiddelen"
+        },
+        "chips": {
+          "filters": "Filters"
+        }
+      },
+      "workspace": {
+        "title": "Werkruimte",
+        "description": "Modellen horen bij een werkruimte. Wissel hier van werkruimte of maak een nieuwe om projecten te ordenen en met je team te delen."
+      },
+      "demo": {
+        "title": "CO₂-transport – Ruhrgebied",
+        "example": "Voorbeeld",
+        "justNow": "Zojuist"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Bekijk de open-sourcecode en meld problemen op GitHub."
+      },
+      "help": {
+        "title": "Help",
+        "description": "Alles op één plek: open de documentatie, start deze rondleiding op elk moment opnieuw of stuur ons feedback."
+      },
+      "language": {
+        "title": "Taal",
+        "description": "Wijzig de taal van de interface. Je keuze wordt in deze browser opgeslagen."
+      },
+      "notifications": {
+        "title": "Meldingen",
+        "description": "Hier zie je voltooide berekeningen, gedeelde items en systeemmeldingen."
+      },
+      "version": {
+        "title": "Wat is er nieuw",
+        "description": "Klik op het versienummer om de nieuwste functies en verbeteringen te zien."
       }
     },
     "areaSelect": {
@@ -1577,10 +1699,6 @@
         "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
         "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
       },
-      "customData": {
-        "title": "Custom data",
-        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -1607,6 +1725,15 @@
         "description": "Kies de CO2-bronnen en -putten waartussen het model routeert.",
         "tip": "Er is minstens één knooppunt nodig voordat het model verder kan.",
         "title": "Knooppuntselectie"
+      },
+      "ui": {
+        "sections": {
+          "intro": "Intro",
+          "setup": "Instellen",
+          "map": "Kaart",
+          "layers": "Lagen",
+          "review": "Controleren"
+        }
       }
     },
     "buttons": {
@@ -1687,42 +1814,6 @@
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
   },
-  "weather": {
-    "temperature": "Temp.",
-    "windSpeed": "Wind",
-    "humidity": "Vocht.",
-    "uvIndex": "UV",
-    "clickToRefresh": "Klik om te vernieuwen",
-    "clickToRetry": "Klik om opnieuw te proberen",
-    "retry": "Opnieuw",
-    "loadWeather": "Weer laden",
-    "clickToLoad": "Klik om weer te laden voor {{location}}",
-    "current": "Huidig",
-    "searchLocation": "Zoek locatie...",
-    "yourLocations": "Uw Locaties",
-    "syncing": "Synchroniseren...",
-    "temperatureTooltip": "Huidige temperatuur in Celsius en Fahrenheit",
-    "humidityTooltip": "Relatieve luchtvochtigheid percentage",
-    "uvLevels": {
-      "low": "Laag",
-      "moderate": "Matig",
-      "high": "Hoog",
-      "veryHigh": "Zeer Hoog",
-      "extreme": "Extreem"
-    },
-    "uvDescriptions": {
-      "low": "Geen bescherming nodig",
-      "moderate": "Gebruik zonnebrandcrème",
-      "high": "Bescherming essentieel",
-      "veryHigh": "Extra bescherming nodig",
-      "extreme": "Vermijd blootstelling aan de zon"
-    },
-    "dataBy": "Weerdata door",
-    "settings": "Weerinstellingen",
-    "title": "Weerinformatie",
-    "uvUnavailable": "Geen UV-gegevens (nacht)",
-    "windSpeedTooltip": "Wijzig de eenheid bij Instellingen → Gegevensweergave."
-  },
   "settings": {
     "title": "Instellingen",
     "subtitle": "Pas uw ervaring en voorkeuren aan",
@@ -1748,10 +1839,6 @@
     "language": {
       "title": "Taal",
       "subtitle": "Interfacetaal"
-    },
-    "weatherLocation": {
-      "title": "Weerlocatie",
-      "subtitle": "Standaard weer"
     },
     "mapLocation": {
       "title": "Kaartlocatie",
@@ -1931,9 +2018,6 @@
       "fields": {
         "fullName": "Volledige Naam",
         "email": "E-mailadres",
-        "organization": "Organisatie",
-        "position": "Functie",
-        "phone": "Telefoonnummer",
         "accessLevel": "Toegangsniveau",
         "emailVerified": "E-mail Geverifieerd",
         "password": "Wachtwoord",
@@ -1943,8 +2027,6 @@
       "placeholders": {
         "fullName": "Voer volledige naam in",
         "email": "Voer e-mailadres in",
-        "organization": "Voer organisatienaam in",
-        "position": "Voer functie in",
         "password": "Voer wachtwoord in",
         "confirmPassword": "Bevestig wachtwoord",
         "modelLimit": "Laat leeg voor standaardwaarde"
@@ -1960,7 +2042,6 @@
         "expert": "Expert (Volledige Toegang)"
       },
       "validation": {
-        "phoneInvalid": "Telefoonnummer mag alleen cijfers, spaties, streepjes, plustekens en haakjes bevatten",
         "passwordLength": "Wachtwoord moet minimaal 8 tekens lang zijn",
         "nameRequired": "Naam is verplicht",
         "emailRequired": "E-mail is verplicht",
@@ -2118,17 +2199,13 @@
       "greeting": "Welkom bij het CCUS-simulatieplatform!",
       "intro": "Laten we even de tijd nemen om je voorkeuren in te stellen. Dit helpt ons je ervaring te personaliseren en je de meest relevante informatie te geven.",
       "step1": "Kies je voorkeurstaal",
-      "step2": "Stel je weer- en kaartvoorkeuren in",
+      "step2": "Stel uw kaart- en meldingsvoorkeuren in",
       "step3": "Configureer meldingsinstellingen",
       "timeNote": "Dit duurt maar een minuut"
     },
     "language": {
       "title": "Taalvoorkeur",
       "description": "Selecteer je voorkeurstaal voor de applicatie"
-    },
-    "weather": {
-      "title": "Weervoorkeuren",
-      "description": "Stel je voorkeurslocatie in voor weerinformatie"
     },
     "map": {
       "title": "Kaartvoorkeuren",
@@ -2174,6 +2251,7 @@
       "platform": "Platform",
       "infrastructure": "Infrastructuur",
       "howItWorks": "Hoe het werkt",
+      "caseStudy": "Casestudy",
       "personas": "Voor wie",
       "contact": "Contact",
       "signIn": "Inloggen",
@@ -2181,45 +2259,57 @@
     },
     "hero": {
       "badge": "Door de EU gefinancierd Horizon CCUS-onderzoeksproject",
-      "title1": "Versnel koolstofafvang in heel Europa",
-      "titleHighlight": "CCUS-intelligentie",
-      "subtitle": "Breng industriële emissies in kaart, modelleer optimale pijpleiding- en scheepvaartnetwerken, beoordeel geologische opslagreservoirs en versnel industriële decarbonisatie in heel Europa.",
+      "title1": "Beoordeel CCU-projecten in",
+      "titleHighlight": "Duitsland, Noorwegen en Nederland",
+      "subtitle": "Breng industriële emissies in kaart, modelleer optimale pijpleiding- en scheepvaartnetwerken en beoordeel geologische opslagreservoirs — voor de beoordeling van CCU-projecten in Duitsland, Noorwegen en Nederland.",
       "getStarted": "CCUS-beoordeling starten",
       "seeHow": "Bekijk hoe het werkt",
+      "publicNote": "Alles op deze pagina is openbaar — geen account nodig. Log alleen in om eigen beoordelingen te maken en uit te voeren; via het STORCITO-logo keert u altijd hiernaartoe terug.",
       "metricSites": "Emissiebronnen in kaart",
       "metricStorage": "Jaarlijks gecatalogiseerde CO₂",
       "metricNetwork": "Gedekte gemeenten",
       "metricCost": "Landen"
     },
+    "caseStudy": {
+      "eyebrow": "De casestudy",
+      "title": "CCU-projecten in Duitsland, Noorwegen en Nederland",
+      "description": "Het platform is gebouwd op de STORE_CO2-casestudy: het beoordelen van CCU-projecten (carbon capture and utilisation) in de drie landen waarvoor het project data levert — Duitsland, Noorwegen en Nederland. Industriële CO₂-bronnen en opslag- of gebruikslocaties komen uit de STORE_CO2-catalogus, en de afvangkosten volgen de scenariohorizonnen daarvan van 2025–2030 tot 2050. Het platform routeert de afgevangen CO₂ tussen de locaties via pijpleiding, vrachtwagen of spoor en berekent de kosten van de hele keten per ton.",
+      "germanyTitle": "Duitsland",
+      "germanyDesc": "Industriële puntbronnen en gebruiksopties in Europa's grootste emissie-economie.",
+      "norwayTitle": "Noorwegen",
+      "norwayDesc": "Offshore geologische opslag in aquifers en lege velden in de Noordzee.",
+      "netherlandsTitle": "Nederland",
+      "netherlandsDesc": "Industrieclusters rond Rotterdam met pijpleiding- en scheepvaartverbindingen."
+    },
     "challenge": {
       "eyebrow": "De decarbonisatie-uitdaging",
-      "title": "Europese industriële decarbonisatie oplossen",
-      "description": "De overgang van de zware industrie naar netto nul vereist het oplossen van complexe ruimtelijke, logistieke en economische uitdagingen over Europese grenzen heen.",
+      "title": "De uitdaging van CCU-beoordeling",
+      "description": "Elke beoordeling moet duizenden emissiebronnen koppelen aan geschikte opslag- en gebruikssenken, de CO₂ ertussen routeren en de hele keten per ton beprijzen.",
       "card1Title": "Industriële puntbronnen",
-      "card1Desc": "Zware industrie (cement, staal, chemie) is goed voor meer dan 25% van de Europese emissies en vereist snelle uitrol van afvang.",
-      "card2Title": "Complexe transportlogistiek",
-      "card2Desc": "Het verbinden van binnenlandse industriële clusters met offshore opslag vereist de combinatie van hogedrukpijpleidingen en LCO₂-scheepvaartnetwerken.",
-      "card3Title": "Geologische reservoir-matching",
-      "card3Desc": "Zorgen voor langdurige insluitingsintegriteit en het afstemmen van jaarlijkse afvangvolumes op injectielimieten van offshore aquifers.",
-      "card4Title": "Economische optimalisatie",
-      "card4Desc": "Berekening van de vermeden CO₂-kosten (€/t CO₂) over CAPEX, compressie-energie, scheepvaartcharters en koolstofheffingen."
+      "card1Desc": "14.641 industriële CO₂-bronnen in Duitsland, Noorwegen en Nederland — elk met eigen emissies, sector en bedrijfsperiode.",
+      "card2Title": "Transportlogistiek",
+      "card2Desc": "Afgevangen CO₂ moet van bron naar put — via pijpleiding, vrachtwagen of spoor — elke modaliteit met heel andere kosten.",
+      "card3Title": "Bron–put-koppeling",
+      "card3Desc": "Elke ton heeft een passende put nodig: afgestemd op volume, afstand en de jaren waarin beide locaties actief zijn.",
+      "card4Title": "Kosten van de hele keten",
+      "card4Desc": "Afvang, vervloeiing, transport en opslag voegen elk € per ton toe — en de kosten verschuiven met het scenariojaar 2025–2050."
     },
     "features": {
       "label": "Platformmogelijkheden",
       "title": "Alles voor CCUS-planning en route-optimalisatie",
-      "description": "Een uitgebreide geospatiale toolkit voor het modelleren van koolstofafvang, CO₂-transportlogistiek en geologische opslagreservoirs.",
+      "description": "Een geospatiale toolkit gebouwd op de STORE_CO2-catalogus: bronnen, senken, routing en kosten van de hele keten voor Duitsland, Noorwegen en Nederland.",
       "f1Title": "Interactieve geospatiale kaart",
-      "f1Desc": "Visualiseer emissiebronnen, pijpleidingcorridors, scheepvaartroutes en opslaglocaties op één interactieve kaart.",
+      "f1Desc": "Visualiseer 14.641 emissiebronnen, opslag- en gebruikssenken en kandidaatroutes op één interactieve kaart.",
       "f2Title": "Bron–put-matching",
-      "f2Desc": "Koppel industriële CO₂-emittenten aan geschikte geologische opslag op basis van capaciteit, afstand en kosten.",
+      "f2Desc": "Koppel industriële CO₂-emittenten aan geschikte opslag- en gebruikssenken op volume, afstand en bedrijfsperiode.",
       "f3Title": "Route-optimalisatie",
-      "f3Desc": "Modelleer pijpleiding- en scheepvaartcorridors en bereken de goedkoopste, koolstofoptimale routering en dimensionering.",
-      "f4Title": "Reservoir-analyse",
-      "f4Desc": "Beoordeel diepe zoutwateraquifers en uitgeputte olie- en gasvelden op capaciteit, druklimieten en injectiesnelheden.",
+      "f3Desc": "CO2RouteX berekent één route per bron–put-paar — via pijpleiding, vrachtwagen of spoor — met afstand en kosten per ton.",
+      "f4Title": "Puttencatalogus",
+      "f4Desc": "Blader door opslag- en gebruikssenken met jaarlijkse vraag (kt CO₂/jaar) en capaciteiten (Mt CO₂) uit de STORE_CO2-dataset.",
       "f5Title": "Kosten- en CO₂-rapporten",
-      "f5Desc": "Vermeden CO₂-kosten (€/t) met uitsplitsing van CAPEX, compressie en transport en Sankey-koolstofstromen.",
+      "f5Desc": "Kosten voor afvang, vervloeiing, transport en opslag per ton — bandbreedtes over de scenario's 2025–2050, plus een downloadbare werkmap.",
       "f6Title": "Gedeelde werkruimtes",
-      "f6Desc": "Deel modellen, vergelijk scenario's en werk samen met regionale consortia aan decarbonisatieplannen."
+      "f6Desc": "Deel modellen, vergelijk scenario's en werk samen in gedeelde werkruimtes."
     },
     "infrastructure": {
       "eyebrow": "CCUS-waardeketen",
@@ -2227,57 +2317,57 @@
       "description": "Afvang, transport, opslag en gebruik — end-to-end gemodelleerd zodat elk project als een volledige waardeketen wordt gepland.",
       "c1Subtitle": "Puntbron-afvang",
       "c1Title": "Koolstofafvang",
-      "c1Desc": "Vang CO₂ af bij cement-, staal-, chemie- en energiecentrales met post-combustion en andere bewezen technologieën.",
-      "c1Spec1": "Post-combustion- en oxyfuel-afvang",
-      "c1Spec2": "Modellering van rookgasvolume en -zuiverheid",
-      "c1Spec3": "Afvangpercentage vs. energiestraf",
-      "c1Spec4": "Beoordeling van retrofit-haalbaarheid",
-      "c2Subtitle": "Pijpleiding en schip",
+      "c1Desc": "Afvangkosten per installatie uit STORE_CO2 — per sector en toepassing, met afvangpercentage en kosten per ton.",
+      "c1Spec1": "Sectorspecifieke afvangtoepassingen",
+      "c1Spec2": "Afvangpercentage per installatie",
+      "c1Spec3": "Kosten van afvang (€2024/t)",
+      "c1Spec4": "First-of-a-kind tot nth-of-a-kind",
+      "c2Subtitle": "Pijpleiding, vrachtwagen & spoor",
       "c2Title": "CO₂-transport",
-      "c2Desc": "Verplaats afgevangen CO₂ van binnenlandse clusters naar opslag via hogedrukpijpleidingen en vloeibaar-CO₂-scheepvaart.",
-      "c2Spec1": "Pijpleidingdiameter en drukdimensionering",
-      "c2Spec2": "Maritieme LCO₂-routes",
-      "c2Spec3": "Compressie- en vloeibaarmakingsenergie",
-      "c2Spec4": "Goedkoopste corridorroutering",
+      "c2Desc": "Routeer afgevangen CO₂ van bronnen naar senken — via pijpleiding, vrachtwagen of spoor, één route per bron–put-paar.",
+      "c2Spec1": "Pijpleiding-CAPEX naar tracé & terrein (€2021)",
+      "c2Spec2": "Afstandstarieven voor vrachtwagen & spoor",
+      "c2Spec3": "Spoorrouting van station tot station",
+      "c2Spec4": "Vervloeiing bij de emittent voor weg & rail",
       "c3Subtitle": "Geologische opslag",
       "c3Title": "CO₂-opslag",
-      "c3Desc": "Beoordeel offshore en onshore reservoirs voor veilige, permanente geologische insluiting van geïnjecteerde CO₂.",
-      "c3Spec1": "Zoutwateraquifers en uitgeputte velden",
-      "c3Spec2": "Injectiesnelheid- en druklimieten",
-      "c3Spec3": "Controles van insluitingsintegriteit",
-      "c3Spec4": "Afstemming van jaarcapaciteit",
+      "c3Desc": "Koppel afgevangen volumes aan opslaglocaties met bekende capaciteit en jaarlijkse limieten.",
+      "c3Spec1": "Opslagcapaciteit per locatie (Mt)",
+      "c3Spec2": "Jaarlijkse rates (kt CO₂/jaar)",
+      "c3Spec3": "Opslagkosten per ton",
+      "c3Spec4": "Onshore- & offshorelocaties",
       "c4Subtitle": "CO₂-gebruik",
       "c4Title": "Koolstofbenutting",
-      "c4Desc": "Zet afgevangen CO₂ om in e-fuels, chemicaliën, bouwmaterialen en andere waardevolle producten.",
-      "c4Spec1": "E-fuels en synthetische chemicaliën",
-      "c4Spec2": "Mineralisatie en bouwmaterialen",
-      "c4Spec3": "Verbeterde winningsroutes",
+      "c4Desc": "Leid CO₂ naar gebruiksvraag — kassen, ureum, CCU-chemicaliën en meer — en vergelijk met opslag.",
+      "c4Spec1": "Gebruiksvraag per locatie (kt/jaar)",
+      "c4Spec2": "Kassen, brouwerijen & chemie",
+      "c4Spec3": "Ureum & mineralisatie",
       "c4Spec4": "Gebruik vs. opslag"
     },
     "howItWorks": {
       "label": "Workflow in 4 stappen",
       "title": "Van locatiegegevens naar operationeel CCUS-netwerk",
       "description": "Ontwerp, optimaliseer en implementeer koolstofafvang- en opslaginfrastructuur in vier stappen.",
-      "s1Title": "1. Selecteer een regio",
-      "s1Desc": "Teken of kies een gebied op de kaart. Emittenten, opslaglocaties en bestaande infrastructuur worden automatisch geladen.",
-      "s2Title": "2. Configureer de keten",
-      "s2Desc": "Koppel afvang aan emittenten en kies vervolgens pijpleidingcorridors, scheepvaartterminals en kandidaat-reservoirs.",
-      "s3Title": "3. Optimaliseer routes",
-      "s3Desc": "Voer de optimalisatie uit om de goedkoopste routering, netwerkcapaciteit en compressiebehoeften te berekenen.",
-      "s4Title": "4. Analyseer en deel",
-      "s4Desc": "Verken kaarten, CO₂-stroomdiagrammen en vermeden kosten (€/t CO₂), exporteer rapporten en deel scenario's."
+      "s1Title": "1. Naam & periode",
+      "s1Desc": "Geef uw model een naam en kies de beoordelingsperiode — de scenariohorizonnen lopen van 2025–2030 tot 2050.",
+      "s2Title": "2. Knooppunten kiezen",
+      "s2Desc": "Kies CO₂-bronnen en -senken in Duitsland, Noorwegen en Nederland uit de STORE_CO2-catalogus.",
+      "s3Title": "3. Routes & kosten",
+      "s3Desc": "CO2RouteX verbindt de knooppunten via pijpleiding, vrachtwagen of spoor en berekent de kosten van elke route per ton.",
+      "s4Title": "4. Controleren & starten",
+      "s4Desc": "Controleer de opstelling, sla het model op en start de berekening — verken daarna kaarten, stromen en kosten en deel scenario's."
     },
     "personas": {
       "eyebrow": "Voor wie het is",
-      "title": "Ontworpen voor het hele CCUS-ecosysteem",
+      "title": "Ontworpen voor de CCU-waardeketen",
       "p1Title": "Industriële emittenten",
-      "p1Desc": "Cement-, staal-, chemie- en energiecentrales die de haalbaarheid van afvang en regionale hoofdverbindingen beoordelen.",
+      "p1Desc": "Cement-, staal-, chemie- en energiecentrales in Duitsland, Noorwegen en Nederland die afvangkosten en gebruiksopties voor hun locaties beoordelen.",
       "p2Title": "Pijpleiding- en logistiekontwikkelaars",
-      "p2Desc": "Tracé hogedruk-CO₂-hoofdleidingen, dimensioneer compressorstations en optimaliseer de scheepsbevrachting.",
-      "p3Title": "Opslagexploitanten",
-      "p3Desc": "Analyseer diepe zoutwateraquifers in de Noordzee, de Baltische Zee en de Middellandse Zee op injectielimieten.",
+      "p2Desc": "Vergelijk pijpleiding-, vrachtwagen- en spoorverbindingen tussen CO₂-bronnen en -senken, met kosten per ton voor elke route.",
+      "p3Title": "Opslag- en gebruiksexploitanten",
+      "p3Desc": "Zie welke emittenten afgevangen CO₂ naar uw opslag- of gebruikslocatie zouden kunnen transporteren — en wat de hele keten zou kosten.",
       "p4Title": "Beleidsmakers en consortia",
-      "p4Desc": "Simuleer regionale netto-nul-routekaarten, grensoverschrijdende CO₂-transportregels en EU-taxonomieconformiteit."
+      "p4Desc": "Verken CCU-scenario's van 2025–2030 tot 2050 en vergelijk uitrolopties in de drie casestudylanden."
     },
     "trust": {
       "euTitle": "Gefinancierd door de Europese Unie",
@@ -2314,7 +2404,7 @@
       "brandDescription": "Geavanceerd CCUS-planningsplatform voor een duurzame toekomst. Gefinancierd door de Europese Unie.",
       "privacySettings": "Privacy-instellingen",
       "privacyPolicy": "Privacybeleid",
-      "tagline": "Versnelling van CO₂-afvang, -transport en -opslag in heel Europa.",
+      "tagline": "Beoordeling van CO₂-afvang-, transport- en opslagprojecten in Duitsland, Noorwegen en Nederland.",
       "cookies": "Cookiebeleid",
       "impressum": "Impressum",
       "terms": "Algemene voorwaarden",
@@ -2384,7 +2474,7 @@
   "configurator": {
     "registry": {
       "layer1Title": "Model Initialization",
-      "layer1Subtitle": "Name and simulation timeframe",
+      "layer1Subtitle": "Naam en beoordelingsperiode",
       "layer2Title": "Knooppuntselectie",
       "layer2Subtitle": "Kies de CO₂-bronnen en -putten",
       "layer3Title": "Routes",
@@ -2415,10 +2505,10 @@
       "step": "STEP"
     },
     "layer1": {
-      "purpose": "Name this analysis run and choose the date window you want to assess.",
-      "nextStepHint": "Next you'll outline the geographic area on the map.",
+      "purpose": "Geef deze beoordeling een naam en kies de jaren die ze beslaat.",
+      "nextStepHint": "Hierna kiest u de CO₂-bronnen en -putten.",
       "modelNameLabel": "Model name",
-      "modelNamePlaceholder": "e.g. Sample Area Summer 2026",
+      "modelNamePlaceholder": "bijv. Rijnmond-opslag 2030–2040",
       "modelNameHint": "A descriptive name so you can find this model later.",
       "dynamicHint": "Dynamic runs keep the selected date range and use the 16:00 to 17:00 window.",
       "dynamicLoading": "Loading available dynamic dates...",
@@ -2431,10 +2521,15 @@
       "suggestedName1": "Regionale CO₂-beoordeling",
       "suggestedName2": "Studie industriecluster",
       "suggestedName3": "Screening opslaglocaties",
-      "suggestedName4": "Kwartaalvooruitzicht afvang",
+      "suggestedName4": "Landelijke CO₂-hub",
       "modelNameQuestion": "Hoe wilt u dit model noemen?",
       "periodQuestion": "Welke periode moet worden beoordeeld?",
-      "assessmentPeriod": "Beoordelingsperiode"
+      "assessmentPeriod": "Beoordelingsperiode",
+      "periodHint": "Hele jaren. Locaties tellen zolang ze in de periode in bedrijf zijn; afvangkosten volgen de STORE_CO2-horizonten 2025–2050.",
+      "startYear": "Beginjaar",
+      "endYear": "Eindjaar",
+      "periodSelected": "{{period}} · {{count}} jaar",
+      "periodMissing": "Kies een begin- en eindjaar."
     },
     "layer2": {
       "purpose": "Kies de CO₂-bronnen en -putten waartussen dit model routeert.",
@@ -2447,9 +2542,6 @@
       "purpose": "CO2RouteX onderzoekt de gekozen knooppunten op mogelijke verbindingen en berekent route en kosten.",
       "nextStepHint": "Daarna ziet u wat die routes kosten.",
       "customData": "Custom data (optional)",
-      "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
-      "weatherStationData": "Weather station data",
-      "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
       "lockedByPrecomputed": "Opgenomen in de voorberekende regiokaart. Schakel de schakelaar hierboven uit om lagen aan te passen.",
       "precomputedLabel": "Voorberekende regiokaart",
       "precomputedInfoLabel": "Over de voorberekende regiokaart",
@@ -2472,7 +2564,6 @@
       "uploadIncomplete": "GeoJSON upload incomplete.",
       "areaDetails": "{{count}} regions · {{area}}",
       "areaDetailsSingle": "1 region · {{area}}",
-      "allSignalsActive": "All risk signals active (weather + terrain + history).",
       "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
       "bufferDistance": "{{buffer}} m around the AOI.",
       "blockers": "{{count}} blockers — fix before running.",
@@ -2490,7 +2581,10 @@
       },
       "costsQuestion": "Wat kosten deze routes?",
       "costsInfo": "Berekend uit de routes uit de vorige stap.",
-      "noNodes": "Geen knooppunten gekozen — ga terug naar stap 2."
+      "noNodes": "Geen knooppunten gekozen — ga terug naar stap 2.",
+      "missingYears": "Begin- of eindjaar ontbreekt – ga terug naar stap 1.",
+      "yearOrder": "Het beginjaar ligt na het eindjaar.",
+      "periodYears": "{{period}} · {{count}} jaar"
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -2503,13 +2597,11 @@
         "modelName": "Model name",
         "from": "From",
         "to": "To",
-        "dailyRun": "Daily run",
         "buffer": "Buffer",
         "area": "Area",
         "riskComponents": "Risk components",
         "nodes": "Knooppunten"
-      },
-      "dailyRunInfo": "Elke gesimuleerde dag wordt beoordeeld met het weer uit dit tijdvenster — het heetste en droogste deel van de middag."
+      }
     },
     "coverage": {
       "title": "Data coverage",
@@ -2535,7 +2627,9 @@
       "dynamicLoading": "Beschikbare dynamische datums laden.",
       "dynamicRange": "Selecteer een volledig beschikbaar dynamisch datumbereik.",
       "modelName": "een modelnaam",
-      "dynamicOrder": "De startdatum moet vóór of gelijk aan de einddatum liggen."
+      "dynamicOrder": "De startdatum moet vóór of gelijk aan de einddatum liggen.",
+      "yearRange": "een begin- en eindjaar",
+      "yearOrder": "Het beginjaar mag niet na het eindjaar liggen."
     },
     "save": {
       "calculationFailed": "Het model is opgeslagen, maar de berekening kon niet worden gestart.",
@@ -2573,7 +2667,12 @@
       "glass": "Glas",
       "industry": "Algemene industrie",
       "iron_and_steel": "IJzer en staal",
-      "pulp_and_paper": "Pulp en papier"
+      "pulp_and_paper": "Pulp en papier",
+      "greenhouse": "Kassen",
+      "brewery": "Brouwerijen",
+      "ccu_chemicals": "CCU-chemie",
+      "urea": "Ureumfabrieken",
+      "mineralization": "Mineralisatie"
     },
     "legend": {
       "emitters": "Emissiebronnen",
@@ -2620,7 +2719,27 @@
     "noState": "Geen provincie vastgelegd",
     "sortAsc": "Laagste CO₂ eerst",
     "sortDesc": "Hoogste CO₂ eerst",
-    "statesFilter": "Provincies"
+    "statesFilter": "Provincies",
+    "ruralFilter": "Type gebied",
+    "rural": {
+      "all": "Alle",
+      "rural": "Landelijk",
+      "urban": "Stedelijk"
+    },
+    "ruralHint": "Landelijk volgens het censusraster 2021 (STORE_CO2).",
+    "regionsFilter": "Regio's (NUTS 2)",
+    "loadGroup": "Laden",
+    "periodNote": "Beoordelingsperiode {{start}}–{{end}}: installaties tellen vanaf hun ingebruiknamejaar, kolen tot de uitfasering. Emissies zijn de laatste waarde per installatie, constant gehouden; STORE_CO2 bevat geen prognoses.",
+    "outsidePeriod": "{{count}} geselecteerde locaties zijn niet in bedrijf in de beoordelingsperiode.",
+    "periodOnly": "Alleen locaties in bedrijf in de beoordelingsperiode",
+    "periodOnlyHint": "{{start}}–{{end}}: verbergt gesloten installaties, later gebouwde installaties en kolen na de uitfasering.",
+    "periodMissing": "Stel de beoordelingsperiode in bij stap 1; tot dan worden alleen gesloten installaties verborgen.",
+    "tag": {
+      "retired": "gesloten",
+      "from": "vanaf {{year}}",
+      "until": "tot {{year}}",
+      "startUnknown": "start onbekend"
+    }
   },
   "co2Routing": {
     "run": "Routes zoeken",
@@ -2642,7 +2761,13 @@
   "co2Costs": {
     "running": "De run loopt nog — kosten verschijnen zodra het routeren klaar is.",
     "noRun": "Ga terug naar Routes en zoek eerst verbindingen — de kosten volgen daaruit.",
-    "noCosts": "Geen berekende routes. Pijpleiding-CAPEX vraagt een geroute pijpleiding; vrachtwagen- en spoortarieven vragen geroute afstanden."
+    "noCosts": "Geen berekende routes. Pijpleiding-CAPEX vraagt een geroute pijpleiding; vrachtwagen- en spoortarieven vragen geroute afstanden.",
+    "capture": "Afvang (€/t)",
+    "liquefaction": "Vloeibaar maken (€/t)",
+    "storage": "Opslag (€/t)",
+    "total": "Hele keten (€/t)",
+    "chainNote": "Per ton in €2024, lage – hoge kostencase, zoals de STORE_CO2-scenario's de keten prijzen: afvang zonder conditionering (2030, eerste installatie), vloeibaar maken bij de emittent voor weg en spoor, het tarief van de route en opslag tegen de geauditeerde kosten van Porthos (geen bij een gebruiker). Pijpleidingen hebben CAPEX in plaats van een tarief, dus geen ketenwaarde.",
+    "periodBasis": "Afvang en vloeibaar maken gemiddeld over {{start}}–{{end}}, de jaren dat elke installatie draait."
   },
   "apiTokens": {
     "create": "Nieuw token maken",
@@ -2708,6 +2833,91 @@
     "refreshError": "Bronnen konden niet worden ververst. Bestaande gegevens zijn behouden.",
     "search": "Bronnen zoeken",
     "status": "Status",
-    "yes": "Ja"
+    "yes": "Ja",
+    "sinkInfo": "STORE_CO2-record. Snelheden en vraag in kt CO₂ per jaar; capaciteiten in Mt CO₂.",
+    "loadingCapture": "Afvangkosten laden",
+    "captureTitle": "CO₂-afvang (STORE_CO2)",
+    "capturable": "{{value}} t CO₂/jaar af te vangen",
+    "captureRate": "afvanggraad {{value}}",
+    "maturity": {
+      "noak": "N-de installatie",
+      "foak_100": "Eerste installatie (+100%)",
+      "foak_200": "Eerste installatie (+200%)"
+    },
+    "lcocCaption": "Genormaliseerde afvangkosten (€2024 per afgevangen ton)",
+    "horizonYear": "Jaar",
+    "costCase": {
+      "low": "Laag",
+      "central": "Centraal",
+      "high": "Hoog"
+    },
+    "otherApplications": "Andere mogelijke toepassingen"
+  },
+  "whatsNew": {
+    "open": "Wat is er nieuw in deze versie",
+    "title": "Wat is er nieuw",
+    "version": "Versie {{version}}",
+    "released": "Uitgebracht op {{date}}",
+    "intro": "Een overzicht van de nieuwste functies, verbeteringen en oplossingen in deze release.",
+    "where": "Waar",
+    "viewAll": "Alle wijzigingen op GitHub",
+    "close": "Begrepen",
+    "groups": {
+      "new": "Nieuw",
+      "improved": "Verbeterd",
+      "fixed": "Opgelost"
+    },
+    "items": {
+      "families": {
+        "title": "Modelversies gegroepeerd",
+        "description": "Elk model verschijnt nu één keer, met de kopieën eronder gegroepeerd. Het oorspronkelijke model blijft bovenaan en de versiebadge klapt de kopieën uit, oudste eerst.",
+        "where": "Modeldashboard → modellenlijst"
+      },
+      "tabs": {
+        "title": "Statustabbladen",
+        "description": "Schakel tussen Alle, Vastgezet, Bezig, Voltooid, Concepten en Mislukt. Zoeken en het periodefilter werken in elk tabblad.",
+        "where": "Modeldashboard → boven de lijst"
+      },
+      "pinning": {
+        "title": "Modellen vastzetten",
+        "description": "Een vastgezet model blijft bovenaan de lijst. Een versie vastzetten houdt de hele familie bovenaan, en het tabblad Vastgezet verzamelt ze op één plek.",
+        "where": "Modelrij → punaise-icoon"
+      },
+      "newBadge": {
+        "title": "Badge voor nieuwe resultaten",
+        "description": "Recent voltooide modellen krijgen een Nieuw-badge. Beweeg erover om te zien wanneer de berekening klaar was.",
+        "where": "Modelrij → naast de titel"
+      },
+      "acceptance": {
+        "title": "Laag publieke acceptatie",
+        "description": "Kleurt de kaart naar het aandeel plattelandsbewoners dat een CCUS-toepassing steunt of afwijst (RUB-enquête). Klik op een regio voor de resultaten, wat het belangrijkst is en communicatiesuggesties.",
+        "where": "Nieuw model → kaart in stap 2"
+      },
+      "siteCard": {
+        "title": "Locatiekaart op de kaart",
+        "description": "Klik op een emissiebron of opslagpunt om type, locatie en uitstoot te zien, het aan het model toe te voegen of te verwijderen, of de details te openen.",
+        "where": "Nieuw model → kaart in stap 2"
+      },
+      "tour": {
+        "title": "Vernieuwde rondleiding",
+        "description": "De rondleiding loopt stap voor stap door dashboard, kaart en hulpmiddelen, met sectiepunten en navigatie met pijltjestoetsen.",
+        "where": "Help-menu → Rondleiding herstarten"
+      },
+      "sinks": {
+        "title": "Opslag- en gebruikslocaties",
+        "description": "De knooppuntencatalogus bevat nu opslaglocaties en gebruikslocaties met hun regio’s en bedrijfsjaren.",
+        "where": "Nieuw model → stap 2 → categorieën van afnemers"
+      },
+      "period": {
+        "title": "Beoordelingsperiode",
+        "description": "Modellen beslaan nu hele jaren. Installaties tellen alleen mee voor de jaren waarin ze binnen de periode in bedrijf zijn.",
+        "where": "Nieuw model → stap 1"
+      },
+      "workspaceMenu": {
+        "title": "Werkruimtemenu",
+        "description": "De lijst met werkruimtes opent nu volledig boven de statustabbladen en de modellenlijst.",
+        "where": "Modeldashboard → werkruimtekiezer"
+      }
+    }
   }
 }

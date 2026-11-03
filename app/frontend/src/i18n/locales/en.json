@@ -201,6 +201,7 @@
       "moveToWorkspace": "Move to Workspace",
       "profile": "Profile",
       "documentation": "Documentation",
+      "howItWorks": "How it works",
       "restartTour": "Restart tour",
       "feedback": "Feedback",
       "theme": "Theme",
@@ -262,9 +263,6 @@
       "fields": {
         "fullName": "Full Name",
         "email": "Email Address",
-        "organization": "Organization",
-        "position": "Position",
-        "phone": "Phone Number",
         "accessLevel": "Access Level",
         "emailVerified": "Email Verified",
         "password": "Password",
@@ -274,8 +272,6 @@
       "placeholders": {
         "fullName": "Enter full name",
         "email": "Enter email address",
-        "organization": "Enter organization name",
-        "position": "Enter job position",
         "password": "Enter password",
         "confirmPassword": "Confirm password",
         "modelLimit": "Leave empty for default"
@@ -291,7 +287,6 @@
         "expert": "Expert (Full Access)"
       },
       "validation": {
-        "phoneInvalid": "Phone number can only contain digits, spaces, dashes, plus signs, and parentheses",
         "passwordLength": "Password must be at least 8 characters long",
         "nameRequired": "Name is required",
         "emailRequired": "Email is required",
@@ -888,13 +883,6 @@
       "specialChar": "One special character",
       "hasSpaces": "Password contains leading or trailing spaces"
     },
-    "organizationDetails": "Organization Details",
-    "organization": "Organization",
-    "enterOrganization": "Enter your organization",
-    "position": "Position",
-    "enterPosition": "Enter your position",
-    "phoneNumber": "Phone Number",
-    "enterPhoneNumber": "Enter your phone number",
     "accessLevel": "Access Level",
     "veryLow": "Very Low",
     "low": "Low",
@@ -917,11 +905,15 @@
     "agreeToTerms": "By creating an account, you agree to our Terms of Service",
     "signInHere": "Sign in here",
     "sidePanel": {
-      "badge": "CCUS intelligence",
+      "badge": "CCUS assessment",
       "title": "Accelerate carbon capture before emissions escalate",
       "subtitle": "Map, model and act on CCUS projects — turning site data and geospatial insight into safe, scalable carbon capture, utilisation and storage across Europe.",
       "funded": "Funded by the European Union · Built on the STORCITO platform"
-    }
+    },
+    "consentText": "I consent to the processing and storage of my personal data in accordance with the",
+    "declarationOfConsent": "Declaration of Consent",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy"
   },
   "workspace": {
     "workspace": "Workspace",
@@ -1049,7 +1041,34 @@
     "peopleWithAccessDescription": "Users listed here can open this model and its risk layers.",
     "revokeAccess": "Revoke",
     "revokingAccess": "Revoking…",
-    "revokeAccessFor": "Revoke access for {{email}}"
+    "revokeAccessFor": "Revoke access for {{email}}",
+    "tabs": {
+      "all": "All",
+      "pinned": "Pinned",
+      "running": "Running",
+      "completed": "Completed",
+      "drafts": "Drafts",
+      "failed": "Failed"
+    },
+    "area": "Area",
+    "period": "Period",
+    "lastActivity": "Last activity",
+    "pin": "Pin to top",
+    "unpin": "Unpin",
+    "recentlyCompleted": "New",
+    "recentlyCompletedTooltip": "Finished {{time}}. Open it to see the results.",
+    "versions_one": "{{count}} version",
+    "versions_other": "{{count}} versions",
+    "showVersions_one": "Show {{count}} version",
+    "showVersions_other": "Show {{count}} versions",
+    "hideVersions_one": "Hide {{count}} version",
+    "hideVersions_other": "Hide {{count}} versions",
+    "originalVersion": "Original",
+    "originalVersionHint": "This row is the original model. Its status, period and activity are its own; each version has its own row.",
+    "estimateBasis_one": "Based on 1 comparable run, which took {{typical}}",
+    "estimateBasis_other": "Based on {{count}} comparable runs, which typically take {{typical}}",
+    "view": "View",
+    "run": "Run"
   },
   "polygon": {
     "drawRegion": "Draw Your Region",
@@ -1153,10 +1172,7 @@
     "userProfile": {
       "title": "User Profile",
       "subtitle": "Your account information",
-      "email": "Email",
-      "organization": "Organization",
-      "position": "Position",
-      "phone": "Phone"
+      "email": "Email"
     },
     "accessPermissions": {
       "title": "Access & Permissions",
@@ -1195,7 +1211,7 @@
   "userManagement": {
     "title": "User Management",
     "subtitle": "Manage users, groups, and permissions",
-    "searchPlaceholder": "Search name, email, organization...",
+    "searchPlaceholder": "Search name or email...",
     "refresh": "Refresh",
     "addNewUser": "Add New User",
     "add": "Add",
@@ -1216,12 +1232,9 @@
     },
     "table": {
       "user": "User",
-      "organization": "Organization",
-      "position": "Position",
       "accessLevel": "Access Level",
       "group": "Group",
       "emailVerified": "Email Verified",
-      "phone": "Phone",
       "actions": "Actions"
     },
     "emailStatus": {
@@ -1366,16 +1379,10 @@
     "saveChanges": "Save Changes",
     "fields": {
       "fullName": "Full Name",
-      "email": "Email Address",
-      "organization": "Organization",
-      "position": "Position",
-      "phone": "Phone Number"
+      "email": "Email Address"
     },
     "placeholders": {
-      "fullName": "Enter your full name",
-      "organization": "Your company or organization",
-      "position": "Your job title",
-      "phone": "+1 (555) 000-0000"
+      "fullName": "Enter your full name"
     },
     "accessLevels": {
       "basic": "Basic",
@@ -1702,8 +1709,8 @@
         "description": "Access your profile, account settings, and user preferences. Manage your account and access additional options."
       },
       "navigation": {
-        "title": "Dashboard Navigation",
-        "description": "Access your main dashboard to view your projects, recent assessments, and overall statistics. This is your home base."
+        "title": "Admin Dashboard",
+        "description": "Manage workspaces, users and every model on the platform. Visible to administrators only."
       },
       "simulations": {
         "title": "CCUS Simulations",
@@ -1737,6 +1744,115 @@
         "nextStepsDescription": "Try creating your first CCUS assessment or explore the interactive map.",
         "restartTour": "Restart Tour",
         "restartTourDescription": "You can restart this tour anytime from the sidebar."
+      },
+      "dashboard": {
+        "tabsOverview": {
+          "title": "Filter by status",
+          "description": "These tabs filter your models by state, with live counts for each group."
+        },
+        "tabAll": {
+          "title": "All models",
+          "description": "Every model family in this workspace, with pinned families on top."
+        },
+        "tabPinned": {
+          "title": "Pinned",
+          "description": "Models you pinned. Pinning any version keeps the whole family on top."
+        },
+        "tabRunning": {
+          "title": "Running",
+          "description": "Queued, calculating, running or processing models. The list updates live while they run."
+        },
+        "tabCompleted": {
+          "title": "Completed",
+          "description": "Completed and published models, ready to open and explore."
+        },
+        "tabDrafts": {
+          "title": "Drafts",
+          "description": "Draft and modified models that still need to be run."
+        },
+        "tabFailed": {
+          "title": "Failed",
+          "description": "Failed or cancelled runs. Inspect the error and re-run when ready."
+        },
+        "search": {
+          "title": "Search & period",
+          "description": "Search model titles and filter by simulation period. Matches include older versions of a family."
+        },
+        "familyRow": {
+          "title": "One row per model",
+          "description": "Each row is a model family with the original model on top. The versions badge expands its copies, oldest first."
+        },
+        "columns": {
+          "title": "Columns",
+          "description": "Last activity lists running models first, then the most recently finished. Period, area and risk at a glance."
+        },
+        "pin": {
+          "title": "Pin models",
+          "description": "Pin a model to keep its family at the top of every tab."
+        },
+        "primaryAction": {
+          "title": "Primary action",
+          "description": "View finished models or run drafts straight from the row."
+        },
+        "moreMenu": {
+          "title": "More actions",
+          "description": "Edit, copy, download, share, move to a workspace or delete from this menu."
+        },
+        "newBadge": {
+          "title": "New results",
+          "description": "Recently completed models you have not opened yet are marked as new."
+        },
+        "refresh": {
+          "title": "Refresh, share & copy",
+          "description": "Refresh reloads the model list (running models also update on their own). Share gives your team access to this workspace, and Copy duplicates it with its models."
+        }
+      },
+      "ui": {
+        "stepOf": "Step {{current}} of {{total}}",
+        "skipTour": "Skip tour",
+        "finish": "Finish",
+        "whatsNew": "New",
+        "sections": {
+          "welcome": "Welcome",
+          "navigation": "Navigation",
+          "dashboard": "Dashboard",
+          "tabs": "Tabs",
+          "rows": "Rows",
+          "finish": "Finish",
+          "tools": "Tools"
+        },
+        "chips": {
+          "filters": "Filters"
+        }
+      },
+      "workspace": {
+        "title": "Workspace",
+        "description": "Models belong to a workspace. Switch workspaces here, or create a new one to organise projects and share them with your team."
+      },
+      "demo": {
+        "title": "CO₂ transport – Ruhr area",
+        "example": "Example",
+        "justNow": "Just now"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "View the open-source code and report issues on GitHub."
+      },
+      "help": {
+        "title": "Help",
+        "description": "Everything you need in one place: open the documentation, restart this tour at any time, or send us feedback."
+      },
+      "language": {
+        "title": "Language",
+        "description": "Switch the interface language. Your choice is saved in this browser."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "See finished runs, shares and system announcements here."
+      },
+      "version": {
+        "title": "What's New",
+        "description": "Click the version number to see the latest features and improvements."
       }
     },
     "areaSelect": {
@@ -1780,10 +1896,6 @@
         "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
         "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
       },
-      "customData": {
-        "title": "Custom data",
-        "description": "Optionally upload weather station data (Excel or CSV) for this area; it is used to compute the Weather Index. If left empty, the bundled regional data is used."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -1810,6 +1922,15 @@
         "description": "Choose the CO2 sources and sinks the model routes between.",
         "tip": "At least one node is required before the model can continue.",
         "title": "Node selection"
+      },
+      "ui": {
+        "sections": {
+          "intro": "Intro",
+          "setup": "Setup",
+          "map": "Map",
+          "layers": "Layers",
+          "review": "Review"
+        }
       }
     },
     "buttons": {
@@ -1890,42 +2011,6 @@
     "sampleRegion": "Sample Region",
     "Vedra": "Vedra"
   },
-  "weather": {
-    "temperature": "Temp.",
-    "windSpeed": "Wind",
-    "humidity": "Humidity",
-    "uvIndex": "UV",
-    "clickToRefresh": "Click weather to refresh",
-    "clickToRetry": "Click to retry",
-    "retry": "Retry",
-    "loadWeather": "Load weather",
-    "clickToLoad": "Click to load weather for {{location}}",
-    "current": "Current",
-    "searchLocation": "Search location...",
-    "yourLocations": "Your Locations",
-    "syncing": "Syncing...",
-    "temperatureTooltip": "Current temperature in Celsius and Fahrenheit",
-    "humidityTooltip": "Relative humidity percentage",
-    "uvLevels": {
-      "low": "Low",
-      "moderate": "Moderate",
-      "high": "High",
-      "veryHigh": "Very High",
-      "extreme": "Extreme"
-    },
-    "uvDescriptions": {
-      "low": "No protection needed",
-      "moderate": "Wear sunscreen",
-      "high": "Protection essential",
-      "veryHigh": "Extra protection needed",
-      "extreme": "Avoid sun exposure"
-    },
-    "dataBy": "Weather data by",
-    "settings": "Weather settings",
-    "title": "Weather information",
-    "uvUnavailable": "UV data not available (nighttime)",
-    "windSpeedTooltip": "Change the unit in Settings → Data display."
-  },
   "settings": {
     "title": "Settings",
     "subtitle": "Customize your experience and preferences",
@@ -1951,10 +2036,6 @@
     "language": {
       "title": "Language",
       "subtitle": "Interface language"
-    },
-    "weatherLocation": {
-      "title": "Weather Location",
-      "subtitle": "Default weather"
     },
     "mapLocation": {
       "title": "Map Location",
@@ -2114,17 +2195,13 @@
       "greeting": "Welcome to CCUS Simulation Platform!",
       "intro": "Let's take a moment to set up your preferences. This will help us personalize your experience and provide you with the most relevant information.",
       "step1": "Choose your preferred language",
-      "step2": "Set your weather and map preferences",
+      "step2": "Set your map and notification preferences",
       "step3": "Configure notification settings",
       "timeNote": "This will only take a minute"
     },
     "language": {
       "title": "Language Preference",
       "description": "Select your preferred language for the application"
-    },
-    "weather": {
-      "title": "Weather Preferences",
-      "description": "Set your preferred location for weather information"
     },
     "map": {
       "title": "Map Preferences",
@@ -2164,6 +2241,7 @@
       "platform": "Platform",
       "infrastructure": "Infrastructure",
       "howItWorks": "How it Works",
+      "caseStudy": "Case Study",
       "personas": "Who It's For",
       "contact": "Contact",
       "signIn": "Sign in",
@@ -2171,45 +2249,57 @@
     },
     "hero": {
       "badge": "EU-Funded Horizon CCUS Research Project",
-      "title1": "Accelerate Carbon Capture Across Europe",
-      "titleHighlight": "CCUS Intelligence",
-      "subtitle": "Map industrial emissions, model optimal pipeline & shipping transport networks, evaluate geological storage reservoirs, and fast-track industrial decarbonization across Europe.",
+      "title1": "Assess CCU Projects in",
+      "titleHighlight": "Germany, Norway and the Netherlands",
+      "subtitle": "Map industrial emissions, model optimal pipeline & shipping transport networks, and evaluate geological storage reservoirs — assessing CCU projects in Germany, Norway and the Netherlands.",
       "getStarted": "Launch CCUS Assessment",
       "seeHow": "See How It Works",
+      "publicNote": "Everything on this page is public — no account needed. Sign in only to create and run your own assessments, and return here anytime via the STORCITO logo.",
       "metricSites": "Emission Sources Mapped",
       "metricStorage": "Annual CO₂ Catalogued",
       "metricNetwork": "Municipalities Covered",
       "metricCost": "Countries"
     },
+    "caseStudy": {
+      "eyebrow": "The Case Study",
+      "title": "CCU projects in Germany, Norway and the Netherlands",
+      "description": "The platform is built on the STORE_CO2 case study: assessing carbon capture and utilisation (CCU) projects in the three countries for which the project provides data — Germany, Norway and the Netherlands. Industrial CO₂ sources and storage or utilisation sinks come from the STORE_CO2 catalogue, and capture costs follow its scenario horizons from 2025–2030 up to 2050. The platform routes captured CO₂ between sites by pipeline, truck or railway and prices the full chain per tonne.",
+      "germanyTitle": "Germany",
+      "germanyDesc": "Industrial point sources and utilisation options in Europe's largest emitting economy.",
+      "norwayTitle": "Norway",
+      "norwayDesc": "Offshore geological storage in North Sea aquifers and depleted fields.",
+      "netherlandsTitle": "Netherlands",
+      "netherlandsDesc": "Industrial clusters around Rotterdam with pipeline and shipping links."
+    },
     "challenge": {
       "eyebrow": "The Decarbonization Challenge",
-      "title": "Solving European Industrial Decarbonization",
-      "description": "Transitioning heavy industry to net-zero requires solving complex spatial, transport, and economic challenges across European borders.",
+      "title": "The Challenge of CCU Assessment",
+      "description": "Every assessment must match thousands of emission sources to suitable storage and utilisation sinks, route the CO₂ between them, and price the full chain per tonne.",
       "card1Title": "Industrial Point Sources",
-      "card1Desc": "Heavy industry (cement, steel, chemicals) accounts for over 25% of European emissions, requiring rapid capture deployment.",
-      "card2Title": "Complex Transport Logistics",
-      "card2Desc": "Connecting inland industrial clusters to offshore storage requires combining high-pressure pipelines with LCO₂ shipping networks.",
-      "card3Title": "Geological Reservoir Matching",
-      "card3Desc": "Ensuring long-term containment integrity and matching annual capture volumes to offshore aquifer injection limits.",
-      "card4Title": "Economic Optimization",
-      "card4Desc": "Calculating levelized cost of CO₂ avoided (€/t CO₂) across CAPEX, compression power, shipping charters, and carbon taxes."
+      "card1Desc": "14,641 industrial CO₂ sources in Germany, Norway and the Netherlands — each with its own emissions, sector and operating period.",
+      "card2Title": "Transport Logistics",
+      "card2Desc": "Captured CO₂ has to travel from source to sink — by pipeline, truck or railway — each mode with very different costs.",
+      "card3Title": "Source–Sink Matching",
+      "card3Desc": "Every tonne needs a compatible sink: matched by volume, distance, and the years both sites operate.",
+      "card4Title": "Full-Chain Costs",
+      "card4Desc": "Capture, liquefaction, transport and storage each add € per tonne — and costs shift with the 2025–2050 scenario year."
     },
     "features": {
       "label": "Platform Capabilities",
       "title": "Everything you need for CCUS planning & route optimization",
-      "description": "A comprehensive geospatial toolkit for modeling carbon capture, CO₂ transport logistics, and geological storage reservoirs.",
+      "description": "A geospatial toolkit built on the STORE_CO2 catalogue: sources, sinks, routing and full-chain costs for Germany, Norway and the Netherlands.",
       "f1Title": "Interactive Geospatial Map",
-      "f1Desc": "Visualize industrial emission sources, pipeline corridors, shipping routes and storage sites in one interactive map.",
+      "f1Desc": "Visualize 14,641 emission sources, storage and utilisation sinks and candidate routes on one interactive map.",
       "f2Title": "Source–Sink Matching",
-      "f2Desc": "Match industrial CO₂ emitters to suitable geological storage by capacity, distance and cost.",
+      "f2Desc": "Match industrial CO₂ emitters to suitable storage and utilisation sinks by volume, distance and operating period.",
       "f3Title": "Route Optimization",
-      "f3Desc": "Model pipeline and shipping corridors and compute least-cost, carbon-optimal transport routing and sizing.",
-      "f4Title": "Storage Reservoir Analytics",
-      "f4Desc": "Evaluate deep saline aquifers and depleted oil & gas fields for capacity, pressure limits and injection rates.",
+      "f3Desc": "CO2RouteX computes one route per source–sink pair — by pipeline, truck or railway — with distance and cost per tonne.",
+      "f4Title": "Sink Catalogue",
+      "f4Desc": "Browse storage and utilisation sinks with annual demand (kt CO₂/yr) and capacities (Mt CO₂) from the STORE_CO2 dataset.",
       "f5Title": "Cost & CO₂ Reports",
-      "f5Desc": "Levelized cost of CO₂ avoided (€/t) with CAPEX, compression and shipping breakdowns and Sankey carbon flows.",
+      "f5Desc": "Capture, liquefaction, transport and storage costs per tonne — low–high ranges across the 2025–2050 scenarios, plus a downloadable workbook.",
       "f6Title": "Collaborative Workspaces",
-      "f6Desc": "Share models, compare scenarios and collaborate with regional consortiums on decarbonization plans."
+      "f6Desc": "Share models, compare scenarios and collaborate in shared workspaces."
     },
     "infrastructure": {
       "eyebrow": "CCUS Value Chain",
@@ -2217,57 +2307,57 @@
       "description": "Capture, transport, storage and utilization — modeled end to end so every project is planned as a complete value chain.",
       "c1Subtitle": "Point-Source Capture",
       "c1Title": "Carbon Capture",
-      "c1Desc": "Capture CO₂ at cement, steel, chemical and power plants using post-combustion and other proven technologies.",
-      "c1Spec1": "Post-combustion & oxy-fuel capture",
-      "c1Spec2": "Flue-gas volume & purity modeling",
-      "c1Spec3": "Capture rate vs. energy penalty",
-      "c1Spec4": "Retrofit feasibility scoring",
-      "c2Subtitle": "Pipeline & Shipping",
+      "c1Desc": "Capture costs per plant from STORE_CO2 — by sector and application, with capture rate and levelised cost per tonne.",
+      "c1Spec1": "Sector-specific capture applications",
+      "c1Spec2": "Capture rate per plant",
+      "c1Spec3": "Levelised cost of capture (€2024/t)",
+      "c1Spec4": "First-of-a-kind to nth-of-a-kind cases",
+      "c2Subtitle": "Pipeline, Truck & Rail",
       "c2Title": "CO₂ Transport",
-      "c2Desc": "Move captured CO₂ from inland clusters to storage via high-pressure pipelines and liquefied-CO₂ shipping.",
-      "c2Spec1": "Pipeline diameter & pressure sizing",
-      "c2Spec2": "Maritime LCO₂ shipping routes",
-      "c2Spec3": "Compression & liquefaction power",
-      "c2Spec4": "Least-cost corridor routing",
+      "c2Desc": "Route captured CO₂ from sources to sinks by pipeline, truck or railway — one route per source–sink pair.",
+      "c2Spec1": "Pipeline CAPEX by route & terrain (€2021)",
+      "c2Spec2": "Truck & railway distance tariffs",
+      "c2Spec3": "Rail station-to-station routing",
+      "c2Spec4": "Liquefaction at the emitter for road & rail",
       "c3Subtitle": "Geological Storage",
       "c3Title": "CO₂ Storage",
-      "c3Desc": "Assess offshore and onshore reservoirs for safe, permanent geological containment of injected CO₂.",
-      "c3Spec1": "Saline aquifers & depleted fields",
-      "c3Spec2": "Injection-rate & pressure limits",
-      "c3Spec3": "Containment integrity checks",
-      "c3Spec4": "Annual capacity matching",
+      "c3Desc": "Match captured volumes to storage sites with known capacities and annual injection limits.",
+      "c3Spec1": "Storage capacity per site (Mt)",
+      "c3Spec2": "Annual rates (kt CO₂/yr)",
+      "c3Spec3": "Storage cost per tonne",
+      "c3Spec4": "Onshore & offshore sites",
       "c4Subtitle": "CO₂ Utilization",
       "c4Title": "Carbon Utilization",
-      "c4Desc": "Convert captured CO₂ into e-fuels, chemicals, building materials and other valuable products.",
-      "c4Spec1": "E-fuels & synthetic chemicals",
-      "c4Spec2": "Mineralization & building materials",
-      "c4Spec3": "Enhanced recovery pathways",
+      "c4Desc": "Route CO₂ to utilisation demand — greenhouses, urea, CCU chemicals and more — and compare against storage.",
+      "c4Spec1": "Utilisation demand per site (kt/yr)",
+      "c4Spec2": "Greenhouses, breweries & chemicals",
+      "c4Spec3": "Urea & mineralisation",
       "c4Spec4": "Utilization vs. storage trade-offs"
     },
     "howItWorks": {
       "label": "4-Step Workflow",
       "title": "From site data to operational CCUS network",
       "description": "Design, optimize, and deploy carbon capture and storage infrastructure in four steps.",
-      "s1Title": "1. Select a Region",
-      "s1Desc": "Draw or pick an area on the map. Industrial emitters, storage sites and existing infrastructure load automatically.",
-      "s2Title": "2. Configure the Chain",
-      "s2Desc": "Attach capture to emitters, then choose pipeline corridors, shipping terminals and candidate storage reservoirs.",
-      "s3Title": "3. Optimize Routes",
-      "s3Desc": "Run the optimization engine to compute least-cost transport routing, network capacity and compression needs.",
-      "s4Title": "4. Analyze & Share",
-      "s4Desc": "Explore maps, CO₂ flow diagrams and levelized cost (€/t CO₂), then export reports and share scenarios."
+      "s1Title": "1. Name & Period",
+      "s1Desc": "Name your model and choose the assessment period — scenario horizons run from 2025–2030 up to 2050.",
+      "s2Title": "2. Select Nodes",
+      "s2Desc": "Pick CO₂ sources and sinks in Germany, Norway and the Netherlands from the STORE_CO2 catalogue.",
+      "s3Title": "3. Routes & Costs",
+      "s3Desc": "CO2RouteX connects the nodes by pipeline, truck or railway and prices each route per tonne.",
+      "s4Title": "4. Review & Run",
+      "s4Desc": "Check the setup, save the model and start the run — then explore maps, flows and costs, and share scenarios."
     },
     "personas": {
       "eyebrow": "Who it is for",
-      "title": "Designed for the entire CCUS ecosystem",
+      "title": "Designed for the CCU value chain",
       "p1Title": "Industrial Emitters",
-      "p1Desc": "Cement, steel, chemical, and power plants evaluating point-source capture feasibility and regional trunk connections.",
+      "p1Desc": "Cement, steel, chemical and power plants in Germany, Norway and the Netherlands evaluating capture costs and utilisation options for their sites.",
       "p2Title": "Pipeline & Logistics Developers",
-      "p2Desc": "Route high-pressure CO₂ trunk lines, size compressor stations, and optimize ship chartering logistics.",
-      "p3Title": "Storage Reservoir Operators",
-      "p3Desc": "Analyze offshore North Sea, Baltic, and Mediterranean deep saline aquifers for injection rate limits.",
+      "p2Desc": "Compare pipeline, truck and railway connections between CO₂ sources and sinks, with a cost per tonne for each route.",
+      "p3Title": "Storage & Utilisation Operators",
+      "p3Desc": "See which emitters could route captured CO₂ to your storage or utilisation site, and what the full chain would cost.",
       "p4Title": "Policy Makers & Consortiums",
-      "p4Desc": "Simulate regional net-zero roadmaps, cross-border CO₂ transport regulations, and EU Taxonomy compliance."
+      "p4Desc": "Explore CCU scenarios from 2025–2030 up to 2050 and compare rollout options across the three case-study countries."
     },
     "trust": {
       "euTitle": "Funded by the European Union",
@@ -2304,7 +2394,7 @@
       "brandDescription": "Advanced CCUS planning platform for a sustainable future. Funded by the European Union.",
       "privacySettings": "Privacy Settings",
       "privacyPolicy": "Privacy Policy",
-      "tagline": "Accelerating carbon capture, transport and storage across Europe.",
+      "tagline": "Assessing carbon capture, transport and storage projects in Germany, Norway and the Netherlands.",
       "cookies": "Cookies Policy",
       "impressum": "Impressum",
       "terms": "Terms & Conditions",
@@ -2374,7 +2464,7 @@
   "configurator": {
     "registry": {
       "layer1Title": "Model Initialization",
-      "layer1Subtitle": "Name and simulation timeframe",
+      "layer1Subtitle": "Name and assessment period",
       "layer2Title": "Node Selection",
       "layer2Subtitle": "Pick the CO₂ sources and sinks",
       "layer3Title": "Routes",
@@ -2405,10 +2495,10 @@
       "step": "STEP"
     },
     "layer1": {
-      "purpose": "Name this analysis run and choose the date window you want to assess.",
-      "nextStepHint": "Next you'll outline the geographic area on the map.",
+      "purpose": "Name this assessment and choose the years it covers.",
+      "nextStepHint": "Next you'll choose the CO₂ sources and sinks.",
       "modelNameLabel": "Model name",
-      "modelNamePlaceholder": "e.g. Sample Area Summer 2026",
+      "modelNamePlaceholder": "e.g. Rhine–Ruhr storage 2030–2040",
       "modelNameHint": "A descriptive name so you can find this model later.",
       "dynamicHint": "Dynamic runs keep the selected date range and use the 16:00 to 17:00 window.",
       "dynamicLoading": "Loading available dynamic dates...",
@@ -2421,10 +2511,15 @@
       "suggestedName1": "Regional CO₂ Assessment",
       "suggestedName2": "Industrial Cluster Study",
       "suggestedName3": "Storage Site Screening",
-      "suggestedName4": "Quarterly Capture Outlook",
+      "suggestedName4": "Rural CO₂ Hub",
       "modelNameQuestion": "What do you want to call this model?",
       "periodQuestion": "Which period should it assess?",
-      "assessmentPeriod": "Assessment Period"
+      "assessmentPeriod": "Assessment Period",
+      "periodHint": "Whole years. Sites count while they operate in the period, and capture costs follow STORE_CO2's 2025–2050 horizons.",
+      "startYear": "Start year",
+      "endYear": "End year",
+      "periodSelected": "{{period}} · {{count}} years",
+      "periodMissing": "Choose a start and end year."
     },
     "layer2": {
       "purpose": "Choose the CO₂ sources and sinks this model routes between.",
@@ -2437,9 +2532,6 @@
       "purpose": "CO2RouteX screens the selected nodes for candidate connections, then routes and costs them.",
       "nextStepHint": "Next you'll see what those routes cost.",
       "customData": "Custom data (optional)",
-      "customDataDesc": "Bring your own weather inputs for this area. If left empty, the bundled regional data is used.",
-      "weatherStationData": "Weather station data",
-      "weatherStationHint": "Excel or CSV station export (.xlsx / .csv)",
       "lockedByPrecomputed": "Included in the precomputed regional map. Disable the precomputed switch above to customise layers.",
       "precomputedLabel": "Precomputed regional map",
       "precomputedInfoLabel": "About the precomputed regional map",
@@ -2462,7 +2554,6 @@
       "uploadIncomplete": "GeoJSON upload incomplete.",
       "areaDetails": "{{count}} regions · {{area}}",
       "areaDetailsSingle": "1 region · {{area}}",
-      "allSignalsActive": "All risk signals active (weather + terrain + history).",
       "someSignalsActive": "Running with {{count}} of 3 optional signals — output will differ from the full model.",
       "bufferDistance": "{{buffer}} m around the AOI.",
       "blockers": "{{count}} blockers — fix before running.",
@@ -2480,7 +2571,10 @@
       },
       "costsQuestion": "What do these routes cost?",
       "costsInfo": "Calculated from the routes found in the previous step.",
-      "noNodes": "No nodes selected — go back to Step 2."
+      "noNodes": "No nodes selected — go back to Step 2.",
+      "missingYears": "Start or end year missing — go back to Step 1.",
+      "yearOrder": "The start year is after the end year.",
+      "periodYears": "{{period}} · {{count}} years"
     },
     "layer5": {
       "purpose": "Review the model setup before saving. The calculation will use the selected dates, area and data source choices.",
@@ -2493,13 +2587,11 @@
         "modelName": "Model name",
         "from": "From",
         "to": "To",
-        "dailyRun": "Daily run",
         "buffer": "Buffer",
         "area": "Area",
         "riskComponents": "Risk components",
         "nodes": "Nodes"
-      },
-      "dailyRunInfo": "Every simulated day is assessed with the weather from this window — the hottest, driest part of the afternoon."
+      }
     },
     "coverage": {
       "title": "Data coverage",
@@ -2525,7 +2617,9 @@
       "dynamicLoading": "Loading available dynamic dates.",
       "dynamicRange": "Select a fully available dynamic date range.",
       "modelName": "a model name",
-      "dynamicOrder": "The start date must be before or equal to the end date."
+      "dynamicOrder": "The start date must be before or equal to the end date.",
+      "yearRange": "a start and end year",
+      "yearOrder": "The start year must not be after the end year."
     },
     "save": {
       "calculationFailed": "The model was saved, but the calculation could not be started.",
@@ -2563,7 +2657,12 @@
       "glass": "Glass",
       "industry": "General industry",
       "iron_and_steel": "Iron and steel",
-      "pulp_and_paper": "Pulp and paper"
+      "pulp_and_paper": "Pulp and paper",
+      "greenhouse": "Greenhouses",
+      "brewery": "Breweries",
+      "ccu_chemicals": "CCU chemicals",
+      "urea": "Urea plants",
+      "mineralization": "Mineralisation"
     },
     "legend": {
       "emitters": "Emission sources",
@@ -2610,7 +2709,27 @@
     "noState": "No state recorded",
     "sortAsc": "Lowest CO₂ first",
     "sortDesc": "Highest CO₂ first",
-    "statesFilter": "States"
+    "statesFilter": "States",
+    "ruralFilter": "Settlement type",
+    "rural": {
+      "all": "All",
+      "rural": "Rural",
+      "urban": "Urban"
+    },
+    "ruralHint": "Rural by the 2021 census grid (STORE_CO2).",
+    "regionsFilter": "Regions (NUTS 2)",
+    "loadGroup": "Load",
+    "periodNote": "Assessment period {{start}}–{{end}}: plants count from their commissioning year, coal until its phase-out. Emissions are each plant's latest value, held constant; STORE_CO2 has no projections.",
+    "outsidePeriod": "{{count}} selected sites do not operate in the assessment period.",
+    "periodOnly": "Only sites operating in the assessment period",
+    "periodOnlyHint": "{{start}}–{{end}}: hides retired plants, plants built later and coal after its phase-out.",
+    "periodMissing": "Set the assessment period in step 1; until then only retired plants are hidden.",
+    "tag": {
+      "retired": "retired",
+      "from": "from {{year}}",
+      "until": "until {{year}}",
+      "startUnknown": "start unknown"
+    }
   },
   "co2Routing": {
     "run": "Find routes",
@@ -2632,7 +2751,13 @@
   "co2Costs": {
     "running": "The run is still going — costs appear once routing finishes.",
     "noRun": "Go back to Routes and find connections first — costs are calculated from them.",
-    "noCosts": "No costed routes. Pipeline CAPEX needs a routed pipeline; truck and railway tariffs need routed distances."
+    "noCosts": "No costed routes. Pipeline CAPEX needs a routed pipeline; truck and railway tariffs need routed distances.",
+    "capture": "Capture (€/t)",
+    "liquefaction": "Liquefaction (€/t)",
+    "storage": "Storage (€/t)",
+    "total": "Full chain (€/t)",
+    "chainNote": "Per tonne in €2024, low – high cost case, as STORE_CO2's scenarios price the chain: capture without conditioning (2030, first of a kind), liquefaction at the emitter for road and rail, the route's tariff, and storage at Porthos's audited cost (none at a utiliser). Pipelines have a CAPEX, not a tariff, so no full-chain figure.",
+    "periodBasis": "Capture and liquefaction averaged over {{start}}–{{end}}, the years each plant runs."
   },
   "apiTokens": {
     "create": "Create new token",
@@ -2698,6 +2823,91 @@
     "refreshError": "Could not refresh sources. Existing data was kept.",
     "search": "Search sources",
     "status": "Status",
-    "yes": "Yes"
+    "yes": "Yes",
+    "sinkInfo": "STORE_CO2 record. Rates and demand are kt CO₂ per year; capacities are Mt CO₂.",
+    "loadingCapture": "Loading capture costs",
+    "captureTitle": "Carbon capture (STORE_CO2)",
+    "capturable": "{{value}} t CO₂/yr capturable",
+    "captureRate": "capture rate {{value}}",
+    "maturity": {
+      "noak": "Nth of a kind",
+      "foak_100": "First of a kind (+100%)",
+      "foak_200": "First of a kind (+200%)"
+    },
+    "lcocCaption": "Levelised cost of capture (€2024 per tonne captured)",
+    "horizonYear": "Year",
+    "costCase": {
+      "low": "Low",
+      "central": "Central",
+      "high": "High"
+    },
+    "otherApplications": "Other candidate applications"
+  },
+  "whatsNew": {
+    "open": "What's new in this version",
+    "title": "What's new",
+    "version": "Version {{version}}",
+    "released": "Released {{date}}",
+    "intro": "A summary of the latest features, improvements and fixes in this release.",
+    "where": "Where",
+    "viewAll": "All changes on GitHub",
+    "close": "Got it",
+    "groups": {
+      "new": "New",
+      "improved": "Improved",
+      "fixed": "Fixed"
+    },
+    "items": {
+      "families": {
+        "title": "Model versions grouped",
+        "description": "Each model now appears once, with its copies grouped under it. The original model stays on top, and the version badge expands its copies, oldest first.",
+        "where": "Model dashboard → model list"
+      },
+      "tabs": {
+        "title": "Status tabs",
+        "description": "Switch between All, Pinned, Running, Completed, Drafts and Failed to see only the models you need. Search and period filters work inside every tab.",
+        "where": "Model dashboard → above the list"
+      },
+      "pinning": {
+        "title": "Pin models",
+        "description": "Pin a model to keep it at the top of the list. Pinning any version keeps the whole family on top, and the Pinned tab collects them in one place.",
+        "where": "Model row → pin icon"
+      },
+      "newBadge": {
+        "title": "New results badge",
+        "description": "Recently finished models get a New badge so fresh results stand out. Hover over it to see when the run finished.",
+        "where": "Model row → next to the title"
+      },
+      "acceptance": {
+        "title": "Public acceptance layer",
+        "description": "Shade the map by the share of rural residents who support or oppose each CCUS use, from the RUB survey. Click a region to see its results, what matters most and suggestions for communication.",
+        "where": "New model → Step 2 map"
+      },
+      "siteCard": {
+        "title": "Site card on the map",
+        "description": "Click an emitter or sink dot to see its type, location and emissions, add it to or remove it from the model, or open its details.",
+        "where": "New model → Step 2 map"
+      },
+      "tour": {
+        "title": "Redesigned guided tour",
+        "description": "The tour now walks through the dashboard, map and tools step by step, with section dots and arrow-key navigation.",
+        "where": "Help menu → Restart tour"
+      },
+      "sinks": {
+        "title": "Storage and utilisation sinks",
+        "description": "The node catalogue now includes storage sites and utilisation sinks with their regions and operating years.",
+        "where": "New model → Step 2 → Sink categories"
+      },
+      "period": {
+        "title": "Assessment period",
+        "description": "Models now cover whole years. Plants are counted only for the years they operate within the assessment period.",
+        "where": "New model → Step 1"
+      },
+      "workspaceMenu": {
+        "title": "Workspace menu",
+        "description": "The workspace list now opens fully above the status tabs and the model list.",
+        "where": "Model dashboard → workspace selector"
+      }
+    }
   }
 }

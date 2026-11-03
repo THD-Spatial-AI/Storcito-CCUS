@@ -201,6 +201,7 @@
       "moveToWorkspace": "Mover para espaço de trabalho",
       "profile": "Perfil",
       "documentation": "Documentação",
+      "howItWorks": "Como funciona",
       "restartTour": "Reiniciar visita guiada",
       "feedback": "Comentários",
       "theme": "Tema",
@@ -262,9 +263,6 @@
       "fields": {
         "fullName": "Nome completo",
         "email": "Endereço de e-mail",
-        "organization": "Organização",
-        "position": "Cargo",
-        "phone": "Número de telefone",
         "accessLevel": "Nível de acesso",
         "emailVerified": "E-mail verificado",
         "password": "Palavra-passe",
@@ -274,8 +272,6 @@
       "placeholders": {
         "fullName": "Introduza o nome completo",
         "email": "Introduza o endereço de e-mail",
-        "organization": "Introduza o nome da organização",
-        "position": "Introduza o cargo",
         "password": "Introduza a palavra-passe",
         "confirmPassword": "Confirme a palavra-passe",
         "modelLimit": "Deixe vazio para o valor predefinido"
@@ -291,7 +287,6 @@
         "expert": "Especialista (acesso total)"
       },
       "validation": {
-        "phoneInvalid": "O número de telefone só pode conter dígitos, espaços, hífenes, sinais de mais e parênteses",
         "passwordLength": "A palavra-passe deve ter pelo menos 8 caracteres",
         "nameRequired": "O nome é obrigatório",
         "emailRequired": "O e-mail é obrigatório",
@@ -888,13 +883,6 @@
       "specialChar": "Um carácter especial",
       "hasSpaces": "A palavra-passe tem espaços no início ou no fim"
     },
-    "organizationDetails": "Dados da organização",
-    "organization": "Organização",
-    "enterOrganization": "Introduza a sua organização",
-    "position": "Cargo",
-    "enterPosition": "Introduza o seu cargo",
-    "phoneNumber": "Número de telefone",
-    "enterPhoneNumber": "Introduza o seu número de telefone",
     "accessLevel": "Nível de acesso",
     "veryLow": "Muito baixo",
     "low": "Baixo",
@@ -917,11 +905,15 @@
     "agreeToTerms": "Ao criar uma conta, aceita os nossos Termos de Serviço",
     "signInHere": "Inicie sessão aqui",
     "sidePanel": {
-      "badge": "Inteligência CCUS",
+      "badge": "CCUS assessment",
       "title": "Acelerar a captura de carbono antes que as emissões aumentem",
       "subtitle": "Mapeie, modele e atue em projetos CCUS — transformando dados de instalações e informação geoespacial em captura, utilização e armazenamento de carbono seguros e escaláveis em toda a Europa.",
       "funded": "Financiado pela União Europeia · Desenvolvido na plataforma STORCITO"
-    }
+    },
+    "consentText": "Consinto o tratamento e o armazenamento dos meus dados pessoais nos termos da",
+    "declarationOfConsent": "Declaração de consentimento",
+    "and": "e",
+    "privacyPolicy": "Política de privacidade"
   },
   "workspace": {
     "workspace": "Espaço de trabalho",
@@ -1049,7 +1041,34 @@
     "peopleWithAccessDescription": "As pessoas listadas aqui podem abrir este modelo e as suas camadas de risco.",
     "revokeAccess": "Revogar",
     "revokingAccess": "A revogar…",
-    "revokeAccessFor": "Revogar o acesso de {{email}}"
+    "revokeAccessFor": "Revogar o acesso de {{email}}",
+    "tabs": {
+      "all": "Todos",
+      "pinned": "Fixados",
+      "running": "Em execução",
+      "completed": "Concluídos",
+      "drafts": "Rascunhos",
+      "failed": "Falhados"
+    },
+    "area": "Área",
+    "period": "Período",
+    "lastActivity": "Última atividade",
+    "pin": "Fixar no topo",
+    "unpin": "Desafixar",
+    "recentlyCompleted": "Novo",
+    "recentlyCompletedTooltip": "Concluído em {{time}}. Abra-o para ver os resultados.",
+    "versions_one": "{{count}} versão",
+    "versions_other": "{{count}} versões",
+    "showVersions_one": "Mostrar {{count}} versão",
+    "showVersions_other": "Mostrar {{count}} versões",
+    "hideVersions_one": "Ocultar {{count}} versão",
+    "hideVersions_other": "Ocultar {{count}} versões",
+    "originalVersion": "Original",
+    "originalVersionHint": "Esta linha é o modelo original. O estado, o período e a atividade são dele; cada versão tem a sua própria linha.",
+    "estimateBasis_one": "Com base em 1 execução comparável, que demorou {{typical}}",
+    "estimateBasis_other": "Com base em {{count}} execuções comparáveis, que normalmente demoram {{typical}}",
+    "view": "Ver",
+    "run": "Executar"
   },
   "polygon": {
     "drawRegion": "Desenhe a sua região",
@@ -1153,10 +1172,7 @@
     "userProfile": {
       "title": "Perfil do utilizador",
       "subtitle": "Informação da sua conta",
-      "email": "E-mail",
-      "organization": "Organização",
-      "position": "Cargo",
-      "phone": "Telefone"
+      "email": "E-mail"
     },
     "accessPermissions": {
       "title": "Acesso e permissões",
@@ -1195,7 +1211,7 @@
   "userManagement": {
     "title": "Gestão de utilizadores",
     "subtitle": "Faça a gestão de utilizadores, grupos e permissões",
-    "searchPlaceholder": "Pesquisar nome, e-mail, organização...",
+    "searchPlaceholder": "Pesquisar nome ou e-mail...",
     "refresh": "Atualizar",
     "addNewUser": "Adicionar novo utilizador",
     "add": "Adicionar",
@@ -1216,12 +1232,9 @@
     },
     "table": {
       "user": "Utilizador",
-      "organization": "Organização",
-      "position": "Cargo",
       "accessLevel": "Nível de acesso",
       "group": "Grupo",
       "emailVerified": "E-mail verificado",
-      "phone": "Telefone",
       "actions": "Ações"
     },
     "emailStatus": {
@@ -1366,16 +1379,10 @@
     "saveChanges": "Guardar alterações",
     "fields": {
       "fullName": "Nome completo",
-      "email": "Endereço de e-mail",
-      "organization": "Organização",
-      "position": "Cargo",
-      "phone": "Número de telefone"
+      "email": "Endereço de e-mail"
     },
     "placeholders": {
-      "fullName": "Introduza o seu nome completo",
-      "organization": "A sua empresa ou organização",
-      "position": "O seu cargo",
-      "phone": "+351 900 000 000"
+      "fullName": "Introduza o seu nome completo"
     },
     "accessLevels": {
       "basic": "Básico",
@@ -1702,8 +1709,8 @@
         "description": "Aceda ao seu perfil, às definições da conta e às preferências de utilizador. Faça a gestão da sua conta e aceda a opções adicionais."
       },
       "navigation": {
-        "title": "Navegação do painel",
-        "description": "Aceda ao seu painel principal para ver os seus projetos, as avaliações recentes e as estatísticas gerais. É o seu ponto de partida."
+        "title": "Painel de administração",
+        "description": "Gerencie espaços de trabalho, usuários e todos os modelos da plataforma. Visível apenas para administradores."
       },
       "simulations": {
         "title": "Simulações CCUS",
@@ -1737,6 +1744,115 @@
         "nextStepsDescription": "Experimente criar a sua primeira avaliação CCUS ou explore o mapa interativo.",
         "restartTour": "Reiniciar a visita",
         "restartTourDescription": "Pode reiniciar esta visita a qualquer momento a partir da barra lateral."
+      },
+      "dashboard": {
+        "tabsOverview": {
+          "title": "Filtrar por estado",
+          "description": "Estes separadores filtram os seus modelos por estado, com contagens ao vivo para cada grupo."
+        },
+        "tabAll": {
+          "title": "Todos os modelos",
+          "description": "Todas as famílias de modelos neste espaço de trabalho, com as famílias fixadas no topo."
+        },
+        "tabPinned": {
+          "title": "Fixados",
+          "description": "Modelos que fixou. Fixar qualquer versão mantém a família inteira no topo."
+        },
+        "tabRunning": {
+          "title": "Em execução",
+          "description": "Modelos em fila, a calcular, em execução ou a processar. A lista atualiza em tempo real enquanto executam."
+        },
+        "tabCompleted": {
+          "title": "Concluídos",
+          "description": "Modelos concluídos e publicados, prontos a abrir e explorar."
+        },
+        "tabDrafts": {
+          "title": "Rascunhos",
+          "description": "Modelos em rascunho ou modificados que ainda precisam de ser executados."
+        },
+        "tabFailed": {
+          "title": "Com falha",
+          "description": "Execuções falhadas ou canceladas. Inspecione o erro e execute novamente quando estiver pronto."
+        },
+        "search": {
+          "title": "Pesquisa e período",
+          "description": "Pesquise títulos de modelos e filtre por período de simulação. Os resultados incluem versões antigas de uma família."
+        },
+        "familyRow": {
+          "title": "Uma linha por modelo",
+          "description": "Cada linha é uma família de modelos com o modelo original no topo. O distintivo de versões mostra as cópias, da mais antiga para a mais recente."
+        },
+        "columns": {
+          "title": "Colunas",
+          "description": "Última atividade lista primeiro os modelos em execução, depois os terminados mais recentemente. Período, área e risco num relance."
+        },
+        "pin": {
+          "title": "Fixar modelos",
+          "description": "Fixe um modelo para manter a sua família no topo de todos os separadores."
+        },
+        "primaryAction": {
+          "title": "Ação principal",
+          "description": "Veja modelos concluídos ou execute rascunhos diretamente a partir da linha."
+        },
+        "moreMenu": {
+          "title": "Mais ações",
+          "description": "Edite, copie, transfira, partilhe, mova para um espaço de trabalho ou elimine a partir deste menu."
+        },
+        "newBadge": {
+          "title": "Novos resultados",
+          "description": "Os modelos concluídos recentemente que ainda não abriu são marcados como novos."
+        },
+        "refresh": {
+          "title": "Atualizar, partilhar e copiar",
+          "description": "Atualizar recarrega a lista de modelos (os modelos em execução também se atualizam sozinhos). Partilhar dá à sua equipa acesso a este espaço e Copiar duplica-o com os seus modelos."
+        }
+      },
+      "ui": {
+        "stepOf": "Passo {{current}} de {{total}}",
+        "skipTour": "Ignorar a visita",
+        "finish": "Concluir",
+        "whatsNew": "Novo",
+        "sections": {
+          "welcome": "Boas-vindas",
+          "navigation": "Navegação",
+          "dashboard": "Painel",
+          "tabs": "Separadores",
+          "rows": "Linhas",
+          "finish": "Concluir",
+          "tools": "Ferramentas"
+        },
+        "chips": {
+          "filters": "Filtros"
+        }
+      },
+      "workspace": {
+        "title": "Espaço de trabalho",
+        "description": "Os modelos pertencem a um espaço de trabalho. Troque de espaço aqui ou crie um novo para organizar projetos e partilhá-los com a sua equipa."
+      },
+      "demo": {
+        "title": "Transporte de CO₂ – bacia do Ruhr",
+        "example": "Exemplo",
+        "justNow": "Agora mesmo"
+      },
+      "github": {
+        "title": "GitHub",
+        "description": "Veja o código aberto e reporte problemas no GitHub."
+      },
+      "help": {
+        "title": "Ajuda",
+        "description": "Tudo num só lugar: abra a documentação, reinicie este tour a qualquer momento ou envie-nos feedback."
+      },
+      "language": {
+        "title": "Idioma",
+        "description": "Altere o idioma da interface. A sua escolha fica guardada neste navegador."
+      },
+      "notifications": {
+        "title": "Notificações",
+        "description": "Veja aqui simulações concluídas, compartilhamentos e avisos do sistema."
+      },
+      "version": {
+        "title": "Novidades",
+        "description": "Clique no número da versão para ver os recursos e melhorias mais recentes."
       }
     },
     "areaSelect": {
@@ -1780,10 +1896,6 @@
         "description": "Todas as noites a região inteira é analisada com todas as camadas de risco ativas. Se a sua data dinâmica única estiver coberta, este interruptor recorta o resultado da sua área desse mapa e devolve-o em segundos.",
         "tip": "Quando o interruptor não está disponível, o texto abaixo explica porquê, e o modelo calcula todos os passos para a sua área."
       },
-      "customData": {
-        "title": "Dados personalizados",
-        "description": "Opcionalmente carregue dados de estação meteorológica (Excel ou CSV) para esta área; são usados para calcular o Índice Meteorológico. Se ficar vazio, são usados os dados regionais incluídos."
-      },
       "calculationStatus": {
         "title": "Estado do cálculo",
         "description": "Esta linha indica se as datas disponíveis estão a carregar, indisponíveis, com erro ou prontas a selecionar.",
@@ -1810,6 +1922,15 @@
         "description": "Escolha as fontes e sumidouros de CO2 entre os quais o modelo traça rotas.",
         "tip": "É necessário pelo menos um nó para continuar.",
         "title": "Seleção de nós"
+      },
+      "ui": {
+        "sections": {
+          "intro": "Introdução",
+          "setup": "Configuração",
+          "map": "Mapa",
+          "layers": "Camadas",
+          "review": "Revisão"
+        }
       }
     },
     "buttons": {
@@ -1890,42 +2011,6 @@
     "sampleRegion": "Região de exemplo",
     "Vedra": "Vedra"
   },
-  "weather": {
-    "temperature": "Temp.",
-    "windSpeed": "Vento",
-    "humidity": "Humidade",
-    "uvIndex": "UV",
-    "clickToRefresh": "Clique na meteorologia para atualizar",
-    "clickToRetry": "Clique para tentar novamente",
-    "retry": "Tentar novamente",
-    "loadWeather": "Carregar meteorologia",
-    "clickToLoad": "Clique para carregar a meteorologia de {{location}}",
-    "current": "Atual",
-    "searchLocation": "Pesquisar localização...",
-    "yourLocations": "As suas localizações",
-    "syncing": "A sincronizar...",
-    "temperatureTooltip": "Temperatura atual em Celsius e Fahrenheit",
-    "humidityTooltip": "Percentagem de humidade relativa",
-    "uvLevels": {
-      "low": "Baixo",
-      "moderate": "Moderado",
-      "high": "Alto",
-      "veryHigh": "Muito alto",
-      "extreme": "Extremo"
-    },
-    "uvDescriptions": {
-      "low": "Não é necessária proteção",
-      "moderate": "Use protetor solar",
-      "high": "Proteção essencial",
-      "veryHigh": "É necessária proteção extra",
-      "extreme": "Evite a exposição solar"
-    },
-    "dataBy": "Dados meteorológicos de",
-    "settings": "Definições meteorológicas",
-    "title": "Informação meteorológica",
-    "uvUnavailable": "Dados UV indisponíveis (noite)",
-    "windSpeedTooltip": "Altere a unidade em Definições → Dados e visualização."
-  },
   "settings": {
     "title": "Definições",
     "subtitle": "Personalize a sua experiência e preferências",
@@ -1951,10 +2036,6 @@
     "language": {
       "title": "Idioma",
       "subtitle": "Idioma da interface"
-    },
-    "weatherLocation": {
-      "title": "Localização meteorológica",
-      "subtitle": "Meteorologia predefinida"
     },
     "mapLocation": {
       "title": "Localização no mapa",
@@ -2114,17 +2195,13 @@
       "greeting": "Bem-vindo à Plataforma de Simulação CCUS!",
       "intro": "Vamos dedicar um momento a configurar as suas preferências. Isto ajuda-nos a personalizar a sua experiência e a mostrar-lhe a informação mais relevante.",
       "step1": "Escolha o seu idioma preferido",
-      "step2": "Defina as suas preferências de meteorologia e mapa",
+      "step2": "Defina as suas preferências de mapa e notificações",
       "step3": "Configure as definições de notificações",
       "timeNote": "Isto demora apenas um minuto"
     },
     "language": {
       "title": "Preferência de idioma",
       "description": "Selecione o idioma preferido para a aplicação"
-    },
-    "weather": {
-      "title": "Preferências meteorológicas",
-      "description": "Defina a localização preferida para a informação meteorológica"
     },
     "map": {
       "title": "Preferências do mapa",
@@ -2164,6 +2241,7 @@
       "platform": "Plataforma",
       "infrastructure": "Infraestrutura",
       "howItWorks": "Como funciona",
+      "caseStudy": "Caso de estudo",
       "personas": "Para quem é",
       "contact": "Contacto",
       "signIn": "Iniciar sessão",
@@ -2171,45 +2249,57 @@
     },
     "hero": {
       "badge": "Projeto de investigação CCUS Horizonte financiado pela UE",
-      "title1": "Acelerar a captura de carbono em toda a Europa",
-      "titleHighlight": "Inteligência CCUS",
-      "subtitle": "Mapeie emissões industriais, modele redes ótimas de transporte por conduta e navio, avalie reservatórios geológicos de armazenamento e acelere a descarbonização industrial em toda a Europa.",
+      "title1": "Avalie projetos CCU em",
+      "titleHighlight": "Alemanha, Noruega e Países Baixos",
+      "subtitle": "Mapeie emissões industriais, modele redes ótimas de transporte por conduta e navio e avalie reservatórios geológicos de armazenamento — para avaliar projetos CCU na Alemanha, na Noruega e nos Países Baixos.",
       "getStarted": "Iniciar avaliação CCUS",
       "seeHow": "Ver como funciona",
+      "publicNote": "Tudo nesta página é público — não precisa de conta. Inicie sessão apenas para criar e executar as suas próprias avaliações; regresse aqui a qualquer momento através do logótipo STORCITO.",
       "metricSites": "Fontes de emissão mapeadas",
       "metricStorage": "CO₂ anual catalogado",
       "metricNetwork": "Municípios cobertos",
       "metricCost": "Países"
     },
+    "caseStudy": {
+      "eyebrow": "O caso de estudo",
+      "title": "Projetos CCU na Alemanha, Noruega e Países Baixos",
+      "description": "A plataforma assenta no caso de estudo STORE_CO2: a avaliação de projetos de captura e utilização de carbono (CCU) nos três países para os quais o projeto disponibiliza dados — Alemanha, Noruega e Países Baixos. As fontes industriais de CO₂ e os destinos de armazenamento ou utilização provêm do catálogo STORE_CO2, e os custos de captura seguem os seus horizontes de cenários de 2025–2030 até 2050. A plataforma encaminha o CO₂ capturado entre os locais por conduta, camião ou caminho-de-ferro e calcula o custo de toda a cadeia por tonelada.",
+      "germanyTitle": "Alemanha",
+      "germanyDesc": "Fontes pontuais industriais e opções de utilização na maior economia emissora da Europa.",
+      "norwayTitle": "Noruega",
+      "norwayDesc": "Armazenamento geológico offshore em aquíferos e campos esgotados do Mar do Norte.",
+      "netherlandsTitle": "Países Baixos",
+      "netherlandsDesc": "Clusters industriais em torno de Roterdão com ligações por conduta e navio."
+    },
     "challenge": {
       "eyebrow": "O desafio da descarbonização",
-      "title": "Resolver a descarbonização industrial europeia",
-      "description": "A transição da indústria pesada para o zero líquido exige resolver desafios espaciais, logísticos e económicos complexos, atravessando fronteiras europeias.",
+      "title": "O desafio da avaliação CCU",
+      "description": "Cada avaliação tem de corresponder milhares de fontes de emissão a sumidouros de armazenamento ou utilização adequados, encaminhar o CO₂ entre eles e orçamentar toda a cadeia por tonelada.",
       "card1Title": "Fontes pontuais industriais",
-      "card1Desc": "A indústria pesada (cimento, aço, química) representa mais de 25% das emissões europeias, exigindo uma implantação rápida da captura.",
-      "card2Title": "Logística de transporte complexa",
-      "card2Desc": "Ligar clusters industriais do interior ao armazenamento offshore exige combinar condutas de alta pressão com redes de transporte marítimo de CO₂ liquefeito.",
-      "card3Title": "Correspondência de reservatórios geológicos",
-      "card3Desc": "Garantir a integridade da contenção a longo prazo e ajustar os volumes anuais capturados aos limites de injeção dos aquíferos offshore.",
-      "card4Title": "Otimização económica",
-      "card4Desc": "Calcular o custo nivelado do CO₂ evitado (€/t CO₂) considerando CAPEX, energia de compressão, fretamento de navios e impostos sobre o carbono."
+      "card1Desc": "14 641 fontes industriais de CO₂ na Alemanha, Noruega e Países Baixos — cada uma com as suas emissões, setor e período de operação.",
+      "card2Title": "Logística de transporte",
+      "card2Desc": "O CO₂ capturado tem de ir da fonte ao sumidouro — por conduta, camião ou caminho-de-ferro — cada modo com custos muito diferentes.",
+      "card3Title": "Correspondência fonte–sumidouro",
+      "card3Desc": "Cada tonelada precisa de um sumidouro compatível: correspondida por volume, distância e os anos em que ambos os locais operam.",
+      "card4Title": "Custos de toda a cadeia",
+      "card4Desc": "Captura, liquefação, transporte e armazenamento somam cada um € por tonelada — e os custos variam com o ano de cenário 2025–2050."
     },
     "features": {
       "label": "Capacidades da plataforma",
       "title": "Tudo o que precisa para planear CCUS e otimizar rotas",
-      "description": "Um conjunto geoespacial completo para modelar a captura de carbono, a logística de transporte de CO₂ e os reservatórios geológicos de armazenamento.",
+      "description": "Um conjunto de ferramentas geoespaciais baseado no catálogo STORE_CO2: fontes, sumidouros, encaminhamento e custos de toda a cadeia para a Alemanha, a Noruega e os Países Baixos.",
       "f1Title": "Mapa geoespacial interativo",
-      "f1Desc": "Visualize fontes de emissão industriais, corredores de conduta, rotas marítimas e locais de armazenamento num único mapa interativo.",
+      "f1Desc": "Visualize 14 641 fontes de emissão, sumidouros de armazenamento e utilização e rotas candidatas num único mapa interativo.",
       "f2Title": "Correspondência fonte–sumidouro",
-      "f2Desc": "Associe emissores industriais de CO₂ a armazenamento geológico adequado por capacidade, distância e custo.",
+      "f2Desc": "Associe emissores industriais de CO₂ a sumidouros de armazenamento ou utilização adequados por volume, distância e período de operação.",
       "f3Title": "Otimização de rotas",
-      "f3Desc": "Modele corredores de conduta e marítimos e calcule o traçado e dimensionamento de menor custo e ótimos em carbono.",
-      "f4Title": "Análise de reservatórios de armazenamento",
-      "f4Desc": "Avalie aquíferos salinos profundos e campos esgotados de petróleo e gás quanto a capacidade, limites de pressão e taxas de injeção.",
+      "f3Desc": "O CO2RouteX calcula uma rota por par fonte–sumidouro — por conduta, camião ou caminho-de-ferro — com distância e custo por tonelada.",
+      "f4Title": "Catálogo de sumidouros",
+      "f4Desc": "Explore sumidouros de armazenamento e utilização com procura anual (kt CO₂/ano) e capacidades (Mt CO₂) do conjunto de dados STORE_CO2.",
       "f5Title": "Relatórios de custo e CO₂",
-      "f5Desc": "Custo nivelado do CO₂ evitado (€/t) com decomposição de CAPEX, compressão e transporte marítimo, e fluxos de carbono em diagramas Sankey.",
+      "f5Desc": "Custos de captura, liquefação, transporte e armazenamento por tonelada — intervalos nos cenários 2025–2050, mais um livro de trabalho descarregável.",
       "f6Title": "Espaços de trabalho colaborativos",
-      "f6Desc": "Partilhe modelos, compare cenários e colabore com consórcios regionais em planos de descarbonização."
+      "f6Desc": "Partilhe modelos, compare cenários e colabore em espaços de trabalho partilhados."
     },
     "infrastructure": {
       "eyebrow": "Cadeia de valor CCUS",
@@ -2217,57 +2307,57 @@
       "description": "Captura, transporte, armazenamento e utilização — modelados de ponta a ponta para que cada projeto seja planeado como uma cadeia de valor completa.",
       "c1Subtitle": "Captura em fonte pontual",
       "c1Title": "Captura de carbono",
-      "c1Desc": "Capte CO₂ em fábricas de cimento, aço, química e centrais elétricas com tecnologias pós-combustão e outras já comprovadas.",
-      "c1Spec1": "Captura pós-combustão e oxi-combustível",
-      "c1Spec2": "Modelação do volume e pureza dos gases de combustão",
-      "c1Spec3": "Taxa de captura vs. penalização energética",
-      "c1Spec4": "Pontuação da viabilidade de adaptação",
-      "c2Subtitle": "Conduta e transporte marítimo",
+      "c1Desc": "Custos de captura por instalação do STORE_CO2 — por setor e aplicação, com taxa de captura e custo por tonelada.",
+      "c1Spec1": "Aplicações de captura por setor",
+      "c1Spec2": "Taxa de captura por instalação",
+      "c1Spec3": "Custo de captura (€2024/t)",
+      "c1Spec4": "De first-of-a-kind a nth-of-a-kind",
+      "c2Subtitle": "Conduta, camião e caminho-de-ferro",
       "c2Title": "Transporte de CO₂",
-      "c2Desc": "Transporte o CO₂ capturado dos clusters do interior até ao armazenamento através de condutas de alta pressão e navios de CO₂ liquefeito.",
-      "c2Spec1": "Dimensionamento de diâmetro e pressão da conduta",
-      "c2Spec2": "Rotas marítimas de CO₂ liquefeito",
-      "c2Spec3": "Energia de compressão e liquefação",
-      "c2Spec4": "Traçado de corredores de menor custo",
+      "c2Desc": "Encaminhe o CO₂ capturado das fontes aos sumidouros — por conduta, camião ou caminho-de-ferro, uma rota por par fonte–sumidouro.",
+      "c2Spec1": "CAPEX da conduta por traçado e terreno (€2021)",
+      "c2Spec2": "Tarifas por distância de camião e ferrovia",
+      "c2Spec3": "Encaminhamento ferroviário de estação em estação",
+      "c2Spec4": "Liquefação no emissor para rodovia e ferrovia",
       "c3Subtitle": "Armazenamento geológico",
       "c3Title": "Armazenamento de CO₂",
-      "c3Desc": "Avalie reservatórios offshore e onshore para uma contenção geológica segura e permanente do CO₂ injetado.",
-      "c3Spec1": "Aquíferos salinos e campos esgotados",
-      "c3Spec2": "Limites de taxa de injeção e pressão",
-      "c3Spec3": "Verificações da integridade da contenção",
-      "c3Spec4": "Correspondência da capacidade anual",
+      "c3Desc": "Afete os volumes capturados a locais de armazenamento com capacidade e limites anuais conhecidos.",
+      "c3Spec1": "Capacidade de armazenamento por local (Mt)",
+      "c3Spec2": "Taxas anuais (kt CO₂/ano)",
+      "c3Spec3": "Custo de armazenamento por tonelada",
+      "c3Spec4": "Locais em terra e offshore",
       "c4Subtitle": "Utilização de CO₂",
       "c4Title": "Valorização do carbono",
-      "c4Desc": "Converta o CO₂ capturado em combustíveis sintéticos, produtos químicos, materiais de construção e outros produtos de valor.",
-      "c4Spec1": "Combustíveis eletrolíticos e químicos sintéticos",
-      "c4Spec2": "Mineralização e materiais de construção",
-      "c4Spec3": "Vias de recuperação assistida",
+      "c4Desc": "Encaminhe o CO₂ para a procura de utilização — estufas, ureia, químicos CCU e mais — e compare com o armazenamento.",
+      "c4Spec1": "Procura de utilização por local (kt/ano)",
+      "c4Spec2": "Estufas, cervejarias e química",
+      "c4Spec3": "Ureia e mineralização",
       "c4Spec4": "Compromissos entre utilização e armazenamento"
     },
     "howItWorks": {
       "label": "Fluxo de trabalho em 4 passos",
       "title": "Dos dados do local a uma rede CCUS operacional",
       "description": "Desenhe, otimize e implemente infraestruturas de captura e armazenamento de carbono em quatro passos.",
-      "s1Title": "1. Selecionar uma região",
-      "s1Desc": "Desenhe ou escolha uma área no mapa. Emissores industriais, locais de armazenamento e infraestrutura existente carregam automaticamente.",
-      "s2Title": "2. Configurar a cadeia",
-      "s2Desc": "Associe a captura aos emissores e escolha corredores de conduta, terminais marítimos e reservatórios candidatos.",
-      "s3Title": "3. Otimizar as rotas",
-      "s3Desc": "Execute o motor de otimização para calcular o traçado de menor custo, a capacidade da rede e as necessidades de compressão.",
-      "s4Title": "4. Analisar e partilhar",
-      "s4Desc": "Explore mapas, diagramas de fluxo de CO₂ e o custo nivelado (€/t CO₂), depois exporte relatórios e partilhe cenários."
+      "s1Title": "1. Nome e período",
+      "s1Desc": "Dê um nome ao modelo e escolha o período de avaliação — os horizontes de cenários vão de 2025–2030 até 2050.",
+      "s2Title": "2. Selecionar nós",
+      "s2Desc": "Escolha fontes e sumidouros de CO₂ na Alemanha, Noruega e Países Baixos a partir do catálogo STORE_CO2.",
+      "s3Title": "3. Rotas e custos",
+      "s3Desc": "O CO2RouteX liga os nós por conduta, camião ou caminho-de-ferro e calcula o custo de cada rota por tonelada.",
+      "s4Title": "4. Rever e executar",
+      "s4Desc": "Verifique a configuração, guarde o modelo e inicie o cálculo — depois explore mapas, fluxos e custos e partilhe cenários."
     },
     "personas": {
       "eyebrow": "Para quem é",
-      "title": "Concebido para todo o ecossistema CCUS",
+      "title": "Concebido para a cadeia de valor do CCU",
       "p1Title": "Emissores industriais",
-      "p1Desc": "Fábricas de cimento, aço, química e centrais elétricas que avaliam a viabilidade da captura em fonte pontual e as ligações regionais principais.",
+      "p1Desc": "Fábricas de cimento, aço, química e centrais elétricas na Alemanha, Noruega e Países Baixos que avaliam custos de captura e opções de utilização para as suas instalações.",
       "p2Title": "Promotores de condutas e logística",
-      "p2Desc": "Trace condutas principais de CO₂ de alta pressão, dimensione estações de compressão e otimize a logística de fretamento de navios.",
-      "p3Title": "Operadores de reservatórios de armazenamento",
-      "p3Desc": "Analise aquíferos salinos profundos do Mar do Norte, do Báltico e do Mediterrâneo quanto aos limites de taxa de injeção.",
+      "p2Desc": "Compare ligações por conduta, camião ou caminho-de-ferro entre fontes e sumidouros de CO₂, com o custo por tonelada de cada rota.",
+      "p3Title": "Operadores de armazenamento e utilização",
+      "p3Desc": "Veja que emissores poderiam encaminhar CO₂ capturado para o seu local de armazenamento ou utilização — e quanto custaria toda a cadeia.",
       "p4Title": "Decisores políticos e consórcios",
-      "p4Desc": "Simule roteiros regionais de zero líquido, regulamentação transfronteiriça de transporte de CO₂ e conformidade com a Taxonomia da UE."
+      "p4Desc": "Explore cenários CCU de 2025–2030 até 2050 e compare opções de implementação nos três países do caso de estudo."
     },
     "trust": {
       "euTitle": "Financiado pela União Europeia",
@@ -2304,7 +2394,7 @@
       "brandDescription": "Plataforma avançada de planeamento CCUS para um futuro sustentável. Financiada pela União Europeia.",
       "privacySettings": "Definições de privacidade",
       "privacyPolicy": "Política de privacidade",
-      "tagline": "A acelerar a captura, o transporte e o armazenamento de carbono em toda a Europa.",
+      "tagline": "Avaliação de projetos de captura, transporte e armazenamento de carbono na Alemanha, Noruega e Países Baixos.",
       "cookies": "Política de cookies",
       "impressum": "Ficha técnica",
       "terms": "Termos e condições",
@@ -2374,7 +2464,7 @@
   "configurator": {
     "registry": {
       "layer1Title": "Inicialização do modelo",
-      "layer1Subtitle": "Nome e período da simulação",
+      "layer1Subtitle": "Nome e período de avaliação",
       "layer2Title": "Seleção de nós",
       "layer2Subtitle": "Escolha as fontes e sumidouros de CO₂",
       "layer3Title": "Rotas",
@@ -2406,9 +2496,9 @@
     },
     "layer1": {
       "purpose": "Dê um nome a esta análise e escolha o período a avaliar.",
-      "nextStepHint": "A seguir vai delinear a área geográfica no mapa.",
+      "nextStepHint": "A seguir vai escolher as fontes e os sumidouros de CO₂.",
       "modelNameLabel": "Nome do modelo",
-      "modelNamePlaceholder": "por ex. Área de Exemplo Verão 2026",
+      "modelNamePlaceholder": "por ex. Armazenamento Reno–Ruhr 2030–2040",
       "modelNameHint": "Um nome descritivo para encontrar este modelo mais tarde.",
       "dynamicHint": "As execuções dinâmicas mantêm o intervalo de datas selecionado e usam a janela das 16:00 às 17:00.",
       "dynamicLoading": "A carregar as datas dinâmicas disponíveis...",
@@ -2421,7 +2511,7 @@
       "suggestedName1": "Avaliação regional de CO₂",
       "suggestedName2": "Estudo de cluster industrial",
       "suggestedName3": "Triagem de locais de armazenamento",
-      "suggestedName4": "Perspetiva trimestral de captura",
+      "suggestedName4": "Hub rural de CO₂",
       "modelNameQuestion": "Como quer chamar a este modelo?",
       "periodQuestion": "Que período deve avaliar?",
       "assessmentPeriod": "Período de avaliação"
@@ -2437,9 +2527,6 @@
       "purpose": "O CO2RouteX analisa os nós selecionados em busca de ligações candidatas, depois traça-as e calcula os custos.",
       "nextStepHint": "A seguir verá quanto custam essas rotas.",
       "customData": "Dados personalizados (opcional)",
-      "customDataDesc": "Traga os seus próprios dados meteorológicos para esta área. Se ficar vazio, usam-se os dados regionais incluídos.",
-      "weatherStationData": "Dados de estação meteorológica",
-      "weatherStationHint": "Exportação Excel ou CSV da estação (.xlsx / .csv)",
       "lockedByPrecomputed": "Incluída no mapa regional pré-calculado. Desative o interruptor de pré-cálculo acima para personalizar as camadas.",
       "precomputedLabel": "Mapa regional pré-calculado",
       "precomputedInfoLabel": "Sobre o mapa regional pré-calculado",
@@ -2462,7 +2549,6 @@
       "uploadIncomplete": "Carregamento do GeoJSON incompleto.",
       "areaDetails": "{{count}} regiões · {{area}}",
       "areaDetailsSingle": "1 região · {{area}}",
-      "allSignalsActive": "Todos os sinais de risco ativos (meteorologia + terreno + histórico).",
       "someSignalsActive": "A executar com {{count}} de 3 sinais opcionais — o resultado será diferente do modelo completo.",
       "bufferDistance": "{{buffer}} m em redor da AOI.",
       "blockers": "{{count}} bloqueios — resolva antes de executar.",
@@ -2493,13 +2579,11 @@
         "modelName": "Nome do modelo",
         "from": "De",
         "to": "Até",
-        "dailyRun": "Execução diária",
         "buffer": "Margem",
         "area": "Área",
         "riskComponents": "Componentes de risco",
         "nodes": "Nós"
-      },
-      "dailyRunInfo": "Cada dia simulado é avaliado com a meteorologia desta janela horária — a parte mais quente e seca da tarde."
+      }
     },
     "coverage": {
       "title": "Cobertura de dados",
@@ -2699,5 +2783,72 @@
     "search": "Pesquisar fontes",
     "status": "Estado",
     "yes": "Sim"
+  },
+  "whatsNew": {
+    "open": "Novidades desta versão",
+    "title": "Novidades",
+    "version": "Versão {{version}}",
+    "released": "Lançada em {{date}}",
+    "intro": "Um resumo dos recursos, melhorias e correções mais recentes desta versão.",
+    "where": "Onde",
+    "viewAll": "Todas as alterações no GitHub",
+    "close": "Entendi",
+    "groups": {
+      "new": "Novo",
+      "improved": "Melhorado",
+      "fixed": "Corrigido"
+    },
+    "items": {
+      "families": {
+        "title": "Versões de modelos agrupadas",
+        "description": "Cada modelo aparece agora uma só vez, com as suas cópias agrupadas por baixo. O modelo original fica no topo e o selo de versões mostra as cópias, da mais antiga para a mais recente.",
+        "where": "Painel de modelos → lista de modelos"
+      },
+      "tabs": {
+        "title": "Abas de status",
+        "description": "Alterne entre Todos, Fixados, Em execução, Concluídos, Rascunhos e Com falha. A busca e o filtro de período funcionam em todas as abas.",
+        "where": "Painel de modelos → acima da lista"
+      },
+      "pinning": {
+        "title": "Fixar modelos",
+        "description": "Um modelo fixado fica no topo da lista. Fixar qualquer versão mantém toda a família no topo, e a aba Fixados reúne-os num só lugar.",
+        "where": "Linha do modelo → ícone de alfinete"
+      },
+      "newBadge": {
+        "title": "Selo de novos resultados",
+        "description": "Modelos concluídos recentemente recebem o selo Novo. Passe o cursor para ver quando a simulação terminou.",
+        "where": "Linha do modelo → ao lado do título"
+      },
+      "acceptance": {
+        "title": "Camada de aceitação pública",
+        "description": "Colore o mapa pela proporção de residentes rurais que apoiam ou rejeitam cada uso de CCUS (inquérito RUB). Clique numa região para ver os resultados, o que mais importa e sugestões de comunicação.",
+        "where": "Novo modelo → mapa do passo 2"
+      },
+      "siteCard": {
+        "title": "Cartão do local no mapa",
+        "description": "Clique num ponto emissor ou sumidouro para ver o tipo, a localização e as emissões, adicioná-lo ao modelo ou removê-lo, ou abrir os detalhes.",
+        "where": "Novo modelo → mapa do passo 2"
+      },
+      "tour": {
+        "title": "Tour guiado redesenhado",
+        "description": "O tour percorre passo a passo o painel, o mapa e as ferramentas, com pontos de seção e navegação pelas setas.",
+        "where": "Menu Ajuda → Reiniciar tour"
+      },
+      "sinks": {
+        "title": "Sumidouros de armazenamento e utilização",
+        "description": "O catálogo de nós inclui agora locais de armazenamento e sumidouros de utilização com as suas regiões e anos de operação.",
+        "where": "Novo modelo → passo 2 → categorias de sumidouros"
+      },
+      "period": {
+        "title": "Período de avaliação",
+        "description": "Os modelos abrangem agora anos completos. As instalações só são contadas nos anos em que operam dentro do período.",
+        "where": "Novo modelo → passo 1"
+      },
+      "workspaceMenu": {
+        "title": "Menu de espaços de trabalho",
+        "description": "A lista de espaços de trabalho abre agora por completo acima dos separadores de estado e da lista de modelos.",
+        "where": "Painel de modelos → seletor de espaço de trabalho"
+      }
+    }
   }
 }
