@@ -9,7 +9,6 @@ import type { Workspace } from "@/components/workspace";
 import { useTranslation } from "@/i18n";
 import type { ModelStats } from "@/features/model-dashboard/services/modelService";
 import { RangeCalendar } from "@/components/ui/calendar-rac";
-import { ModelStatsSummary } from "./ModelStatsSummary";
 import type { Group } from "./types";
 
 interface ModelDashboardFiltersProps {
@@ -38,9 +37,9 @@ interface ModelDashboardFiltersProps {
 	handleDeleteWorkspace: () => void | Promise<void>;
 	bulkActions?: ReactNode;
 	stats: ModelStats;
-	statsLoaded?: boolean;
 	handleNewModel: () => void;
 	isModelLimitReached: boolean;
+	tabs?: ReactNode;
 	table: ReactNode;
 }
 
@@ -50,7 +49,7 @@ const TOOLBAR_ICON_BUTTON_CLASS =
 	"inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors duration-150 hover:bg-muted/60 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
 
 export function ModelDashboardFilters({
-	groups, selectedGroup, setSelectedGroup, filterText, setFilterText, filterFromDate, filterToDate, onDateRangeChange, isLoadingWorkspace, handleWorkspaceChange, setIsCreateWsOpen, wsReloadKey, normalizedWorkspaceId, preferredWorkspaceId, currentWorkspace, handleRefresh, isRefreshing, isLoading, canManageWorkspace, setIsShareWsOpen, setIsCopyWsOpen, setIsRenameWsOpen, handleDeleteWorkspace, bulkActions, stats, statsLoaded = false, handleNewModel, isModelLimitReached, table,
+	groups, selectedGroup, setSelectedGroup, filterText, setFilterText, filterFromDate, filterToDate, onDateRangeChange, isLoadingWorkspace, handleWorkspaceChange, setIsCreateWsOpen, wsReloadKey, normalizedWorkspaceId, preferredWorkspaceId, currentWorkspace, handleRefresh, isRefreshing, isLoading, canManageWorkspace, setIsShareWsOpen, setIsCopyWsOpen, setIsRenameWsOpen, handleDeleteWorkspace, bulkActions, stats, handleNewModel, isModelLimitReached, tabs, table,
 }: ModelDashboardFiltersProps) {
 	const { t } = useTranslation();
 
@@ -140,69 +139,71 @@ export function ModelDashboardFilters({
 			<div className="md-card md-rise" style={{ animationDelay: "60ms" }}>
 				{/* Filter toolbar */}
 				<div className="flex flex-wrap items-center gap-2 p-4 sm:px-5">
-					{/* Search field */}
-					<div className="relative w-full sm:w-auto sm:min-w-[220px] sm:flex-1 sm:max-w-sm">
-						<Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-						<input
-							type="text"
-							placeholder={t('model.searchModels')}
-							value={filterText}
-							onChange={(e) => setFilterText(e.target.value)}
-							className="h-9 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-sm text-foreground transition-colors duration-150 placeholder:text-muted-foreground hover:border-muted-foreground/40"
-						/>
-					</div>
+					{/* Search and period */}
+					<div data-tour="model-search" className="flex w-full items-center gap-2 sm:w-auto sm:min-w-[264px] sm:flex-1 sm:max-w-[26.75rem]">
+						<div className="relative min-w-0 flex-1">
+							<Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+							<input
+								type="text"
+								placeholder={t('model.searchModels')}
+								value={filterText}
+								onChange={(e) => setFilterText(e.target.value)}
+								className="h-9 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-sm text-foreground transition-colors duration-150 placeholder:text-muted-foreground hover:border-muted-foreground/40"
+							/>
+						</div>
 
-					{/* Period filter. */}
-					<DateRangePicker
-						value={dateRangeValue}
-						onChange={handleRangeChange}
-						aria-label={t('model.filterPeriod', 'Filter by period')}
-					>
-						<FieldGroup className="flex items-center gap-1.5">
-							<Tooltip>
-								<TooltipTrigger asChild>
-									<Trigger
-										aria-label={t('model.filterPeriod', 'Filter by period')}
-										className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors duration-150 cursor-pointer ${
-											hasDateFilter
-												? "border-primary/40 bg-primary/5 text-primary ring-1 ring-primary/20"
-												: "border-border bg-card text-muted-foreground hover:bg-muted/60 hover:text-foreground"
-										}`}
-									>
-										<Filter className="h-4 w-4" />
-									</Trigger>
-								</TooltipTrigger>
-								<TooltipContent>
-									{hasDateFilter
-										? `${filterFromDate || "…"} – ${filterToDate || "…"}`
-										: t('model.filterPeriod', 'Filter by period')}
-								</TooltipContent>
-							</Tooltip>
-							{hasDateFilter && (
+						{/* Period filter. */}
+						<DateRangePicker
+							value={dateRangeValue}
+							onChange={handleRangeChange}
+							aria-label={t('model.filterPeriod', 'Filter by period')}
+						>
+							<FieldGroup className="flex items-center gap-1.5">
 								<Tooltip>
 									<TooltipTrigger asChild>
-										<button
-											type="button"
-											onClick={() => onDateRangeChange("", "")}
-											aria-label={t('model.clearDateFilter', 'Clear date filter')}
-											className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer"
+										<Trigger
+											aria-label={t('model.filterPeriod', 'Filter by period')}
+											className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border transition-colors duration-150 cursor-pointer ${
+												hasDateFilter
+													? "border-primary/40 bg-primary/5 text-primary ring-1 ring-primary/20"
+													: "border-border bg-card text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+											}`}
 										>
-											<X className="h-3.5 w-3.5" />
-										</button>
+											<Filter className="h-4 w-4" />
+										</Trigger>
 									</TooltipTrigger>
-									<TooltipContent>{t('model.clearDateFilter', 'Clear date filter')}</TooltipContent>
+									<TooltipContent>
+										{hasDateFilter
+											? `${filterFromDate || "…"} – ${filterToDate || "…"}`
+											: t('model.filterPeriod', 'Filter by period')}
+									</TooltipContent>
 								</Tooltip>
-							)}
-						</FieldGroup>
-						<Popover
-							className="bg-popover z-50 rounded-md border border-border shadow-lg outline-hidden"
-							offset={4}
-						>
-							<Dialog className="max-h-[inherit] overflow-auto p-2">
-								<RangeCalendar onChange={handleRangeChange} />
-							</Dialog>
-						</Popover>
-					</DateRangePicker>
+								{hasDateFilter && (
+									<Tooltip>
+										<TooltipTrigger asChild>
+											<button
+												type="button"
+												onClick={() => onDateRangeChange("", "")}
+												aria-label={t('model.clearDateFilter', 'Clear date filter')}
+												className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-muted hover:text-foreground cursor-pointer"
+											>
+												<X className="h-3.5 w-3.5" />
+											</button>
+										</TooltipTrigger>
+										<TooltipContent>{t('model.clearDateFilter', 'Clear date filter')}</TooltipContent>
+									</Tooltip>
+								)}
+							</FieldGroup>
+							<Popover
+								className="bg-popover z-50 rounded-md border border-border shadow-lg outline-hidden"
+								offset={4}
+							>
+								<Dialog className="max-h-[inherit] overflow-auto p-2">
+									<RangeCalendar onChange={handleRangeChange} />
+								</Dialog>
+							</Popover>
+						</DateRangePicker>
+					</div>
 
 					{/* Workspace Controls */}
 					<div className="flex flex-wrap items-center gap-2">
@@ -212,128 +213,127 @@ export function ModelDashboardFilters({
 								<span className="font-medium text-muted-foreground">{t('model.loadingWorkspace')}</span>
 							</div>
 						) : (
-							<>
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<div>
-											<WorkspaceSelector
-												onWorkspaceChange={handleWorkspaceChange}
-												onCreateWorkspace={() => setIsCreateWsOpen(true)}
-												reloadKey={wsReloadKey}
-												initialWorkspaceId={normalizedWorkspaceId ?? preferredWorkspaceId ?? undefined}
-												activeWorkspace={currentWorkspace}
-											/>
-										</div>
-									</TooltipTrigger>
-									<TooltipContent>
-										{t('model.selectWorkspace')}
-									</TooltipContent>
-								</Tooltip>
-
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<button
-											onClick={handleRefresh}
-											disabled={isRefreshing || isLoading}
-											className={TOOLBAR_ICON_BUTTON_CLASS}
-											aria-label={t('model.refreshModels')}
-										>
-											<RefreshCw className={`h-4 w-4 ${isRefreshing || isLoading ? 'animate-spin' : ''}`} />
-										</button>
-									</TooltipTrigger>
-									<TooltipContent>
-										{t('model.refreshModels')}
-									</TooltipContent>
-								</Tooltip>
-							</>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<div data-tour="workspace">
+										<WorkspaceSelector
+											onWorkspaceChange={handleWorkspaceChange}
+											onCreateWorkspace={() => setIsCreateWsOpen(true)}
+											reloadKey={wsReloadKey}
+											initialWorkspaceId={normalizedWorkspaceId ?? preferredWorkspaceId ?? undefined}
+											activeWorkspace={currentWorkspace}
+										/>
+									</div>
+								</TooltipTrigger>
+								<TooltipContent>
+									{t('model.selectWorkspace')}
+								</TooltipContent>
+							</Tooltip>
 						)}
 
-						{currentWorkspace && (
-							<span className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
-						)}
+						<span className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
 
-						{currentWorkspace && (
-							<>
-								{canManageWorkspace && (
+						{/* Model, workspace actions */}
+						<div data-tour="model-actions" className="flex flex-wrap items-center gap-2">
+							{/* Model refresh */}
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<button
+										data-tour="model-refresh"
+										onClick={handleRefresh}
+										disabled={isRefreshing || isLoading}
+										className={TOOLBAR_ICON_BUTTON_CLASS}
+										aria-label={t('model.refreshModels')}
+									>
+										<RefreshCw className={`h-4 w-4 ${isRefreshing || isLoading ? 'animate-spin' : ''}`} />
+									</button>
+								</TooltipTrigger>
+								<TooltipContent>
+									{t('model.refreshModels')}
+								</TooltipContent>
+							</Tooltip>
+
+							{currentWorkspace && (
+								<>
+									{canManageWorkspace && (
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<button
+													onClick={() => setIsShareWsOpen(true)}
+													className={TOOLBAR_BUTTON_CLASS}
+												>
+													<Share2 className="h-4 w-4 text-muted-foreground" />
+													<span className="hidden sm:inline">{t('model.share')}</span>
+												</button>
+											</TooltipTrigger>
+											<TooltipContent>
+												{t('model.shareWorkspace')}
+											</TooltipContent>
+										</Tooltip>
+									)}
+
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<button
-												onClick={() => setIsShareWsOpen(true)}
+												onClick={() => setIsCopyWsOpen(true)}
 												className={TOOLBAR_BUTTON_CLASS}
 											>
-												<Share2 className="h-4 w-4 text-muted-foreground" />
-												<span className="hidden sm:inline">{t('model.share')}</span>
+												<Copy className="h-4 w-4 text-muted-foreground" />
+												<span className="hidden sm:inline">{t('model.copy')}</span>
 											</button>
 										</TooltipTrigger>
 										<TooltipContent>
-											{t('model.shareWorkspace')}
+											{t('model.copyWorkspace')}
 										</TooltipContent>
 									</Tooltip>
-								)}
 
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<button
-											onClick={() => setIsCopyWsOpen(true)}
-											className={TOOLBAR_BUTTON_CLASS}
-										>
-											<Copy className="h-4 w-4 text-muted-foreground" />
-											<span className="hidden sm:inline">{t('model.copy')}</span>
-										</button>
-									</TooltipTrigger>
-									<TooltipContent>
-										{t('model.copyWorkspace')}
-									</TooltipContent>
-								</Tooltip>
+									{!currentWorkspace.is_default && canManageWorkspace && (
+										<>
+											<Tooltip>
+												<TooltipTrigger asChild>
+													<button
+														onClick={() => setIsRenameWsOpen(true)}
+														className={TOOLBAR_BUTTON_CLASS}
+													>
+														<Edit className="h-4 w-4 text-muted-foreground" />
+														<span className="hidden sm:inline">{t('model.rename')}</span>
+													</button>
+												</TooltipTrigger>
+												<TooltipContent>
+													{t('model.renameWorkspace')}
+												</TooltipContent>
+											</Tooltip>
 
-								{!currentWorkspace.is_default && canManageWorkspace && (
-									<>
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<button
-													onClick={() => setIsRenameWsOpen(true)}
-													className={TOOLBAR_BUTTON_CLASS}
-												>
-													<Edit className="h-4 w-4 text-muted-foreground" />
-													<span className="hidden sm:inline">{t('model.rename')}</span>
-												</button>
-											</TooltipTrigger>
-											<TooltipContent>
-												{t('model.renameWorkspace')}
-											</TooltipContent>
-										</Tooltip>
-
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<button
-													onClick={handleDeleteWorkspace}
-													className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-destructive/30 bg-card px-3 text-sm font-medium text-destructive transition-colors duration-150 hover:bg-destructive/10"
-												>
-													<Trash2 className="h-4 w-4" />
-													<span className="hidden sm:inline">{t('model.delete')}</span>
-												</button>
-											</TooltipTrigger>
-											<TooltipContent>
-												{t('model.deleteWorkspace')}
-											</TooltipContent>
-										</Tooltip>
-									</>
-								)}
-							</>
-						)}
+											<Tooltip>
+												<TooltipTrigger asChild>
+													<button
+														onClick={handleDeleteWorkspace}
+														className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-destructive/30 bg-card px-3 text-sm font-medium text-destructive transition-colors duration-150 hover:bg-destructive/10"
+													>
+														<Trash2 className="h-4 w-4" />
+														<span className="hidden sm:inline">{t('model.delete')}</span>
+													</button>
+												</TooltipTrigger>
+												<TooltipContent>
+													{t('model.deleteWorkspace')}
+												</TooltipContent>
+											</Tooltip>
+										</>
+									)}
+								</>
+							)}
+						</div>
 
 						{/* Bulk actions. */}
 						{bulkActions}
 					</div>
-
-					{/* Stats summary. */}
-					{statsLoaded && (
-						<ModelStatsSummary stats={stats} className="max-sm:w-full sm:ml-auto" />
-					)}
 				</div>
 
+				{/* Status tabs. */}
+				{tabs}
+
 				{/* Table */}
-				<div className="border-t border-border">
+				<div>
 					{table}
 				</div>
 			</div>

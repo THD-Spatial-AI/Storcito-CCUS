@@ -15,16 +15,17 @@ import { useModelSelection } from '@/features/model-dashboard/hooks/useModelSele
 import { useBulkOperations } from '@/features/model-dashboard/hooks/useBulkOperations';
 import { useDeleteConfirm } from '@/hooks/useDeleteConfirm';
 import { useFavoriteModelsStore } from "@/features/model-dashboard/store/favorite-models";
-import { isModelDisabled as checkModelDisabled } from "@/features/model-dashboard/utils/statusHelpers";
+import { isModelDisabled as checkModelDisabled, statusTabParam, type StatusTab } from "@/features/model-dashboard/utils/statusHelpers";
 import { useWebservices } from "@/features/admin-dashboard";
 import { processModelTimingUpdates, type TimingUpdate } from "@/features/model-dashboard/utils/modelTimingUtils";
 import { estimateRuntimesForModels, type RuntimeEstimate } from "@/features/model-dashboard/utils/runtimeEstimate";
-import { organizeModelsHierarchically } from "@/features/model-dashboard/utils/dashboardHelpers";
+import { buildModelFamilies, flattenFamilies } from "@/features/model-dashboard/utils/dashboardHelpers";
 import { useTranslation } from "@/i18n";
 import { useNotification } from "@/features/notifications";
 import { ModelDashboardFilters } from "./model-dashboard/ModelDashboardFilters";
 import { ModelDashboardBulkActions } from "./model-dashboard/ModelDashboardBulkActions";
 import { ModelDashboardTable } from "./model-dashboard/ModelDashboardTable";
+import { ModelStatusTabs } from "./model-dashboard/ModelStatusTabs";
 import { ModelDashboardActionsProvider, type ModelDashboardActionsContextValue } from "./model-dashboard/ModelDashboardActionsContext";
 import { ModelDashboardModals } from "./model-dashboard/ModelDashboardModals";
 import type { Group, ModelDashboardProps, WorkspaceMember } from "./model-dashboard/types";
@@ -136,14 +137,22 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		}
 	});
 
-	const [orderBy, setOrderBy] = useState<string>("created_at");
+	const [orderBy, setOrderBy] = useState<string>("last_activity");
 	const [order, setOrder] = useState<"asc" | "desc">("desc");
 	const [filterText, setFilterText] = useState<string>("");
 	const [filterFromDate, setFilterFromDate] = useState<string>("");
 	const [filterToDate, setFilterToDate] = useState<string>("");
+	const [statusTab, setStatusTab] = useState<StatusTab>("all");
 	const [currentPage, setCurrentPage] = useState<number>(0);
-	const [itemsPerPage, setItemsPerPage] = useState<number>(12);
+	const [itemsPerPage, setItemsPerPage] = useState<number>(25);
 	const [currentWorkspaceId, setCurrentWorkspaceId] = useState<number | undefined>(undefined);
+
+	const favoriteIds = useFavoriteModelsStore(s => s.favoriteIds);
+	const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+	const pinnedParam = useMemo(
+		() => (favoriteIds.length > 0 ? [...favoriteIds].sort((a, b) => a - b).join(",") : undefined),
+		[favoriteIds]
+	);
 
 	const { data: modelsResponse, isLoading: isLoadingModels, refetch: refetchModels } = useModelsQuery({
 		limit: itemsPerPage,
@@ -154,6 +163,10 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		sort_order: order,
 		from_date: filterFromDate || undefined,
 		to_date: filterToDate || undefined,
+		pinned: pinnedParam,
+		pinned_only: statusTab === "pinned" ? "true" : undefined,
+		status: statusTabParam(statusTab),
+		grouped: true,
 	});
 
 	const { data: statsResponse, isSuccess: statsLoaded } = useModelStatsQuery();
@@ -162,21 +175,33 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const { summary: webserviceSummary } = useWebservices({}, { autoRefresh: true, refreshInterval: 10000 });
 	const hasAvailableWebservice = (webserviceSummary?.available ?? 0) > 0;
 
-	// Page slice only.
+	// Current page families.
 	const models = useMemo(() => modelsResponse?.data || [], [modelsResponse?.data]);
+
+	// Pinned families first.
+	const families = useMemo(() => {
+		const built = buildModelFamilies(models);
+		return built.sort((a, b) => {
+			const aFav = a.memberIds.some((id) => favoriteIdSet.has(id)) ? 0 : 1;
+			const bFav = b.memberIds.some((id) => favoriteIdSet.has(id)) ? 0 : 1;
+			return aFav - bFav;
+		});
+	}, [models, favoriteIdSet]);
+	const pageModels = useMemo(() => flattenFamilies(families), [families]);
+
 	const runtimeHistory = useMemo(() => {
 		const modelsById = new Map<number, Model>();
 		for (const model of runtimeHistoryResponse?.data ?? []) modelsById.set(model.id, model);
-		// Page wins.
-		for (const model of models) modelsById.set(model.id, model);
+		// Page data is fresher.
+		for (const model of pageModels) modelsById.set(model.id, model);
 		return [...modelsById.values()];
-	}, [models, runtimeHistoryResponse?.data]);
+	}, [pageModels, runtimeHistoryResponse?.data]);
 	const runtimeEstimates = useMemo<Record<number, RuntimeEstimate>>(
 		() => estimateRuntimesForModels(
-			models.filter((model) => checkModelDisabled(model.status)),
+			pageModels.filter((model) => checkModelDisabled(model.status)),
 			runtimeHistory,
 		),
-		[models, runtimeHistory],
+		[pageModels, runtimeHistory],
 	);
 	const totalItems = modelsResponse?.total || 0;
 	const isLoading = isLoadingModels;
@@ -198,7 +223,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 
 	// No-op for compatibility.
 	const loadStats = useCallback(async () => {
-		// React Query stats.
+		// Stats via React Query.
 	}, []);
 
 	const {
@@ -328,42 +353,14 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 		clearSelection();
 	}, [selectedModels, isModelDisabled, canUserDeleteModel, bulkDeleteHandler, clearSelection]);
 
-	const filteredModels = models;
-
-	const favoriteIds = useFavoriteModelsStore(s => s.favoriteIds);
-	const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
-
-	const sortedModels = useMemo(() => {
-		// Favorites to top.
-		return [...filteredModels].sort((a, b) => {
-			const aFav = favoriteIdSet.has(a.id) ? 0 : 1;
-			const bFav = favoriteIdSet.has(b.id) ? 0 : 1;
-			return aFav - bFav;
-		});
-	}, [filteredModels, favoriteIdSet]);
-
-	const orderedModels = useMemo(() => organizeModelsHierarchically(sortedModels), [sortedModels]);
-
-	const paginatedModels = orderedModels;
-	const modelTitlesByID = useMemo(() => {
-		const titles = new Map<number, string>();
-		for (const model of paginatedModels) {
-			titles.set(model.id, model.title.trim());
-		}
-		return titles;
-	}, [paginatedModels]);
-	const childCountByParentID = useMemo(() => {
-		const children = new Map<number, number>();
-		for (const model of paginatedModels) {
-			if (!model.parent_model_id) continue;
-			children.set(model.parent_model_id, (children.get(model.parent_model_id) ?? 0) + 1);
-		}
-		return children;
-	}, [paginatedModels]);
+	const handleStatusTabChange = useCallback((tab: StatusTab) => {
+		setStatusTab(tab);
+		setCurrentPage(0);
+	}, []);
 
 	const { showBulkDeleteConfirm } = useBulkOperations({
 		selectedModels,
-		sortedModels: orderedModels,
+		sortedModels: pageModels,
 		isModelDisabled,
 		onBulkDelete: performBulkDelete,
 		onClearSelection: clearSelection,
@@ -371,7 +368,7 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	});
 
 	const { handleSingleDelete } = useDeleteConfirm({
-		sortedModels: orderedModels,
+		sortedModels: pageModels,
 		onDelete: handleDelete,
 		onLoadStats: loadStats,
 	});
@@ -388,13 +385,13 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	}, [isLoadingWorkspace, currentWorkspace, loadStats, setWorkspaceFilter]);
 
 	useEffect(() => {
-		if (!models.length) return;
+		if (!pageModels.length) return;
 
-		const timingUpdate = processModelTimingUpdates(models, calculationStartTimes, calculationCompletionInfo);
-		
+		const timingUpdate = processModelTimingUpdates(pageModels, calculationStartTimes, calculationCompletionInfo);
+
 		updateCalculationStartTimes(timingUpdate);
 		updateCalculationCompletionInfo(timingUpdate);
-	}, [models, calculationStartTimes, calculationCompletionInfo]);
+	}, [pageModels, calculationStartTimes, calculationCompletionInfo]);
 
 	const updateCalculationStartTimes = (timingUpdate: TimingUpdate) => {
 		if (timingUpdate.hasStartChanges) {
@@ -425,7 +422,6 @@ export const ModelDashboard: React.FC<ModelDashboardProps> = () => {
 	const handleCalculateSingle = useCallback((model: Model) => {
 		handleCalculate([model.id]);
 	}, [handleCalculate]);
-
 
 
 
@@ -514,20 +510,24 @@ return (
 						setIsRenameWsOpen={setIsRenameWsOpen}
 						handleDeleteWorkspace={handleDeleteWorkspace}
 						stats={stats}
-						statsLoaded={statsLoaded}
 						handleNewModel={handleNewModel}
 						isModelLimitReached={isModelLimitReached}
 						bulkActions={<ModelDashboardBulkActions selectedCount={selectedModels.length} actions={bulkActions} />}
+						tabs={(
+							<ModelStatusTabs
+								stats={stats}
+								statsLoaded={statsLoaded}
+								pinnedCount={favoriteIds.length}
+								activeTab={statusTab}
+								onTabChange={handleStatusTabChange}
+							/>
+						)}
 						table={(
 							<ModelDashboardActionsProvider value={modelDashboardActions}>
 								<ModelDashboardTable
 									isLoading={isLoading}
 									isLoadingWorkspace={isLoadingWorkspace}
-									filteredModels={filteredModels}
-									paginatedModels={paginatedModels}
-									modelTitlesByID={modelTitlesByID}
-									childCountByParentID={childCountByParentID}
-									sortedModels={sortedModels}
+									families={families}
 									totalItems={totalItems}
 									filterText={filterText}
 								/>

@@ -1,24 +1,31 @@
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { AlertCircle, ArrowUpDown, BarChart3, ChevronDown, ChevronUp, Plus, RefreshCw } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@spatialhub/ui";
 import Pagination from "@/components/ui/Pagination";
-import type { Model } from "@/features/model-dashboard/services/modelService";
 import { ModelTableRow } from "../ModelTableRow";
+import { TourDemoRow } from "../TourDemoRow";
+import { useActiveTourStepId } from "@/features/guided-tour/hooks/useActiveTourStepId";
+import {
+	isRecentlyCompleted,
+	useSeenCompletedModelsStore,
+} from "@/features/model-dashboard/store/seen-completed-models";
+import type { ModelFamily } from "@/features/model-dashboard/utils/dashboardHelpers";
 import { useTranslation } from "@/i18n";
 import { useModelDashboardActions } from "./ModelDashboardActionsContext";
-
-type DashboardModel = Model & { level: number };
 
 interface ModelDashboardTableProps {
 	isLoading: boolean;
 	isLoadingWorkspace: boolean;
-	filteredModels: Model[];
-	paginatedModels: DashboardModel[];
-	modelTitlesByID: Map<number, string>;
-	childCountByParentID: Map<number, number>;
-	sortedModels: Model[];
+	families: ModelFamily[];
 	totalItems: number;
 	filterText: string;
 }
+
+// Dashboard steps needing a row.
+const DEMO_ROW_STEPS = new Set([
+	"tabsOverview", "tabAll", "tabPinned", "tabRunning", "tabCompleted", "tabDrafts", "tabFailed",
+	"search", "refresh", "columns", "familyRow", "pin", "primaryAction", "moreMenu", "newBadge",
+]);
 
 interface SortHeaderButtonProps {
 	field: string;
@@ -54,6 +61,58 @@ function SortHeaderButton({ field, label, orderBy, order, onSort }: SortHeaderBu
 	);
 }
 
+interface EmptyModelsStateProps {
+	filterText: string;
+	isModelLimitReached: boolean;
+	statsTotal: number;
+	statsModelLimit?: number;
+	onNewModel: () => void;
+}
+
+function EmptyModelsState({ filterText, isModelLimitReached, statsTotal, statsModelLimit, onNewModel }: EmptyModelsStateProps) {
+	const { t } = useTranslation();
+	return (
+		<div data-tour="models-loaded" className="md-fade-in m-4 sm:m-5 flex flex-col items-center rounded-xl border border-dashed border-border bg-muted/30 px-6 py-16 text-center">
+			<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-muted/50">
+				<BarChart3 className="h-7 w-7 text-muted-foreground" />
+			</div>
+			<h3 className="text-base font-semibold tracking-tight text-foreground">{t('model.noModelsFound')}</h3>
+			<p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
+				{filterText
+					? t('model.noModelsMatch', { search: filterText })
+					: t('model.noModelsYet')}
+			</p>
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<span>
+						<button
+							onClick={onNewModel}
+							disabled={isModelLimitReached}
+							className={`mt-6 inline-flex h-10 items-center gap-2 rounded-lg px-4 text-sm font-medium transition-all duration-200 ${
+								isModelLimitReached
+									? 'cursor-not-allowed bg-muted text-muted-foreground'
+									: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md active:scale-[0.98]'
+							}`}
+						>
+							{isModelLimitReached ? (
+								<AlertCircle className="h-4 w-4" />
+							) : (
+								<Plus className="h-4 w-4" />
+							)}
+							{t('model.createFirstModel')}
+						</button>
+					</span>
+				</TooltipTrigger>
+				{isModelLimitReached && (
+					<TooltipContent>
+						{t('model.limitReached', { current: statsTotal, limit: statsModelLimit })}
+					</TooltipContent>
+				)}
+			</Tooltip>
+		</div>
+	);
+}
+
 function TableSkeleton({ rows = 6 }: { rows?: number }) {
 	return (
 		<div className="overflow-hidden rounded-xl border border-border">
@@ -78,9 +137,8 @@ function TableSkeleton({ rows = 6 }: { rows?: number }) {
 	);
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity -- extracted verbatim
 export function ModelDashboardTable({
-	isLoading, isLoadingWorkspace, filteredModels, paginatedModels, modelTitlesByID, childCountByParentID, sortedModels, totalItems, filterText,
+	isLoading, isLoadingWorkspace, families, totalItems, filterText,
 }: ModelDashboardTableProps) {
 	const { t } = useTranslation();
 	const {
@@ -99,6 +157,39 @@ export function ModelDashboardTable({
 		statsModelLimit,
 	} = useModelDashboardActions();
 	const stats = { total: statsTotal, model_limit: statsModelLimit };
+
+	const [expandedFamilies, setExpandedFamilies] = useState<ReadonlySet<number>>(new Set());
+	const toggleVersions = useCallback((rootId: number) => {
+		setExpandedFamilies((prev) => {
+			const next = new Set(prev);
+			if (next.has(rootId)) {
+				next.delete(rootId);
+			} else {
+				next.add(rootId);
+			}
+			return next;
+		});
+	}, []);
+
+	const visibleModels = useMemo(
+		() => families.flatMap((family) => [
+			family.display,
+			...(expandedFamilies.has(family.root.id) ? family.otherVersions : []),
+		]),
+		[families, expandedFamilies]
+	);
+	const tourStepId = useActiveTourStepId();
+	const seenCompleted = useSeenCompletedModelsStore((s) => s.seen);
+	const hasRealNewBadge = families.some((family) => isRecentlyCompleted(family.display, seenCompleted));
+	// Example row during tour.
+	const showDemoRow =
+		tourStepId !== null &&
+		((families.length === 0 && DEMO_ROW_STEPS.has(tourStepId)) ||
+			(tourStepId === "newBadge" && !hasRealNewBadge));
+
+	const visibleIdSet = useMemo(() => new Set(visibleModels.map((m) => m.id)), [visibleModels]);
+	const allVisibleSelected =
+		visibleModels.length > 0 && selectedModels.filter((m) => visibleIdSet.has(m.id)).length === visibleModels.length;
 
 	return (
 		<>
@@ -120,21 +211,19 @@ export function ModelDashboardTable({
 				</div>
 			) : (
 				<>
-					{!isLoading && filteredModels.length > 0 ? (
-						<div className="md-fade-in overflow-hidden">
+					{!isLoading && (families.length > 0 || showDemoRow) ? (
+						<div data-tour="models-loaded" className="md-fade-in overflow-hidden">
 							<div className="w-full overflow-auto">
 								<table className="w-full table-auto">
 									<thead>
-										<tr className="border-b border-border bg-muted/30">
+										<tr data-tour="model-columns" className="border-b border-border bg-muted/30">
 											<th className="w-12 px-4 py-3 text-center">
 												<Tooltip>
 													<TooltipTrigger asChild>
 														<input
 															type="checkbox"
-															checked={
-																selectedModels.length === filteredModels.length && filteredModels.length > 0
-															}
-															onChange={() => handleSelectAll(filteredModels)}
+															checked={allVisibleSelected}
+															onChange={() => handleSelectAll(visibleModels)}
 															className="h-4 w-4 cursor-pointer rounded border-input accent-primary focus:ring-ring focus:ring-offset-0"
 														/>
 													</TooltipTrigger>
@@ -143,7 +232,7 @@ export function ModelDashboardTable({
 													</TooltipContent>
 												</Tooltip>
 											</th>
-											<th className="px-4 py-3 text-left">
+											<th className="w-[40%] px-4 py-3 text-left">
 												<SortHeaderButton
 													field="title"
 													label={t('model.name')}
@@ -152,7 +241,17 @@ export function ModelDashboardTable({
 													onSort={handleSort}
 												/>
 											</th>
-											<th className="px-4 py-3 text-left">
+											<th className="w-[12%] px-4 py-3 text-left">
+												<span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+													{t('model.area')}
+												</span>
+											</th>
+											<th className="hidden w-[14%] whitespace-nowrap px-4 py-3 text-left md:table-cell">
+												<span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+													{t('model.period')}
+												</span>
+											</th>
+											<th className="whitespace-nowrap px-4 py-3 text-left">
 												<SortHeaderButton
 													field="status"
 													label={t('model.status')}
@@ -161,16 +260,16 @@ export function ModelDashboardTable({
 													onSort={handleSort}
 												/>
 											</th>
-											<th className="hidden px-4 py-3 text-left md:table-cell">
+											<th className="hidden w-px whitespace-nowrap px-4 py-3 text-left md:table-cell">
 												<SortHeaderButton
-													field="created_at"
-													label={t('model.created')}
+													field="last_activity"
+													label={t('model.lastActivity')}
 													orderBy={orderBy}
 													order={order}
 													onSort={handleSort}
 												/>
 											</th>
-											<th className="px-4 py-3 text-left">
+											<th className="w-px whitespace-nowrap px-4 py-3 text-left">
 												<span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
 													{t('model.actions')}
 												</span>
@@ -178,69 +277,58 @@ export function ModelDashboardTable({
 										</tr>
 									</thead>
 									<tbody className="divide-y divide-border/60 bg-card">
-										{paginatedModels.map((model) => (
-											<ModelTableRow
-												key={model.id}
-												model={model}
-												modelTitle={modelTitlesByID.get(model.id) ?? model.title.trim()}
-												parentModelTitle={model.parent_model_id ? (modelTitlesByID.get(model.parent_model_id) ?? model.parent_model_title) : undefined}
-												hasChildren={(childCountByParentID.get(model.id) ?? 0) > 0}
-											/>
-										))}
+										{showDemoRow && <TourDemoRow />}
+										{families.map((family) => {
+											const expanded = expandedFamilies.has(family.root.id);
+											const rootTitle = family.root.title.trim();
+											return (
+												<Fragment key={family.root.id}>
+													<ModelTableRow
+														model={family.display}
+														level={0}
+														parentModelTitle={family.display.is_copy ? family.display.parent_model_title || rootTitle : undefined}
+														versionCount={family.versionCount}
+														versionsExpanded={expanded}
+														familyRootId={family.root.id}
+														familyMemberIds={family.memberIds}
+														onToggleVersions={toggleVersions}
+													/>
+													{expanded &&
+														family.otherVersions.map((version, index) => (
+															<ModelTableRow
+																key={version.id}
+																model={version}
+																level={1}
+																parentModelTitle={version.is_copy ? rootTitle : undefined}
+																isLastVersion={index === family.otherVersions.length - 1}
+															/>
+														))}
+												</Fragment>
+											);
+										})}
 									</tbody>
 								</table>
 							</div>
-							{sortedModels.length > 0 && (
+							{families.length > 0 && (
 								<Pagination
 									currentPage={currentPage}
 									totalItems={totalItems}
 									itemsPerPage={itemsPerPage}
 									onPageChange={handlePageChange}
 									onItemsPerPageChange={handleItemsPerPageChange}
-									pageSizeOptions={[12, 24, 36, 48]}
+									pageSizeOptions={[25, 50, 100]}
 									isLoading={isLoading}
 								/>
 							)}
 						</div>
 					) : (
-						<div className="md-fade-in m-4 sm:m-5 flex flex-col items-center rounded-xl border border-dashed border-border bg-muted/30 px-6 py-16 text-center">
-							<div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-muted/50">
-								<BarChart3 className="h-7 w-7 text-muted-foreground" />
-							</div>
-							<h3 className="text-base font-semibold tracking-tight text-foreground">{t('model.noModelsFound')}</h3>
-							<p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
-								{filterText
-									? t('model.noModelsMatch', { search: filterText })
-									: t('model.noModelsYet')}
-							</p>
-							<Tooltip>
-								<TooltipTrigger asChild>
-									<span>
-										<button
-											onClick={handleNewModel}
-											disabled={isModelLimitReached}
-											className={`mt-6 inline-flex h-10 items-center gap-2 rounded-lg px-4 text-sm font-medium transition-all duration-200 ${
-												isModelLimitReached
-													? 'cursor-not-allowed bg-muted text-muted-foreground'
-													: 'bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md active:scale-[0.98]'
-											}`}
-										>
-											{isModelLimitReached ? (
-												<AlertCircle className="h-4 w-4" />
-											) : (
-												<Plus className="h-4 w-4" />
-											)}
-											{t('model.createFirstModel')}
-										</button>
-									</span>
-								</TooltipTrigger>
-								{isModelLimitReached && (
-									<TooltipContent>
-										{t('model.limitReached', { current: stats.total, limit: stats.model_limit })}
-									</TooltipContent>
-								)}
-							</Tooltip>
-						</div>
+						<EmptyModelsState
+							filterText={filterText}
+							isModelLimitReached={isModelLimitReached}
+							statsTotal={stats.total ?? 0}
+							statsModelLimit={stats.model_limit}
+							onNewModel={handleNewModel}
+						/>
 					)}
 				</>
 			)}
