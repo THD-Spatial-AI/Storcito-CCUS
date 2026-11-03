@@ -5,7 +5,7 @@ export const buildCurvedPath = (
 ) => {
   let startX: number, startY: number, endX: number, endY: number;
 
-  // Start from placement.
+  // Start point.
   switch (placement) {
     case 'left':
       startX = tooltipRect.right;
