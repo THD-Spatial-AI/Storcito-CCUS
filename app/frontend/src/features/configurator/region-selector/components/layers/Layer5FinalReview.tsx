@@ -1,8 +1,9 @@
 import type { FC, ReactNode } from "react";
 import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { dateRangeHasOnlyAvailableDates } from "@/features/configurator/utils/dateAvailability";
+import { formatPeriod, periodYears } from "@/features/configurator/utils/assessmentYears";
 import { useTranslation } from "@/i18n";
+import { AcceptanceSummary } from "@/features/survey/AcceptanceSummary";
 import { LayerShell } from "./shared/LayerShell";
 import type { ConfiguratorContext } from "./types";
 
@@ -36,28 +37,21 @@ const buildChecks = (ctx: ConfiguratorContext, t: (key: string, data?: any) => s
             : { label: t("configurator.layer4.labels.modelName", "Model name"), status: "fail", detail: t("configurator.layer4.missingModelName", "Missing — go back to Step 1.") },
     );
 
+    const timeframe = t("configurator.layer4.labels.timeframe", "Timeframe");
     if (!state.fromDate || !state.toDate) {
-        checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "fail", detail: t("configurator.layer4.missingDates", "Start or end date missing.") });
+        checks.push({ label: timeframe, status: "fail", detail: t("configurator.layer4.missingYears", "Start or end year missing — go back to Step 1.") });
+    } else if (state.fromDate > state.toDate) {
+        checks.push({ label: timeframe, status: "fail", detail: t("configurator.layer4.yearOrder", "The start year is after the end year.") });
     } else {
-        if (state.isLoadingDynamicDates) {
-            checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "warn", detail: t("configurator.layer4.loadingDynamic", "Loading available dynamic dates…") });
-        } else if (state.dynamicDatesError) {
-            checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "fail", detail: state.dynamicDatesError });
-        } else if (state.fromDate > state.toDate) {
-            checks.push({ label: t("configurator.layer4.labels.timeframe", "Timeframe"), status: "fail", detail: t("configurator.layer4.dynamicRequiresBefore", "Start date must be before end date.") });
-        } else if (!dateRangeHasOnlyAvailableDates(state.fromDate, state.toDate, state.availableDynamicDates)) {
-            checks.push({
-                label: t("configurator.layer4.labels.timeframe", "Timeframe"),
-                status: "fail",
-                detail: t("configurator.layer4.dynamicUnavailableDates", "The selected dynamic date range contains unavailable dates."),
-            });
-        } else {
-            checks.push({
-                label: t("configurator.layer4.labels.timeframe", "Timeframe"),
-                status: "pass",
-                detail: t("configurator.layer4.dynamicRange", { start: state.fromDate, end: state.toDate, defaultValue: `Dynamic ${state.fromDate} → ${state.toDate}.` }),
-            });
-        }
+        checks.push({
+            label: timeframe,
+            status: "pass",
+            detail: t("configurator.layer4.periodYears", {
+                period: formatPeriod(state.fromDate, state.toDate),
+                count: periodYears(state.fromDate, state.toDate),
+                defaultValue: "{{period}} · {{count}} years",
+            }),
+        });
     }
 
     if (selectedNodeCount === 0) {
@@ -135,6 +129,7 @@ export const Layer5FinalReview: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => 
                         );
                     })}
                 </ul>
+                <AcceptanceSummary selectedIds={ctx.state.selectedNodeIds} />
             </div>
         </LayerShell>
     );

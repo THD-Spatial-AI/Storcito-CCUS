@@ -1,7 +1,7 @@
 /** Step layout split. */
 
 /** Node-step panel width. */
-export const MAP_STEP_PANEL_WIDTH = 420;
+export const MAP_STEP_PANEL_WIDTH = 360;
 
 /** Map share. */
 const SIDEBAR_MAP_RATIO = 0.5;

@@ -1,6 +1,5 @@
 export { LAYERS, LAYER_COUNT } from "./registry";
 export type {
-    DateBounds,
     ConfiguratorContext,
 } from "./types";
 

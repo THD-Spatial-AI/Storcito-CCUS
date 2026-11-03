@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type FC, type ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
-import { parseDate } from "@internationalized/date";
 import { useTranslation } from "@/i18n";
 
 import { AreaSelectTour } from "@/features/guided-tour";
 import { useAreaSelect, type AreaData } from "@/features/configurator/hooks/useAreaSelect";
 import { useWizardSteps } from "@/features/configurator/hooks/area-select/useWizardSteps";
-import { useNodeOLLayers, useNodesQuery, useFitToNodes, filterNodes, useNodeFilterStore, useRoutingRunStore, EMITTER_COLOR, SINK_COLOR, TRANSPORT_COLOR, MODE_COLORS } from "@/features/co2-nodes";
-import { MAP_STEP_PANEL_WIDTH, WizardStepBar } from "./components/wizard";
+import { useNodeOLLayers, useNodesQuery, useFitToNodes, filterNodes, periodOf, useNodeFilterStore, useRoutingRunStore, EMITTER_COLOR, SINK_COLOR, TRANSPORT_COLOR, MODE_COLORS } from "@/features/co2-nodes";
+import { MAP_STEP_PANEL_WIDTH, SIDEBAR_PANEL_WIDTH_CSS, WizardStepBar } from "./components/wizard";
+import { useSurveyDescriber } from "@/features/survey/useSurveyDescriber";
+import { useSurveyOLLayer } from "@/features/survey/useSurveyOLLayer";
+import { SurveyMapControl } from "@/features/survey/SurveyMapControl";
+import { useSurveyLayerStore } from "@/features/survey/surveyLayerStore";
+import { isEmitter, isSink, type CO2Node } from "@/features/co2-nodes/types";
+import { NodePopup } from "@/features/co2-nodes/components/NodePopup";
+import { SourceDetails } from "@/features/co2-nodes/components/SourceDetails";
 import { CreateWorkspaceModal, useWorkspaceStore, type Workspace } from "@/components/workspace";
 import { useDocumentTitle } from "@/hooks/use-document-title";
 import Notification from "@/components/ui/Notification";
@@ -20,15 +26,6 @@ import { LayerStepper } from "./components/LayerStepper";
 
 /** Clears the panel. */
 const NODE_FIT_PADDING: [number, number, number, number] = [48, 48, 48, MAP_STEP_PANEL_WIDTH + 48];
-
-const DATE_BOUNDS = { minYear: 2015, maxYear: 2025 };
-
-const getDateBounds = () => ({
-  minValue: parseDate(`${DATE_BOUNDS.minYear}-01-01`),
-  maxValue: parseDate(`${DATE_BOUNDS.maxYear}-12-31`),
-  minYear: DATE_BOUNDS.minYear,
-  maxYear: DATE_BOUNDS.maxYear,
-});
 
 interface AreaSelectProps {
   onAreaSelected?: (areaData: AreaData) => void;
@@ -92,7 +89,16 @@ export const AreaSelect: FC<AreaSelectProps> = ({
   const nodeMunicipalityFilter = useNodeFilterStore((s) => s.municipalities);
   const nodeEmitterFilter = useNodeFilterStore((s) => s.emitterCategories);
   const nodeSinkFilter = useNodeFilterStore((s) => s.sinkCategories);
+  const nodeRegionFilter = useNodeFilterStore((s) => s.regions);
+  const nodeRuralFilter = useNodeFilterStore((s) => s.rural);
   const nodeFluxRange = useNodeFilterStore((s) => s.fluxRange);
+  const nodePeriodOnly = useNodeFilterStore((s) => s.periodOnly);
+  const nodePeriod = useNodeFilterStore((s) => s.period);
+  const setNodePeriod = useNodeFilterStore((s) => s.setPeriod);
+  // Period drives filters.
+  useEffect(() => {
+    setNodePeriod(periodOf(state.fromDate, state.toDate));
+  }, [state.fromDate, state.toDate, setNodePeriod]);
   // Mirrors the filters.
   const mapNodes = useMemo(
     () =>
@@ -102,7 +108,11 @@ export const AreaSelect: FC<AreaSelectProps> = ({
         municipalities: nodeMunicipalityFilter,
         emitterCategories: nodeEmitterFilter,
         sinkCategories: nodeSinkFilter,
+        regions: nodeRegionFilter,
+        rural: nodeRuralFilter,
         fluxRange: nodeFluxRange,
+        periodOnly: nodePeriodOnly,
+        period: nodePeriod,
       }),
     [
       nodes,
@@ -111,7 +121,11 @@ export const AreaSelect: FC<AreaSelectProps> = ({
       nodeMunicipalityFilter,
       nodeEmitterFilter,
       nodeSinkFilter,
+      nodeRegionFilter,
+      nodeRuralFilter,
       nodeFluxRange,
+      nodePeriodOnly,
+      nodePeriod,
     ],
   );
   const map = useMapStore((mapState) => mapState.map);
@@ -142,13 +156,22 @@ export const AreaSelect: FC<AreaSelectProps> = ({
   const isMapStep = wizard.step === 2;
   const isMapSidebar = wizard.step > 2 && selectedNodeCount > 0;
   const showsMap = wizard.hasStarted && (isMapStep || isMapSidebar);
+  // Clear of the panel.
+  const legendLeft = isMapStep ? `${MAP_STEP_PANEL_WIDTH + 16}px` : `calc(${SIDEBAR_PANEL_WIDTH_CSS} + 16px)`;
 
   // Picks only.
+  const surveyOn = useSurveyLayerStore((s) => s.enabled);
+  const showEmitters = useSurveyLayerStore((s) => s.showEmitters);
+  const showSinks = useSurveyLayerStore((s) => s.showSinks);
   const visibleNodes = useMemo(() => {
-    if (isMapStep) return mapNodes;
     const picked = new Set(state.selectedNodeIds);
-    return mapNodes.filter((node) => picked.has(node.id));
-  }, [isMapStep, mapNodes, state.selectedNodeIds]);
+    if (!isMapStep) return mapNodes.filter((node) => picked.has(node.id));
+    if (!surveyOn || (showEmitters && showSinks)) return mapNodes;
+    // Picks stay visible.
+    return mapNodes.filter(
+      (node) => picked.has(node.id) || (isEmitter(node) ? showEmitters : isSink(node) ? showSinks : true),
+    );
+  }, [isMapStep, mapNodes, state.selectedNodeIds, surveyOn, showEmitters, showSinks]);
 
   // Routed paths.
   const routes = useRoutingRunStore((store) => store.routes);
@@ -157,7 +180,16 @@ export const AreaSelect: FC<AreaSelectProps> = ({
     [routes],
   );
 
-  useNodeOLLayers({ map, nodes: visibleNodes, selectedIds: state.selectedNodeIds, onToggle: toggleNode, routes });
+  const describeNode = useSurveyDescriber();
+  // Dot card and details.
+  const [popup, setPopup] = useState<{ node: CO2Node; coordinate?: number[] } | null>(null);
+  const [detailNode, setDetailNode] = useState<CO2Node | null>(null);
+  const handleNodeClick = useCallback((node: CO2Node | null, coordinate?: number[]) => {
+    setPopup(node ? { node, coordinate } : null);
+  }, []);
+  useEffect(() => setPopup(null), [wizard.step]);
+  useSurveyOLLayer(map);
+  useNodeOLLayers({ map, nodes: visibleNodes, selectedIds: state.selectedNodeIds, onToggle: toggleNode, routes, describe: describeNode, onNodeClick: handleNodeClick });
 
   // Hides loading canvas.
   const [revealVeil, setRevealVeil] = useState(false);
@@ -223,31 +255,50 @@ export const AreaSelect: FC<AreaSelectProps> = ({
           hideMapControls={!showsMap}
           mapOverlays={
             showsMap ? (
-              <div className="pointer-events-none absolute bottom-4 right-4 z-20 flex flex-col gap-1.5 rounded-xl border border-border bg-card/95 px-3 py-2 text-[11px] text-muted-foreground shadow-lg backdrop-blur-md">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: EMITTER_COLOR }} />
-                  {t("co2Nodes.legend.emitters", "Emission sources")}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: SINK_COLOR }} />
-                  {t("co2Nodes.legend.sinks", "Storage & utilisation")}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="h-0.5 w-5" style={{ backgroundColor: TRANSPORT_COLOR }} />
-                  {t("co2Nodes.legend.routes", "Candidate transport routes")}
-                </span>
-                {routedModes.map((mode) => (
-                  <span key={mode} className="flex items-center gap-1.5">
-                    <span className="h-1 w-5 rounded-full" style={{ backgroundColor: MODE_COLORS[mode] ?? TRANSPORT_COLOR }} />
-                    {t(`co2Nodes.legend.routed.${mode}`, `${mode[0].toUpperCase()}${mode.slice(1)} route`)}
+              <>
+                <SurveyMapControl />
+                <div style={{ left: legendLeft }} className="pointer-events-none absolute bottom-4 z-20 flex flex-col gap-1.5 rounded-xl border border-border bg-card/95 px-3 py-2 text-[11px] text-muted-foreground shadow-lg backdrop-blur-md">
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: EMITTER_COLOR }} />
+                    {t("co2Nodes.legend.emitters", "Emission sources")}
                   </span>
-                ))}
-                <span className="mt-0.5 border-t border-border/60 pt-1.5 text-[10px]">
-                  {t("co2Nodes.legend.size", "Bubble size = annual CO₂ emissions")}
-                </span>
-              </div>
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: SINK_COLOR }} />
+                    {t("co2Nodes.legend.sinks", "Storage & utilisation")}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-0.5 w-5" style={{ backgroundColor: TRANSPORT_COLOR }} />
+                    {t("co2Nodes.legend.routes", "Candidate transport routes")}
+                  </span>
+                  {routedModes.map((mode) => (
+                    <span key={mode} className="flex items-center gap-1.5">
+                      <span className="h-1 w-5 rounded-full" style={{ backgroundColor: MODE_COLORS[mode] ?? TRANSPORT_COLOR }} />
+                      {t(`co2Nodes.legend.routed.${mode}`, `${mode[0].toUpperCase()}${mode.slice(1)} route`)}
+                    </span>
+                  ))}
+                  <span className="mt-0.5 border-t border-border/60 pt-1.5 text-[10px]">
+                    {t("co2Nodes.legend.size", "Bubble size = annual CO₂ emissions")}
+                  </span>
+                </div>
+              </>
             ) : null
           }
+        />
+
+        <NodePopup
+          map={map}
+          node={popup?.node ?? null}
+          coordinate={popup?.coordinate}
+          selected={!!popup && state.selectedNodeIds.includes(popup.node.id)}
+          extra={popup ? describeNode(popup.node) : null}
+          onToggle={(node) => toggleNode(node.id)}
+          onDetails={popup?.node.source === "store_co2" ? setDetailNode : undefined}
+          onClose={() => setPopup(null)}
+        />
+        <SourceDetails
+          sourceId={detailNode && !isSink(detailNode) ? detailNode.node_id : null}
+          nodeId={detailNode && isSink(detailNode) ? detailNode.id : null}
+          onClose={() => setDetailNode(null)}
         />
 
         {revealVeil && (
@@ -266,7 +317,6 @@ export const AreaSelect: FC<AreaSelectProps> = ({
           actions={actions}
           selectedNodeCount={selectedNodeCount}
           handleModelNameChange={handleModelNameChange}
-          getDateBounds={getDateBounds}
           editMode={editMode}
           modelId={existingModelId ?? modelIdFromRoute}
           tourRequestedStep={tourRequestedStep}

@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { Info, Sparkles } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@spatialhub/ui";
+import { formatPeriod } from "@/features/configurator/utils/assessmentYears";
 import { useTranslation } from "@/i18n";
 
 import { LayerShell } from "./shared/LayerShell";
@@ -53,20 +54,13 @@ export const Layer6SaveCalculate: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) =
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                     <Row index={0} label={t("configurator.layer5.labels.modelName", "Model name")} value={state.modelName} />
-                    <Row index={1} label={t("configurator.layer5.labels.from", "From")} value={state.fromDate} />
-                    <Row index={2} label={t("configurator.layer5.labels.to", "To")} value={state.toDate} />
                     <Row
-                        index={3}
-                        label={t("configurator.layer5.labels.dailyRun", "Daily run")}
-                        value="16:00-17:00"
-                        info={t(
-                            "configurator.layer5.dailyRunInfo",
-                            "Every simulated day is assessed with the weather from this window — the hottest, driest part of the afternoon."
-                        )}
+                        index={1}
+                        label={t("configurator.layer5.labels.period", "Assessment period")}
+                        value={formatPeriod(state.fromDate, state.toDate)}
                     />
-                    <Row index={4} label={t("configurator.layer5.labels.buffer", "Buffer")} value={`${state.bufferDistance} m`} />
                     <Row
-                        index={5}
+                        index={2}
                         label={t("configurator.layer5.labels.nodes", "Nodes")}
                         value={t("configurator.layer5.nodeCount", {
                             count: selectedNodeCount,

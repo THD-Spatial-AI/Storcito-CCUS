@@ -4,7 +4,6 @@ import { useTranslation } from "@/i18n";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@spatialhub/ui";
-import { dateRangeHasOnlyAvailableDates } from "@/features/configurator/utils/dateAvailability";
 import type { AreaSelectState, AreaSelectActions } from "@/features/configurator/types/area-select";
 import type { WizardStepsApi } from "@/features/configurator/hooks/area-select/useWizardSteps";
 import { MAP_STEP_PANEL_WIDTH, SIDEBAR_PANEL_WIDTH_CSS } from "./wizard";
@@ -19,7 +18,6 @@ import {
     Layer5FinalReview,
     Layer6SaveCalculate,
     type ConfiguratorContext,
-    type DateBounds,
 } from "./layers";
 
 interface LayerStepperProps {
@@ -27,7 +25,6 @@ interface LayerStepperProps {
     actions: AreaSelectActions;
     selectedNodeCount: number;
     handleModelNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    getDateBounds: () => DateBounds;
     editMode: boolean;
     modelId?: number;
     onStepChange?: (step: number) => void;
@@ -41,7 +38,6 @@ export const LayerStepper: FC<LayerStepperProps> = ({
     actions,
     selectedNodeCount,
     handleModelNameChange,
-    getDateBounds,
     editMode,
     modelId,
     onStepChange,
@@ -81,7 +77,6 @@ export const LayerStepper: FC<LayerStepperProps> = ({
         modelId,
         editMode,
         handleModelNameChange,
-        getDateBounds,
     };
 
     const blockingReason = useMemo<string | null>(() => {
@@ -89,25 +84,9 @@ export const LayerStepper: FC<LayerStepperProps> = ({
             case 1: {
                 const missing: string[] = [];
                 if (!state.modelName.trim()) missing.push(t("configurator.blocking.modelName", "a model name"));
-                if (!state.fromDate || !state.toDate) missing.push(t("configurator.blocking.dateRange", "a start and end date"));
-                if (state.isLoadingDynamicDates) {
-                    return t("configurator.blocking.dynamicLoading", "Loading available dynamic dates.");
-                }
-                if (state.dynamicDatesError) {
-                    return state.dynamicDatesError;
-                }
-                if (state.availableDynamicDates.length === 0) {
-                    return t("configurator.blocking.dynamicEmpty", "No dynamic dates are currently available.");
-                }
+                if (!state.fromDate || !state.toDate) missing.push(t("configurator.blocking.yearRange", "a start and end year"));
                 if (state.fromDate && state.toDate && state.fromDate > state.toDate) {
-                    return t("configurator.blocking.dynamicOrder", "The start date must be before or equal to the end date.");
-                }
-                if (
-                    state.fromDate &&
-                    state.toDate &&
-                    !dateRangeHasOnlyAvailableDates(state.fromDate, state.toDate, state.availableDynamicDates)
-                ) {
-                    return t("configurator.blocking.dynamicRange", "Select a fully available dynamic date range.");
+                    return t("configurator.blocking.yearOrder", "The start year must not be after the end year.");
                 }
                 return missing.length
                     ? t("configurator.blocking.missingFields", {
@@ -132,9 +111,6 @@ export const LayerStepper: FC<LayerStepperProps> = ({
         state.modelName,
         state.fromDate,
         state.toDate,
-        state.availableDynamicDates,
-        state.isLoadingDynamicDates,
-        state.dynamicDatesError,
         selectedNodeCount,
         t,
     ]);
@@ -145,9 +121,6 @@ export const LayerStepper: FC<LayerStepperProps> = ({
         !state.toDate ||
         !state.modelName.trim() ||
         state.fromDate > state.toDate ||
-        state.isLoadingDynamicDates ||
-        Boolean(state.dynamicDatesError) ||
-        !dateRangeHasOnlyAvailableDates(state.fromDate, state.toDate, state.availableDynamicDates) ||
         state.isSaving ||
         selectedNodeCount === 0;
 
