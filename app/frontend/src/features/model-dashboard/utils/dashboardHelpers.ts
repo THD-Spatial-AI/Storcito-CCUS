@@ -1,39 +1,27 @@
 import { Model } from "@/features/model-dashboard/services/modelService";
 
-export const organizeModelsHierarchically = (
-	models: Model[]
-): (Model & { level: number })[] => {
-	const organized: (Model & { level: number })[] = [];
-	const addedIds = new Set<number>();
-	const parentMap = new Map<number, Model[]>();
+export interface ModelFamily {
+	root: Model;
+	/** Parent shown on top. */
+	display: Model;
+	/** Copies, oldest first. */
+	otherVersions: Model[];
+	versionCount: number;
+	memberIds: number[];
+}
 
-	for (const model of models) {
-		if (model.parent_model_id) {
-			if (!parentMap.has(model.parent_model_id)) {
-				parentMap.set(model.parent_model_id, []);
-			}
-			parentMap.get(model.parent_model_id)!.push(model);
-		}
-	}
+export const buildModelFamilies = (roots: Model[]): ModelFamily[] =>
+	roots.map((root) => {
+		const versions = root.versions ?? [];
+		const members = [root, ...versions];
+		return {
+			root,
+			display: root,
+			otherVersions: versions,
+			versionCount: members.length,
+			memberIds: members.map((member) => member.id),
+		};
+	});
 
-	for (const model of models) {
-		if (!model.parent_model_id) {
-			organized.push({ ...model, level: 0 });
-			addedIds.add(model.id);
-
-			const children = parentMap.get(model.id) || [];
-			for (const child of children) {
-				organized.push({ ...child, level: 1 });
-				addedIds.add(child.id);
-			}
-		}
-	}
-
-	for (const model of models) {
-		if (!addedIds.has(model.id)) {
-			organized.push({ ...model, level: 0 });
-		}
-	}
-
-	return organized;
-};
+export const flattenFamilies = (families: ModelFamily[]): Model[] =>
+	families.flatMap((family) => [family.root, ...(family.root.versions ?? [])]);

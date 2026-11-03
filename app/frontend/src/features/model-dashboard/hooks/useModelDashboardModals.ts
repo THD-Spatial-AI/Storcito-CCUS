@@ -90,7 +90,7 @@ export function useModelDashboardModals({
 
 	const handleRenameWorkspaceSuccess = useCallback(async (updatedWorkspace: Workspace) => {
 		try {
-			// Set the workspace.
+			// Update workspace.
 			setCurrentWorkspace(updatedWorkspace);
 			setWsReloadKey((k) => k + 1);
 

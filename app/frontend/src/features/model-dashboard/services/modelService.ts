@@ -93,6 +93,8 @@ export interface Model {
   parent_model_title?: string;
   child_model_ids?: number[];
   is_copy?: boolean;
+  /** Family versions, grouped only. */
+  versions?: Model[];
 
   // Activation
   is_active?: boolean;
@@ -212,6 +214,10 @@ class ModelService {
     mine?: boolean;
     from_date?: string;
     to_date?: string;
+    pinned?: string;
+    pinned_only?: string;
+    status?: string;
+    grouped?: boolean;
   }): Promise<ModelListResponse> {
     const response = await axios.get(this.baseURL, { params });
     return response.data;
@@ -245,11 +251,10 @@ class ModelService {
   // Upload optional inputs.
   async uploadModelInputs(
     id: number,
-    files: { stationData?: File | null; dtm?: File | null }
+    files: { dtm?: File | null }
   ): Promise<void> {
-    if (!files.stationData && !files.dtm) return;
+    if (!files.dtm) return;
     const formData = new FormData();
-    if (files.stationData) formData.append("station_data", files.stationData);
     if (files.dtm) formData.append("dtm", files.dtm);
     await axios.post(`${this.baseURL}/${id}/inputs`, formData, {
       headers: { "Content-Type": "multipart/form-data" },

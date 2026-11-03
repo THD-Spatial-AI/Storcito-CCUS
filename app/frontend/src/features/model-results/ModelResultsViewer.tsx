@@ -7,6 +7,7 @@ import { useDocumentTitle } from "@/hooks/use-document-title";
 import { MapContainer } from "@/components/shared/MapContainer";
 import { useMapStore } from "@/features/interactive-map/store/map-store";
 import { modelService, Model } from "@/features/model-dashboard/services/modelService";
+import { useSeenCompletedModelsStore } from "@/features/model-dashboard/store/seen-completed-models";
 import { getSelectedNodeIdsFromConfig } from "@/features/configurator/hooks/area-select/utils";
 import {
   routeService,
@@ -60,6 +61,11 @@ export const ModelResultsViewer: FC = () => {
       cancelled = true;
     };
   }, [modelId, t]);
+
+  const markCompletedSeen = useSeenCompletedModelsStore((s) => s.markSeen);
+  useEffect(() => {
+    if (model?.status === "completed") markCompletedSeen(model);
+  }, [model, markCompletedSeen]);
 
   const selectedIds = useMemo(
     () => (model?.config ? getSelectedNodeIdsFromConfig(model.config) : []),

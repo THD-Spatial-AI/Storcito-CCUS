@@ -8,7 +8,7 @@ const MAX_SAMPLE_SECONDS = 6 * 60 * 60;
 const MIN_SAMPLES = 1;
 const MAX_SAMPLES = 20;
 const MAX_AREA_RATIO = 2;
-/** 1 is exact. */
+/** Ratio 1 means exact match. */
 const MAX_DAY_RATIO = 1;
 const MAX_BUFFER_RATIO = 1;
 
@@ -34,6 +34,7 @@ interface WorkloadProfile {
 	country: string;
 	dayCount: number;
 	forceCompute: boolean | null;
+	optionalLayers: string;
 	userInputs: string;
 }
 
@@ -41,6 +42,16 @@ const asRecord = (value: unknown): Record<string, unknown> | null =>
 	value !== null && typeof value === "object" && !Array.isArray(value)
 		? value as Record<string, unknown>
 		: null;
+
+const stableRecordSignature = (value: unknown): string => {
+	const record = asRecord(value);
+	if (!record) return "";
+	return Object.entries(record)
+		.filter(([, entry]) => typeof entry === "boolean" || typeof entry === "string" || typeof entry === "number")
+		.sort(([left], [right]) => left.localeCompare(right))
+		.map(([key, entry]) => `${key}:${String(entry)}`)
+		.join("|");
+};
 
 const stableRecordKeys = (value: unknown): string => {
 	const record = asRecord(value);
@@ -80,6 +91,7 @@ const workloadProfile = (model: Model): WorkloadProfile => {
 		forceCompute: typeof parameters?.force_compute === "boolean"
 			? parameters.force_compute
 			: null,
+		optionalLayers: stableRecordSignature(parameters?.optional_layers),
 		userInputs: stableRecordKeys(config?.user_inputs),
 	};
 };
@@ -94,6 +106,7 @@ const comparableWorkload = (target: WorkloadProfile, sample: WorkloadProfile): b
 	target.calculationMode === sample.calculationMode &&
 	target.forceCompute === sample.forceCompute &&
 	(!target.country || !sample.country || target.country === sample.country) &&
+	target.optionalLayers === sample.optionalLayers &&
 	target.userInputs === sample.userInputs &&
 	valuesWithinRatio(target.areaKm2, sample.areaKm2, MAX_AREA_RATIO) &&
 	valuesWithinRatio(target.dayCount, sample.dayCount, MAX_DAY_RATIO) &&
