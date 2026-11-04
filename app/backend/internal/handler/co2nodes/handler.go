@@ -3,6 +3,7 @@ package co2nodes
 import (
 	"context"
 	"errors"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -129,6 +130,29 @@ type importRequest struct {
 	Offset  int      `json:"offset"`
 }
 
+type ImportOptions struct {
+	Country string
+	MinCO2T *float64
+	All     bool
+	BBox    string
+	Limit   int
+	Offset  int
+}
+
+type ImportResult struct {
+	Imported       int    `json:"imported"`
+	Sinks          int    `json:"sinks"`
+	Removed        int64  `json:"removed"`
+	Total          int64  `json:"total"`
+	SourceTotal    int    `json:"source_total"`
+	HasMore        bool   `json:"has_more"`
+	NextOffset     int    `json:"next_offset"`
+	DatasetVersion string `json:"dataset_version"`
+}
+
+var ErrInvalidImport = errors.New("invalid import bounds")
+var ErrSaveImport = errors.New("failed to save imported nodes")
+
 // Import pulls from STORE_CO2.
 func (h *Handler) Import(c *gin.Context) {
 	if h.store == nil {
@@ -141,9 +165,27 @@ func (h *Handler) Import(c *gin.Context) {
 		httputil.BadRequest(c, "Invalid request body")
 		return
 	}
-	if req.Limit < 0 || req.Limit > 10000 || req.Offset < 0 || (req.MinCO2T != nil && (math.IsNaN(*req.MinCO2T) || math.IsInf(*req.MinCO2T, 0) || *req.MinCO2T < 0)) {
+
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 120*time.Second)
+	defer cancel()
+
+	result, err := ImportNodes(ctx, h.db, h.store, ImportOptions(req))
+	switch {
+	case errors.Is(err, ErrInvalidImport):
 		httputil.BadRequest(c, "Invalid import bounds")
-		return
+	case errors.Is(err, ErrSaveImport):
+		httputil.InternalError(c, "Failed to save imported nodes")
+	case err != nil:
+		respondUpstream(c, err)
+	default:
+		httputil.SuccessResponse(c, result)
+	}
+}
+
+// ImportNodes upserts STORE_CO2 nodes.
+func ImportNodes(ctx context.Context, db *gorm.DB, store *storeco2.Client, req ImportOptions) (ImportResult, error) {
+	if req.Limit < 0 || req.Limit > 10000 || req.Offset < 0 || (req.MinCO2T != nil && (math.IsNaN(*req.MinCO2T) || math.IsInf(*req.MinCO2T, 0) || *req.MinCO2T < 0)) {
+		return ImportResult{}, ErrInvalidImport
 	}
 	if req.Limit == 0 {
 		req.Limit = 1000
@@ -154,9 +196,6 @@ func (h *Handler) Import(c *gin.Context) {
 		minFlux = *req.MinCO2T
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 120*time.Second)
-	defer cancel()
-
 	query := storeco2.NodeQuery{
 		Country:    req.Country,
 		MinCO2T:    minFlux,
@@ -165,26 +204,25 @@ func (h *Handler) Import(c *gin.Context) {
 		Limit:      req.Limit,
 		Offset:     req.Offset,
 	}
-	page, err := h.store.ImportNodes(ctx, query, req.All)
+	page, err := store.ImportNodes(ctx, query, req.All)
 	if err != nil {
-		respondUpstream(c, err)
-		return
+		return ImportResult{}, err
 	}
 	// Full imports include sinks.
 	var sinks []storeco2.Node
 	if req.All && req.Offset == 0 {
-		sinkPage, err := h.store.ImportSinks(ctx, storeco2.NodeQuery{Country: req.Country, BBox: req.BBox, Limit: req.Limit}, true)
+		sinkPage, err := store.ImportSinks(ctx, storeco2.NodeQuery{Country: req.Country, BBox: req.BBox, Limit: req.Limit}, true)
 		if err != nil {
-			respondUpstream(c, err)
-			return
+			return ImportResult{}, err
 		}
 		sinks = sinkPage.Nodes
 	}
 	emitters, sinks := inScope(page.Nodes), inScope(sinks)
 	fetched := append(emitters, sinks...)
+	result := ImportResult{SourceTotal: page.Total, HasMore: page.HasMore, NextOffset: req.Offset, DatasetVersion: page.DatasetVersion}
 	if len(fetched) == 0 {
-		httputil.SuccessResponse(c, gin.H{"imported": 0, "sinks": 0, "removed": 0, "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset, "dataset_version": page.DatasetVersion})
-		return
+		result.Total = countNodes(db)
+		return result, nil
 	}
 
 	started := time.Now()
@@ -216,9 +254,8 @@ func (h *Handler) Import(c *gin.Context) {
 	// Prune removed nodes.
 	prune := req.All && req.Offset == 0 && req.Country == "" && req.BBox == "" && req.MinCO2T == nil
 
-	// Re-runnable.
 	var removed int64
-	err = h.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	err = db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Clauses(clause.OnConflict{
 			Columns: []clause.Column{{Name: "source"}, {Name: "node_id"}},
 			DoUpdates: clause.AssignmentColumns([]string{
@@ -235,20 +272,24 @@ func (h *Handler) Import(c *gin.Context) {
 			return nil
 		}
 		// Keep model nodes.
-		result := tx.Exec(`DELETE FROM co2_nodes n
+		res := tx.Exec(`DELETE FROM co2_nodes n
 			WHERE n.source = ? AND n.updated_at < ?
 			  AND NOT EXISTS (SELECT 1 FROM model_co2_nodes l WHERE l.co2_node_id = n.id)
 			  AND NOT EXISTS (SELECT 1 FROM models m WHERE m.config->'parameters'->'co2_node_ids' @> to_jsonb(n.id))`,
 			sourceStoreCO2, started)
-		removed = result.RowsAffected
-		return result.Error
+		removed = res.RowsAffected
+		return res.Error
 	})
 	if err != nil {
-		httputil.InternalError(c, "Failed to save imported nodes")
-		return
+		return ImportResult{}, fmt.Errorf("%w: %v", ErrSaveImport, err)
 	}
 
-	httputil.SuccessResponse(c, gin.H{"imported": len(emitters), "sinks": len(sinks), "removed": removed, "total": h.count(), "source_total": page.Total, "has_more": page.HasMore, "next_offset": req.Offset + len(page.Nodes), "dataset_version": page.DatasetVersion})
+	result.Imported = len(emitters)
+	result.Sinks = len(sinks)
+	result.Removed = removed
+	result.Total = countNodes(db)
+	result.NextOffset = req.Offset + len(page.Nodes)
+	return result, nil
 }
 
 func respondUpstream(c *gin.Context, err error) {
@@ -260,9 +301,9 @@ func respondUpstream(c *gin.Context, err error) {
 	httputil.BadGateway(c, "STORE_CO2 request failed: "+err.Error())
 }
 
-func (h *Handler) count() int64 {
+func countNodes(db *gorm.DB) int64 {
 	var total int64
-	h.db.Model(&models.CO2Node{}).Count(&total)
+	db.Model(&models.CO2Node{}).Count(&total)
 	return total
 }
 

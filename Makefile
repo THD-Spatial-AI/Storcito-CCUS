@@ -24,6 +24,7 @@ help:
 	@echo "  make init-keycloak      Initialize Keycloak"
 	@echo "  make migrate            Run Energy App DB migrations"
 	@echo "  make seed               Seed the database"
+	@echo "  make seed-co2           Import STORE_CO2 nodes"
 	@echo "  make install            Install dependencies"
 	@echo ""
 	@echo "Database:"
@@ -240,6 +241,13 @@ seed:
 	@echo "$(CYAN)Seeding Database...$(NC)"
 	@cd app/backend && go run ./cmd/seed
 	@echo "$(GREEN)Database seeded.$(NC)"
+	@echo ""
+
+.PHONY: seed-co2
+seed-co2:
+	@echo "$(CYAN)Importing STORE_CO2 nodes...$(NC)"
+	@cd app/backend && go run ./cmd/seed-co2 $(if $(COUNTRY),-country=$(COUNTRY))
+	@echo "$(GREEN)STORE_CO2 nodes imported.$(NC)"
 	@echo ""
 
 .PHONY: setup-complete
