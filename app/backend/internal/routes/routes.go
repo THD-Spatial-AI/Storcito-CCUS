@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 
 	co2nodeshandler "spatialhub_backend/internal/handler/co2nodes"
-	co2routexhandler "spatialhub_backend/internal/handler/co2routex"
 	co2sourceshandler "spatialhub_backend/internal/handler/co2sources"
 	feedback "spatialhub_backend/internal/handler/feedback"
 	geocodinghandler "spatialhub_backend/internal/handler/geocoding"
 	grouphandler "spatialhub_backend/internal/handler/group"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
+	routinghandler "spatialhub_backend/internal/handler/routing"
 	settingshandler "spatialhub_backend/internal/handler/settings"
 	surveyhandler "spatialhub_backend/internal/handler/survey"
 	usershandler "spatialhub_backend/internal/handler/users"
@@ -52,7 +52,7 @@ type Deps struct {
 	CookieDomain               string
 	IsProduction               bool
 
-	// APITokenValidator enables personal access tokens.
+	// Personal access tokens.
 	APITokenValidator middleware.APITokenValidator
 
 	ResultHandler         *resulthandler.ResultHandler
@@ -66,7 +66,7 @@ type Deps struct {
 	ModelHandler          *modelhandler.ModelHandler
 	WebserviceClient      *webservice.Client
 	CO2NodesHandler       *co2nodeshandler.Handler
-	CO2RouteXHandler      *co2routexhandler.Handler
+	RoutingHandler        *routinghandler.Handler
 	CO2SourcesHandler     *co2sourceshandler.Handler
 	SurveyHandler         *surveyhandler.Handler
 	GeocodingHandler      *geocodinghandler.Handler
@@ -103,7 +103,7 @@ func RegisterPublic(r *gin.Engine, deps Deps) {
 	registerInternalRoutes(r, deps)
 }
 
-// registerInternalRoutes mounts lifecycle routes.
+// Lifecycle routes.
 func registerInternalRoutes(r *gin.Engine, deps Deps) {
 	internal := r.Group("/api/internal")
 	internal.Use(middleware.CallbackAuthMiddleware())
@@ -142,7 +142,7 @@ func RegisterProtected(r *gin.Engine, deps Deps) {
 	registerGroupRoutes(protectedAPI, deps.GroupHandler)
 	registerModelRoutes(protectedAPI, deps.ModelHandler, deps.ResultHandler)
 	registerCO2NodeRoutes(protectedAPI, deps.CO2NodesHandler)
-	registerCO2RouteXRoutes(protectedAPI, deps.CO2RouteXHandler, deps.ModelHandler)
+	registerRoutingRoutes(protectedAPI, deps.RoutingHandler, deps.ModelHandler)
 	registerCO2SourceRoutes(protectedAPI, deps.CO2SourcesHandler)
 	registerSurveyRoutes(protectedAPI, deps.SurveyHandler)
 	registerGeocodingRoutes(protectedAPI, deps.GeocodingHandler)

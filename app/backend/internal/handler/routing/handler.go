@@ -1,14 +1,11 @@
-package co2routex
+package routing
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
-	"sort"
 	"strconv"
-	"strings"
 	"sync"
 	"time"
 
@@ -18,34 +15,40 @@ import (
 	"gorm.io/gorm"
 	"platform.local/common/pkg/httputil"
 	"platform.local/common/pkg/models"
-	client "spatialhub_backend/internal/co2routex"
+
+	"spatialhub_backend/internal/routing"
 )
 
 const runTimeout = 30 * time.Minute
 
-// Runs CO2RouteX.
+// Runs STORE_CO2 routing.
 type Handler struct {
-	db   *gorm.DB
-	api  *client.Client
-	mu   sync.Mutex
-	runs map[string]*runState
+	db     *gorm.DB
+	runner *routing.Runner
+	mu     sync.Mutex
+	runs   map[string]*runState
 }
 
 type runState struct {
-	ID       string                  `json:"run_id"`
-	Status   string                  `json:"status"`
-	Error    string                  `json:"error,omitempty"`
-	Jobs     []client.StageResult    `json:"jobs"`
-	Routes   []models.CO2RouteXRoute `json:"routes"`
-	owner    string
-	modelID  uint
-	created  time.Time
-	cancel   context.CancelFunc
-	workbook []byte
+	ID      string                  `json:"run_id"`
+	Status  string                  `json:"status"`
+	Error   string                  `json:"error,omitempty"`
+	Jobs    []routing.StageResult   `json:"jobs"`
+	Routes  []models.CO2RouteXRoute `json:"routes"`
+	Notes   []string                `json:"notes"`
+	owner   string
+	modelID uint
+	created time.Time
+	cancel  context.CancelFunc
 }
 
-func NewHandler(db *gorm.DB, api *client.Client) *Handler {
-	return &Handler{db: db, api: api, runs: map[string]*runState{}}
+type runRequest struct {
+	NodeIDs []uint `json:"node_ids"`
+	routing.Inputs
+}
+
+func NewHandler(db *gorm.DB, runner *routing.Runner) *Handler {
+	return &Handler{db: db, runner: runner, runs: map[string]*runState{}}
 }
 
 func (h *Handler) Run(c *gin.Context) {
@@ -64,24 +67,16 @@ func (h *Handler) start(c *gin.Context, modelID uint) {
 	if !ok {
 		return
 	}
-	req, directory, err := readRequest(c)
-	if err != nil {
+	var req runRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		httputil.BadRequest(c, "Invalid routing settings")
+		return
+	}
+	if err := req.Validate(); err != nil {
 		httputil.BadRequest(c, err.Error())
 		return
 	}
-	keep := false
-	defer func() {
-		if !keep {
-			_ = os.RemoveAll(directory)
-		}
-	}()
 	nodes, err := h.loadNodes(req.NodeIDs)
-	if err != nil {
-		httputil.BadRequest(c, err.Error())
-		return
-	}
-	req.NodeCountries = nodeCountries(nodes)
-	workbook, err := client.BuildWorkbook(nodes)
 	if err != nil {
 		httputil.BadRequest(c, err.Error())
 		return
@@ -95,7 +90,7 @@ func (h *Handler) start(c *gin.Context, modelID uint) {
 		}
 		if active.Status == "running" && (active.owner == owner || (modelID != 0 && active.modelID == modelID)) {
 			h.mu.Unlock()
-			c.JSON(http.StatusConflict, gin.H{"error": "A CO2RouteX run is already active"})
+			c.JSON(http.StatusConflict, gin.H{"error": "A routing run is already active"})
 			return
 		}
 	}
@@ -111,19 +106,17 @@ func (h *Handler) start(c *gin.Context, modelID uint) {
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), runTimeout)
-	state := &runState{ID: uuid.NewString(), Status: "running", Jobs: []client.StageResult{}, Routes: []models.CO2RouteXRoute{}, owner: owner, modelID: modelID, created: time.Now(), cancel: cancel}
+	state := &runState{ID: uuid.NewString(), Status: "running", Jobs: []routing.StageResult{}, Routes: []models.CO2RouteXRoute{}, Notes: []string{}, owner: owner, modelID: modelID, created: time.Now(), cancel: cancel}
 	h.runs[state.ID] = state
 	h.mu.Unlock()
-	keep = true
-	c.JSON(http.StatusAccepted, gin.H{"success": true, "data": gin.H{"run_id": state.ID, "status": "running", "jobs": []client.StageResult{}, "routes": []models.CO2RouteXRoute{}}})
-	go h.execute(ctx, state, workbook, req.Inputs, directory)
+	c.JSON(http.StatusAccepted, gin.H{"success": true, "data": gin.H{"run_id": state.ID, "status": "running", "jobs": []routing.StageResult{}, "routes": []models.CO2RouteXRoute{}, "notes": []string{}}})
+	go h.execute(ctx, state, nodes, req.Inputs)
 }
 
-func (h *Handler) execute(ctx context.Context, state *runState, workbook []byte, in client.Inputs, directory string) {
+func (h *Handler) execute(ctx context.Context, state *runState, nodes []models.CO2Node, in routing.Inputs) {
 	defer state.cancel()
-	defer func() { _ = os.RemoveAll(directory) }()
 	records := map[string]*models.CO2RouteXJob{}
-	progress := func(update client.StageResult) error {
+	progress := func(update routing.StageResult) error {
 		h.mu.Lock()
 		found := false
 		for i, existing := range state.Jobs {
@@ -151,11 +144,7 @@ func (h *Handler) execute(ctx context.Context, state *runState, workbook []byte,
 		if err != nil {
 			return err
 		}
-		outputs, err := json.Marshal(update.Job.Outputs)
-		if err != nil {
-			return err
-		}
-		record.Summary, record.Outputs = datatypes.JSON(summary), datatypes.JSON(outputs)
+		record.Summary = datatypes.JSON(summary)
 		if record.IsFinished() {
 			now := time.Now()
 			record.FinishedAt = &now
@@ -165,7 +154,7 @@ func (h *Handler) execute(ctx context.Context, state *runState, workbook []byte,
 		}
 		return nil
 	}
-	result, err := h.api.Execute(ctx, workbook, in, progress)
+	result, err := h.runner.Execute(ctx, nodes, in, progress)
 	if err == nil {
 		err = ctx.Err()
 	}
@@ -175,7 +164,8 @@ func (h *Handler) execute(ctx context.Context, state *runState, workbook []byte,
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	if result != nil {
-		state.Routes, state.workbook = result.Routes, result.Workbook
+		state.Routes = result.Routes
+		state.Notes = result.Notes
 	}
 	if err != nil {
 		state.Status, state.Error = "failed", err.Error()
@@ -203,24 +193,6 @@ func (h *Handler) loadNodes(ids []uint) ([]models.CO2Node, error) {
 		return nil, fmt.Errorf("some selected nodes were not found")
 	}
 	return nodes, nil
-}
-
-// Unique node countries.
-func nodeCountries(nodes []models.CO2Node) []string {
-	seen := map[string]bool{}
-	codes := []string{}
-	for _, node := range nodes {
-		if node.CountryCode == nil {
-			continue
-		}
-		code := strings.ToUpper(strings.TrimSpace(*node.CountryCode))
-		if code != "" && !seen[code] {
-			seen[code] = true
-			codes = append(codes, code)
-		}
-	}
-	sort.Strings(codes)
-	return codes
 }
 
 func (h *Handler) withRun(c *gin.Context, action func(*runState)) {
@@ -252,8 +224,13 @@ func (h *Handler) Workbook(c *gin.Context) {
 			httputil.BadRequest(c, "Routing has not completed")
 			return
 		}
-		c.Header("Content-Disposition", `attachment; filename="co2routex_results.xlsx"`)
-		c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", state.workbook)
+		data, err := routing.Workbook(state.Routes)
+		if err != nil {
+			httputil.InternalError(c, "Failed to build the workbook")
+			return
+		}
+		c.Header("Content-Disposition", `attachment; filename="routing_results.xlsx"`)
+		c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", data)
 	})
 }
 

@@ -6,17 +6,14 @@ import (
 	"gorm.io/datatypes"
 )
 
-// CO2RouteX stage names.
+// Stage names.
 const (
-	StageConnections     = "connections"
 	StageRoutingPipeline = "routing_pipeline"
-	StageRoutingTruck    = "routing_truck"
-	StageRoutingRailway  = "routing_railway"
-	StageCostsPipeline   = "costs_pipeline"
-	StageCostsContainer  = "costs_container"
+	StageRoutingRoad     = "routing_road"
+	StageRoutingRail     = "routing_rail"
 )
 
-// CO2RouteX job states.
+// Routing job states.
 const (
 	JobStatusQueued    = "queued"
 	JobStatusRunning   = "running"

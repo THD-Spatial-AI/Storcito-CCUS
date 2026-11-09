@@ -6,7 +6,7 @@ import (
 	"gorm.io/datatypes"
 )
 
-// CO2RouteX node types.
+// STORE_CO2 node types.
 const (
 	NodeTypeCement        = "cement"
 	NodeTypeRefinery      = "refinery"
@@ -41,12 +41,13 @@ type CO2Node struct {
 	NUTS3        *string `gorm:"column:nuts3;size:8" json:"nuts3,omitempty"`
 	Rural        *bool   `gorm:"column:rural" json:"rural,omitempty"`
 
-	// Operating years, until exclusive.
+	// Operating years.
 	OperatingFrom  *int `gorm:"column:operating_from" json:"operating_from,omitempty"`
 	OperatingUntil *int `gorm:"column:operating_until" json:"operating_until,omitempty"`
 	Retired        bool `gorm:"column:retired;not null;default:false" json:"retired,omitempty"`
 
-	Source string `gorm:"not null;size:64;default:'co2routex'" json:"source"`
+
+	Source string `gorm:"not null;size:64;default:'store_co2'" json:"source"`
 
 	Metadata datatypes.JSON `gorm:"type:jsonb" json:"metadata,omitempty"`
 

@@ -12,17 +12,16 @@ import (
 
 	"spatialhub_backend/internal/apitoken"
 	"spatialhub_backend/internal/cache"
-	co2routexclient "spatialhub_backend/internal/co2routex"
 	"spatialhub_backend/internal/config"
 	"spatialhub_backend/internal/events"
 	geoserverclient "spatialhub_backend/internal/geoserver"
 	co2nodeshandler "spatialhub_backend/internal/handler/co2nodes"
-	co2routexhandler "spatialhub_backend/internal/handler/co2routex"
 	co2sourceshandler "spatialhub_backend/internal/handler/co2sources"
 	feedback "spatialhub_backend/internal/handler/feedback"
 	geocodinghandler "spatialhub_backend/internal/handler/geocoding"
 	grouphandler "spatialhub_backend/internal/handler/group"
 	notificationshandler "spatialhub_backend/internal/handler/notifications"
+	routinghandler "spatialhub_backend/internal/handler/routing"
 	settingshandler "spatialhub_backend/internal/handler/settings"
 	surveyhandler "spatialhub_backend/internal/handler/survey"
 	usershandler "spatialhub_backend/internal/handler/users"
@@ -31,6 +30,7 @@ import (
 	modelhandler "spatialhub_backend/internal/model/handler"
 	resulthandler "spatialhub_backend/internal/result/handler"
 	"spatialhub_backend/internal/routes"
+	"spatialhub_backend/internal/routing"
 	"spatialhub_backend/internal/services"
 	apitokenstore "spatialhub_backend/internal/store/apitoken"
 	feedbackstore "spatialhub_backend/internal/store/feedback"
@@ -105,7 +105,7 @@ func main() {
 	runHTTPServer(serverAddr, r, log)
 }
 
-// AppDependencies holds the connections.
+// Shared connections.
 type AppDependencies struct {
 	DB                  *gorm.DB
 	SQLdb               *sql.DB
@@ -121,7 +121,7 @@ type AppDependencies struct {
 	Cfg                 *config.Config
 }
 
-// Close releases the connections.
+// Releases connections.
 func (d *AppDependencies) Close() {
 	if d.SQLdb != nil {
 		_ = d.SQLdb.Close()
@@ -137,7 +137,7 @@ func (d *AppDependencies) Close() {
 	}
 }
 
-// initializeInfrastructure wires the infrastructure.
+// Wires infrastructure.
 func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDependencies {
 	db, sqlDB, err := platformdatabase.ConnectWithPing(cfg.Database)
 	if err != nil {
@@ -224,7 +224,7 @@ func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDepend
 	}
 }
 
-// setupGinEngine builds the engine.
+// Builds the engine.
 func setupGinEngine(cfg *config.Config, log *logrus.Logger) *gin.Engine {
 	trusted := []string{"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}
 
@@ -265,7 +265,7 @@ func setupGinEngine(cfg *config.Config, log *logrus.Logger) *gin.Engine {
 	return r
 }
 
-// configureRoutes mounts the routes.
+// Mounts the routes.
 func configureRoutes(r *gin.Engine, cfg *config.Config, deps *AppDependencies) {
 	routes.Register(r, buildRouteDeps(cfg, deps))
 }
@@ -312,13 +312,13 @@ func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {
 		GeocodingHandler:           geocodingHandler,
 		WebserviceClient:           deps.WebserviceClient,
 		CO2NodesHandler:            co2nodeshandler.NewHandler(deps.DB, storeco2client.NewClient(cfg.StoreCO2URL)),
-		CO2RouteXHandler:           co2routexhandler.NewHandler(deps.DB, co2routexclient.NewClient(cfg.CO2RouteXURL)),
+		RoutingHandler:             routinghandler.NewHandler(deps.DB, routing.NewRunner(storeco2client.NewClient(cfg.StoreCO2URL))),
 		CO2SourcesHandler:          co2sourceshandler.NewHandler(storeco2client.NewClient(cfg.StoreCO2URL)),
 		SurveyHandler:              surveyhandler.NewHandler(loadSurvey(cfg.SurveyDataDir)),
 	}
 }
 
-// loadSurvey reads RUB sheets.
+// Reads RUB sheets.
 func loadSurvey(dir string) []survey.Region {
 	log := platformlogger.Logger
 	if dir == "" {

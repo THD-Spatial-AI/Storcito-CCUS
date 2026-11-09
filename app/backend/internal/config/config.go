@@ -14,8 +14,6 @@ import (
 const (
 	defaultWebserviceURL = "http://localhost:8082"
 	defaultGeoserverURL  = "http://localhost:8083"
-	defaultCO2RouteXHost = "localhost"
-	defaultCO2RouteXPort = "8010"
 	defaultStoreCO2Host  = "localhost"
 	defaultStoreCO2Port  = "8020"
 )
@@ -36,7 +34,6 @@ type Config struct {
 	WebserviceServiceURL string // Webservice.
 	GeoserverServiceURL  string // GeoServer control plane.
 	GeoserverPublicURL   string // Public WMS URL.
-	CO2RouteXURL         string // CO2RouteX API.
 	StoreCO2URL          string // STORE_CO2 API.
 	SurveyDataDir        string // RUB survey sheets.
 	CallbackSecret       string // Callback secret.
@@ -75,7 +72,6 @@ func LoadFromEnv() (*Config, error) {
 		WebserviceServiceURL: normalizeWebserviceURL(platformconfig.GetEnv("WEBSERVICE_SERVICE_URL", defaultWebserviceURL)),
 		GeoserverServiceURL:  platformconfig.GetEnv("GEOSERVER_SERVICE_URL", defaultGeoserverURL),
 		GeoserverPublicURL:   platformconfig.GetEnv("GEOSERVER_PUBLIC_URL", defaultGeoserverURL),
-		CO2RouteXURL:         co2routeXURL(),
 		StoreCO2URL:          storeCO2URL(),
 		SurveyDataDir:        strings.TrimSpace(os.Getenv("SURVEY_DATA_DIR")),
 		CallbackSecret:       os.Getenv("CALLBACK_SECRET"),
@@ -83,7 +79,7 @@ func LoadFromEnv() (*Config, error) {
 	return cfg, nil
 }
 
-// normalizeWebserviceURL rewrites 0.0.0.0 to localhost.
+// 0.0.0.0 to localhost.
 func normalizeWebserviceURL(raw string) string {
 	if raw == "" {
 		return defaultWebserviceURL
@@ -97,16 +93,6 @@ func normalizeWebserviceURL(raw string) string {
 		return defaultWebserviceURL
 	}
 	return raw
-}
-
-// co2routeXURL prefers CO2ROUTEX_URL.
-func co2routeXURL() string {
-	if url := strings.TrimSpace(os.Getenv("CO2ROUTEX_URL")); url != "" {
-		return strings.TrimRight(url, "/")
-	}
-	host := platformconfig.GetEnv("CO2ROUTEX_HOST", defaultCO2RouteXHost)
-	port := platformconfig.GetEnv("CO2ROUTEX_PORT", defaultCO2RouteXPort)
-	return fmt.Sprintf("http://%s:%s", host, port)
 }
 
 // storeCO2URL prefers STORECO2_URL.
