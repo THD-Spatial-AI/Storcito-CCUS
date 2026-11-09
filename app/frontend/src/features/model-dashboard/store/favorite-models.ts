@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { settingsService } from '@/features/settings';
+import { syncedListSetting } from '@/features/settings';
 
 interface FavoriteModelsState {
   favoriteIds: number[];
@@ -9,25 +9,7 @@ interface FavoriteModelsState {
   syncFromBackend: () => Promise<void>;
 }
 
-const isAuthenticated = () => {
-  try {
-    const authStore = localStorage.getItem('auth-storage');
-    if (!authStore) return false;
-    const parsed = JSON.parse(authStore);
-    return !!parsed?.state?.user;
-  } catch {
-    return false;
-  }
-};
-
-const syncToBackend = async (favoriteIds: number[]) => {
-  if (!isAuthenticated()) return;
-  try {
-    await settingsService.setSetting('favorite_models', JSON.stringify(favoriteIds));
-  } catch (err) {
-    if (import.meta.env.DEV) console.error('Failed to save favorite models:', err);
-  }
-};
+const setting = syncedListSetting<number>('favorite_models');
 
 export const useFavoriteModelsStore = create<FavoriteModelsState>()(
   persist(
@@ -36,30 +18,16 @@ export const useFavoriteModelsStore = create<FavoriteModelsState>()(
 
       toggleFavorite: (id: number) => {
         const current = get().favoriteIds;
-        const next = current.includes(id)
-          ? current.filter(fid => fid !== id)
-          : [...current, id];
-        set({ favoriteIds: next });
-        syncToBackend(next);
+        const favoriteIds = current.includes(id) ? current.filter(fid => fid !== id) : [...current, id];
+        set({ favoriteIds });
+        void setting.save(favoriteIds);
       },
 
-      isFavorite: (id: number) => {
-        return get().favoriteIds.includes(id);
-      },
+      isFavorite: (id: number) => get().favoriteIds.includes(id),
 
       syncFromBackend: async () => {
-        if (!isAuthenticated()) return;
-        try {
-          const raw = await settingsService.getSetting('favorite_models');
-          if (raw) {
-            const parsed = JSON.parse(raw) as number[];
-            if (Array.isArray(parsed)) {
-              set({ favoriteIds: parsed });
-            }
-          }
-        } catch (err) {
-          if (import.meta.env.DEV) console.error('Failed to sync favorite models:', err);
-        }
+        const favoriteIds = await setting.load();
+        if (favoriteIds) set({ favoriteIds });
       },
     }),
     {

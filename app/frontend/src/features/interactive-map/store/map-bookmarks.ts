@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { settingsService } from '@/features/settings';
+import { syncedListSetting } from '@/features/settings';
 
 export interface MapBookmark {
   id: string;
@@ -17,62 +17,32 @@ interface MapBookmarksState {
   syncFromBackend: () => Promise<void>;
 }
 
-const isAuthenticated = () => {
-  try {
-    const authStore = localStorage.getItem('auth-storage');
-    if (!authStore) return false;
-    const parsed = JSON.parse(authStore);
-    return !!parsed?.state?.user;
-  } catch {
-    return false;
-  }
-};
-
-const syncToBackend = async (bookmarks: MapBookmark[]) => {
-  if (!isAuthenticated()) return;
-  try {
-    await settingsService.setSetting('map_bookmarks', JSON.stringify(bookmarks));
-  } catch (err) {
-    if (import.meta.env.DEV) console.error('Failed to save map bookmarks:', err);
-  }
-};
+const setting = syncedListSetting<MapBookmark>('map_bookmarks');
 
 export const useMapBookmarksStore = create<MapBookmarksState>()(
   persist(
-    (set, get) => ({
-      bookmarks: [],
+    (set, get) => {
+      const save = (bookmarks: MapBookmark[]) => {
+        set({ bookmarks });
+        void setting.save(bookmarks);
+      };
+      return {
+        bookmarks: [],
 
-      addBookmark: (bookmark) => {
-        const newBookmark: MapBookmark = {
-          ...bookmark,
-          id: `bm-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        };
-        const next = [...get().bookmarks, newBookmark];
-        set({ bookmarks: next });
-        syncToBackend(next);
-      },
+        addBookmark: (bookmark) =>
+          save([
+            ...get().bookmarks,
+            { ...bookmark, id: `bm-${Date.now()}-${Math.random().toString(36).slice(2, 7)}` },
+          ]),
 
-      removeBookmark: (id) => {
-        const next = get().bookmarks.filter(b => b.id !== id);
-        set({ bookmarks: next });
-        syncToBackend(next);
-      },
+        removeBookmark: (id) => save(get().bookmarks.filter(b => b.id !== id)),
 
-      syncFromBackend: async () => {
-        if (!isAuthenticated()) return;
-        try {
-          const raw = await settingsService.getSetting('map_bookmarks');
-          if (raw) {
-            const parsed = JSON.parse(raw) as MapBookmark[];
-            if (Array.isArray(parsed)) {
-              set({ bookmarks: parsed });
-            }
-          }
-        } catch (err) {
-          if (import.meta.env.DEV) console.error('Failed to sync map bookmarks:', err);
-        }
-      },
-    }),
+        syncFromBackend: async () => {
+          const bookmarks = await setting.load();
+          if (bookmarks) set({ bookmarks });
+        },
+      };
+    },
     {
       name: 'map-bookmarks-store',
       storage: createJSONStorage(() => localStorage),
