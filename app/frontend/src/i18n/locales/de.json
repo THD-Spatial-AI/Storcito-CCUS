@@ -2293,7 +2293,7 @@
       "f2Title": "Quelle-Senke-Zuordnung",
       "f2Desc": "Ordnen Sie industrielle CO₂-Emittenten passenden Speicher- und Nutzungssenken zu — nach Menge, Entfernung und Betriebszeitraum.",
       "f3Title": "Routenoptimierung",
-      "f3Desc": "CO2RouteX berechnet eine Route pro Quelle-Senke-Paar — per Pipeline, Lkw oder Bahn — mit Entfernung und Kosten pro Tonne.",
+      "f3Desc": "STORE_CO2 berechnet eine Route pro Quelle-Senke-Paar — per Pipeline, Lkw oder Bahn — mit Entfernung und Kosten pro Tonne.",
       "f4Title": "Senkenkatalog",
       "f4Desc": "Durchsuchen Sie Speicher- und Nutzungssenken mit jährlicher Nachfrage (kt CO₂/Jahr) und Kapazitäten (Mt CO₂) aus dem STORE_CO2-Datensatz.",
       "f5Title": "Kosten- & CO₂-Berichte",
@@ -2343,7 +2343,7 @@
       "s2Title": "2. Knoten wählen",
       "s2Desc": "Wählen Sie CO₂-Quellen und -Senken in Deutschland, Norwegen und den Niederlanden aus dem STORE_CO2-Katalog.",
       "s3Title": "3. Routen & Kosten",
-      "s3Desc": "CO2RouteX verbindet die Knoten per Pipeline, Lkw oder Bahn und beziffert jede Route pro Tonne.",
+      "s3Desc": "STORE_CO2 verbindet die Knoten per Pipeline, Lkw oder Bahn und beziffert jede Route pro Tonne.",
       "s4Title": "4. Prüfen & Starten",
       "s4Desc": "Prüfen Sie die Konfiguration, speichern Sie das Modell und starten Sie die Berechnung — erkunden Sie dann Karten, Flüsse und Kosten und teilen Sie Szenarien."
     },
@@ -2523,13 +2523,13 @@
     },
     "layer2": {
       "purpose": "Wählen Sie die CO₂-Quellen und -Senken, zwischen denen dieses Modell routet.",
-      "nextStepHint": "Als Nächstes sucht CO2RouteX Verbindungen zwischen ihnen.",
+      "nextStepHint": "Als Nächstes sucht STORE_CO2 Verbindungen zwischen ihnen.",
       "nodesQuestion": "Welche Knoten soll das Modell verwenden?",
       "nodesInfo": "Hier oder direkt auf der Karte auswählen.",
       "blockingSelectNodes": "Wählen Sie mindestens einen Knoten aus."
     },
     "layer3": {
-      "purpose": "CO2RouteX prüft die gewählten Knoten auf mögliche Verbindungen und berechnet Route und Kosten.",
+      "purpose": "STORE_CO2 prüft die gewählten Knoten auf mögliche Verbindungen und berechnet Route und Kosten.",
       "nextStepHint": "Als Nächstes sehen Sie die Kosten dieser Routen.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "In der vorberechneten Regionalkarte enthalten. Deaktivieren Sie den Schalter oben, um Ebenen anzupassen.",
@@ -2638,7 +2638,6 @@
     "loadError": "Der Knotenkatalog konnte nicht geladen werden.",
     "searchPlaceholder": "Nach Name oder ID suchen…",
     "empty": "Keine Knoten gefunden.",
-    "selectionSummary": "{{count}} ausgewählt — {{emitters}} Emittenten, {{sinks}} Senken",
     "types": {
       "cement": "Zement",
       "refinery": "Raffinerie",
@@ -2677,7 +2676,7 @@
     },
     "catalogueEmpty": "Der Knotenkatalog ist leer.",
     "runConnections": "Verbindungen suchen",
-    "runFailed": "Der CO2RouteX-Lauf ist fehlgeschlagen.",
+    "runFailed": "Der STORE_CO2-Lauf ist fehlgeschlagen.",
     "noRoutes": "Keine möglichen Verbindungen zwischen den gewählten Knoten.",
     "candidate": "möglich",
     "modes": {
@@ -2690,26 +2689,22 @@
     "countrySection": "Land",
     "emittersSection": "Emittentenkategorien",
     "sinksSection": "Senkenkategorien",
-    "expandCategory": "Anlagen anzeigen",
     "selectAll": "Alle {{count}} auswählen",
     "clearCategory": "Zurücksetzen",
     "needEmitter": "Mindestens einen Emittenten hinzufügen — dort beginnen Routen.",
     "needDestination": "Speicher-, Nutzungs- oder Transportknoten hinzufügen — Routen brauchen ein Ziel.",
     "advancedFilters": "Erweiterte Filter",
-    "clearAllFilters": "Alle Filter zurücksetzen",
     "clearFilters": "Filter zurücksetzen",
     "filterListPlaceholder": "Tippen zum Eingrenzen…",
     "fluxCustom": "Eigener Bereich (kt/Jahr)",
     "fluxFilterTitle": "Jährliche CO₂-Emissionen",
     "fluxMax": "Max",
     "fluxMin": "Min",
-    "municipalitiesFilter": "Städte / Gemeinden",
     "noMatches": "Keine Treffer.",
     "noSinks": "Noch keine Senken im Katalog.",
     "noState": "Kein Bundesland erfasst",
     "sortAsc": "Niedrigstes CO₂ zuerst",
     "sortDesc": "Höchstes CO₂ zuerst",
-    "statesFilter": "Bundesländer",
     "ruralFilter": "Siedlungstyp",
     "rural": {
       "all": "Alle",
@@ -2729,7 +2724,30 @@
       "from": "ab {{year}}",
       "until": "bis {{year}}",
       "startUnknown": "Start unbekannt"
-    }
+    },
+    "railFilter": "Nähe zur Bahn",
+    "railHint": "Emittenten und Senken in dieser Entfernung zu einer Bahnstrecke im eigenen Land. Bahnrouting verbindet Standorte im Umkreis von 500 m.",
+    "rail": {
+      "any": "Alle"
+    },
+    "filtersTitle": "Filter",
+    "resetFilters": "Zurücksetzen",
+    "periodOnlyShort": "In Betrieb im Zeitraum",
+    "selectedCount": "{{count}} ausgewählt",
+    "fluxShort": {
+      "all": "Alle",
+      "high": "Hoch",
+      "medium": "Mittel",
+      "low": "Niedrig"
+    },
+    "clearSelection": "Auswahl löschen",
+    "selectHint": "Noch nichts ausgewählt. Standorte unten ankreuzen oder auf der Karte anklicken.",
+    "searchIn": "In {{name}} suchen…",
+    "showSites": "Standorte zeigen",
+    "showMore": "{{count}} weitere zeigen (noch {{total}})",
+    "startOver": "Neu beginnen",
+    "startOverHint": "Löscht Auswahl, Filter, Suche und Routen.",
+    "clearEverything": "Alles löschen"
   },
   "co2Routing": {
     "run": "Routen suchen",
@@ -2742,11 +2760,25 @@
     "noRoutes": "Keine Routen zwischen den gewählten Knoten gefunden.",
     "preview": "Entwurfsvorschau: Arbeitsmappe herunterladen oder das Modell speichern und erneut ausführen, um die Routen zu sichern.",
     "resistance": "Widerstand",
-    "stationDistances": "Bahnhofsentfernungen",
-    "stationPair": "Bahnhof zu Bahnhof",
     "unitCost": "Kosten (€/t/km)",
     "unrouted": "Nicht geroutet",
-    "uploading": "Routingdaten werden hochgeladen…"
+    "starting": "Routing wird gestartet…",
+    "optimize": "Senkenkapazität beachten",
+    "optimizeHint": "Die Zuordnung so lösen, dass keine Senke mehr aufnimmt, als sie speichern kann. Sonst nimmt jeder Emittent seine günstigste Senke.",
+    "running": "Routen werden gesucht…",
+    "emptyTitle": "Noch keine Routen",
+    "emptyHint": "Wählen Sie die Verkehrsträger und suchen Sie Routen. Sie erscheinen hier und auf der Karte.",
+    "summary": {
+      "routes": "Routen",
+      "co2": "CO₂",
+      "distance": "Distanz",
+      "cost": "Ø Kosten"
+    },
+    "modeHints": {
+      "pipeline": "Kostengünstigster Korridor",
+      "truck": "Straßennetz",
+      "railway": "Schienennetz"
+    }
   },
   "co2Costs": {
     "running": "Der Lauf läuft noch — Kosten erscheinen nach dem Routing.",
@@ -2841,7 +2873,8 @@
       "central": "Mittel",
       "high": "Hoch"
     },
-    "otherApplications": "Weitere mögliche Anwendungen"
+    "otherApplications": "Weitere mögliche Anwendungen",
+    "browseShort": "Durchsuchen"
   },
   "whatsNew": {
     "open": "Neuigkeiten in dieser Version",

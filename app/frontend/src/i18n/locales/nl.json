@@ -2303,7 +2303,7 @@
       "f2Title": "Bron–put-matching",
       "f2Desc": "Koppel industriële CO₂-emittenten aan geschikte opslag- en gebruikssenken op volume, afstand en bedrijfsperiode.",
       "f3Title": "Route-optimalisatie",
-      "f3Desc": "CO2RouteX berekent één route per bron–put-paar — via pijpleiding, vrachtwagen of spoor — met afstand en kosten per ton.",
+      "f3Desc": "STORE_CO2 berekent één route per bron–put-paar — via pijpleiding, vrachtwagen of spoor — met afstand en kosten per ton.",
       "f4Title": "Puttencatalogus",
       "f4Desc": "Blader door opslag- en gebruikssenken met jaarlijkse vraag (kt CO₂/jaar) en capaciteiten (Mt CO₂) uit de STORE_CO2-dataset.",
       "f5Title": "Kosten- en CO₂-rapporten",
@@ -2353,7 +2353,7 @@
       "s2Title": "2. Knooppunten kiezen",
       "s2Desc": "Kies CO₂-bronnen en -senken in Duitsland, Noorwegen en Nederland uit de STORE_CO2-catalogus.",
       "s3Title": "3. Routes & kosten",
-      "s3Desc": "CO2RouteX verbindt de knooppunten via pijpleiding, vrachtwagen of spoor en berekent de kosten van elke route per ton.",
+      "s3Desc": "STORE_CO2 verbindt de knooppunten via pijpleiding, vrachtwagen of spoor en berekent de kosten van elke route per ton.",
       "s4Title": "4. Controleren & starten",
       "s4Desc": "Controleer de opstelling, sla het model op en start de berekening — verken daarna kaarten, stromen en kosten en deel scenario's."
     },
@@ -2533,13 +2533,13 @@
     },
     "layer2": {
       "purpose": "Kies de CO₂-bronnen en -putten waartussen dit model routeert.",
-      "nextStepHint": "Daarna zoekt CO2RouteX verbindingen tussen de knooppunten.",
+      "nextStepHint": "Daarna zoekt STORE_CO2 verbindingen tussen de knooppunten.",
       "nodesQuestion": "Welke knooppunten moet het model gebruiken?",
       "nodesInfo": "Kies ze hier of direct op de kaart.",
       "blockingSelectNodes": "Selecteer minstens één knooppunt om door te gaan."
     },
     "layer3": {
-      "purpose": "CO2RouteX onderzoekt de gekozen knooppunten op mogelijke verbindingen en berekent route en kosten.",
+      "purpose": "STORE_CO2 onderzoekt de gekozen knooppunten op mogelijke verbindingen en berekent route en kosten.",
       "nextStepHint": "Daarna ziet u wat die routes kosten.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "Opgenomen in de voorberekende regiokaart. Schakel de schakelaar hierboven uit om lagen aan te passen.",
@@ -2648,7 +2648,6 @@
     "loadError": "De knooppuntcatalogus kon niet worden geladen.",
     "searchPlaceholder": "Zoek op naam of id…",
     "empty": "Geen knooppunten gevonden.",
-    "selectionSummary": "{{count}} geselecteerd — {{emitters}} emitters, {{sinks}} putten",
     "types": {
       "cement": "Cement",
       "refinery": "Raffinaderij",
@@ -2687,7 +2686,7 @@
     },
     "catalogueEmpty": "De knooppuntcatalogus is leeg.",
     "runConnections": "Verbindingen zoeken",
-    "runFailed": "De CO2RouteX-run is mislukt.",
+    "runFailed": "De STORE_CO2-run is mislukt.",
     "noRoutes": "Geen mogelijke verbindingen tussen de gekozen knooppunten.",
     "candidate": "mogelijk",
     "modes": {
@@ -2700,26 +2699,22 @@
     "countrySection": "Land",
     "emittersSection": "Emittentcategorieën",
     "sinksSection": "Putcategorieën",
-    "expandCategory": "Locaties tonen",
     "selectAll": "Alle {{count}} selecteren",
     "clearCategory": "Wissen",
     "needEmitter": "Voeg minstens één emittent toe — daar beginnen routes.",
     "needDestination": "Voeg een opslag-, gebruiks- of transportknooppunt toe — routes moeten ergens eindigen.",
     "advancedFilters": "Geavanceerde filters",
-    "clearAllFilters": "Alle filters wissen",
     "clearFilters": "Filters wissen",
     "filterListPlaceholder": "Typ om te verfijnen…",
     "fluxCustom": "Eigen bereik (kt/jaar)",
     "fluxFilterTitle": "Jaarlijkse CO₂-uitstoot",
     "fluxMax": "Max",
     "fluxMin": "Min",
-    "municipalitiesFilter": "Steden / gemeenten",
     "noMatches": "Geen resultaten.",
     "noSinks": "Nog geen putten in de catalogus.",
     "noState": "Geen provincie vastgelegd",
     "sortAsc": "Laagste CO₂ eerst",
     "sortDesc": "Hoogste CO₂ eerst",
-    "statesFilter": "Provincies",
     "ruralFilter": "Type gebied",
     "rural": {
       "all": "Alle",
@@ -2739,7 +2734,30 @@
       "from": "vanaf {{year}}",
       "until": "tot {{year}}",
       "startUnknown": "start onbekend"
-    }
+    },
+    "railFilter": "Bij een spoorlijn",
+    "railHint": "Uitstoters en opslag binnen deze afstand van een spoorlijn in hun land. Spoorroutering verbindt locaties binnen 500 m.",
+    "rail": {
+      "any": "Alle"
+    },
+    "filtersTitle": "Filters",
+    "resetFilters": "Herstellen",
+    "periodOnlyShort": "In bedrijf in de periode",
+    "selectedCount": "{{count}} geselecteerd",
+    "fluxShort": {
+      "all": "Alle",
+      "high": "Hoog",
+      "medium": "Midden",
+      "low": "Laag"
+    },
+    "clearSelection": "Selectie wissen",
+    "selectHint": "Nog niets geselecteerd. Vink locaties hieronder aan of klik ze op de kaart.",
+    "searchIn": "Zoeken in {{name}}…",
+    "showSites": "Locaties tonen",
+    "showMore": "{{count}} meer tonen (nog {{total}})",
+    "startOver": "Opnieuw beginnen",
+    "startOverHint": "Wist selectie, filters, zoekopdracht en routes.",
+    "clearEverything": "Alles wissen"
   },
   "co2Routing": {
     "run": "Routes zoeken",
@@ -2752,11 +2770,25 @@
     "noRoutes": "Geen routes gevonden tussen de gekozen knooppunten.",
     "preview": "Conceptvoorbeeld: download de werkmap, of sla het model op en voer opnieuw uit om de routes te bewaren.",
     "resistance": "Weerstand",
-    "stationDistances": "Stationsafstanden",
-    "stationPair": "Station naar station",
     "unitCost": "Kosten (€/t/km)",
     "unrouted": "Niet gerouteerd",
-    "uploading": "Routegegevens uploaden…"
+    "starting": "Routering wordt gestart…",
+    "optimize": "Capaciteit van putten respecteren",
+    "optimizeHint": "Los de toewijzing zo op dat geen put meer opneemt dan hij kan opslaan. Anders kiest elke uitstoter zijn goedkoopste put.",
+    "running": "Routes zoeken…",
+    "emptyTitle": "Nog geen routes",
+    "emptyHint": "Kies de vervoerswijzen en zoek routes. Ze verschijnen hier en op de kaart.",
+    "summary": {
+      "routes": "Routes",
+      "co2": "CO₂",
+      "distance": "Afstand",
+      "cost": "Gem. kosten"
+    },
+    "modeHints": {
+      "pipeline": "Goedkoopste corridor",
+      "truck": "Wegennet",
+      "railway": "Spoornet"
+    }
   },
   "co2Costs": {
     "running": "De run loopt nog — kosten verschijnen zodra het routeren klaar is.",
@@ -2851,7 +2883,8 @@
       "central": "Centraal",
       "high": "Hoog"
     },
-    "otherApplications": "Andere mogelijke toepassingen"
+    "otherApplications": "Andere mogelijke toepassingen",
+    "browseShort": "Bladeren"
   },
   "whatsNew": {
     "open": "Wat is er nieuw in deze versie",

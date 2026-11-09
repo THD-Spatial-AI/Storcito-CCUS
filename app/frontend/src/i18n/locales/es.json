@@ -2297,7 +2297,7 @@
       "f2Title": "Emparejamiento fuente–sumidero",
       "f2Desc": "Empareje emisores industriales de CO₂ con sumideros de almacenamiento o utilización adecuados por volumen, distancia y periodo operativo.",
       "f3Title": "Optimización de rutas",
-      "f3Desc": "CO2RouteX calcula una ruta por par fuente–sumidero — por tubería, camión o ferrocarril — con distancia y coste por tonelada.",
+      "f3Desc": "STORE_CO2 calcula una ruta por par fuente–sumidero — por tubería, camión o ferrocarril — con distancia y coste por tonelada.",
       "f4Title": "Catálogo de sumideros",
       "f4Desc": "Explore sumideros de almacenamiento y utilización con demanda anual (kt CO₂/año) y capacidades (Mt CO₂) del conjunto de datos STORE_CO2.",
       "f5Title": "Informes de coste y CO₂",
@@ -2347,7 +2347,7 @@
       "s2Title": "2. Seleccionar nodos",
       "s2Desc": "Elija fuentes y sumideros de CO₂ en Alemania, Noruega y los Países Bajos del catálogo STORE_CO2.",
       "s3Title": "3. Rutas y costes",
-      "s3Desc": "CO2RouteX conecta los nodos por tubería, camión o ferrocarril y calcula el coste de cada ruta por tonelada.",
+      "s3Desc": "STORE_CO2 conecta los nodos por tubería, camión o ferrocarril y calcula el coste de cada ruta por tonelada.",
       "s4Title": "4. Revisar y ejecutar",
       "s4Desc": "Revise la configuración, guarde el modelo e inicie el cálculo — después explore mapas, flujos y costes y comparta escenarios."
     },
@@ -2522,13 +2522,13 @@
     },
     "layer2": {
       "purpose": "Elija las fuentes y sumideros de CO₂ entre los que enruta este modelo.",
-      "nextStepHint": "A continuación CO2RouteX busca conexiones entre ellos.",
+      "nextStepHint": "A continuación STORE_CO2 busca conexiones entre ellos.",
       "nodesQuestion": "¿Qué nodos debe usar el modelo?",
       "nodesInfo": "Selecciónalos aquí o directamente en el mapa.",
       "blockingSelectNodes": "Seleccione al menos un nodo para continuar."
     },
     "layer3": {
-      "purpose": "CO2RouteX examina los nodos seleccionados en busca de conexiones, y luego las traza y calcula su coste.",
+      "purpose": "STORE_CO2 examina los nodos seleccionados en busca de conexiones, y luego las traza y calcula su coste.",
       "nextStepHint": "A continuación verás lo que cuestan esas rutas.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "Incluido en el mapa regional precalculado. Desactive el interruptor de arriba para personalizar las capas.",
@@ -2632,7 +2632,6 @@
     "loadError": "No se pudo cargar el catálogo de nodos.",
     "searchPlaceholder": "Buscar por nombre o id…",
     "empty": "Ningún nodo coincide.",
-    "selectionSummary": "{{count}} seleccionados — {{emitters}} emisores, {{sinks}} sumideros",
     "types": {
       "cement": "Cemento",
       "refinery": "Refinería",
@@ -2666,7 +2665,7 @@
     },
     "catalogueEmpty": "El catálogo de nodos está vacío.",
     "runConnections": "Buscar conexiones",
-    "runFailed": "La ejecución de CO2RouteX falló.",
+    "runFailed": "La ejecución de STORE_CO2 falló.",
     "noRoutes": "No hay conexiones candidatas entre los nodos seleccionados.",
     "candidate": "candidata",
     "modes": {
@@ -2679,26 +2678,45 @@
     "countrySection": "País",
     "emittersSection": "Categorías de emisores",
     "sinksSection": "Categorías de sumideros",
-    "expandCategory": "Mostrar instalaciones",
     "selectAll": "Seleccionar los {{count}}",
     "clearCategory": "Borrar",
     "needEmitter": "Añade al menos un emisor: las rutas empiezan ahí.",
     "needDestination": "Añade un nodo de almacenamiento, utilización o transporte: las rutas deben terminar en algún sitio.",
     "advancedFilters": "Filtros avanzados",
-    "clearAllFilters": "Borrar todos los filtros",
     "clearFilters": "Borrar filtros",
     "filterListPlaceholder": "Escribe para filtrar…",
     "fluxCustom": "Rango personalizado (kt/año)",
     "fluxFilterTitle": "Emisiones anuales de CO₂",
     "fluxMax": "Máx",
     "fluxMin": "Mín",
-    "municipalitiesFilter": "Ciudades / municipios",
     "noMatches": "Sin coincidencias.",
     "noSinks": "Aún no hay sumideros en el catálogo.",
     "noState": "Sin región registrada",
     "sortAsc": "Menor CO₂ primero",
     "sortDesc": "Mayor CO₂ primero",
-    "statesFilter": "Regiones"
+    "railFilter": "Cerca del ferrocarril",
+    "railHint": "Emisores y sumideros a esta distancia de una vía férrea de su país. El enrutamiento ferroviario conecta sitios a menos de 500 m.",
+    "rail": {
+      "any": "Todos"
+    },
+    "filtersTitle": "Filtros",
+    "resetFilters": "Restablecer",
+    "periodOnlyShort": "En operación en el periodo",
+    "selectedCount": "{{count}} seleccionados",
+    "fluxShort": {
+      "all": "Todos",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Bajo"
+    },
+    "clearSelection": "Borrar selección",
+    "selectHint": "Nada seleccionado aún. Marque sitios abajo o haga clic en ellos en el mapa.",
+    "searchIn": "Buscar en {{name}}…",
+    "showSites": "Mostrar sitios",
+    "showMore": "Mostrar {{count}} más (quedan {{total}})",
+    "startOver": "Empezar de nuevo",
+    "startOverHint": "Borra la selección, los filtros, la búsqueda y las rutas.",
+    "clearEverything": "Borrar todo"
   },
   "co2Routing": {
     "run": "Buscar rutas",
@@ -2711,11 +2729,25 @@
     "noRoutes": "No se encontraron rutas entre los nodos seleccionados.",
     "preview": "Vista previa: descarga el libro, o guarda el modelo y vuelve a ejecutarlo para conservar las rutas.",
     "resistance": "Resistencia",
-    "stationDistances": "Distancias entre estaciones",
-    "stationPair": "De estación a estación",
     "unitCost": "Coste (€/t/km)",
     "unrouted": "Sin trazar",
-    "uploading": "Subiendo datos de rutas…"
+    "starting": "Iniciando el enrutamiento…",
+    "optimize": "Respetar la capacidad de los sumideros",
+    "optimizeHint": "Resolver la asignación para que ningún sumidero reciba más de lo que puede almacenar. Si no, cada emisor toma su sumidero más barato.",
+    "running": "Buscando rutas…",
+    "emptyTitle": "Aún no hay rutas",
+    "emptyHint": "Elija los modos de transporte y busque rutas. Aparecerán aquí y en el mapa.",
+    "summary": {
+      "routes": "Rutas",
+      "co2": "CO₂",
+      "distance": "Distancia",
+      "cost": "Coste medio"
+    },
+    "modeHints": {
+      "pipeline": "Corredor de mínimo coste",
+      "truck": "Red de carreteras",
+      "railway": "Red ferroviaria"
+    }
   },
   "co2Costs": {
     "running": "La ejecución sigue en curso: los costes aparecen cuando termine el trazado.",
@@ -2786,7 +2818,8 @@
     "refreshError": "No se pudieron actualizar las fuentes. Se conservaron los datos existentes.",
     "search": "Buscar fuentes",
     "status": "Estado",
-    "yes": "Sí"
+    "yes": "Sí",
+    "browseShort": "Explorar"
   },
   "whatsNew": {
     "open": "Novedades de esta versión",

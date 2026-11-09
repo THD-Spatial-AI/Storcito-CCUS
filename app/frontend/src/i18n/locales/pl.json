@@ -2307,7 +2307,7 @@
       "f2Title": "Dopasowanie źródło–zbiornik",
       "f2Desc": "Dopasowuj przemysłowych emitentów CO₂ do odpowiednich ujść składowania lub wykorzystania według wolumenu, odległości i okresu działania.",
       "f3Title": "Optymalizacja tras",
-      "f3Desc": "CO2RouteX oblicza jedną trasę dla każdej pary źródło–ujście — rurociągiem, ciężarówką lub koleją — z odległością i kosztem za tonę.",
+      "f3Desc": "STORE_CO2 oblicza jedną trasę dla każdej pary źródło–ujście — rurociągiem, ciężarówką lub koleją — z odległością i kosztem za tonę.",
       "f4Title": "Katalog ujść",
       "f4Desc": "Przeglądaj ujścia składowania i wykorzystania z rocznym zapotrzebowaniem (kt CO₂/rok) i pojemnościami (Mt CO₂) ze zbioru danych STORE_CO2.",
       "f5Title": "Raporty kosztów i CO₂",
@@ -2357,7 +2357,7 @@
       "s2Title": "2. Wybierz węzły",
       "s2Desc": "Wybierz źródła i ujścia CO₂ w Niemczech, Norwegii i Holandii z katalogu STORE_CO2.",
       "s3Title": "3. Trasy i koszty",
-      "s3Desc": "CO2RouteX łączy węzły rurociągiem, ciężarówką lub koleją i wycenia każdą trasę za tonę.",
+      "s3Desc": "STORE_CO2 łączy węzły rurociągiem, ciężarówką lub koleją i wycenia każdą trasę za tonę.",
       "s4Title": "4. Sprawdź i uruchom",
       "s4Desc": "Sprawdź konfigurację, zapisz model i uruchom obliczenia — następnie przeglądaj mapy, przepływy i koszty oraz udostępniaj scenariusze."
     },
@@ -2532,13 +2532,13 @@
     },
     "layer2": {
       "purpose": "Wybierz źródła i składowiska CO₂, między którymi model wyznacza trasy.",
-      "nextStepHint": "Następnie CO2RouteX poszuka połączeń między nimi.",
+      "nextStepHint": "Następnie STORE_CO2 poszuka połączeń między nimi.",
       "nodesQuestion": "Których węzłów ma użyć model?",
       "nodesInfo": "Wybierz je tutaj lub bezpośrednio na mapie.",
       "blockingSelectNodes": "Wybierz co najmniej jeden węzeł, aby kontynuować."
     },
     "layer3": {
-      "purpose": "CO2RouteX sprawdza wybrane węzły pod kątem możliwych połączeń, a następnie wyznacza trasy i koszty.",
+      "purpose": "STORE_CO2 sprawdza wybrane węzły pod kątem możliwych połączeń, a następnie wyznacza trasy i koszty.",
       "nextStepHint": "Następnie zobaczysz, ile kosztują te trasy.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "Uwzględnione we wstępnie obliczonej mapie regionalnej. Wyłącz przełącznik powyżej, aby dostosować warstwy.",
@@ -2642,7 +2642,6 @@
     "loadError": "Nie udało się wczytać katalogu węzłów.",
     "searchPlaceholder": "Szukaj po nazwie lub id…",
     "empty": "Brak pasujących węzłów.",
-    "selectionSummary": "Wybrano {{count}} — {{emitters}} emitentów, {{sinks}} składowisk",
     "types": {
       "cement": "Cement",
       "refinery": "Rafineria",
@@ -2676,7 +2675,7 @@
     },
     "catalogueEmpty": "Katalog węzłów jest pusty.",
     "runConnections": "Znajdź połączenia",
-    "runFailed": "Uruchomienie CO2RouteX nie powiodło się.",
+    "runFailed": "Uruchomienie STORE_CO2 nie powiodło się.",
     "noRoutes": "Brak potencjalnych połączeń między wybranymi węzłami.",
     "candidate": "potencjalne",
     "modes": {
@@ -2689,26 +2688,45 @@
     "countrySection": "Kraj",
     "emittersSection": "Kategorie emitentów",
     "sinksSection": "Kategorie zbiorników",
-    "expandCategory": "Pokaż instalacje",
     "selectAll": "Zaznacz wszystkie ({{count}})",
     "clearCategory": "Wyczyść",
     "needEmitter": "Dodaj co najmniej jeden emitent — tam zaczynają się trasy.",
     "needDestination": "Dodaj węzeł składowania, wykorzystania lub transportu — trasy muszą gdzieś się kończyć.",
     "advancedFilters": "Filtry zaawansowane",
-    "clearAllFilters": "Wyczyść wszystkie filtry",
     "clearFilters": "Wyczyść filtry",
     "filterListPlaceholder": "Wpisz, aby zawęzić…",
     "fluxCustom": "Własny zakres (kt/rok)",
     "fluxFilterTitle": "Roczna emisja CO₂",
     "fluxMax": "Maks",
     "fluxMin": "Min",
-    "municipalitiesFilter": "Miasta / gminy",
     "noMatches": "Brak wyników.",
     "noSinks": "Brak zbiorników w katalogu.",
     "noState": "Brak zapisanego regionu",
     "sortAsc": "Najniższe CO₂ najpierw",
     "sortDesc": "Najwyższe CO₂ najpierw",
-    "statesFilter": "Regiony"
+    "railFilter": "Blisko kolei",
+    "railHint": "Emitenci i składowiska w tej odległości od linii kolejowej w ich kraju. Trasowanie kolejowe łączy obiekty w promieniu 500 m.",
+    "rail": {
+      "any": "Wszystkie"
+    },
+    "filtersTitle": "Filtry",
+    "resetFilters": "Resetuj",
+    "periodOnlyShort": "Działające w okresie",
+    "selectedCount": "Wybrano: {{count}}",
+    "fluxShort": {
+      "all": "Wszystkie",
+      "high": "Wysokie",
+      "medium": "Średnie",
+      "low": "Niskie"
+    },
+    "clearSelection": "Wyczyść wybór",
+    "selectHint": "Nic nie wybrano. Zaznacz obiekty poniżej lub kliknij je na mapie.",
+    "searchIn": "Szukaj w {{name}}…",
+    "showSites": "Pokaż obiekty",
+    "showMore": "Pokaż {{count}} więcej (pozostało {{total}})",
+    "startOver": "Zacznij od nowa",
+    "startOverHint": "Czyści wybór, filtry, wyszukiwanie i trasy.",
+    "clearEverything": "Wyczyść wszystko"
   },
   "co2Routing": {
     "run": "Znajdź trasy",
@@ -2721,11 +2739,25 @@
     "noRoutes": "Nie znaleziono tras między wybranymi węzłami.",
     "preview": "Podgląd roboczy: pobierz skoroszyt albo zapisz model i uruchom ponownie, aby zachować trasy.",
     "resistance": "Opór",
-    "stationDistances": "Odległości między stacjami",
-    "stationPair": "Ze stacji do stacji",
     "unitCost": "Koszt (€/t/km)",
     "unrouted": "Bez trasy",
-    "uploading": "Przesyłanie danych tras…"
+    "starting": "Uruchamianie wyznaczania tras…",
+    "optimize": "Uwzględnij pojemność ujść",
+    "optimizeHint": "Rozwiąż przydział tak, aby żadne ujście nie przyjęło więcej, niż może zmagazynować. W przeciwnym razie każdy emitent wybiera najtańsze ujście.",
+    "running": "Wyszukiwanie tras…",
+    "emptyTitle": "Brak tras",
+    "emptyHint": "Wybierz rodzaje transportu i wyszukaj trasy. Pojawią się tutaj i na mapie.",
+    "summary": {
+      "routes": "Trasy",
+      "co2": "CO₂",
+      "distance": "Odległość",
+      "cost": "Śr. koszt"
+    },
+    "modeHints": {
+      "pipeline": "Korytarz najniższego kosztu",
+      "truck": "Sieć drogowa",
+      "railway": "Sieć kolejowa"
+    }
   },
   "co2Costs": {
     "running": "Obliczenia trwają — koszty pojawią się po wyznaczeniu tras.",
@@ -2796,7 +2828,8 @@
     "refreshError": "Nie udało się odświeżyć źródeł. Zachowano dotychczasowe dane.",
     "search": "Szukaj źródeł",
     "status": "Status",
-    "yes": "Tak"
+    "yes": "Tak",
+    "browseShort": "Przeglądaj"
   },
   "whatsNew": {
     "open": "Co nowego w tej wersji",

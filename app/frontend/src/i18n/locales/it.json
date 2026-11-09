@@ -2303,7 +2303,7 @@
       "f2Title": "Abbinamento sorgente–pozzo",
       "f2Desc": "Abbina gli emettitori industriali di CO₂ a pozzi di stoccaggio o utilizzo idonei per volume, distanza e periodo operativo.",
       "f3Title": "Ottimizzazione delle rotte",
-      "f3Desc": "CO2RouteX calcola una rotta per coppia sorgente–pozzo — via condotta, camion o ferrovia — con distanza e costo per tonnellata.",
+      "f3Desc": "STORE_CO2 calcola una rotta per coppia sorgente–pozzo — via condotta, camion o ferrovia — con distanza e costo per tonnellata.",
       "f4Title": "Catalogo dei pozzi",
       "f4Desc": "Sfoglia i pozzi di stoccaggio e utilizzo con domanda annua (kt CO₂/anno) e capacità (Mt CO₂) dal dataset STORE_CO2.",
       "f5Title": "Report costi e CO₂",
@@ -2353,7 +2353,7 @@
       "s2Title": "2. Seleziona i nodi",
       "s2Desc": "Scegli fonti e pozzi di CO₂ in Germania, Norvegia e Paesi Bassi dal catalogo STORE_CO2.",
       "s3Title": "3. Rotte e costi",
-      "s3Desc": "CO2RouteX collega i nodi via condotta, camion o ferrovia e calcola il costo di ogni rotta per tonnellata.",
+      "s3Desc": "STORE_CO2 collega i nodi via condotta, camion o ferrovia e calcola il costo di ogni rotta per tonnellata.",
       "s4Title": "4. Verifica ed esegui",
       "s4Desc": "Controlla la configurazione, salva il modello e avvia il calcolo — poi esplora mappe, flussi e costi e condividi gli scenari."
     },
@@ -2528,13 +2528,13 @@
     },
     "layer2": {
       "purpose": "Scegli le sorgenti e i pozzi di CO₂ tra cui questo modello instrada.",
-      "nextStepHint": "Poi CO2RouteX cerca connessioni tra di essi.",
+      "nextStepHint": "Poi STORE_CO2 cerca connessioni tra di essi.",
       "nodesQuestion": "Quali nodi deve usare il modello?",
       "nodesInfo": "Selezionali qui o direttamente sulla mappa.",
       "blockingSelectNodes": "Seleziona almeno un nodo per continuare."
     },
     "layer3": {
-      "purpose": "CO2RouteX analizza i nodi selezionati per trovare connessioni, poi le traccia e ne calcola i costi.",
+      "purpose": "STORE_CO2 analizza i nodi selezionati per trovare connessioni, poi le traccia e ne calcola i costi.",
       "nextStepHint": "Poi vedrai quanto costano quei percorsi.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "Incluso nella mappa regionale precalcolata. Disattiva l'interruttore sopra per personalizzare i livelli.",
@@ -2638,7 +2638,6 @@
     "loadError": "Impossibile caricare il catalogo dei nodi.",
     "searchPlaceholder": "Cerca per nome o id…",
     "empty": "Nessun nodo corrisponde.",
-    "selectionSummary": "{{count}} selezionati — {{emitters}} emettitori, {{sinks}} pozzi",
     "types": {
       "cement": "Cemento",
       "refinery": "Raffineria",
@@ -2672,7 +2671,7 @@
     },
     "catalogueEmpty": "Il catalogo dei nodi è vuoto.",
     "runConnections": "Trova connessioni",
-    "runFailed": "L'esecuzione di CO2RouteX non è riuscita.",
+    "runFailed": "L'esecuzione di STORE_CO2 non è riuscita.",
     "noRoutes": "Nessuna connessione candidata tra i nodi selezionati.",
     "candidate": "candidata",
     "modes": {
@@ -2685,26 +2684,45 @@
     "countrySection": "Paese",
     "emittersSection": "Categorie di emettitori",
     "sinksSection": "Categorie di pozzi",
-    "expandCategory": "Mostra impianti",
     "selectAll": "Seleziona tutti ({{count}})",
     "clearCategory": "Cancella",
     "needEmitter": "Aggiungi almeno un emettitore: i percorsi partono da lì.",
     "needDestination": "Aggiungi un nodo di stoccaggio, utilizzo o trasporto: i percorsi devono finire da qualche parte.",
     "advancedFilters": "Filtri avanzati",
-    "clearAllFilters": "Cancella tutti i filtri",
     "clearFilters": "Cancella filtri",
     "filterListPlaceholder": "Digita per filtrare…",
     "fluxCustom": "Intervallo personalizzato (kt/anno)",
     "fluxFilterTitle": "Emissioni annue di CO₂",
     "fluxMax": "Max",
     "fluxMin": "Min",
-    "municipalitiesFilter": "Città / comuni",
     "noMatches": "Nessun risultato.",
     "noSinks": "Nessun pozzo nel catalogo.",
     "noState": "Nessuna regione registrata",
     "sortAsc": "CO₂ più basso prima",
     "sortDesc": "CO₂ più alto prima",
-    "statesFilter": "Regioni"
+    "railFilter": "Vicino alla ferrovia",
+    "railHint": "Emettitori e pozzi entro questa distanza da una linea ferroviaria del loro paese. L'instradamento ferroviario collega siti entro 500 m.",
+    "rail": {
+      "any": "Tutti"
+    },
+    "filtersTitle": "Filtri",
+    "resetFilters": "Reimposta",
+    "periodOnlyShort": "In esercizio nel periodo",
+    "selectedCount": "{{count}} selezionati",
+    "fluxShort": {
+      "all": "Tutti",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Basso"
+    },
+    "clearSelection": "Cancella selezione",
+    "selectHint": "Nessuna selezione. Spunta i siti qui sotto o cliccali sulla mappa.",
+    "searchIn": "Cerca in {{name}}…",
+    "showSites": "Mostra siti",
+    "showMore": "Mostra altri {{count}} ({{total}} rimanenti)",
+    "startOver": "Ricomincia",
+    "startOverHint": "Cancella selezione, filtri, ricerca e percorsi.",
+    "clearEverything": "Cancella tutto"
   },
   "co2Routing": {
     "run": "Trova percorsi",
@@ -2717,11 +2735,25 @@
     "noRoutes": "Nessun percorso tra i nodi selezionati.",
     "preview": "Anteprima provvisoria: scarica la cartella di lavoro, oppure salva il modello ed esegui di nuovo per conservare i percorsi.",
     "resistance": "Resistenza",
-    "stationDistances": "Distanze tra stazioni",
-    "stationPair": "Da stazione a stazione",
     "unitCost": "Costo (€/t/km)",
     "unrouted": "Non tracciato",
-    "uploading": "Caricamento dei dati di percorso…"
+    "starting": "Avvio dell'instradamento…",
+    "optimize": "Rispetta la capacità dei pozzi",
+    "optimizeHint": "Risolve l'assegnazione in modo che nessun pozzo riceva più di quanto può stoccare. Altrimenti ogni emettitore prende il pozzo più economico.",
+    "running": "Ricerca dei percorsi…",
+    "emptyTitle": "Nessun percorso",
+    "emptyHint": "Scegli le modalità di trasporto e cerca i percorsi. Compariranno qui e sulla mappa.",
+    "summary": {
+      "routes": "Percorsi",
+      "co2": "CO₂",
+      "distance": "Distanza",
+      "cost": "Costo medio"
+    },
+    "modeHints": {
+      "pipeline": "Corridoio a costo minimo",
+      "truck": "Rete stradale",
+      "railway": "Rete ferroviaria"
+    }
   },
   "co2Costs": {
     "running": "L'esecuzione è in corso — i costi compaiono al termine del calcolo dei percorsi.",
@@ -2792,7 +2824,8 @@
     "refreshError": "Impossibile aggiornare le sorgenti. I dati esistenti sono stati mantenuti.",
     "search": "Cerca sorgenti",
     "status": "Stato",
-    "yes": "Sì"
+    "yes": "Sì",
+    "browseShort": "Sfoglia"
   },
   "whatsNew": {
     "open": "Novità di questa versione",

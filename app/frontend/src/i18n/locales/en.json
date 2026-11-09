@@ -2293,7 +2293,7 @@
       "f2Title": "Source–Sink Matching",
       "f2Desc": "Match industrial CO₂ emitters to suitable storage and utilisation sinks by volume, distance and operating period.",
       "f3Title": "Route Optimization",
-      "f3Desc": "CO2RouteX computes one route per source–sink pair — by pipeline, truck or railway — with distance and cost per tonne.",
+      "f3Desc": "STORE_CO2 computes one route per source–sink pair — by pipeline, truck or railway — with distance and cost per tonne.",
       "f4Title": "Sink Catalogue",
       "f4Desc": "Browse storage and utilisation sinks with annual demand (kt CO₂/yr) and capacities (Mt CO₂) from the STORE_CO2 dataset.",
       "f5Title": "Cost & CO₂ Reports",
@@ -2343,7 +2343,7 @@
       "s2Title": "2. Select Nodes",
       "s2Desc": "Pick CO₂ sources and sinks in Germany, Norway and the Netherlands from the STORE_CO2 catalogue.",
       "s3Title": "3. Routes & Costs",
-      "s3Desc": "CO2RouteX connects the nodes by pipeline, truck or railway and prices each route per tonne.",
+      "s3Desc": "STORE_CO2 connects the nodes by pipeline, truck or railway and prices each route per tonne.",
       "s4Title": "4. Review & Run",
       "s4Desc": "Check the setup, save the model and start the run — then explore maps, flows and costs, and share scenarios."
     },
@@ -2523,13 +2523,13 @@
     },
     "layer2": {
       "purpose": "Choose the CO₂ sources and sinks this model routes between.",
-      "nextStepHint": "Next CO2RouteX looks for connections between them.",
+      "nextStepHint": "Next STORE_CO2 looks for connections between them.",
       "nodesQuestion": "Which nodes should the model use?",
       "nodesInfo": "Pick them here or straight from the map.",
       "blockingSelectNodes": "Select at least one node to continue."
     },
     "layer3": {
-      "purpose": "CO2RouteX screens the selected nodes for candidate connections, then routes and costs them.",
+      "purpose": "STORE_CO2 screens the selected nodes for candidate connections, then routes and costs them.",
       "nextStepHint": "Next you'll see what those routes cost.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "Included in the precomputed regional map. Disable the precomputed switch above to customise layers.",
@@ -2638,7 +2638,6 @@
     "loadError": "Could not load the node catalogue.",
     "searchPlaceholder": "Search by name or id…",
     "empty": "No nodes match your search.",
-    "selectionSummary": "{{count}} selected — {{emitters}} emitters, {{sinks}} sinks",
     "types": {
       "cement": "Cement",
       "refinery": "Refinery",
@@ -2677,7 +2676,7 @@
     },
     "catalogueEmpty": "The node catalogue is empty.",
     "runConnections": "Find connections",
-    "runFailed": "The CO2RouteX run failed.",
+    "runFailed": "The STORE_CO2 run failed.",
     "noRoutes": "No candidate connections between the selected nodes.",
     "candidate": "candidate",
     "modes": {
@@ -2690,26 +2689,22 @@
     "countrySection": "Country",
     "emittersSection": "Emitter categories",
     "sinksSection": "Sink categories",
-    "expandCategory": "Show facilities",
     "selectAll": "Select all {{count}}",
     "clearCategory": "Clear",
     "needEmitter": "Add at least one emitter — routes start there.",
     "needDestination": "Add a storage, utilisation or transport node — routes have to end somewhere.",
     "advancedFilters": "Advanced filters",
-    "clearAllFilters": "Clear all filters",
     "clearFilters": "Clear filters",
     "filterListPlaceholder": "Type to narrow…",
     "fluxCustom": "Custom range (kt/yr)",
     "fluxFilterTitle": "Annual CO₂ emissions",
     "fluxMax": "Max",
     "fluxMin": "Min",
-    "municipalitiesFilter": "Cities / municipalities",
     "noMatches": "No matches.",
     "noSinks": "No sinks in the catalogue yet.",
     "noState": "No state recorded",
     "sortAsc": "Lowest CO₂ first",
     "sortDesc": "Highest CO₂ first",
-    "statesFilter": "States",
     "ruralFilter": "Settlement type",
     "rural": {
       "all": "All",
@@ -2729,7 +2724,30 @@
       "from": "from {{year}}",
       "until": "until {{year}}",
       "startUnknown": "start unknown"
-    }
+    },
+    "railFilter": "Near a railway",
+    "railHint": "Emitters and sinks within this distance of a rail line in their country. Railway routing connects sites within 500 m.",
+    "rail": {
+      "any": "Any"
+    },
+    "filtersTitle": "Filters",
+    "resetFilters": "Reset",
+    "periodOnlyShort": "Operating in the period",
+    "selectedCount": "{{count}} selected",
+    "fluxShort": {
+      "all": "All",
+      "high": "High",
+      "medium": "Mid",
+      "low": "Low"
+    },
+    "clearSelection": "Clear selection",
+    "selectHint": "Nothing selected yet. Tick sites below or click them on the map.",
+    "searchIn": "Search in {{name}}…",
+    "showSites": "Show sites",
+    "showMore": "Show {{count}} more ({{total}} left)",
+    "startOver": "Start over",
+    "startOverHint": "Clears selected sites, filters, search and routes.",
+    "clearEverything": "Clear everything"
   },
   "co2Routing": {
     "run": "Find routes",
@@ -2742,11 +2760,25 @@
     "noRoutes": "No routes found between the selected nodes.",
     "preview": "Draft preview: download the workbook to keep it, or save the model and rerun to store its routes.",
     "resistance": "Resistance",
-    "stationDistances": "Station distances",
-    "stationPair": "Station to station",
     "unitCost": "Cost (€/t/km)",
     "unrouted": "Not routed",
-    "uploading": "Uploading routing data…"
+    "starting": "Starting routing…",
+    "optimize": "Respect sink capacity",
+    "optimizeHint": "Solve the assignment so no sink takes more than it can store. Otherwise each emitter takes its cheapest sink.",
+    "running": "Finding routes…",
+    "emptyTitle": "No routes yet",
+    "emptyHint": "Pick the transport modes and find routes. They appear here and on the map.",
+    "summary": {
+      "routes": "Routes",
+      "co2": "CO₂",
+      "distance": "Distance",
+      "cost": "Avg. cost"
+    },
+    "modeHints": {
+      "pipeline": "Least-cost corridor",
+      "truck": "Road network",
+      "railway": "Rail network"
+    }
   },
   "co2Costs": {
     "running": "The run is still going — costs appear once routing finishes.",
@@ -2841,7 +2873,8 @@
       "central": "Central",
       "high": "High"
     },
-    "otherApplications": "Other candidate applications"
+    "otherApplications": "Other candidate applications",
+    "browseShort": "Browse"
   },
   "whatsNew": {
     "open": "What's new in this version",

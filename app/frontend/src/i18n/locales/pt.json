@@ -2293,7 +2293,7 @@
       "f2Title": "Correspondência fonte–sumidouro",
       "f2Desc": "Associe emissores industriais de CO₂ a sumidouros de armazenamento ou utilização adequados por volume, distância e período de operação.",
       "f3Title": "Otimização de rotas",
-      "f3Desc": "O CO2RouteX calcula uma rota por par fonte–sumidouro — por conduta, camião ou caminho-de-ferro — com distância e custo por tonelada.",
+      "f3Desc": "O STORE_CO2 calcula uma rota por par fonte–sumidouro — por conduta, camião ou caminho-de-ferro — com distância e custo por tonelada.",
       "f4Title": "Catálogo de sumidouros",
       "f4Desc": "Explore sumidouros de armazenamento e utilização com procura anual (kt CO₂/ano) e capacidades (Mt CO₂) do conjunto de dados STORE_CO2.",
       "f5Title": "Relatórios de custo e CO₂",
@@ -2343,7 +2343,7 @@
       "s2Title": "2. Selecionar nós",
       "s2Desc": "Escolha fontes e sumidouros de CO₂ na Alemanha, Noruega e Países Baixos a partir do catálogo STORE_CO2.",
       "s3Title": "3. Rotas e custos",
-      "s3Desc": "O CO2RouteX liga os nós por conduta, camião ou caminho-de-ferro e calcula o custo de cada rota por tonelada.",
+      "s3Desc": "O STORE_CO2 liga os nós por conduta, camião ou caminho-de-ferro e calcula o custo de cada rota por tonelada.",
       "s4Title": "4. Rever e executar",
       "s4Desc": "Verifique a configuração, guarde o modelo e inicie o cálculo — depois explore mapas, fluxos e custos e partilhe cenários."
     },
@@ -2518,13 +2518,13 @@
     },
     "layer2": {
       "purpose": "Escolha as fontes e sumidouros de CO₂ entre os quais o modelo traça rotas.",
-      "nextStepHint": "A seguir o CO2RouteX procura ligações entre eles.",
+      "nextStepHint": "A seguir o STORE_CO2 procura ligações entre eles.",
       "nodesQuestion": "Que nós deve o modelo usar?",
       "nodesInfo": "Escolha-os aqui ou diretamente no mapa.",
       "blockingSelectNodes": "Selecione pelo menos um nó para continuar."
     },
     "layer3": {
-      "purpose": "O CO2RouteX analisa os nós selecionados em busca de ligações candidatas, depois traça-as e calcula os custos.",
+      "purpose": "O STORE_CO2 analisa os nós selecionados em busca de ligações candidatas, depois traça-as e calcula os custos.",
       "nextStepHint": "A seguir verá quanto custam essas rotas.",
       "customData": "Dados personalizados (opcional)",
       "lockedByPrecomputed": "Incluída no mapa regional pré-calculado. Desative o interruptor de pré-cálculo acima para personalizar as camadas.",
@@ -2628,7 +2628,6 @@
     "loadError": "Não foi possível carregar o catálogo de nós.",
     "searchPlaceholder": "Pesquisar por nome ou id…",
     "empty": "Nenhum nó corresponde à pesquisa.",
-    "selectionSummary": "{{count}} selecionados — {{emitters}} emissores, {{sinks}} sumidouros",
     "types": {
       "cement": "Cimento",
       "refinery": "Refinaria",
@@ -2662,7 +2661,7 @@
     },
     "catalogueEmpty": "O catálogo de nós está vazio.",
     "runConnections": "Procurar ligações",
-    "runFailed": "A execução do CO2RouteX falhou.",
+    "runFailed": "A execução do STORE_CO2 falhou.",
     "noRoutes": "Não há ligações candidatas entre os nós selecionados.",
     "candidate": "candidata",
     "modes": {
@@ -2675,26 +2674,45 @@
     "countrySection": "País",
     "emittersSection": "Categorias de emissores",
     "sinksSection": "Categorias de sumidouros",
-    "expandCategory": "Mostrar instalações",
     "selectAll": "Selecionar todas ({{count}})",
     "clearCategory": "Limpar",
     "needEmitter": "Adicione pelo menos um emissor — as rotas começam aí.",
     "needDestination": "Adicione um nó de armazenamento, utilização ou transporte — as rotas têm de terminar algures.",
     "advancedFilters": "Filtros avançados",
-    "clearAllFilters": "Limpar todos os filtros",
     "clearFilters": "Limpar filtros",
     "filterListPlaceholder": "Escreva para filtrar…",
     "fluxCustom": "Intervalo personalizado (kt/ano)",
     "fluxFilterTitle": "Emissões anuais de CO₂",
     "fluxMax": "Máx",
     "fluxMin": "Mín",
-    "municipalitiesFilter": "Cidades / municípios",
     "noMatches": "Sem resultados.",
     "noSinks": "Ainda não há sumidouros no catálogo.",
     "noState": "Sem região registada",
     "sortAsc": "Menor CO₂ primeiro",
     "sortDesc": "Maior CO₂ primeiro",
-    "statesFilter": "Regiões"
+    "railFilter": "Perto da ferrovia",
+    "railHint": "Emissores e sumidouros a esta distância de uma linha férrea no seu país. O encaminhamento ferroviário liga locais a menos de 500 m.",
+    "rail": {
+      "any": "Todos"
+    },
+    "filtersTitle": "Filtros",
+    "resetFilters": "Repor",
+    "periodOnlyShort": "Em operação no período",
+    "selectedCount": "{{count}} selecionados",
+    "fluxShort": {
+      "all": "Todos",
+      "high": "Alto",
+      "medium": "Médio",
+      "low": "Baixo"
+    },
+    "clearSelection": "Limpar seleção",
+    "selectHint": "Nada selecionado. Marque locais abaixo ou clique neles no mapa.",
+    "searchIn": "Pesquisar em {{name}}…",
+    "showSites": "Mostrar locais",
+    "showMore": "Mostrar mais {{count}} ({{total}} restantes)",
+    "startOver": "Recomeçar",
+    "startOverHint": "Limpa a seleção, os filtros, a pesquisa e as rotas.",
+    "clearEverything": "Limpar tudo"
   },
   "co2Routing": {
     "run": "Procurar rotas",
@@ -2707,11 +2725,25 @@
     "noRoutes": "Não foram encontradas rotas entre os nós selecionados.",
     "preview": "Pré-visualização: transfira o livro, ou guarde o modelo e execute de novo para manter as rotas.",
     "resistance": "Resistência",
-    "stationDistances": "Distâncias entre estações",
-    "stationPair": "De estação a estação",
     "unitCost": "Custo (€/t/km)",
     "unrouted": "Sem rota",
-    "uploading": "A carregar dados de rotas…"
+    "starting": "A iniciar o encaminhamento…",
+    "optimize": "Respeitar a capacidade dos sumidouros",
+    "optimizeHint": "Resolver a atribuição para que nenhum sumidouro receba mais do que consegue armazenar. Caso contrário, cada emissor fica com o sumidouro mais barato.",
+    "running": "A procurar rotas…",
+    "emptyTitle": "Ainda sem rotas",
+    "emptyHint": "Escolha os modos de transporte e procure rotas. Aparecem aqui e no mapa.",
+    "summary": {
+      "routes": "Rotas",
+      "co2": "CO₂",
+      "distance": "Distância",
+      "cost": "Custo médio"
+    },
+    "modeHints": {
+      "pipeline": "Corredor de menor custo",
+      "truck": "Rede rodoviária",
+      "railway": "Rede ferroviária"
+    }
   },
   "co2Costs": {
     "running": "A execução ainda decorre — os custos surgem quando o traçado terminar.",
@@ -2782,7 +2814,8 @@
     "refreshError": "Não foi possível atualizar as fontes. Os dados existentes foram mantidos.",
     "search": "Pesquisar fontes",
     "status": "Estado",
-    "yes": "Sim"
+    "yes": "Sim",
+    "browseShort": "Explorar"
   },
   "whatsNew": {
     "open": "Novidades desta versão",

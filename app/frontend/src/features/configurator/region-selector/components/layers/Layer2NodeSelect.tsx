@@ -4,7 +4,6 @@ import { useTranslation } from "@/i18n";
 import { NodeSelector } from "@/features/co2-nodes";
 
 import { LayerShell } from "./shared/LayerShell";
-import { QuestionSection } from "../wizard";
 import type { ConfiguratorContext } from "./types";
 
 /** Node selection step. */
@@ -23,25 +22,19 @@ export const Layer2NodeSelect: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => {
                 "Next STORE_CO2 looks for connections between them.",
             )}
         >
-            <div>
-                <QuestionSection
-                    compact
-                    index={1}
-                    title={t("configurator.layer2.nodesQuestion", "Which nodes should the model use?")}
-                    description={t(
-                        "configurator.layer2.nodesInfo",
-                        "Pick them here or straight from the map.",
-                    )}
-                >
-                    <div data-tour="node-selection">
-                        <NodeSelector
-                            selectedIds={state.selectedNodeIds}
-                            onChange={actions.setSelectedNodeIds}
-                        />
-                    </div>
-                </QuestionSection>
-
-            </div>
+            <section className="space-y-5">
+                <header>
+                    <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                        {t("configurator.layer2.nodesQuestion", "Which nodes should the model use?")}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        {t("configurator.layer2.nodesInfo", "Pick them here or straight from the map.")}
+                    </p>
+                </header>
+                <div data-tour="node-selection">
+                    <NodeSelector selectedIds={state.selectedNodeIds} onChange={actions.setSelectedNodeIds} />
+                </div>
+            </section>
         </LayerShell>
     );
 };

@@ -2307,7 +2307,7 @@
       "f2Title": "Párování zdroj–úložiště",
       "f2Desc": "Přiřaďte průmyslové emitenty CO₂ k vhodným úložištím či místům využití podle objemu, vzdálenosti a období provozu.",
       "f3Title": "Optimalizace tras",
-      "f3Desc": "CO2RouteX vypočítá jednu trasu pro každou dvojici zdroj–úložiště — potrubím, kamionem nebo železnicí — se vzdáleností a náklady na tunu.",
+      "f3Desc": "STORE_CO2 vypočítá jednu trasu pro každou dvojici zdroj–úložiště — potrubím, kamionem nebo železnicí — se vzdáleností a náklady na tunu.",
       "f4Title": "Katalog úložišť",
       "f4Desc": "Procházejte úložiště a místa využití s roční poptávkou (kt CO₂/rok) a kapacitami (Mt CO₂) z datové sady STORE_CO2.",
       "f5Title": "Zprávy o nákladech a CO₂",
@@ -2357,7 +2357,7 @@
       "s2Title": "2. Výběr uzlů",
       "s2Desc": "Vyberte zdroje a úložiště CO₂ v Německu, Norsku a Nizozemsku z katalogu STORE_CO2.",
       "s3Title": "3. Trasy a náklady",
-      "s3Desc": "CO2RouteX propojí uzly potrubím, nákladní dopravou nebo železnicí a nacení každou trasu na tunu.",
+      "s3Desc": "STORE_CO2 propojí uzly potrubím, nákladní dopravou nebo železnicí a nacení každou trasu na tunu.",
       "s4Title": "4. Zkontrolovat a spustit",
       "s4Desc": "Zkontrolujte nastavení, uložte model a spusťte výpočet — pak prozkoumejte mapy, toky a náklady a sdílejte scénáře."
     },
@@ -2532,13 +2532,13 @@
     },
     "layer2": {
       "purpose": "Vyberte zdroje a úložiště CO₂, mezi kterými model vede trasy.",
-      "nextStepHint": "Poté CO2RouteX vyhledá spojení mezi nimi.",
+      "nextStepHint": "Poté STORE_CO2 vyhledá spojení mezi nimi.",
       "nodesQuestion": "Které uzly má model použít?",
       "nodesInfo": "Vyberte je zde nebo přímo v mapě.",
       "blockingSelectNodes": "Pokračujte výběrem alespoň jednoho uzlu."
     },
     "layer3": {
-      "purpose": "CO2RouteX prověří vybrané uzly na možná spojení, poté je trasuje a spočítá náklady.",
+      "purpose": "STORE_CO2 prověří vybrané uzly na možná spojení, poté je trasuje a spočítá náklady.",
       "nextStepHint": "Dále uvidíte, kolik tyto trasy stojí.",
       "customData": "Custom data (optional)",
       "lockedByPrecomputed": "Zahrnuto v předpočítané regionální mapě. Vypněte přepínač výše, chcete-li vrstvy upravit.",
@@ -2642,7 +2642,6 @@
     "loadError": "Katalog uzlů se nepodařilo načíst.",
     "searchPlaceholder": "Hledat podle názvu nebo id…",
     "empty": "Žádné uzly neodpovídají.",
-    "selectionSummary": "Vybráno {{count}} — {{emitters}} zdrojů, {{sinks}} úložišť",
     "types": {
       "cement": "Cement",
       "refinery": "Rafinerie",
@@ -2676,7 +2675,7 @@
     },
     "catalogueEmpty": "Katalog uzlů je prázdný.",
     "runConnections": "Najít spojení",
-    "runFailed": "Běh CO2RouteX selhal.",
+    "runFailed": "Běh STORE_CO2 selhal.",
     "noRoutes": "Mezi vybranými uzly nejsou žádná možná spojení.",
     "candidate": "možné",
     "modes": {
@@ -2689,26 +2688,45 @@
     "countrySection": "Země",
     "emittersSection": "Kategorie zdrojů",
     "sinksSection": "Kategorie úložišť",
-    "expandCategory": "Zobrazit zařízení",
     "selectAll": "Vybrat vše ({{count}})",
     "clearCategory": "Zrušit",
     "needEmitter": "Přidejte alespoň jeden zdroj — tam trasy začínají.",
     "needDestination": "Přidejte uzel úložiště, využití nebo dopravy — trasy musí někde končit.",
     "advancedFilters": "Rozšířené filtry",
-    "clearAllFilters": "Zrušit všechny filtry",
     "clearFilters": "Zrušit filtry",
     "filterListPlaceholder": "Pište pro zúžení…",
     "fluxCustom": "Vlastní rozsah (kt/rok)",
     "fluxFilterTitle": "Roční emise CO₂",
     "fluxMax": "Max",
     "fluxMin": "Min",
-    "municipalitiesFilter": "Města / obce",
     "noMatches": "Žádné výsledky.",
     "noSinks": "V katalogu zatím nejsou úložiště.",
     "noState": "Region není uveden",
     "sortAsc": "Nejnižší CO₂ první",
     "sortDesc": "Nejvyšší CO₂ první",
-    "statesFilter": "Regiony"
+    "railFilter": "Blízko železnice",
+    "railHint": "Zdroje a úložiště v této vzdálenosti od železniční trati ve své zemi. Železniční trasování propojuje místa do 500 m.",
+    "rail": {
+      "any": "Vše"
+    },
+    "filtersTitle": "Filtry",
+    "resetFilters": "Obnovit",
+    "periodOnlyShort": "V provozu v období",
+    "selectedCount": "Vybráno: {{count}}",
+    "fluxShort": {
+      "all": "Vše",
+      "high": "Vysoké",
+      "medium": "Střední",
+      "low": "Nízké"
+    },
+    "clearSelection": "Zrušit výběr",
+    "selectHint": "Zatím nic nevybráno. Zaškrtněte místa níže nebo je klikněte na mapě.",
+    "searchIn": "Hledat v {{name}}…",
+    "showSites": "Zobrazit místa",
+    "showMore": "Zobrazit dalších {{count}} (zbývá {{total}})",
+    "startOver": "Začít znovu",
+    "startOverHint": "Vymaže výběr, filtry, hledání a trasy.",
+    "clearEverything": "Vymazat vše"
   },
   "co2Routing": {
     "run": "Najít trasy",
@@ -2721,11 +2739,25 @@
     "noRoutes": "Mezi vybranými uzly nebyly nalezeny trasy.",
     "preview": "Náhled konceptu: stáhněte sešit, nebo model uložte a spusťte znovu, aby se trasy uchovaly.",
     "resistance": "Odpor",
-    "stationDistances": "Vzdálenosti stanic",
-    "stationPair": "Ze stanice do stanice",
     "unitCost": "Náklady (€/t/km)",
     "unrouted": "Bez trasy",
-    "uploading": "Nahrávání dat tras…"
+    "starting": "Spouštění trasování…",
+    "optimize": "Respektovat kapacitu úložišť",
+    "optimizeHint": "Vyřešit přiřazení tak, aby žádné úložiště nepřijalo víc, než dokáže uložit. Jinak si každý zdroj vezme nejlevnější úložiště.",
+    "running": "Hledání tras…",
+    "emptyTitle": "Zatím žádné trasy",
+    "emptyHint": "Vyberte druhy dopravy a vyhledejte trasy. Zobrazí se zde a na mapě.",
+    "summary": {
+      "routes": "Trasy",
+      "co2": "CO₂",
+      "distance": "Vzdálenost",
+      "cost": "Prům. náklady"
+    },
+    "modeHints": {
+      "pipeline": "Nejlevnější koridor",
+      "truck": "Silniční síť",
+      "railway": "Železniční síť"
+    }
   },
   "co2Costs": {
     "running": "Výpočet stále běží — náklady se objeví po dokončení trasování.",
@@ -2796,7 +2828,8 @@
     "refreshError": "Zdroje se nepodařilo obnovit. Stávající data zůstala zachována.",
     "search": "Hledat zdroje",
     "status": "Stav",
-    "yes": "Ano"
+    "yes": "Ano",
+    "browseShort": "Procházet"
   },
   "whatsNew": {
     "open": "Co je nového v této verzi",
