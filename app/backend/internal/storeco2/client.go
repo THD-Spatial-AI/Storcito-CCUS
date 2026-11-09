@@ -292,54 +292,47 @@ func (c *Client) PointSources(ctx context.Context, query PointSourceQuery) (*Poi
 
 // PointSource fetches one facility.
 func (c *Client) PointSource(ctx context.Context, entityID string) (*PointSource, int, error) {
-	req, err := http.NewRequestWithContext(
-		ctx, http.MethodGet, c.baseURL+"/point-sources/"+url.PathEscape(entityID), nil,
-	)
-	if err != nil {
-		return nil, 0, err
-	}
-	resp, err := c.http.Do(req)
-	if err != nil {
-		return nil, 0, fmt.Errorf("store_co2 unreachable: %w", err)
-	}
-	defer func() { _ = resp.Body.Close() }()
-
-	if resp.StatusCode == http.StatusNotFound {
-		return nil, http.StatusNotFound, nil
-	}
-	if resp.StatusCode != http.StatusOK {
-		return nil, resp.StatusCode, responseError(resp)
-	}
 	var out PointSource
-	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
-		return nil, 0, err
+	status, err := c.getOptional(ctx, "/point-sources/"+url.PathEscape(entityID), &out)
+	if status != http.StatusOK {
+		return nil, status, err
 	}
-	return &out, http.StatusOK, nil
+	return &out, status, nil
 }
 
 // Capture returns capture cases.
 func (c *Client) Capture(ctx context.Context, entityID string) (json.RawMessage, int, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+"/capture/"+url.PathEscape(entityID), nil)
+	var out json.RawMessage
+	status, err := c.getOptional(ctx, "/capture/"+url.PathEscape(entityID), &out)
+	if status != http.StatusOK {
+		return nil, status, err
+	}
+	return out, status, nil
+}
+
+// getOptional tolerates 404.
+func (c *Client) getOptional(ctx context.Context, path string, out any) (int, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.baseURL+path, nil)
 	if err != nil {
-		return nil, 0, err
+		return 0, err
 	}
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return nil, 0, fmt.Errorf("store_co2 unreachable: %w", err)
+		return 0, fmt.Errorf("store_co2 unreachable: %w", err)
 	}
 	defer func() { _ = resp.Body.Close() }()
 
-	if resp.StatusCode == http.StatusNotFound {
-		return nil, http.StatusNotFound, nil
+	switch resp.StatusCode {
+	case http.StatusOK:
+		if err := json.NewDecoder(resp.Body).Decode(out); err != nil {
+			return 0, err
+		}
+		return http.StatusOK, nil
+	case http.StatusNotFound:
+		return http.StatusNotFound, nil
+	default:
+		return resp.StatusCode, responseError(resp)
 	}
-	if resp.StatusCode != http.StatusOK {
-		return nil, resp.StatusCode, responseError(resp)
-	}
-	var out json.RawMessage
-	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
-		return nil, 0, err
-	}
-	return out, http.StatusOK, nil
 }
 
 // Stats summarises the dataset.

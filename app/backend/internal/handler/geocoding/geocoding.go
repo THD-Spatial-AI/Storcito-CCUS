@@ -107,11 +107,7 @@ func (h *Handler) Reverse(c *gin.Context) {
 		return
 	}
 
-	query := url.Values{}
-	query.Set("format", "jsonv2")
-	query.Set("lat", strconv.FormatFloat(latitude, 'f', -1, 64))
-	query.Set("lon", strconv.FormatFloat(longitude, 'f', -1, 64))
-	query.Set("addressdetails", "1")
+	query := pointQuery(latitude, longitude)
 
 	proxyNominatimJSON(c, h, "/reverse", query, false)
 }
@@ -122,12 +118,8 @@ func (h *Handler) GetAdministrativeRegion(c *gin.Context) {
 		return
 	}
 
-	query := url.Values{}
-	query.Set("format", "jsonv2")
-	query.Set("lat", strconv.FormatFloat(latitude, 'f', -1, 64))
-	query.Set("lon", strconv.FormatFloat(longitude, 'f', -1, 64))
+	query := pointQuery(latitude, longitude)
 	query.Set("zoom", "5")
-	query.Set("addressdetails", "1")
 	query.Set("polygon_geojson", "1")
 	query.Set("polygon_threshold", "0.001")
 	query.Set("layer", "address")
@@ -265,4 +257,14 @@ func parseCoordinates(c *gin.Context) (float64, float64, bool) {
 	}
 
 	return latitude, longitude, true
+}
+
+// pointQuery builds reverse query.
+func pointQuery(latitude, longitude float64) url.Values {
+	query := url.Values{}
+	query.Set("format", "jsonv2")
+	query.Set("lat", strconv.FormatFloat(latitude, 'f', -1, 64))
+	query.Set("lon", strconv.FormatFloat(longitude, 'f', -1, 64))
+	query.Set("addressdetails", "1")
+	return query
 }

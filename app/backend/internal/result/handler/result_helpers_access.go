@@ -139,3 +139,21 @@ func parseUint(s string) uint {
 	}
 	return val
 }
+
+// accessibleResults checks access.
+func (h *ResultHandler) accessibleResults(c *gin.Context) (string, []commonModels.ModelResult, bool) {
+	userCtx, ok := httputil.GetUserContext(c)
+	if !ok {
+		return "", nil, false
+	}
+	modelID := c.Param("id")
+	model, ok := h.fetchModelByID(c, modelID)
+	if !ok || !h.userHasModelAccess(c, model, userCtx) {
+		return "", nil, false
+	}
+	results, err := h.fetchResults(c, modelID)
+	if err != nil {
+		return "", nil, false
+	}
+	return modelID, results, true
+}

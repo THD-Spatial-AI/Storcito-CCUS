@@ -55,48 +55,14 @@ func NewResultHandler(
 }
 
 func (h *ResultHandler) GetModelResults(c *gin.Context) {
-	userCtx, ok := httputil.GetUserContext(c)
-	if !ok {
-		return
+	if _, results, ok := h.accessibleResults(c); ok {
+		httputil.SuccessResponse(c, results)
 	}
-
-	modelID := c.Param("id")
-
-	model, ok := h.fetchModelByID(c, modelID)
-	if !ok {
-		return
-	}
-
-	if !h.userHasModelAccess(c, model, userCtx) {
-		return
-	}
-
-	results, err := h.fetchResults(c, modelID)
-	if err != nil {
-		return
-	}
-
-	httputil.SuccessResponse(c, results)
 }
 
 func (h *ResultHandler) DownloadModelResult(c *gin.Context) {
-	userCtx, ok := httputil.GetUserContext(c)
+	modelID, results, ok := h.accessibleResults(c)
 	if !ok {
-		return
-	}
-
-	modelID := c.Param("id")
-	model, ok := h.fetchModelByID(c, modelID)
-	if !ok {
-		return
-	}
-
-	if !h.userHasModelAccess(c, model, userCtx) {
-		return
-	}
-
-	results, err := h.fetchResults(c, modelID)
-	if err != nil {
 		return
 	}
 
