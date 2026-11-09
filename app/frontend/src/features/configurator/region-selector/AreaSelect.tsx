@@ -236,7 +236,13 @@ export const AreaSelect: FC<AreaSelectProps> = ({
           ) : undefined
         }
         selectedNodeCount={selectedNodeCount}
-        onClearNodes={() => actions.setSelectedNodeIds([])}
+        onClearNodes={() => {
+          actions.setSelectedNodeIds([]);
+          // Drop old routes.
+          useRoutingRunStore.getState().reset();
+          // Back to node selection.
+          if (wizard.step > 2) wizard.setStep(2);
+        }}
         isLoadingPreference={isLoadingPreference}
         wsReloadKey={wsReloadKey}
         currentWorkspace={currentWorkspace}
