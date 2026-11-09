@@ -65,11 +65,11 @@ export const useWebservices = (
     offline: number;
   } | null>(null);
 
-  // Prevent overlapping loads and duplicated intervals
+  // Prevent overlapping loads.
   const isLoadingRef = useRef(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Store initial filters & options in refs to keep them stable and avoid infinite reload loops when parent passes new object literals
+  // Stable initial filters.
   const stableFiltersRef = useRef(initialFilters);
   const stableOptionsRef = useRef(options);
 
@@ -185,16 +185,16 @@ export const useWebservices = (
     return response;
   }, []);
 
-  // Load data on mount
+  // Load on mount.
   useEffect(() => {
     loadWebservices(stableFiltersRef.current);
   }, [loadWebservices]);
 
-  // Set up auto-refresh interval (deduplicated)
+  // Auto-refresh interval.
   const autoRefresh = stableOptionsRef.current.autoRefresh;
   const refreshInterval = stableOptionsRef.current.refreshInterval;
   useEffect(() => {
-    // Clear any existing interval first
+    // Clear old interval.
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -218,7 +218,8 @@ export const useWebservices = (
     webservices,
     loading,
     error,
-    summary: summary || computedSummary,
+    // Busy count computed.
+    summary: summary ? { ...summary, busy: computedSummary?.busy ?? summary.busy } : computedSummary,
     loadWebservices,
     createWebservice,
     updateWebservice,

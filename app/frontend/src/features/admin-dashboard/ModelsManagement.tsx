@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Brain, RefreshCw, Users, Search, TrendingUp, Clock, CheckCircle2, AlertCircle, XCircle, Pause, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
-import ModelStatusCards from "@/components/ui/cards/ModelStatusCards";
 import StatusBadge from "@/components/ui/StatusBadge";
 import ModelActions from "@/components/ui/ModelActions";
 import Pagination from "@/components/ui/Pagination";
@@ -17,12 +16,16 @@ import {
 } from "@/features/model-dashboard";
 import { formatDate } from "@/utils/dateHelpers";
 import { getModelStatusColor } from "@/features/model-dashboard";
+import { statusTabParam, type StatusTab } from "@/features/model-dashboard/utils/statusHelpers";
 import type { Model } from "@/features/model-dashboard";
 import { useWebservices } from "@/features/admin-dashboard/hooks/useWebservices";
 import { useAuthStore } from "@/store/auth-store";
 import { useTranslation } from "@/i18n";
 import { useConfirm } from "@/hooks/useConfirmDialog";
 import { useNotification } from "@/features/notifications";
+
+// No pins here.
+const ADMIN_TABS: Exclude<StatusTab, "pinned">[] = ["all", "running", "completed", "drafts", "failed"];
 
 interface ModelsManagementProps {
 	onModelAction?: (action: string, modelId: number) => void;
@@ -40,6 +43,7 @@ export const ModelsManagement: React.FC<ModelsManagementProps> = ({ onModelActio
 	const [isRefreshing, setIsRefreshing] = useState(false);
 	const [sortBy, setSortBy] = useState<string>("created_at");
 	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+	const [activeTab, setActiveTab] = useState<StatusTab>("all");
 
 	const { data: modelsResponse, isLoading, refetch } = useModelsQuery({
 		limit: itemsPerPage,
@@ -47,6 +51,7 @@ export const ModelsManagement: React.FC<ModelsManagementProps> = ({ onModelActio
 		search: searchTerm || undefined,
 		sort_by: sortBy,
 		sort_order: sortOrder,
+		status: statusTabParam(activeTab),
 	}, { requireWorkspace: false });
 
 	const { data: statsResponse } = useModelStatsQuery();
@@ -158,15 +163,21 @@ export const ModelsManagement: React.FC<ModelsManagementProps> = ({ onModelActio
 			: <ArrowDown className="w-3 h-3 text-foreground" />;
 	};
 
-	const statusCounts = statsResponse?.data
+	const stats = statsResponse?.data;
+	const tabCounts: Record<Exclude<StatusTab, "pinned">, number> | null = stats
 		? {
-			draft: statsResponse.data.draft,
-			inQueue: statsResponse.data.queue,
-			calculating: statsResponse.data.running,
-			finished: statsResponse.data.completed,
-			published: statsResponse.data.published,
+			all: stats.total,
+			running: (stats.queue || 0) + (stats.running || 0),
+			completed: (stats.completed || 0) + (stats.published || 0),
+			drafts: stats.draft || 0,
+			failed: (stats.failed || 0) + (stats.cancelled || 0),
 		}
-		: { draft: 0, inQueue: 0, calculating: 0, finished: 0, published: 0 };
+		: null;
+
+	const handleTabChange = (tab: StatusTab) => {
+		setActiveTab(tab);
+		setCurrentPage(0);
+	};
 
 	const getStatusIcon = (status: string) => {
 		switch (status) {
@@ -346,18 +357,45 @@ export const ModelsManagement: React.FC<ModelsManagementProps> = ({ onModelActio
 				</div>
 			</div>
 
-			{/* Status Cards */}
-			<div className="md-rise" style={{ animationDelay: "60ms" }}>
-				<ModelStatusCards statusCounts={statusCounts} />
-			</div>
-
 			{/* Table */}
-			<div className="md-rise bg-card rounded-xl border border-border overflow-hidden shadow-sm" style={{ animationDelay: "120ms" }}>
+			<div className="md-rise bg-card rounded-xl border border-border overflow-hidden shadow-sm" style={{ animationDelay: "60ms" }}>
 				{isLoading && (
 					<div className="h-1 bg-muted overflow-hidden">
 						<div className="h-full w-1/3 bg-gradient-to-r from-gray-400 to-gray-600 animate-[shimmer_1.5s_infinite]"></div>
 					</div>
 				)}
+				{/* Status tabs. */}
+				<div role="tablist" aria-label={t("modelsManagement.table.status")} className="flex flex-wrap items-center gap-x-1 border-b border-border px-2 sm:px-3">
+					{ADMIN_TABS.map((tab) => {
+						const isActive = activeTab === tab;
+						const count = tabCounts?.[tab];
+						return (
+							<button
+								key={tab}
+								type="button"
+								role="tab"
+								aria-selected={isActive}
+								onClick={() => handleTabChange(tab)}
+								className={`inline-flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+									isActive
+										? "border-primary text-foreground"
+										: "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+								} ${!isActive && count === 0 ? "opacity-50" : ""}`}
+							>
+								{t(`model.tabs.${tab}`)}
+								{count !== undefined && (
+									<span
+										className={`rounded-full px-1.5 py-0.5 text-xs tabular-nums leading-none ${
+											isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+										}`}
+									>
+										{count}
+									</span>
+								)}
+							</button>
+						);
+					})}
+				</div>
 				<div className="md-fade-in overflow-x-auto">
 					<table className="min-w-full divide-y divide-border">
 						<thead>
