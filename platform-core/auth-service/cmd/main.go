@@ -48,12 +48,10 @@ func main() {
 
 	configureAuthRoutes(r, cfg, appDeps, authHandler)
 
-	srv := platformserver.NewHTTPServer(platformserver.HTTPServerConfig{
+	platformserver.Serve(platformserver.HTTPServerConfig{
 		Addr:    serverAddr,
 		Handler: r,
-	})
-
-	platformserver.RunWithGracefulShutdown(srv, log, 5*time.Second)
+	}, log, 5*time.Second)
 }
 
 type AppDependencies struct {
@@ -100,15 +98,7 @@ func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDepend
 		cfg.Auth.ClientSecret,
 	)
 
-	emailService := platformemail.NewEmailService(platformemail.SMTPConfig{
-		Host:      cfg.Email.SMTPHost,
-		Port:      cfg.Email.SMTPPort,
-		Username:  cfg.Email.SMTPUsername,
-		Password:  cfg.Email.SMTPPassword,
-		FromEmail: cfg.Email.SMTPFromEmail,
-		FromName:  cfg.Email.SMTPFromName,
-		UseTLS:    cfg.Email.SMTPUseTLS,
-	})
+	emailService := platformemail.NewEmailService(cfg.Email.SMTPConfig())
 
 	return &AppDependencies{
 		RedisClient:        redisClient,

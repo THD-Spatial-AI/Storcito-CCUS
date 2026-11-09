@@ -1,27 +1,14 @@
 package config
 
 import (
-	"os"
-
-	"platform.local/platform/auth"
 	platformconfig "platform.local/platform/config"
-
-	goredis "github.com/redis/go-redis/v9"
 )
 
 type Config struct {
-	Auth              auth.Config
-	RedisConfig       goredis.Options
-	AppPort           string
-	AppHost           string
-	AppURL            string
-	FrontendURL       string
-	AppEnv            string
-	AppTimezone       string
-	CookieDomain      string
-	Database          platformconfig.DatabaseConfig
-	SessionTTLMinutes int // Session timeout in minutes
-	Email             EmailConfig
+	platformconfig.Service
+	FrontendURL string
+	Database    platformconfig.DatabaseConfig
+	Email       EmailConfig
 }
 
 type EmailConfig struct {
@@ -34,37 +21,16 @@ type EmailConfig struct {
 }
 
 func LoadFromEnv() (*Config, error) {
-	if err := platformconfig.LoadEnvOnce(".", ".."); err != nil {
-		return nil, err
-	}
-
-	redisDB, err := platformconfig.RequireEnvInt("REDIS_DATABASE")
+	service, err := platformconfig.ServiceFromEnv()
 	if err != nil {
 		return nil, err
 	}
-
-	sessionTTL, err := platformconfig.GetEnvInt("SESSION_TTL_MINUTES", 60)
-	if err != nil {
-		return nil, err
-	}
-
-	emailSettings := platformconfig.EmailSettingsFromEnv()
-
-	cfg := &Config{
-		Auth:              platformconfig.AuthConfigFromEnv(),
-		RedisConfig:       platformconfig.RedisOptionsFromEnv(redisDB),
-		AppPort:           os.Getenv("APP_PORT"),
-		AppHost:           os.Getenv("APP_HOST"),
-		AppURL:            os.Getenv("APP_URL"),
-		FrontendURL:       platformconfig.GetEnv("FRONTEND_URL", "http://localhost:3000"),
-		AppEnv:            platformconfig.GetEnv("APP_ENV", "development"),
-		AppTimezone:       platformconfig.GetEnv("APP_TIMEZONE", "UTC"),
-		CookieDomain:      os.Getenv("COOKIE_DOMAIN"),
-		SessionTTLMinutes: sessionTTL,
-		Email:             buildEmailConfig(emailSettings),
-		Database:          platformconfig.DatabaseFromEnv(),
-	}
-	return cfg, nil
+	return &Config{
+		Service:     service,
+		FrontendURL: platformconfig.GetEnv("FRONTEND_URL", "http://localhost:3000"),
+		Email:       buildEmailConfig(platformconfig.EmailSettingsFromEnv()),
+		Database:    platformconfig.DatabaseFromEnv(),
+	}, nil
 }
 
 // buildEmailConfig constructs email configuration from environment

@@ -180,15 +180,7 @@ func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDepend
 		cfg.Auth.ClientSecret,
 	)
 
-	emailService := platformemail.NewEmailService(platformemail.SMTPConfig{
-		Host:      cfg.Email.SMTPHost,
-		Port:      cfg.Email.SMTPPort,
-		Username:  cfg.Email.SMTPUsername,
-		Password:  cfg.Email.SMTPPassword,
-		FromEmail: cfg.Email.SMTPFromEmail,
-		FromName:  cfg.Email.SMTPFromName,
-		UseTLS:    cfg.Email.SMTPUseTLS,
-	})
+	emailService := platformemail.NewEmailService(cfg.Email.SMTPConfig())
 
 	notificationService := services.NewNotificationService(db, emailService, redisClient, nil)
 	webserviceClient := webservice.NewClient(cfg.WebserviceServiceURL)
@@ -271,14 +263,12 @@ func configureRoutes(r *gin.Engine, cfg *config.Config, deps *AppDependencies) {
 }
 
 func runHTTPServer(addr string, engine *gin.Engine, log *logrus.Logger) {
-	srv := platformserver.NewHTTPServer(platformserver.HTTPServerConfig{
+	platformserver.Serve(platformserver.HTTPServerConfig{
 		Addr:         addr,
 		Handler:      engine,
 		ReadTimeout:  300 * time.Second,
 		WriteTimeout: 60 * time.Second,
-	})
-
-	platformserver.RunWithGracefulShutdown(srv, log, 10*time.Second)
+	}, log, 10*time.Second)
 }
 
 func buildRouteDeps(cfg *config.Config, deps *AppDependencies) routes.Deps {

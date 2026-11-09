@@ -5,10 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"platform.local/platform/auth"
 	platformconfig "platform.local/platform/config"
-
-	goredis "github.com/redis/go-redis/v9"
 )
 
 const (
@@ -19,16 +16,8 @@ const (
 )
 
 type Config struct {
-	Auth                 auth.Config
-	RedisConfig          goredis.Options
-	AppPort              string
-	AppHost              string
-	AppURL               string
-	AppEnv               string
-	AppTimezone          string
-	CookieDomain         string
+	platformconfig.Service
 	Database             platformconfig.DatabaseConfig
-	SessionTTLMinutes    int // Minutes.
 	Email                platformconfig.EmailSettings
 	AuthServiceURL       string // Auth service.
 	WebserviceServiceURL string // Webservice.
@@ -40,33 +29,13 @@ type Config struct {
 }
 
 func LoadFromEnv() (*Config, error) {
-	if err := platformconfig.LoadEnvOnce(".", ".."); err != nil {
-		return nil, err
-	}
-
-	redisDB, err := platformconfig.RequireEnvInt("REDIS_DATABASE")
+	service, err := platformconfig.ServiceFromEnv()
 	if err != nil {
 		return nil, err
 	}
-
-	sessionTTL, err := platformconfig.GetEnvInt("SESSION_TTL_MINUTES", 60)
-	if err != nil {
-		return nil, err
-	}
-
-	emailSettings := platformconfig.EmailSettingsFromEnv()
-
-	cfg := &Config{
-		Auth:                 platformconfig.AuthConfigFromEnv(),
-		RedisConfig:          platformconfig.RedisOptionsFromEnv(redisDB),
-		AppPort:              os.Getenv("APP_PORT"),
-		AppHost:              os.Getenv("APP_HOST"),
-		AppURL:               os.Getenv("APP_URL"),
-		AppEnv:               platformconfig.GetEnv("APP_ENV", "development"),
-		AppTimezone:          platformconfig.GetEnv("APP_TIMEZONE", "UTC"),
-		CookieDomain:         os.Getenv("COOKIE_DOMAIN"),
-		SessionTTLMinutes:    sessionTTL,
-		Email:                emailSettings,
+	return &Config{
+		Service:              service,
+		Email:                platformconfig.EmailSettingsFromEnv(),
 		Database:             platformconfig.AppDatabaseFromEnv(),
 		AuthServiceURL:       platformconfig.GetEnv("AUTH_SERVICE_URL", "http://auth-service:8001"),
 		WebserviceServiceURL: normalizeWebserviceURL(platformconfig.GetEnv("WEBSERVICE_SERVICE_URL", defaultWebserviceURL)),
@@ -75,8 +44,7 @@ func LoadFromEnv() (*Config, error) {
 		StoreCO2URL:          storeCO2URL(),
 		SurveyDataDir:        strings.TrimSpace(os.Getenv("SURVEY_DATA_DIR")),
 		CallbackSecret:       os.Getenv("CALLBACK_SECRET"),
-	}
-	return cfg, nil
+	}, nil
 }
 
 // 0.0.0.0 to localhost.

@@ -103,6 +103,11 @@ func RunWithGracefulShutdown(srv *http.Server, log logrus.FieldLogger, shutdownT
 	log.Info("Server exited gracefully")
 }
 
+// Serve runs gracefully.
+func Serve(cfg HTTPServerConfig, log logrus.FieldLogger, shutdownTimeout time.Duration) {
+	RunWithGracefulShutdown(NewHTTPServer(cfg), log, shutdownTimeout)
+}
+
 // HealthHandler returns a Gin handler that reports a consistent health payload.
 func HealthHandler(service string) gin.HandlerFunc {
 	return func(c *gin.Context) {

@@ -57,12 +57,10 @@ func main() {
 	registerRoutes(r, deps)
 
 	serverAddr := fmt.Sprintf("%s:%s", cfg.AppHost, cfg.AppPort)
-	srv := platformserver.NewHTTPServer(platformserver.HTTPServerConfig{
+	platformserver.Serve(platformserver.HTTPServerConfig{
 		Addr:    serverAddr,
 		Handler: r,
-	})
-
-	platformserver.RunWithGracefulShutdown(srv, log, 10*time.Second)
+	}, log, 10*time.Second)
 }
 
 type appDependencies struct {
