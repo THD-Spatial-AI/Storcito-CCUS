@@ -8,30 +8,11 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@spatialhub/ui";
-import type { ModelStatus } from "@/types/models";
 import { isModelDisabled, isModelCompleted } from "@/features/model-dashboard/utils/statusHelpers";
 import { useTranslation } from "@/i18n";
+import type { ActionableModel, ModelActionHandlers } from "@/types/model-actions";
 
-interface ModelRowActionsProps<T extends { id: number; status: ModelStatus; user_id?: string }> {
-	readonly model: T;
-	readonly currentUserId?: string;
-	readonly userAccessLevel?: string;
-	readonly onView?: (model: T) => void;
-	readonly onEdit?: (model: T) => void;
-	readonly onDownload?: (model: T) => void;
-	readonly onCopy?: (model: T) => void;
-	readonly onCalculate?: (model: T) => void;
-	readonly onDelete?: (model: T) => void;
-	readonly onShare?: (model: T) => void;
-	readonly onMoveToWorkspace?: (model: T) => void;
-	readonly disableDelete?: boolean;
-	readonly deleteTooltip?: string;
-	readonly disableMoveToWorkspace?: boolean;
-	readonly moveToWorkspaceTooltip?: string;
-	readonly disableShare?: boolean;
-	readonly shareTooltip?: string;
-	readonly hasAvailableWebservice?: boolean;
-}
+type ModelRowActionsProps<T extends ActionableModel> = ModelActionHandlers<T>;
 
 interface MenuAction {
 	key: string;
@@ -44,7 +25,7 @@ interface MenuAction {
 	destructive?: boolean;
 }
 
-function ModelRowActions<T extends { id: number; status: ModelStatus; user_id?: string }>({
+function ModelRowActions<T extends ActionableModel>({
 	model,
 	currentUserId,
 	userAccessLevel,

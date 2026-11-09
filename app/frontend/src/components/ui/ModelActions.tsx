@@ -1,21 +1,10 @@
 import { Eye, Edit, Download, Copy, Play, Trash2, Share2, FolderInput, RefreshCw } from "lucide-react";
-import { ModelStatus } from "@/types/models";
 import { isModelDisabled, isModelCompleted } from "@/features/model-dashboard/utils/statusHelpers";
 import ModelActionGroup, { ActionConfig, ActionSize } from "../shared/ModelActionGroup";
 import { useTranslation } from "@/i18n";
+import type { ActionableModel, ModelActionHandlers } from "@/types/model-actions";
 
-interface ModelActionsProps<T extends { id: number; status: ModelStatus; user_id?: string }> {
-	readonly model: T;
-	readonly currentUserId?: string;
-	readonly userAccessLevel?: string;
-	readonly onView?: (model: T) => void;
-	readonly onEdit?: (model: T) => void;
-	readonly onDownload?: (model: T) => void;
-	readonly onCopy?: (model: T) => void;
-	readonly onCalculate?: (model: T) => void;
-	readonly onDelete?: (model: T) => void;
-	readonly onShare?: (model: T) => void;
-	readonly onMoveToWorkspace?: (model: T) => void;
+interface ModelActionsProps<T extends ActionableModel> extends ModelActionHandlers<T> {
 	readonly showView?: boolean;
 	readonly showEdit?: boolean;
 	readonly showDownload?: boolean;
@@ -24,18 +13,11 @@ interface ModelActionsProps<T extends { id: number; status: ModelStatus; user_id
 	readonly showDelete?: boolean;
 	readonly showShare?: boolean;
 	readonly showMoveToWorkspace?: boolean;
-	readonly disableDelete?: boolean;
-	readonly deleteTooltip?: string;
-	readonly disableMoveToWorkspace?: boolean;
-	readonly moveToWorkspaceTooltip?: string;
-	readonly disableShare?: boolean;
-	readonly shareTooltip?: string;
-	readonly hasAvailableWebservice?: boolean;
 	readonly layout?: "horizontal" | "grid";
 	readonly size?: ActionSize;
 }
 
-function ModelActions<T extends { id: number; status: ModelStatus; user_id?: string }>({
+function ModelActions<T extends ActionableModel>({
 	model,
 	currentUserId,
 	userAccessLevel,
@@ -100,7 +82,7 @@ function ModelActions<T extends { id: number; status: ModelStatus; user_id?: str
 const getTooltip = (defaultText: string, disabled: boolean, disabledText?: string): string =>
 	disabled && disabledText ? disabledText : defaultText;
 
-function getActionConfigs<T extends { id: number; status: ModelStatus; user_id?: string }>(
+function getActionConfigs<T extends ActionableModel>(
 	model: T,
 	props: Pick<ModelActionsProps<T>, 
 		"onView" | "onEdit" | "onDownload" | "onCopy" | "onCalculate" | "onDelete" | "onShare" | "onMoveToWorkspace" |
