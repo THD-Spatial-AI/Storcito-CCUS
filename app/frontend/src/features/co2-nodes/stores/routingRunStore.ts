@@ -7,22 +7,19 @@ import {
   type RunResult,
 } from "../services/nodeService";
 
-const POLL_INTERVAL_MS = 1000;
+const POLL_INTERVAL_MS = 500;
 
 const DEFAULT_INPUTS: RoutingInputs = {
   modes: ["pipeline", "truck", "railway"],
-  networks: [],
-  network_countries: [],
-  railway_country: "NL",
-  station_radius_km: 5,
+  optimize: false,
 };
 
 function errorMessage(error: unknown): string {
   const payload = (error as { response?: { data?: { error?: string } } })?.response?.data;
-  return payload?.error ?? (error instanceof Error ? error.message : "The CO2RouteX run failed.");
+  return payload?.error ?? (error instanceof Error ? error.message : "The routing run failed.");
 }
 
-/** One run, shared across steps. */
+/** Shared run. */
 interface RoutingRunStore {
   inputs: RoutingInputs;
   routes: CO2Route[] | null;

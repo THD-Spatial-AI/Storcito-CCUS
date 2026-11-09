@@ -3,8 +3,8 @@
 
 **CCUS App** is a geospatial platform for planning CO₂ transport networks. Users
 pick industrial emission sources and storage or utilisation sinks from a
-catalogue of European facilities, then let CO2RouteX screen candidate
-connections, route them by pipeline, truck or railway, and cost each route.
+catalogue of European facilities, then let STORE_CO2 route each emitter to a
+sink by pipeline, truck or railway, and cost each route.
 Results are stored per model and shown on an interactive map.
 
 The application is part of the **STORCITO** ecosystem at TH Deggendorf.
@@ -18,7 +18,7 @@ The application is part of the **STORCITO** ecosystem at TH Deggendorf.
 - **Node catalogue** — 14 600+ CO₂ point sources across Germany, the Netherlands and Norway, filtered by country, region, city, emitter category and annual emissions
 - **Interactive map** — OpenLayers + MapLibre GL, with nodes sized by annual flux, location search and bookmarks
 - **Six-step configurator** — model setup → node selection → routes → costs → review → save
-- **Route discovery** — CO2RouteX screens source-sink pairs, then routes them with A\* over a resistance raster (pipeline), OSM road networks (truck) or station distances (railway)
+- **Route discovery** — STORE_CO2 floods once from every selected sink (Dijkstra over a resistance raster for pipelines, over OSM road or rail networks for containers), assigns each emitter a sink — greedily, or under sink capacity with Gurobi — and walks the assigned routes
 - **Transport costing** — pipeline CAPEX scaled by route resistance; truck and railway distance tariffs
 - **Source browser** — the full upstream STORE_CO2 record per facility, including annual emission history
 - **Workspaces & groups** — organise models into workspaces; share with Keycloak-managed groups
@@ -33,21 +33,22 @@ The application is part of the **STORCITO** ecosystem at TH Deggendorf.
 ### Data flow
 
 1. **Authentication**: Frontend → Keycloak (OAuth2/OIDC) → backend validates token → Redis session
-2. **Catalogue import**: `POST /co2-nodes/import` pulls point sources from the STORE_CO2 API into `co2_nodes`, mapped to CO2RouteX node types
+2. **Catalogue import**: `POST /co2-nodes/import` (or `make seed-co2`) pulls emitters and sinks from the STORE_CO2 API into `co2_nodes`
 3. **Model creation**: User picks nodes → ids stored on the model config as `co2_node_ids`
-4. **Routing run**: Backend builds `node_metrics.xlsx` from the selected nodes and drives the CO2RouteX chain — connections → pipeline/truck/railway routing → pipeline/container costs — passing the workbook forward at each stage
-5. **Progress**: Each stage is tracked in `co2routex_jobs`; the browser polls the run and shows per-stage status
-6. **Results**: Routes are parsed back into `co2routex_routes` with distance, mean route resistance and cost, then drawn on the map
+4. **Routing run**: Backend sends the selected node ids to STORE_CO2 (`POST /routing/runs`), one job per transport mode; STORE_CO2 routes each country on its own raster or network and prices every route (pipeline design and CAPEX after Oeuvray et al., road and rail tariffs)
+5. **Progress**: Each mode's job is tracked in `co2routex_jobs`; the browser polls the run and shows per-mode status
+6. **Results**: Assigned routes are stored in `co2routex_routes` with distance, mean route resistance, cost and geometry, then drawn on the map
 
 ### Upstream services
 
 | Service | Port | Role |
 |---|---|---|
-| **STORE_CO2** | 8020 | Point-source catalogue: facilities, emissions history, node types |
-| **CO2RouteX** | 8010 | Connection generation, multi-modal routing and cost modelling |
+| **STORE_CO2** | 8020 | Point-source catalogue, emitter-to-sink routing and transport costs |
 
-Both are separate repositories; the backend talks to them over HTTP and needs
-only their URLs (`STORECO2_URL`, `CO2ROUTEX_URL`).
+STORE_CO2 is a separate repository; the backend talks to it over HTTP and needs
+only its URL (`STORECO2_URL`). Pipeline routing works wherever its resistance
+rasters are present; road and rail need its OSM networks (`GET /routing/modes`
+lists what each country can route).
 
 ### Technology stack
 
@@ -64,7 +65,7 @@ only their URLs (`STORECO2_URL`, `CO2ROUTEX_URL`).
 - Go 1.25 + Gin web framework
 - GORM with PostgreSQL driver
 - Asynq (Redis-backed) for background jobs
-- Excelize for the CO2RouteX workbook exchange
+- Excelize for the routing results workbook
 - Server-Sent Events (SSE) for real-time push
 - Keycloak OIDC token validation
 
@@ -171,8 +172,7 @@ Copy `app/backend/.env.example` to `app/backend/.env` and adjust:
 | `DB_HOST/PORT/DATABASE` | PostgreSQL connection |
 | `REDIS_HOST/PORT` | Redis connection |
 | `KEYCLOAK_URL` / `KEYCLOAK_REALM` | Keycloak OIDC endpoint |
-| `STORECO2_HOST/PORT` or `STORECO2_URL` | Point-source catalogue API |
-| `CO2ROUTEX_HOST/PORT` or `CO2ROUTEX_URL` | Routing and cost API |
+| `STORECO2_HOST/PORT` or `STORECO2_URL` | Point-source catalogue and routing API |
 | `CALLBACK_SECRET` | Shared secret for compute callbacks |
 
 The frontend reads `VITE_API_BASE_URL` and, optionally,
@@ -189,8 +189,8 @@ The frontend reads `VITE_API_BASE_URL` and, optionally,
 │   │   ├── cmd/              # Entrypoints: main, migrate, seed
 │   │   ├── migrations/       # SQL migrations
 │   │   └── internal/
-│   │       ├── co2routex/    # Routing chain: workbook, stages, results
-│   │       ├── storeco2/     # Point-source catalogue client
+│   │       ├── routing/      # STORE_CO2 routing runs
+│   │       ├── storeco2/     # STORE_CO2 client
 │   │       └── handler/      # HTTP handlers
 │   └── frontend/             # React SPA (Vite, TypeScript)
 │       └── src/

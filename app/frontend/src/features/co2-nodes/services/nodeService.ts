@@ -18,7 +18,7 @@ export interface NodeFilters {
 export interface NodeList {
   items: CO2Node[];
   total: number;
-  /** Excluded counts per industry. */
+  /** Excluded per industry. */
   excluded?: Record<string, number>;
 }
 
@@ -62,20 +62,8 @@ export type TransportMode = "pipeline" | "truck" | "railway";
 
 export interface RoutingInputs {
   modes: TransportMode[];
-  raster?: File;
-  networks: File[];
-  network_countries: string[];
-  network_layers?: Record<string, string>;
-  railway?: File;
-  stations?: File;
-  distances?: File;
-  railway_country: string;
-  railway_layer?: string;
-  stations_layer?: string;
-  station_id_field?: string;
-  station_name_field?: string;
-  station_radius_km: number;
-  capacity_t_per_h?: number;
+  /** Capacity-aware assignment. */
+  optimize: boolean;
 }
 
 export interface RunResult {
@@ -93,46 +81,36 @@ export interface RunResult {
     };
   }>;
   routes: CO2Route[];
-}
-
-function routingForm(nodeIds: number[], inputs: RoutingInputs): FormData {
-  const { raster, networks, railway, stations, distances, ...settings } = inputs;
-  const form = new FormData();
-  form.append("request", JSON.stringify({ node_ids: nodeIds, ...settings }));
-  for (const [key, file] of Object.entries({ raster, railway, stations, distances })) {
-    if (file) form.append(key, file);
-  }
-  for (const network of networks) form.append("networks", network);
-  return form;
+  /** Why not routed. */
+  notes?: string[];
 }
 
 export const routeService = {
   async start(modelId: number | undefined, nodeIds: number[], inputs: RoutingInputs): Promise<RunResult> {
     const { data } = await axios.post<ApiResponse<RunResult>>(
-      modelId ? `/models/${modelId}/co2routex/run` : "/co2routex/preview",
-      routingForm(nodeIds, inputs),
-      { headers: { "Content-Type": undefined }, timeout: 300_000 },
+      modelId ? `/models/${modelId}/routing/run` : "/routing/preview",
+      { node_ids: nodeIds, ...inputs },
     );
     return data.data;
   },
 
   async status(runId: string): Promise<RunResult> {
-    const { data } = await axios.get<ApiResponse<RunResult>>(`/co2routex/runs/${runId}`);
+    const { data } = await axios.get<ApiResponse<RunResult>>(`/routing/runs/${runId}`);
     return data.data;
   },
 
   async cancel(runId: string): Promise<void> {
-    await axios.delete(`/co2routex/runs/${runId}`);
+    await axios.delete(`/routing/runs/${runId}`);
   },
 
   async workbook(runId: string): Promise<Blob> {
-    const { data } = await axios.get<Blob>(`/co2routex/runs/${runId}/workbook`, { responseType: "blob" });
+    const { data } = await axios.get<Blob>(`/routing/runs/${runId}/workbook`, { responseType: "blob" });
     return data;
   },
 
   async getRoutes(modelId: number): Promise<CO2Route[]> {
     const { data } = await axios.get<ApiResponse<{ routes: CO2Route[] }>>(
-      `/models/${modelId}/co2routex/routes`,
+      `/models/${modelId}/routing/routes`,
     );
     return data?.data?.routes ?? [];
   },

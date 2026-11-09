@@ -16,7 +16,7 @@ export const Layer3Routes: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => {
     <LayerShell
       purpose={t(
         "configurator.layer3.purpose",
-        "CO2RouteX screens the selected nodes for candidate connections, then routes and costs them.",
+        "STORE_CO2 screens the selected nodes for candidate connections, then routes and costs them.",
       )}
       nextStepHint={t(
         "configurator.layer3.nextStepHint",

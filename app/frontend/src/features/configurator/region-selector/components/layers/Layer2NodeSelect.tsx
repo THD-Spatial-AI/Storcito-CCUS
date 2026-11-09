@@ -20,7 +20,7 @@ export const Layer2NodeSelect: FC<{ ctx: ConfiguratorContext }> = ({ ctx }) => {
             )}
             nextStepHint={t(
                 "configurator.layer2.nextStepHint",
-                "Next CO2RouteX looks for connections between them.",
+                "Next STORE_CO2 looks for connections between them.",
             )}
         >
             <div>
