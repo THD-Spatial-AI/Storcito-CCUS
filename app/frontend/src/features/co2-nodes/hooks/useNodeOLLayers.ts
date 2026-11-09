@@ -125,7 +125,7 @@ function nodeStyles(feature: FeatureLike): Style[] {
   return styles;
 }
 
-/** Decluttered picked-node names. */
+/** Picked-node labels. */
 function labelStyle(feature: FeatureLike): Style {
   const radius = (feature.get("radius") as number) ?? 5;
   return new Style({
@@ -237,11 +237,10 @@ export const useNodeOLLayers = ({
       const line = routedLine(route);
       return line ? [{ route, line }] : [];
     });
-    const routedPairs = new Set(routed.map(({ route }) => `${route.from_node_id}\u0000${route.to_node_id}`));
+    // Preview until routed.
     const routeSource = new VectorSource({
       features: [
-        ...candidateRoutes(nodes, selected)
-          .filter(([emitter, sink]) => !routedPairs.has(`${emitter.node_id}\u0000${sink.node_id}`))
+        ...(routes ? [] : candidateRoutes(nodes, selected))
           .map(
             ([emitter, sink]) =>
               new Feature({
