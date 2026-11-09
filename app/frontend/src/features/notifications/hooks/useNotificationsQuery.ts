@@ -85,125 +85,56 @@ function updateNotificationsList(incoming: Notification, queryClient: QueryClien
   );
 }
 
-// Mark one read.
-export const useMarkNotificationReadMutation = () => {
+/** Optimistic list update. */
+const useOptimisticNotificationsMutation = <TVariables = void>(
+  mutationFn: (variables: TVariables) => Promise<unknown>,
+  update: (old: NotificationsResponse, variables: TVariables) => NotificationsResponse,
+) => {
   const queryClient = useQueryClient();
+  const listKey = notificationKeys.lists();
 
   return useMutation({
-    mutationFn: async (id: number | string) => {
-      return notificationsService.markRead(id);
-    },
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: notificationKeys.lists() });
-
-      const previousData = queryClient.getQueriesData({
-        queryKey: notificationKeys.lists(),
-      });
-
-      queryClient.setQueriesData<NotificationsResponse>(
-        { queryKey: notificationKeys.lists() },
-        (old) => {
-          if (!old?.notifications) return old;
-          return {
-            ...old,
-            notifications: old.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)),
-          };
-        }
+    mutationFn,
+    onMutate: async (variables: TVariables) => {
+      await queryClient.cancelQueries({ queryKey: listKey });
+      const previousData = queryClient.getQueriesData({ queryKey: listKey });
+      queryClient.setQueriesData<NotificationsResponse>({ queryKey: listKey }, (old) =>
+        old ? update(old, variables) : old,
       );
-
       return { previousData };
     },
-    onError: (_error, _id, context) => {
-      if (context?.previousData) {
-        for (const [queryKey, data] of context.previousData) {
-          queryClient.setQueryData(queryKey, data);
-        }
+    onError: (_error, _variables, context) => {
+      for (const [queryKey, data] of context?.previousData ?? []) {
+        queryClient.setQueryData(queryKey, data);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: notificationKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: listKey });
     },
   });
 };
+
+// Mark one read.
+export const useMarkNotificationReadMutation = () =>
+  useOptimisticNotificationsMutation(
+    (id: number | string) => notificationsService.markRead(id),
+    (old, id) =>
+      old.notifications
+        ? { ...old, notifications: old.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)) }
+        : old,
+  );
 
 // Mark all read.
-export const useMarkAllNotificationsReadMutation = () => {
-  const queryClient = useQueryClient();
+export const useMarkAllNotificationsReadMutation = () =>
+  useOptimisticNotificationsMutation(
+    () => notificationsService.markAllRead(),
+    (old) =>
+      old.notifications ? { ...old, notifications: old.notifications.map((n) => ({ ...n, read: true })) } : old,
+  );
 
-  return useMutation({
-    mutationFn: async () => {
-      return notificationsService.markAllRead();
-    },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: notificationKeys.lists() });
-
-      const previousData = queryClient.getQueriesData({
-        queryKey: notificationKeys.lists(),
-      });
-
-      queryClient.setQueriesData<NotificationsResponse>(
-        { queryKey: notificationKeys.lists() },
-        (old) => {
-          if (!old?.notifications) return old;
-          return {
-            ...old,
-            notifications: old.notifications.map((n) => ({ ...n, read: true })),
-          };
-        }
-      );
-
-      return { previousData };
-    },
-    onError: (_error, _variables, context) => {
-      if (context?.previousData) {
-        for (const [queryKey, data] of context.previousData) {
-          queryClient.setQueryData(queryKey, data);
-        }
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: notificationKeys.lists() });
-    },
-  });
-};
-
-// Clear all notifications
-export const useClearAllNotificationsMutation = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async () => {
-      return notificationsService.clearAll();
-    },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: notificationKeys.lists() });
-
-      const previousData = queryClient.getQueriesData({
-        queryKey: notificationKeys.lists(),
-      });
-
-      queryClient.setQueriesData<NotificationsResponse>(
-        { queryKey: notificationKeys.lists() },
-        (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            notifications: [],
-          };
-        }
-      );
-
-      return { previousData };
-    },
-    onError: (_error, _variables, context) => {
-      if (context?.previousData) {
-        for (const [queryKey, data] of context.previousData) {
-          queryClient.setQueryData(queryKey, data);
-        }
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: notificationKeys.lists() });
-    },
-  });
-};
+// Clear all.
+export const useClearAllNotificationsMutation = () =>
+  useOptimisticNotificationsMutation(
+    () => notificationsService.clearAll(),
+    (old) => ({ ...old, notifications: [] }),
+  );
