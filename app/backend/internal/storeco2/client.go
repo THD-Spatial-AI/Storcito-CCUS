@@ -45,6 +45,7 @@ type Node struct {
 	OperatingFrom  *int            `json:"operating_from"`
 	OperatingUntil *int            `json:"operating_until"`
 	Retired        bool            `json:"retired"`
+	RailDistanceM  *float64        `json:"rail_distance_m"`
 	Metadata       json.RawMessage `json:"metadata"`
 }
 

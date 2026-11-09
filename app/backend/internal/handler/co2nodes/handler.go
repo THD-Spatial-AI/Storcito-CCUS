@@ -248,6 +248,7 @@ func ImportNodes(ctx context.Context, db *gorm.DB, store *storeco2.Client, req I
 			OperatingFrom:  node.OperatingFrom,
 			OperatingUntil: node.OperatingUntil,
 			Retired:        node.Retired,
+			RailDistanceM:  node.RailDistanceM,
 			Source:         sourceStoreCO2,
 		})
 	}
@@ -262,7 +263,7 @@ func ImportNodes(ctx context.Context, db *gorm.DB, store *storeco2.Client, req I
 				"node_name", "longitude", "latitude", "altitude",
 				"annual_flux", "node_type", "industry", "country_code",
 				"state", "municipality", "nuts1", "nuts2", "nuts3", "rural",
-				"operating_from", "operating_until", "retired",
+				"operating_from", "operating_until", "retired", "rail_distance_m",
 				"metadata", "updated_at",
 			}),
 		}).CreateInBatches(&rows, 200).Error; err != nil {

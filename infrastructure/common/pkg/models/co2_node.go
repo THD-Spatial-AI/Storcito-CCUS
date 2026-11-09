@@ -46,6 +46,8 @@ type CO2Node struct {
 	OperatingUntil *int `gorm:"column:operating_until" json:"operating_until,omitempty"`
 	Retired        bool `gorm:"column:retired;not null;default:false" json:"retired,omitempty"`
 
+	// Metres to rail.
+	RailDistanceM *float64 `gorm:"column:rail_distance_m" json:"rail_distance_m,omitempty"`
 
 	Source string `gorm:"not null;size:64;default:'store_co2'" json:"source"`
 
