@@ -8,8 +8,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui-elements/alert-dialog";
-import { Button } from "./ui-elements/button";
+  Button,
+} from "@spatialhub/ui";
 import { LoadingDots } from "./ui-elements/loading";
 import { cn } from "../utils";
 import { IconX } from "@tabler/icons-react";
@@ -278,6 +278,24 @@ function getInputClasses(FieldIcon: LucideIcon | undefined, disabled: boolean | 
   `;
 }
 
+/** Label and hint. */
+const FieldLabel: React.FC<{ field: RenderContext["field"] }> = ({ field }) => (
+  <>
+    <label className="block text-sm font-medium text-foreground">
+      {field.label}
+      {field.required && <span className="text-destructive ml-0.5">*</span>}
+    </label>
+    {field.description && <p className="text-xs text-muted-foreground mb-1.5">{field.description}</p>}
+  </>
+);
+
+/** Reserved error line. */
+const FieldError: React.FC<{ error?: string; className?: string }> = ({ error, className }) => (
+  <div className={cn("min-h-[1.125rem]", className)}>
+    {error && <p className="text-xs text-destructive">{error}</p>}
+  </div>
+);
+
 const CustomSelectField: React.FC<{ ctx: RenderContext }> = ({ ctx }) => {
   const { field, FieldIcon, fieldError, values, handleFieldChange } = ctx;
   const [isOpen, setIsOpen] = useState(false);
@@ -349,11 +367,7 @@ const CustomSelectField: React.FC<{ ctx: RenderContext }> = ({ ctx }) => {
 
   return (
     <div className="space-y-1.5" key={field.key} ref={containerRef}>
-      <label className="block text-sm font-medium text-foreground">
-        {field.label}
-        {field.required && <span className="text-destructive ml-0.5">*</span>}
-      </label>
-      {field.description && <p className="text-xs text-muted-foreground mb-1.5">{field.description}</p>}
+      <FieldLabel field={field} />
       <div className="relative">
         <button
           type="button"
@@ -428,9 +442,7 @@ const CustomSelectField: React.FC<{ ctx: RenderContext }> = ({ ctx }) => {
           document.body
         )}
       </div>
-      <div className="min-h-[1.125rem]">
-        {fieldError && <p className="text-xs text-destructive">{fieldError}</p>}
-      </div>
+      <FieldError error={fieldError} />
     </div>
   );
 };
@@ -463,9 +475,7 @@ function renderCheckboxField(ctx: RenderContext) {
         </label>
       </div>
       {field.description && <p className="text-xs text-muted-foreground ml-8">{field.description}</p>}
-      <div className="min-h-[1.125rem] ml-8">
-        {fieldError && <p className="text-xs text-destructive">{fieldError}</p>}
-      </div>
+      <FieldError error={fieldError} className="ml-8" />
     </div>
   );
 }
@@ -475,11 +485,7 @@ function renderTextareaField(ctx: RenderContext) {
   
   return (
     <div className="space-y-1.5" key={field.key}>
-      <label className="block text-sm font-medium text-foreground">
-        {field.label}
-        {field.required && <span className="text-destructive ml-0.5">*</span>}
-      </label>
-      {field.description && <p className="text-xs text-muted-foreground mb-1.5">{field.description}</p>}
+      <FieldLabel field={field} />
       <div className="relative">
         {FieldIcon && (
           <div className="absolute z-10 top-3.5 left-0 pl-3.5 flex items-start pointer-events-none">
@@ -497,9 +503,7 @@ function renderTextareaField(ctx: RenderContext) {
           autoFocus={!!autoFocus}
         />
       </div>
-      <div className="min-h-[1.125rem]">
-        {fieldError && <p className="text-xs text-destructive">{fieldError}</p>}
-      </div>
+      <FieldError error={fieldError} />
     </div>
   );
 }
@@ -513,11 +517,7 @@ function renderInputField(ctx: RenderContext) {
 
   return (
     <div className="space-y-1.5" key={field.key}>
-      <label className="block text-sm font-medium text-foreground">
-        {field.label}
-        {field.required && <span className="text-destructive ml-0.5">*</span>}
-      </label>
-      {field.description && <p className="text-xs text-muted-foreground mb-1.5">{field.description}</p>}
+      <FieldLabel field={field} />
       <div className="relative group">
         {FieldIcon && (
           <div className="absolute z-10 inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -594,9 +594,7 @@ function renderInputField(ctx: RenderContext) {
         </div>
       )}
       
-      <div className="min-h-[1.125rem]">
-        {fieldError && <p className="text-xs text-destructive">{fieldError}</p>}
-      </div>
+      <FieldError error={fieldError} />
     </div>
   );
 }
