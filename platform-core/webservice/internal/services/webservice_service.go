@@ -332,58 +332,45 @@ func (s *WebserviceService) GetAvailablePrecomputedDates(ctx context.Context) ([
 }
 
 func (s *WebserviceService) getAvailableDates(ctx context.Context, path string, label string) ([]string, error) {
-	var instance models.WebserviceInstance
-	if err := s.db.
-		Where("status = ?", models.StatusActive).
-		Order("available DESC, current_concurrency ASC, id ASC").
-		First(&instance).Error; err != nil {
-		return nil, err
-	}
-
-	url := buildURL(&instance, path)
-	status, _, respBytes, err := s.doJSON(ctx, http.MethodGet, url, nil)
+	instance, err := s.leastBusyInstance()
 	if err != nil {
 		return nil, err
 	}
-	if status < 200 || status >= 300 {
-		return nil, fmt.Errorf("request failed with status %d: %s", status, string(respBytes))
-	}
-
 	var result struct {
 		Dates []string `json:"dates"`
 	}
-	if err := json.Unmarshal(respBytes, &result); err != nil {
-		return nil, fmt.Errorf("invalid available %s dates response: %w", label, err)
+	if err := s.callJSON(ctx, http.MethodGet, buildURL(instance, path), nil, &result, "available "+label+" dates"); err != nil {
+		return nil, err
 	}
 	return result.Dates, nil
 }
 
 func (s *WebserviceService) GetAvailableDataCoverage(ctx context.Context) (map[string]interface{}, error) {
-	var instance models.WebserviceInstance
-	if err := s.db.
-		Where("status = ?", models.StatusActive).
-		Order("available DESC, current_concurrency ASC, id ASC").
-		First(&instance).Error; err != nil {
-		return nil, err
-	}
-
-	url := buildURL(&instance, "/available-data-coverage")
-	status, _, respBytes, err := s.doJSON(ctx, http.MethodGet, url, nil)
+	instance, err := s.leastBusyInstance()
 	if err != nil {
 		return nil, err
 	}
-	if status < 200 || status >= 300 {
-		return nil, fmt.Errorf("request failed with status %d: %s", status, string(respBytes))
-	}
-
 	var result map[string]interface{}
-	if err := json.Unmarshal(respBytes, &result); err != nil {
-		return nil, fmt.Errorf("invalid available data coverage response: %w", err)
+	if err := s.callJSON(ctx, http.MethodGet, buildURL(instance, "/available-data-coverage"), nil, &result, "available data coverage"); err != nil {
+		return nil, err
 	}
 	return result, nil
 }
 
 func (s *WebserviceService) GetFWIAreaSummary(ctx context.Context, payload map[string]interface{}) (map[string]interface{}, error) {
+	instance, err := s.leastBusyInstance()
+	if err != nil {
+		return nil, err
+	}
+	var result map[string]interface{}
+	if err := s.callJSON(ctx, http.MethodPost, buildURL(instance, "/fwi/area"), payload, &result, "FWI area"); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// leastBusyInstance picks headroom.
+func (s *WebserviceService) leastBusyInstance() (*models.WebserviceInstance, error) {
 	var instance models.WebserviceInstance
 	if err := s.db.
 		Where("status = ?", models.StatusActive).
@@ -391,21 +378,22 @@ func (s *WebserviceService) GetFWIAreaSummary(ctx context.Context, payload map[s
 		First(&instance).Error; err != nil {
 		return nil, err
 	}
+	return &instance, nil
+}
 
-	url := buildURL(&instance, "/fwi/area")
-	status, _, respBytes, err := s.doJSON(ctx, http.MethodPost, url, payload)
+// callJSON decodes response.
+func (s *WebserviceService) callJSON(ctx context.Context, method, url string, payload, out interface{}, what string) error {
+	status, _, respBytes, err := s.doJSON(ctx, method, url, payload)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if status < 200 || status >= 300 {
-		return nil, fmt.Errorf("request failed with status %d: %s", status, string(respBytes))
+		return fmt.Errorf("request failed with status %d: %s", status, string(respBytes))
 	}
-
-	var result map[string]interface{}
-	if err := json.Unmarshal(respBytes, &result); err != nil {
-		return nil, fmt.Errorf("invalid FWI area response: %w", err)
+	if err := json.Unmarshal(respBytes, out); err != nil {
+		return fmt.Errorf("invalid %s response: %w", what, err)
 	}
-	return result, nil
+	return nil
 }
 
 func (s *WebserviceService) ReleaseInstance(ctx context.Context, id uint) error {
@@ -441,18 +429,9 @@ func (s *WebserviceService) SendJSONRequest(
 	payload interface{},
 ) (map[string]interface{}, error) {
 
-	ep := ensureEndpoint(endpoint, "/")
-	url := buildURL(ws, ep)
-	status, _, respBytes, err := s.doJSON(ctx, http.MethodPost, url, payload)
-	if err != nil {
-		return nil, err
-	}
-	if status < 200 || status >= 300 {
-		return nil, fmt.Errorf("request failed with status %d: %s", status, string(respBytes))
-	}
 	var result map[string]interface{}
-	if err := json.Unmarshal(respBytes, &result); err != nil {
-		return nil, fmt.Errorf("invalid JSON response: %w", err)
+	if err := s.callJSON(ctx, http.MethodPost, buildURL(ws, ensureEndpoint(endpoint, "/")), payload, &result, "JSON"); err != nil {
+		return nil, err
 	}
 	return result, nil
 }

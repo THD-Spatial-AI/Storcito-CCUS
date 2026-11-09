@@ -88,14 +88,7 @@ func (a *AuthHandler) ResendVerificationEmail(c *gin.Context) {
 
 	log.Infof("sending verification email for user: %s", userID)
 
-	sendVerificationEmailURL := fmt.Sprintf("%s/admin/realms/%s/users/%s/send-verify-email",
-		a.cfg.Auth.BaseURL, a.cfg.Auth.Realm, userID)
-
-	params := url.Values{}
-	params.Add("client_id", a.cfg.Auth.ClientID)
-	params.Add("lifespan", "86400")
-	params.Add("redirect_uri", a.cfg.FrontendURL+"/login?verified=true")
-	sendVerificationEmailURL = sendVerificationEmailURL + "?" + params.Encode()
+	sendVerificationEmailURL := a.verifyEmailURL(userID)
 
 	if !a.executeKeycloakAdminRequest(c, log, "PUT", sendVerificationEmailURL, nil, adminToken, "failed to send verification email") {
 		httputil.InternalError(c, "failed to send verification email")

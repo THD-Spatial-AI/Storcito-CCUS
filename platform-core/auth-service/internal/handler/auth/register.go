@@ -230,14 +230,7 @@ func (a *AuthHandler) sendVerificationEmail(userID, adminToken string) {
 		return
 	}
 
-	sendVerificationEmailURL := fmt.Sprintf("%s/admin/realms/%s/users/%s/send-verify-email",
-		a.cfg.Auth.BaseURL, a.cfg.Auth.Realm, userID)
-
-	params := url.Values{}
-	params.Add("client_id", a.cfg.Auth.ClientID)
-	params.Add("lifespan", "86400")
-	params.Add("redirect_uri", a.cfg.FrontendURL+"/login?verified=true")
-	sendVerificationEmailURL = sendVerificationEmailURL + "?" + params.Encode()
+	sendVerificationEmailURL := a.verifyEmailURL(userID)
 
 	verifyReq, _ := http.NewRequest("PUT", sendVerificationEmailURL, nil)
 	verifyReq.Header.Set("Authorization", authorizationPrefix+adminToken)
@@ -300,4 +293,14 @@ func (a *AuthHandler) sendRegistrationSuccessResponse(c *gin.Context, user *User
 			"access_level": user.AccessLevel,
 		},
 	})
+}
+
+// verifyEmailURL builds endpoint.
+func (a *AuthHandler) verifyEmailURL(userID string) string {
+	params := url.Values{}
+	params.Add("client_id", a.cfg.Auth.ClientID)
+	params.Add("lifespan", "86400")
+	params.Add("redirect_uri", a.cfg.FrontendURL+"/login?verified=true")
+	return fmt.Sprintf("%s/admin/realms/%s/users/%s/send-verify-email?%s",
+		a.cfg.Auth.BaseURL, a.cfg.Auth.Realm, userID, params.Encode())
 }

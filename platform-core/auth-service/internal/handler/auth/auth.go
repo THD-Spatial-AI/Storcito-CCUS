@@ -256,22 +256,11 @@ func (a *AuthHandler) RefreshToken(c *gin.Context) {
 		return
 	}
 
-	tokenSource := a.authClient.Oauth.TokenSource(context.Background(), &oauth2.Token{
-		RefreshToken: sessionData.RefreshToken,
-	})
-
-	newToken, err := tokenSource.Token()
-	if err != nil {
+	if err := a.refreshAccessToken(sessionData); err != nil {
 		platformlogger.WithFields(map[string]any{"component": "auth", "session_id": sessionID, "err": err}).Error("failed to refresh token")
 		httputil.Unauthorized(c, "Failed to refresh token")
 		return
 	}
-
-	sessionData.AccessToken = newToken.AccessToken
-	if newToken.RefreshToken != "" {
-		sessionData.RefreshToken = newToken.RefreshToken
-	}
-	sessionData.TokenExpiresAt = newToken.Expiry
 
 	if err := a.sessionStore.SaveSession(c, sessionID, sessionData); err != nil {
 		platformlogger.WithFields(map[string]any{"component": "auth", "session_id": sessionID, "err": err}).Error("failed to save refreshed session")
@@ -282,6 +271,22 @@ func (a *AuthHandler) RefreshToken(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Token refreshed successfully",
 	})
+}
+
+// refreshAccessToken refreshes tokens.
+func (a *AuthHandler) refreshAccessToken(sessionData *platformsession.SessionData) error {
+	newToken, err := a.authClient.Oauth.TokenSource(context.Background(), &oauth2.Token{
+		RefreshToken: sessionData.RefreshToken,
+	}).Token()
+	if err != nil {
+		return err
+	}
+	sessionData.AccessToken = newToken.AccessToken
+	if newToken.RefreshToken != "" {
+		sessionData.RefreshToken = newToken.RefreshToken
+	}
+	sessionData.TokenExpiresAt = newToken.Expiry
+	return nil
 }
 
 // tokenRefreshThreshold is how far before expiry we proactively refresh the
@@ -316,12 +321,7 @@ func (a *AuthHandler) KeepAlive(c *gin.Context) {
 		return
 	}
 
-	tokenSource := a.authClient.Oauth.TokenSource(context.Background(), &oauth2.Token{
-		RefreshToken: sessionData.RefreshToken,
-	})
-
-	newToken, err := tokenSource.Token()
-	if err != nil {
+	if err := a.refreshAccessToken(sessionData); err != nil {
 		platformlogger.WithFields(map[string]any{
 			"component":  "auth",
 			"session_id": sessionID,
@@ -332,12 +332,6 @@ func (a *AuthHandler) KeepAlive(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"success": true})
 		return
 	}
-
-	sessionData.AccessToken = newToken.AccessToken
-	if newToken.RefreshToken != "" {
-		sessionData.RefreshToken = newToken.RefreshToken
-	}
-	sessionData.TokenExpiresAt = newToken.Expiry
 
 	if err := a.sessionStore.SaveSession(c, sessionID, sessionData); err != nil {
 		platformlogger.WithFields(map[string]any{
