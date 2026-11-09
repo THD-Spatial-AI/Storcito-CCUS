@@ -4,6 +4,31 @@ import { cn } from "@/lib/utils";
 
 import { checkboxClass, Collapsible, rowClass } from "./shared";
 
+const COUNT_CLASS = "shrink-0 text-[10px] tabular-nums text-muted-foreground";
+const CHEVRON_CLASS = "h-3 w-3 transition-transform duration-150";
+
+/** City checkboxes. */
+const MunicipalityList: FC<{
+  entries: [string, number][];
+  picked: ReadonlySet<string>;
+  onToggle: (municipality: string) => void;
+}> = ({ entries, picked, onToggle }) => (
+  <div className="ml-6 max-h-52 space-y-0.5 overflow-y-auto py-0.5 pr-1">
+    {entries.map(([municipality, count]) => (
+      <label key={municipality} className={cn(rowClass(picked.has(municipality)), "cursor-pointer gap-2")}>
+        <input
+          type="checkbox"
+          checked={picked.has(municipality)}
+          onChange={() => onToggle(municipality)}
+          className={checkboxClass}
+        />
+        <span className="min-w-0 flex-1 truncate">{municipality}</span>
+        <span className={COUNT_CLASS}>{count.toLocaleString()}</span>
+      </label>
+    ))}
+  </div>
+);
+
 /** Location drill-down. */
 export const LocationRows: FC<{
   countries: string[];
@@ -49,7 +74,7 @@ export const LocationRows: FC<{
               className="shrink-0 rounded p-0.5 text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:opacity-30"
             >
               <ChevronRight
-                className={cn("h-3 w-3 transition-transform duration-150", countryOpen && "rotate-90")}
+                className={cn(CHEVRON_CLASS, countryOpen && "rotate-90")}
               />
             </button>
             <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
@@ -60,7 +85,7 @@ export const LocationRows: FC<{
                 className={checkboxClass}
               />
               <span className="min-w-0 flex-1">{code}</span>
-              <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+              <span className={COUNT_CLASS}>
                 {(countByCountry.get(code) ?? 0).toLocaleString()}
               </span>
             </label>
@@ -82,7 +107,7 @@ export const LocationRows: FC<{
                         className="shrink-0 rounded p-0.5 text-muted-foreground transition-colors duration-150 hover:text-foreground disabled:opacity-30"
                       >
                         <ChevronRight
-                          className={cn("h-3 w-3 transition-transform duration-150", stateOpen && "rotate-90")}
+                          className={cn(CHEVRON_CLASS, stateOpen && "rotate-90")}
                         />
                       </button>
                       <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2">
@@ -93,35 +118,18 @@ export const LocationRows: FC<{
                           className={checkboxClass}
                         />
                         <span className="min-w-0 flex-1 truncate">{stateName}</span>
-                        <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                        <span className={COUNT_CLASS}>
                           {stateCount.toLocaleString()}
                         </span>
                       </label>
                     </div>
 
                     <Collapsible expanded={stateOpen}>
-                      <div className="ml-6 max-h-52 space-y-0.5 overflow-y-auto py-0.5 pr-1">
-                        {municipalities.map(([municipality, municipalityCount]) => (
-                          <label
-                            key={municipality}
-                            className={cn(
-                              rowClass(municipalityFilter.has(municipality)),
-                              "cursor-pointer gap-2",
-                            )}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={municipalityFilter.has(municipality)}
-                              onChange={() => onToggleMunicipality(municipality)}
-                              className={checkboxClass}
-                            />
-                            <span className="min-w-0 flex-1 truncate">{municipality}</span>
-                            <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
-                              {municipalityCount.toLocaleString()}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
+                      <MunicipalityList
+                        entries={municipalities}
+                        picked={municipalityFilter}
+                        onToggle={onToggleMunicipality}
+                      />
                     </Collapsible>
                   </div>
                 );
@@ -143,39 +151,22 @@ export const LocationRows: FC<{
                         className="shrink-0 rounded p-0.5 text-muted-foreground transition-colors duration-150 hover:text-foreground"
                       >
                         <ChevronRight
-                          className={cn("h-3 w-3 transition-transform duration-150", noStateOpen && "rotate-90")}
+                          className={cn(CHEVRON_CLASS, noStateOpen && "rotate-90")}
                         />
                       </button>
                       <span className="min-w-0 flex-1 truncate italic text-muted-foreground">
                         {noStateLabel}
                       </span>
-                      <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                      <span className={COUNT_CLASS}>
                         {noStateTotal.toLocaleString()}
                       </span>
                     </div>
                     <Collapsible expanded={noStateOpen}>
-                      <div className="ml-6 max-h-52 space-y-0.5 overflow-y-auto py-0.5 pr-1">
-                        {noState.map(([municipality, municipalityCount]) => (
-                          <label
-                            key={municipality}
-                            className={cn(
-                              rowClass(municipalityFilter.has(municipality)),
-                              "cursor-pointer gap-2",
-                            )}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={municipalityFilter.has(municipality)}
-                              onChange={() => onToggleMunicipality(municipality)}
-                              className={checkboxClass}
-                            />
-                            <span className="min-w-0 flex-1 truncate">{municipality}</span>
-                            <span className="shrink-0 text-[10px] tabular-nums text-muted-foreground">
-                              {municipalityCount.toLocaleString()}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
+                      <MunicipalityList
+                        entries={noState}
+                        picked={municipalityFilter}
+                        onToggle={onToggleMunicipality}
+                      />
                     </Collapsible>
                   </div>
                 );

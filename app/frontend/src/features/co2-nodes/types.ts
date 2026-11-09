@@ -67,6 +67,8 @@ export interface CO2Node {
   /** First year stopped. */
   operating_until?: number | null;
   retired?: boolean;
+  /** Metres to rail. */
+  rail_distance_m?: number | null;
   source: string;
   metadata?: Record<string, unknown>;
 }

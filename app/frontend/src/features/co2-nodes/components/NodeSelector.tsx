@@ -1,5 +1,5 @@
 import { useMemo, useState, type FC } from "react";
-import { AlertCircle, Database, Factory, Globe, Loader2, Search } from "lucide-react";
+import { AlertCircle, Database, Factory, Globe, Loader2, RotateCcw, Search } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 import { useEnsureNodes, useLoadDeferredNodes, useNodesQuery } from "../hooks/useNodesQuery";
@@ -11,15 +11,19 @@ import {
   matchesFlux,
   matchesRegion,
   matchesRural,
+  matchesRail,
   matchesPeriod,
   operatesIn,
   useNodeFilterStore,
   NO_FLUX_RANGE,
 } from "../stores/nodeFilterStore";
 import { isEmitterCategory, isSinkCategory, nodeCategory, type CO2Node } from "../types";
+import { useRoutingRunStore } from "../stores/routingRunStore";
 import { SourceCatalogue } from "./SourceCatalogue";
 import { AdvancedFilters } from "./selector/AdvancedFilters";
+import { CategoryFacilities } from "./selector/CategoryFacilities";
 import { CategoryRow } from "./selector/CategoryRow";
+import { EMITTER_COLOR, SINK_COLOR } from "../hooks/useNodeOLLayers";
 import { FilterSection } from "./selector/FilterSection";
 import { LocationRows } from "./selector/LocationRows";
 import { sameRange } from "./selector/shared";
@@ -55,6 +59,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const fluxRange = useNodeFilterStore((state) => state.fluxRange);
   const regionFilter = useNodeFilterStore((state) => state.regions);
   const ruralFilter = useNodeFilterStore((state) => state.rural);
+  const railDistance = useNodeFilterStore((state) => state.railDistance);
   const periodOnly = useNodeFilterStore((state) => state.periodOnly);
   const period = useNodeFilterStore((state) => state.period);
   const toggleCountry = useNodeFilterStore((state) => state.toggleCountry);
@@ -64,9 +69,8 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   const toggleSinkCategory = useNodeFilterStore((state) => state.toggleSinkCategory);
   const clearFilters = useNodeFilterStore((state) => state.clear);
 
-  const [openSections, setOpenSections] = useState<ReadonlySet<string>>(
-    new Set(["country", "emitters", "sinks"]),
-  );
+  // Collapsed until needed.
+  const [openSections, setOpenSections] = useState<ReadonlySet<string>>(new Set());
   const toggleSection = (key: string) => {
     const next = new Set(openSections);
     if (next.has(key)) next.delete(key);
@@ -74,13 +78,8 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
     setOpenSections(next);
   };
 
-  const [openCategories, setOpenCategories] = useState<ReadonlySet<string>>(new Set());
-  const toggleCategoryOpen = (key: string) => {
-    const next = new Set(openCategories);
-    if (next.has(key)) next.delete(key);
-    else next.add(key);
-    setOpenCategories(next);
-  };
+  // Opened category.
+  const [drill, setDrill] = useState<string | null>(null);
 
   const [openLocations, setOpenLocations] = useState<ReadonlySet<string>>(new Set());
   const toggleLocationOpen = (key: string) => {
@@ -113,9 +112,10 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
           matchesMunicipality(node, municipalityFilter) &&
           matchesRegion(node, regionFilter) &&
           matchesRural(node, ruralFilter) &&
+          matchesRail(node, railDistance) &&
           matchesPeriod(node, period, periodOnly),
       ),
-    [inFlux, stateFilter, municipalityFilter, regionFilter, ruralFilter, period, periodOnly],
+    [inFlux, stateFilter, municipalityFilter, regionFilter, ruralFilter, railDistance, period, periodOnly],
   );
 
   // Facets exclude themselves.
@@ -277,10 +277,23 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
     sinkFilter.size > 0 ||
     regionFilter.size > 0 ||
     ruralFilter !== "all" ||
+    railDistance !== null ||
     !periodOnly ||
     !sameRange(fluxRange, NO_FLUX_RANGE);
 
-  const expandLabel = t("co2Nodes.expandCategory", "Show facilities");
+  // Blank step reset.
+  const canStartOver = selectedIds.length > 0 || hasActiveFilters || search.trim() !== "" || drill !== null;
+  const startOver = () => {
+    onChange([]);
+    clearFilters();
+    setSearch("");
+    setDrill(null);
+    useRoutingRunStore.getState().reset();
+  };
+
+  const categoryLabel = (category: string) => t(`co2Nodes.types.${category}`, CATEGORY_LABELS[category] ?? category);
+  const pickedIn = (category: string) =>
+    (facilitiesByCategory.get(category) ?? []).reduce((sum, node) => sum + (isSelected(node) ? 1 : 0), 0);
 
   if (isLoading) {
     return (
@@ -301,17 +314,59 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
   }
 
   return (
-    <div className="space-y-3">
-      <SourceCatalogue />
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-border bg-muted/20 p-4">
+        <div className="flex items-center justify-between gap-2">
+          <span role="status" className="text-sm font-semibold tabular-nums">
+            {t("co2Nodes.selectedCount", { count: selectedIds.length, defaultValue: "{{count}} selected" })}
+          </span>
+          {selectedIds.length > 0 && <button type="button" onClick={() => onChange([])} className="rounded text-xs text-muted-foreground hover:text-destructive focus-visible:ring-2 focus-visible:ring-ring">
+            {t("co2Nodes.clearSelection", "Clear selection")}
+          </button>}
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          {[
+            { label: t("co2Nodes.legend.emitters", "Emission sources"), count: emitterCount, color: EMITTER_COLOR, Icon: Factory },
+            { label: t("co2Nodes.legend.sinks", "Storage & utilisation"), count: sinkCount, color: SINK_COLOR, Icon: Database },
+          ].map(({ label, count, color, Icon }) => (
+            <div key={label} className="rounded-xl border border-border/60 bg-background p-3">
+              <div className="flex items-center justify-between gap-2">
+                <Icon aria-hidden="true" className="h-4 w-4" style={{ color }} />
+                <span className="text-xl font-semibold tabular-nums">{count}</span>
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{label}</p>
+            </div>
+          ))}
+        </div>
+        {selectedIds.length === 0 && <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+          {t("co2Nodes.selectHint", "Nothing selected yet. Tick sites below or click them on the map.")}
+        </p>}
+      </div>
+
+
+      {drill ? (
+        <CategoryFacilities
+          key={drill}
+          label={categoryLabel(drill)}
+          facilities={facilitiesByCategory.get(drill) ?? []}
+          isSelected={isSelected}
+          onToggleNode={toggleNode}
+          onSelectAll={selectAll}
+          onClearAll={clearAll}
+          onBack={() => setDrill(null)}
+        />
+      ) : (
+        <>
       <div className="flex items-center gap-2">
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <input
-            type="text"
+            type="search"
+            aria-label={t("co2Nodes.searchPlaceholder", "Search by name or id…")}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={t("co2Nodes.searchPlaceholder", "Search by name or id…")}
-            className="h-9 w-full rounded-lg border border-border bg-background pl-8 pr-3 text-xs text-foreground transition-colors duration-150 placeholder:text-muted-foreground focus:border-ring focus:outline-none"
+            className="h-11 w-full rounded-xl border border-border bg-background pl-8 pr-3 text-sm text-foreground transition-colors duration-150 placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
         </div>
         <AdvancedFilters nodes={nodes} />
@@ -319,6 +374,7 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
 
       {/* Map-linked filters. */}
       <div className="space-y-2">
+        <div className="space-y-2">
         <FilterSection
           title={t("co2Nodes.countrySection", "Country")}
           icon={Globe}
@@ -355,18 +411,12 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
           {emitterCategories.map((category) => (
             <CategoryRow
               key={category}
-              label={t(`co2Nodes.types.${category}`, CATEGORY_LABELS[category] ?? category)}
+              label={categoryLabel(category)}
               total={countByCategory.get(category) ?? 0}
-              facilities={facilitiesByCategory.get(category) ?? []}
+              picked={pickedIn(category)}
               checked={emitterFilter.has(category)}
               onCheck={() => toggleEmitterCategory(category)}
-              expanded={openCategories.has(category)}
-              onExpand={() => toggleCategoryOpen(category)}
-              isSelected={isSelected}
-              onToggleNode={toggleNode}
-              onSelectAll={selectAll}
-              onClearAll={clearAll}
-              expandLabel={expandLabel}
+              onOpen={() => setDrill(category)}
             />
           ))}
         </FilterSection>
@@ -404,22 +454,17 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
             sinkCategories.map((category) => (
               <CategoryRow
                 key={category}
-                label={t(`co2Nodes.types.${category}`, CATEGORY_LABELS[category] ?? category)}
+                label={categoryLabel(category)}
                 total={countByCategory.get(category) ?? 0}
-                facilities={facilitiesByCategory.get(category) ?? []}
+                picked={pickedIn(category)}
                 checked={sinkFilter.has(category)}
                 onCheck={() => toggleSinkCategory(category)}
-                expanded={openCategories.has(category)}
-                onExpand={() => toggleCategoryOpen(category)}
-                isSelected={isSelected}
-                onToggleNode={toggleNode}
-                onSelectAll={selectAll}
-                onClearAll={clearAll}
-                expandLabel={expandLabel}
+                onOpen={() => setDrill(category)}
               />
             ))
           )}
         </FilterSection>
+        </div>
 
         {hasActiveFilters && (
           <button
@@ -432,6 +477,9 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
         )}
       </div>
 
+        </>
+      )}
+
       {filtered.length === 0 && (
         <p className="rounded-lg border border-border bg-muted/30 px-3 py-4 text-center text-xs text-muted-foreground">
           {nodes.length === 0
@@ -440,15 +488,40 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
         </p>
       )}
 
+      {canStartOver && (
+        <div className="flex items-center gap-3 rounded-xl border border-dashed border-border px-3 py-3">
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-medium text-foreground">{t("co2Nodes.startOver", "Start over")}</span>
+            <span className="block text-xs text-muted-foreground">
+              {t("co2Nodes.startOverHint", "Clears selected sites, filters, search and routes.")}
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={startOver}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground transition-colors duration-150 hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            {t("co2Nodes.clearEverything", "Clear everything")}
+          </button>
+        </div>
+      )}
+
+      <SourceCatalogue />
       {period && (
-        <p className="text-[11px] leading-snug text-muted-foreground">
+        <details className="rounded-xl border border-border bg-muted/20 p-3">
+          <summary className="cursor-pointer text-xs font-medium focus-visible:ring-2 focus-visible:ring-ring">
+            {t("co2Nodes.assessmentPeriod", "Assessment period")} · {period.start}–{period.end}
+          </summary>
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
           {t("co2Nodes.periodNote", {
             start: period.start,
             end: period.end,
             defaultValue:
               "Assessment period {{start}}–{{end}}: plants count from their commissioning year, coal until its phase-out. Emissions are each plant's latest value, held constant; STORE_CO2 has no projections.",
           })}
-        </p>
+          </p>
+        </details>
       )}
 
       {outsidePeriod > 0 && (
@@ -461,14 +534,6 @@ export const NodeSelector: FC<NodeSelectorProps> = ({ selectedIds, onChange }) =
         </p>
       )}
 
-      <p className="text-[11px] text-muted-foreground">
-        {t("co2Nodes.selectionSummary", {
-          count: selectedIds.length,
-          emitters: emitterCount,
-          sinks: sinkCount,
-          defaultValue: "{{count}} selected — {{emitters}} emitters, {{sinks}} sinks",
-        })}
-      </p>
     </div>
   );
 };

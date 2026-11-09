@@ -28,6 +28,7 @@ export {
   matchesFlux,
   matchesRegion,
   matchesRural,
+  matchesRail,
   matchesPeriod,
   operatesIn,
   periodOf,

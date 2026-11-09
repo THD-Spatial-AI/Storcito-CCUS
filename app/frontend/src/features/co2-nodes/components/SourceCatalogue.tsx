@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Database,
+  List,
   Loader2,
   MapPinOff,
   RefreshCw,
@@ -148,16 +149,19 @@ export function SourceCatalogue() {
     .filter((row): row is typeof row & { status: string } => Boolean(row.status))
     .map((row) => ({ value: row.status, label: row.status, count: row.sources }));
 
-  return <div className="space-y-2">
-    <div className="flex flex-wrap items-center gap-2">
-      <Button size="sm" variant="outline" onClick={() => setOpen(true)}>{t("co2Source.browse", "Browse all sources")}</Button>
-      <Button size="sm" variant="outline" disabled={refresh.isPending} onClick={() => refresh.mutate()}>
-        <RefreshCw className={`h-3 w-3 ${refresh.isPending ? "animate-spin" : ""}`} />{t("co2Source.refresh", "Refresh source data")}
-      </Button>
+  const toolClass = "flex h-7 items-center gap-1 rounded-md px-2 text-[11px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-muted/60 hover:text-foreground disabled:opacity-60";
+  return <div className="space-y-2 rounded-xl border border-border p-3">
+    <div className="flex flex-wrap items-center gap-1">
+      <p className="mb-1 w-full text-xs leading-relaxed text-muted-foreground">
+        {stats.data && t("co2Source.coverage", "{{total}} sources; {{mappable}} have map coordinates.", { total: stats.data.total_sources.toLocaleString(), mappable: stats.data.with_coordinates.toLocaleString() })}
+      </p>
+      <button type="button" onClick={() => setOpen(true)} title={t("co2Source.browse", "Browse all sources")} className={toolClass}>
+        <List className="h-3.5 w-3.5" />{t("co2Source.browseShort", "Browse")}
+      </button>
+      <button type="button" disabled={refresh.isPending} onClick={() => refresh.mutate()} title={t("co2Source.refresh", "Refresh source data")} aria-label={t("co2Source.refresh", "Refresh source data")} className={toolClass}>
+        <RefreshCw className={cn("h-3.5 w-3.5", refresh.isPending && "animate-spin")} />
+      </button>
     </div>
-    {stats.data && <p className="text-[11px] text-muted-foreground">
-      {t("co2Source.coverage", "{{total}} sources; {{mappable}} have map coordinates.", { total: stats.data.total_sources.toLocaleString(), mappable: stats.data.with_coordinates.toLocaleString() })}
-    </p>}
     {refresh.isSuccess && <p role="status" className="text-xs text-muted-foreground">{t("co2Source.refreshed", "Updated {{count}} sources.", { count: refresh.data.imported })}</p>}
     {refresh.isError && <p role="alert" className="text-xs text-destructive">{t("co2Source.refreshError", "Could not refresh sources. Existing data was kept.")}</p>}
 

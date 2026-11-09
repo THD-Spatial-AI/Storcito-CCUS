@@ -91,6 +91,7 @@ export const AreaSelect: FC<AreaSelectProps> = ({
   const nodeSinkFilter = useNodeFilterStore((s) => s.sinkCategories);
   const nodeRegionFilter = useNodeFilterStore((s) => s.regions);
   const nodeRuralFilter = useNodeFilterStore((s) => s.rural);
+  const nodeRailDistance = useNodeFilterStore((s) => s.railDistance);
   const nodeFluxRange = useNodeFilterStore((s) => s.fluxRange);
   const nodePeriodOnly = useNodeFilterStore((s) => s.periodOnly);
   const nodePeriod = useNodeFilterStore((s) => s.period);
@@ -110,6 +111,7 @@ export const AreaSelect: FC<AreaSelectProps> = ({
         sinkCategories: nodeSinkFilter,
         regions: nodeRegionFilter,
         rural: nodeRuralFilter,
+        railDistance: nodeRailDistance,
         fluxRange: nodeFluxRange,
         periodOnly: nodePeriodOnly,
         period: nodePeriod,
@@ -123,6 +125,7 @@ export const AreaSelect: FC<AreaSelectProps> = ({
       nodeSinkFilter,
       nodeRegionFilter,
       nodeRuralFilter,
+      nodeRailDistance,
       nodeFluxRange,
       nodePeriodOnly,
       nodePeriod,

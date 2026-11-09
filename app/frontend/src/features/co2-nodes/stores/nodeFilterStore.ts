@@ -16,7 +16,7 @@ export interface AssessmentPeriod {
   end: number;
 }
 
-/** Period from ISO dates. */
+/** Period from dates. */
 export const periodOf = (fromDate: string, toDate: string): AssessmentPeriod | null => {
   const start = Number(fromDate.slice(0, 4));
   const end = Number(toDate.slice(0, 4));
@@ -35,6 +35,8 @@ export interface NodeFilterCriteria {
   sinkCategories: ReadonlySet<string>;
   regions: ReadonlySet<string>;
   rural: RuralFilter;
+  /** Rail distance cap. */
+  railDistance: number | null;
   fluxRange: FluxRange;
   /** Hide inactive sites. */
   periodOnly: boolean;
@@ -51,6 +53,7 @@ export const NO_FILTER_CRITERIA: NodeFilterCriteria = {
   sinkCategories: EMPTY_SET,
   regions: EMPTY_SET,
   rural: "all",
+  railDistance: null,
   fluxRange: NO_FLUX_RANGE,
   periodOnly: true,
   period: null,
@@ -66,6 +69,7 @@ interface NodeFilterStore extends NodeFilterCriteria {
   toggleSinkCategory: (category: string) => void;
   toggleRegion: (nuts2: string) => void;
   setRural: (rural: RuralFilter) => void;
+  setRailDistance: (metres: number | null) => void;
   setPeriodOnly: (periodOnly: boolean) => void;
   setPeriod: (period: AssessmentPeriod | null) => void;
   setFluxRange: (range: FluxRange) => void;
@@ -91,6 +95,7 @@ export const useNodeFilterStore = create<NodeFilterStore>()((set) => ({
     set((state) => ({ sinkCategories: toggleIn(state.sinkCategories, category) })),
   toggleRegion: (value) => set((state) => ({ regions: toggleIn(state.regions, value) })),
   setRural: (rural) => set({ rural }),
+  setRailDistance: (railDistance) => set({ railDistance }),
   setPeriodOnly: (periodOnly) => set({ periodOnly }),
   setPeriod: (period) =>
     set((state) =>
@@ -105,15 +110,15 @@ export const useNodeFilterStore = create<NodeFilterStore>()((set) => ({
 export const matchesCountry = (node: CO2Node, countries: ReadonlySet<string>): boolean =>
   countries.size === 0 || countries.has(node.country_code ?? "");
 
-/** State picks, emitters only. */
+/** Emitter state picks. */
 export const matchesState = (node: CO2Node, states: ReadonlySet<string>): boolean =>
   states.size === 0 || !isEmitter(node) || states.has(node.state ?? "");
 
-/** City picks, emitters only. */
+/** Emitter city picks. */
 export const matchesMunicipality = (node: CO2Node, municipalities: ReadonlySet<string>): boolean =>
   municipalities.size === 0 || !isEmitter(node) || municipalities.has(node.municipality ?? "");
 
-/** Each side narrows itself. */
+/** Per-side categories. */
 export const matchesCategory = (
   node: CO2Node,
   emitterCategories: ReadonlySet<string>,
@@ -125,7 +130,7 @@ export const matchesCategory = (
   return true;
 };
 
-/** Flux band, emitters only. */
+/** Emitter flux band. */
 export const matchesFlux = (node: CO2Node, range: FluxRange): boolean => {
   if (range.min === null && range.max === null) return true;
   if (!isEmitter(node)) return true;
@@ -143,6 +148,10 @@ export const matchesRegion = (node: CO2Node, regions: ReadonlySet<string>): bool
 /** Rural/urban match. */
 export const matchesRural = (node: CO2Node, rural: RuralFilter): boolean =>
   rural === "all" || (node.rural != null && node.rural === (rural === "rural"));
+
+/** Near rail. */
+export const matchesRail = (node: CO2Node, maxMetres: number | null): boolean =>
+  maxMetres === null || (node.rail_distance_m != null && node.rail_distance_m <= maxMetres);
 
 /** Operates in period. */
 export const operatesIn = (node: CO2Node, period: AssessmentPeriod | null): boolean => {
@@ -165,6 +174,7 @@ export const filterNodes = (nodes: CO2Node[], filters: NodeFilterCriteria): CO2N
       matchesMunicipality(node, filters.municipalities) &&
       matchesRegion(node, filters.regions) &&
       matchesRural(node, filters.rural) &&
+      matchesRail(node, filters.railDistance) &&
       matchesPeriod(node, filters.period, filters.periodOnly) &&
       matchesCategory(node, filters.emitterCategories, filters.sinkCategories) &&
       matchesFlux(node, filters.fluxRange),
