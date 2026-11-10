@@ -19,23 +19,29 @@ RUN go mod download
 # Copy source
 COPY app/backend/. .
 
-# Build server and migrate.
+# Build the binaries.
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/server ./cmd/main.go
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/migrate ./cmd/migrate/migration.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/seed ./cmd/seed
 
 # Build the frontend.
 FROM node:20-alpine AS febuilder
-WORKDIR /src
+# Repo layout kept.
+WORKDIR /build
 
-# Local workspace deps.
-COPY libs/auth /libs/auth
-COPY libs/forms /libs/forms
-COPY libs/ui /libs/ui
+# Build shared libs.
+COPY libs/i18n libs/i18n
+COPY libs/ui libs/ui
+COPY libs/forms libs/forms
+COPY libs/auth libs/auth
+RUN for lib in i18n ui forms auth; do (cd libs/$lib && npm install --legacy-peer-deps && npm run build); done
 
+WORKDIR /build/app/frontend
 COPY app/frontend/package*.json ./
-
 RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 COPY app/frontend .
+# Basemap key.
+ARG VITE_CARTO_BASEMAP_API_KEY=
 RUN npm run build
 
 # Ubuntu runtime image.
@@ -53,9 +59,10 @@ WORKDIR /app
 # Copy the binaries.
 COPY --from=gobuilder /app/bin/server /app/server
 COPY --from=gobuilder /app/bin/migrate /app/migrate
+COPY --from=gobuilder /app/bin/seed /app/seed
 
 # Copy frontend dist
-COPY --from=febuilder /src/dist /app/www
+COPY --from=febuilder /build/app/frontend/dist /app/www
 
 # Copy migrations
 COPY --from=gobuilder /app/migrations /app/migrations
@@ -69,7 +76,7 @@ COPY app/backend/entrypoint.sh /app/entrypoint.sh
 # Non-root user and storage.
 RUN useradd -r -s /bin/sh appuser && \
     mkdir -p /app/storage/data && \
-    chmod +x /app/server /app/migrate /app/entrypoint.sh && \
+    chmod +x /app/server /app/migrate /app/seed /app/entrypoint.sh && \
     chown -R appuser:appuser /app
 
 # Expose port
