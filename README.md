@@ -24,7 +24,7 @@ The application is part of the **STORCITO** ecosystem at TH Deggendorf.
 - **Workspaces & groups** — organise models into workspaces; share with Keycloak-managed groups
 - **Real-time notifications** — SSE push + Asynq background jobs for run status
 - **Admin dashboard** — user, model, feedback and webservice management with role-based access
-- **Nine languages** — English, German, Dutch, French, Spanish, Italian, Polish, Czech, Portuguese
+- **Ten languages** — English, German, Dutch, French, Spanish, Italian, Polish, Czech, Portuguese, Norwegian
 
 ---
 
@@ -200,7 +200,7 @@ The frontend reads `VITE_API_BASE_URL` and, optionally,
 │           │   ├── interactive-map/
 │           │   └── model-dashboard/
 │           ├── components/
-│           └── i18n/               # Nine locales
+│           └── i18n/               # Ten locales
 ├── platform-core/            # Platform services (auth-service, webservice, geoserver)
 ├── infrastructure/           # Shared Go libraries (common, platform)
 ├── libs/                     # Shared React component libraries
@@ -213,10 +213,36 @@ The frontend reads `VITE_API_BASE_URL` and, optionally,
 
 ## Translations
 
-The web interface is available in 9 languages: English, Czech, Dutch, French, German, Italian, Polish, Portuguese, Spanish. English is the source language. The other translations in `app/frontend/src/i18n/locales/` **were generated with AI** and have not been reviewed by native speakers, so they may contain errors. Corrections are welcome through issues or pull requests.
+The web interface is available in 10 languages: English, Czech, Dutch, French, German, Italian, Norwegian, Polish, Portuguese, Spanish. English is the source language. The other translations in `app/frontend/src/i18n/locales/` **were generated with AI** and have not been reviewed by native speakers, so they may contain errors. Corrections are welcome through issues or pull requests.
+
+---
+
+## Contributing
+
+Bug reports, feature requests and pull requests are welcome. Please open an issue to discuss larger changes before starting on them.
 
 ---
 
 ## License
 
-See `LICENSE`.
+MIT License — Copyright (c) 2026 BigGeoData & Spatial AI, Technische Hochschule Deggendorf. See [LICENSE](LICENSE) for the full text.
+
+> [!NOTE]
+> This tool is under active development. Routes and costs are screening estimates from the STORE_CO2 models: they are not engineering designs or quotes, and they have not been validated against built projects. Features and performance may change in future releases.
+
+---
+
+## Acknowledgments
+
+Developed by the **BigGeoData & Spatial AI** research group at Technische Hochschule Deggendorf. Source and sink data, capture costs and routing come from the **STORE_CO2** project.
+
+This project is being developed in the context of the research project STORCITO — *Sustainable Transformation Of Rural Communities via Technical, social and Organizational innovations* (<https://cordis.europa.eu/project/id/101182153>). STORCITO is funded by the European Union's Horizon Europe research and innovation programme under grant agreement No. 101182153. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Research Executive Agency (REA). Neither the European Union nor the granting authority can be held responsible for them.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/sponsors/storcito-logo-white.png">
+  <img src=".github/assets/sponsors/storcito-logo-dark.png" alt="STORCITO" height="40">
+</picture>
+&nbsp;&nbsp;
+<img src=".github/assets/sponsors/eu-funded.png" alt="Funded by the European Union" height="40">
+
+Map data © OpenStreetMap contributors; base maps by CARTO.

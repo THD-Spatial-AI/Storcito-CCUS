@@ -12,6 +12,7 @@ import nl from "./locales/nl.json";
 import pl from "./locales/pl.json";
 import cs from "./locales/cs.json";
 import pt from "./locales/pt.json";
+import nb from "./locales/nb.json";
 
 // Language configuration
 export const languages = [
@@ -24,6 +25,7 @@ export const languages = [
   { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱" },
   { code: "cs", name: "Czech", nativeName: "Čeština", flag: "🇨🇿" },
   { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹" },
+  { code: "nb", name: "Norwegian", nativeName: "Norsk", flag: "🇳🇴" },
 ] as const;
 
 export type LanguageCode = (typeof languages)[number]["code"];
@@ -46,6 +48,7 @@ const resources = {
   pl: { translation: pl },
   cs: { translation: cs },
   pt: { translation: pt },
+  nb: { translation: nb },
 };
 
 interface I18nConfig {
@@ -68,7 +71,8 @@ export const initI18n = (config: I18nConfig = {}) => {
     .use(initReactI18next)
     .init({
       resources,
-      fallbackLng,
+      // Norwegian variants.
+      fallbackLng: { no: ["nb"], nn: ["nb"], default: [fallbackLng] },
       defaultNS: "translation",
 
       // Language detection options
@@ -99,7 +103,8 @@ export const initI18n = (config: I18nConfig = {}) => {
  * Get current language info
  */
 export const getCurrentLanguage = (): Language => {
-  const code = i18n.language?.split("-")[0] || "en";
+  const base = i18n.language?.split("-")[0] || "en";
+  const code = base === "no" || base === "nn" ? "nb" : base;
   return languages.find((l) => l.code === code) || languages[0];
 };
 
