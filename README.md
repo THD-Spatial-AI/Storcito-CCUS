@@ -211,6 +211,12 @@ The frontend reads `VITE_API_BASE_URL` and, optionally,
 
 ---
 
+## Translations
+
+The web interface is available in 9 languages: English, Czech, Dutch, French, German, Italian, Polish, Portuguese, Spanish. English is the source language. The other translations in `app/frontend/src/i18n/locales/` **were generated with AI** and have not been reviewed by native speakers, so they may contain errors. Corrections are welcome through issues or pull requests.
+
+---
+
 ## License
 
 See `LICENSE`.
