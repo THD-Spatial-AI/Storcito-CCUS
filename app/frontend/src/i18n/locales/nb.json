@@ -1136,7 +1136,7 @@
     "tabs": {
       "overview": "Oversikt",
       "allSimulationModels": "Alle simuleringsmodeller",
-      "simulationEngine": "Simuleringsmotor",
+      "simulationEngine": "Beregningstjenester",
       "feedback": "Tilbakemeldinger",
       "userManagement": "Brukeradministrasjon",
       "gridEngine": "Beregningsmotor"
@@ -1422,16 +1422,16 @@
     }
   },
   "webservicesManagement": {
-    "title": "Administrasjon av simuleringsmotor",
-    "subtitle": "Administrer instanser av beregningstjenesten",
+    "title": "Beregningstjenester",
+    "subtitle": "Administrer tjenestene STORE_CO2 og AdOpT-NET0",
     "searchPlaceholder": "Søk etter navn, IP...",
     "refresh": "Oppdater",
-    "registerNew": "Registrer ny nettjeneste",
+    "registerNew": "Registrer ny tjeneste",
     "loadingWebservices": "Laster nettjenester...",
     "noWebservicesFound": "Ingen nettjenester funnet",
     "noWebservicesDescription": "Kom i gang ved å registrere din første nettjenesteinstans.",
     "noWebservicesAvailable": "Ingen simuleringsmotorer er konfigurert for øyeblikket. Kontakt en administrator.",
-    "healthCheck": "Simuleringsmotor",
+    "healthCheck": "Beregningstjenester",
     "summary": {
       "total": "Totalt",
       "online": "Tilkoblet",
@@ -1483,11 +1483,11 @@
     },
     "dialog": {
       "editTitle": "Rediger nettjenesteinstans",
-      "createTitle": "Registrer ny nettjeneste",
+      "createTitle": "Registrer ny tjeneste",
       "editDescription": "Oppdater konfigurasjon og innstillinger for nettjenesten",
       "createDescription": "Konfigurer en ny instans av simuleringstjenesten",
       "editButton": "Oppdater nettjeneste",
-      "createButton": "Registrer nettjeneste"
+      "createButton": "Registrer tjeneste"
     },
     "notifications": {
       "created": "Nettjenesten er registrert!",

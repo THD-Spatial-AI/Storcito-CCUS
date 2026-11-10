@@ -1136,7 +1136,7 @@
     "tabs": {
       "overview": "Übersicht",
       "allSimulationModels": "Alle Simulationsmodelle",
-      "simulationEngine": "Simulations-Engine",
+      "simulationEngine": "Rechendienste",
       "feedback": "Feedback",
       "userManagement": "Benutzerverwaltung",
       "gridEngine": "Compute Engine"
@@ -1422,16 +1422,16 @@
     }
   },
   "webservicesManagement": {
-    "title": "Simulationsmotor-Verwaltung",
-    "subtitle": "Berechnungs-Webservice-Instanzen verwalten",
+    "title": "Rechendienste",
+    "subtitle": "STORE_CO2- und AdOpT-NET0-Dienste verwalten",
     "searchPlaceholder": "Nach Name, IP suchen...",
     "refresh": "Aktualisieren",
-    "registerNew": "Neuen Webservice registrieren",
+    "registerNew": "Neuen Dienst registrieren",
     "loadingWebservices": "Webservices werden geladen...",
     "noWebservicesFound": "Keine Webservices gefunden",
     "noWebservicesDescription": "Beginnen Sie, indem Sie Ihre erste Webservice-Instanz registrieren.",
     "noWebservicesAvailable": "Derzeit sind keine Simulationsmaschinen konfiguriert. Kontaktieren Sie einen Administrator.",
-    "healthCheck": "Simulationsmotor",
+    "healthCheck": "Rechendienste",
     "summary": {
       "total": "Gesamt",
       "online": "Online",
@@ -1483,11 +1483,11 @@
     },
     "dialog": {
       "editTitle": "Webservice-Instanz bearbeiten",
-      "createTitle": "Neuen Webservice registrieren",
+      "createTitle": "Neuen Dienst registrieren",
       "editDescription": "Webservice-Konfiguration und -Einstellungen aktualisieren",
       "createDescription": "Eine neue Simulations-Berechnungs-Webservice-Instanz konfigurieren",
       "editButton": "Webservice aktualisieren",
-      "createButton": "Webservice registrieren"
+      "createButton": "Dienst registrieren"
     },
     "notifications": {
       "created": "Webservice erfolgreich registriert!",

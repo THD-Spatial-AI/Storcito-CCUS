@@ -1135,7 +1135,7 @@
     "tabs": {
       "overview": "Aperçu",
       "allSimulationModels": "Tous les Modèles de Simulation",
-      "simulationEngine": "Moteur de Simulation",
+      "simulationEngine": "Services de calcul",
       "feedback": "Retours",
       "userManagement": "Gestion des Utilisateurs",
       "gridEngine": "Compute Engine"
@@ -1426,11 +1426,11 @@
     }
   },
   "webservicesManagement": {
-    "title": "Gestion du moteur de simulation",
-    "subtitle": "Gérer les instances de webservice de calcul",
+    "title": "Services de calcul",
+    "subtitle": "Gérer les services STORE_CO2 et AdOpT-NET0",
     "searchPlaceholder": "Rechercher par nom, IP...",
     "refresh": "Actualiser",
-    "registerNew": "Enregistrer un nouveau webservice",
+    "registerNew": "Enregistrer un nouveau service",
     "loadingWebservices": "Chargement des webservices...",
     "noWebservicesFound": "Aucun webservice trouvé",
     "noWebservicesDescription": "Commencez par enregistrer votre première instance de webservice.",
@@ -1485,11 +1485,11 @@
     },
     "dialog": {
       "editTitle": "Modifier l'instance de webservice",
-      "createTitle": "Enregistrer un nouveau webservice",
+      "createTitle": "Enregistrer un nouveau service",
       "editDescription": "Mettre à jour la configuration du webservice",
       "createDescription": "Configurer une nouvelle instance de webservice de calcul de simulation",
       "editButton": "Mettre à jour le webservice",
-      "createButton": "Enregistrer le webservice"
+      "createButton": "Enregistrer le service"
     },
     "notifications": {
       "created": "Webservice enregistré avec succès !",
@@ -1502,7 +1502,7 @@
       "failedToPing": "Échec du ping du webservice"
     },
     "noWebservicesAvailable": "Aucun moteur de simulation n'est actuellement configuré. Contactez un administrateur.",
-    "healthCheck": "Moteur de simulation"
+    "healthCheck": "Services de calcul"
   },
   "feedbackManagement": {
     "title": "Gestion des Retours Utilisateurs",

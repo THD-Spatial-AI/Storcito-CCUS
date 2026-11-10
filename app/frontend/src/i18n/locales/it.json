@@ -934,7 +934,7 @@
     "tabs": {
       "overview": "Panoramica",
       "allSimulationModels": "Tutti i Modelli di Simulazione",
-      "simulationEngine": "Motore di Simulazione",
+      "simulationEngine": "Servizi di calcolo",
       "feedback": "Feedback",
       "userManagement": "Gestione Utenti",
       "gridEngine": "Compute Engine"
@@ -1225,11 +1225,11 @@
     }
   },
   "webservicesManagement": {
-    "title": "Gestione motore di simulazione",
-    "subtitle": "Gestisci istanze webservice di calcolo",
+    "title": "Servizi di calcolo",
+    "subtitle": "Gestisci i servizi STORE_CO2 e AdOpT-NET0",
     "searchPlaceholder": "Cerca per nome, IP...",
     "refresh": "Aggiorna",
-    "registerNew": "Registra nuovo webservice",
+    "registerNew": "Registra nuovo servizio",
     "loadingWebservices": "Caricamento webservice...",
     "noWebservicesFound": "Nessun webservice trovato",
     "noWebservicesDescription": "Inizia registrando la tua prima istanza webservice.",
@@ -1284,11 +1284,11 @@
     },
     "dialog": {
       "editTitle": "Modifica istanza webservice",
-      "createTitle": "Registra nuovo webservice",
+      "createTitle": "Registra nuovo servizio",
       "editDescription": "Aggiorna configurazione webservice",
       "createDescription": "Configura una nuova istanza webservice di calcolo simulazione",
       "editButton": "Aggiorna webservice",
-      "createButton": "Registra webservice"
+      "createButton": "Registra servizio"
     },
     "notifications": {
       "created": "Webservice registrato con successo!",
@@ -1301,7 +1301,7 @@
       "failedToPing": "Impossibile effettuare il ping del webservice"
     },
     "noWebservicesAvailable": "Nessun motore di simulazione attualmente configurato. Contatta un amministratore.",
-    "healthCheck": "Motore di simulazione"
+    "healthCheck": "Servizi di calcolo"
   },
   "feedbackManagement": {
     "title": "Gestione Feedback Utenti",

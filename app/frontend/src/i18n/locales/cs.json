@@ -938,7 +938,7 @@
     "tabs": {
       "overview": "Přehled",
       "allSimulationModels": "Všechny Simulační Modely",
-      "simulationEngine": "Simulační Engine",
+      "simulationEngine": "Výpočetní služby",
       "feedback": "Zpětná Vazba",
       "userManagement": "Správa Uživatelů",
       "gridEngine": "Compute Engine"
@@ -1229,11 +1229,11 @@
     }
   },
   "webservicesManagement": {
-    "title": "Správa simulačního enginu",
-    "subtitle": "Spravujte instance webservices výpočtů",
+    "title": "Výpočetní služby",
+    "subtitle": "Správa služeb STORE_CO2 a AdOpT-NET0",
     "searchPlaceholder": "Hledat podle názvu, IP...",
     "refresh": "Obnovit",
-    "registerNew": "Registrovat nový webservice",
+    "registerNew": "Registrovat novou službu",
     "loadingWebservices": "Načítání webservices...",
     "noWebservicesFound": "Nebyly nalezeny žádné webservices",
     "noWebservicesDescription": "Začněte registrací první instance webservice.",
@@ -1288,11 +1288,11 @@
     },
     "dialog": {
       "editTitle": "Upravit instanci webservice",
-      "createTitle": "Registrovat nový webservice",
+      "createTitle": "Registrovat novou službu",
       "editDescription": "Aktualizovat konfiguraci webservice",
       "createDescription": "Nastavit novou instanci webservice pro simulační výpočty",
       "editButton": "Aktualizovat webservice",
-      "createButton": "Registrovat webservice"
+      "createButton": "Registrovat službu"
     },
     "notifications": {
       "created": "Webservice úspěšně registrován!",
@@ -1305,7 +1305,7 @@
       "failedToPing": "Nepodařilo se pingnout webservice"
     },
     "noWebservicesAvailable": "Žádné simulační motory nejsou aktuálně nakonfigurovány. Kontaktujte správce.",
-    "healthCheck": "Simulační motor"
+    "healthCheck": "Výpočetní služby"
   },
   "feedbackManagement": {
     "title": "Správa Zpětné Vazby Uživatelů",

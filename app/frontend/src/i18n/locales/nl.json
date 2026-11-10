@@ -934,7 +934,7 @@
     "tabs": {
       "overview": "Overzicht",
       "allSimulationModels": "Alle Simulatiemodellen",
-      "simulationEngine": "Simulatie-Engine",
+      "simulationEngine": "Rekendiensten",
       "feedback": "Feedback",
       "userManagement": "Gebruikersbeheer",
       "gridEngine": "Compute Engine"
@@ -1225,11 +1225,11 @@
     }
   },
   "webservicesManagement": {
-    "title": "Simulatiemotor beheer",
-    "subtitle": "Beheer berekeningswebservice-instanties",
+    "title": "Rekendiensten",
+    "subtitle": "Beheer de STORE_CO2- en AdOpT-NET0-diensten",
     "searchPlaceholder": "Zoeken op naam, IP...",
     "refresh": "Vernieuwen",
-    "registerNew": "Nieuwe webservice registreren",
+    "registerNew": "Nieuwe dienst registreren",
     "loadingWebservices": "Webservices laden...",
     "noWebservicesFound": "Geen webservices gevonden",
     "noWebservicesDescription": "Begin met het registreren van uw eerste webservice-instantie.",
@@ -1284,11 +1284,11 @@
     },
     "dialog": {
       "editTitle": "Webservice-instantie bewerken",
-      "createTitle": "Nieuwe webservice registreren",
+      "createTitle": "Nieuwe dienst registreren",
       "editDescription": "Webserviceconfiguratie bijwerken",
       "createDescription": "Een nieuwe simulatieberekeningswebservice-instantie configureren",
       "editButton": "Webservice bijwerken",
-      "createButton": "Webservice registreren"
+      "createButton": "Dienst registreren"
     },
     "notifications": {
       "created": "Webservice succesvol geregistreerd!",
@@ -1301,7 +1301,7 @@
       "failedToPing": "Webservice pingen mislukt"
     },
     "noWebservicesAvailable": "Geen simulatie-engines momenteel geconfigureerd. Neem contact op met een beheerder.",
-    "healthCheck": "Simulatie-engine"
+    "healthCheck": "Rekendiensten"
   },
   "feedbackManagement": {
     "title": "Gebruikersfeedback Beheer",

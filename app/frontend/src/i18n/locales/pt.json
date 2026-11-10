@@ -1136,7 +1136,7 @@
     "tabs": {
       "overview": "Vista geral",
       "allSimulationModels": "Todos os modelos de simulação",
-      "simulationEngine": "Motor de simulação",
+      "simulationEngine": "Serviços de cálculo",
       "feedback": "Comentários",
       "userManagement": "Gestão de utilizadores",
       "gridEngine": "Motor de cálculo"
@@ -1422,16 +1422,16 @@
     }
   },
   "webservicesManagement": {
-    "title": "Gestão do motor de simulação",
-    "subtitle": "Faça a gestão das instâncias de webservice de cálculo",
+    "title": "Serviços de cálculo",
+    "subtitle": "Gerir os serviços STORE_CO2 e AdOpT-NET0",
     "searchPlaceholder": "Pesquisar por nome, IP...",
     "refresh": "Atualizar",
-    "registerNew": "Registar novo webservice",
+    "registerNew": "Registar novo serviço",
     "loadingWebservices": "A carregar os webservices...",
     "noWebservicesFound": "Nenhum webservice encontrado",
     "noWebservicesDescription": "Comece por registar a sua primeira instância de webservice.",
     "noWebservicesAvailable": "Não há motores de simulação configurados de momento. Contacte um administrador.",
-    "healthCheck": "Motor de simulação",
+    "healthCheck": "Serviços de cálculo",
     "summary": {
       "total": "Total",
       "online": "Online",
@@ -1483,11 +1483,11 @@
     },
     "dialog": {
       "editTitle": "Editar instância de webservice",
-      "createTitle": "Registar novo webservice",
+      "createTitle": "Registar novo serviço",
       "editDescription": "Atualize a configuração e as definições do webservice",
       "createDescription": "Configure uma nova instância de webservice de cálculo de simulação",
       "editButton": "Atualizar webservice",
-      "createButton": "Registar webservice"
+      "createButton": "Registar serviço"
     },
     "notifications": {
       "created": "Webservice registado com sucesso!",

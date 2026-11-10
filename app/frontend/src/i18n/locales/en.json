@@ -1136,7 +1136,7 @@
     "tabs": {
       "overview": "Overview",
       "allSimulationModels": "All Simulation Models",
-      "simulationEngine": "Simulation-Engine",
+      "simulationEngine": "Compute Services",
       "feedback": "Feedback",
       "userManagement": "User Management",
       "gridEngine": "Compute Engine"
@@ -1422,16 +1422,16 @@
     }
   },
   "webservicesManagement": {
-    "title": "Simulation Engine Management",
-    "subtitle": "Manage calculation webservice instances",
+    "title": "Compute Services",
+    "subtitle": "Manage the STORE_CO2 and AdOpT-NET0 services",
     "searchPlaceholder": "Search by name, IP...",
     "refresh": "Refresh",
-    "registerNew": "Register New Webservice",
+    "registerNew": "Register New Service",
     "loadingWebservices": "Loading webservices...",
     "noWebservicesFound": "No webservices found",
     "noWebservicesDescription": "Get started by registering your first webservice instance.",
     "noWebservicesAvailable": "No simulation engines are currently configured. Contact an administrator.",
-    "healthCheck": "Simulation Engine",
+    "healthCheck": "Compute Services",
     "summary": {
       "total": "Total",
       "online": "Online",
@@ -1483,11 +1483,11 @@
     },
     "dialog": {
       "editTitle": "Edit Webservice Instance",
-      "createTitle": "Register New Webservice",
+      "createTitle": "Register New Service",
       "editDescription": "Update webservice configuration and settings",
       "createDescription": "Configure a new simulation calculation webservice instance",
       "editButton": "Update Webservice",
-      "createButton": "Register Webservice"
+      "createButton": "Register service"
     },
     "notifications": {
       "created": "Webservice registered successfully!",

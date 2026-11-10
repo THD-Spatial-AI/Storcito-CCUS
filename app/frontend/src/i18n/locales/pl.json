@@ -938,7 +938,7 @@
     "tabs": {
       "overview": "Przegląd",
       "allSimulationModels": "Wszystkie Modele Symulacji",
-      "simulationEngine": "Silnik Symulacji",
+      "simulationEngine": "Usługi obliczeniowe",
       "feedback": "Opinie",
       "userManagement": "Zarządzanie Użytkownikami",
       "gridEngine": "Compute Engine"
@@ -1229,11 +1229,11 @@
     }
   },
   "webservicesManagement": {
-    "title": "Zarządzanie silnikiem symulacji",
-    "subtitle": "Zarządzaj instancjami webservice obliczeniowych",
+    "title": "Usługi obliczeniowe",
+    "subtitle": "Zarządzaj usługami STORE_CO2 i AdOpT-NET0",
     "searchPlaceholder": "Szukaj po nazwie, IP...",
     "refresh": "Odśwież",
-    "registerNew": "Zarejestruj nowy webservice",
+    "registerNew": "Zarejestruj nową usługę",
     "loadingWebservices": "Ładowanie webservices...",
     "noWebservicesFound": "Nie znaleziono webservices",
     "noWebservicesDescription": "Zacznij od zarejestrowania pierwszej instancji webservice.",
@@ -1288,11 +1288,11 @@
     },
     "dialog": {
       "editTitle": "Edytuj instancję webservice",
-      "createTitle": "Zarejestruj nowy webservice",
+      "createTitle": "Zarejestruj nową usługę",
       "editDescription": "Zaktualizuj konfigurację webservice",
       "createDescription": "Skonfiguruj nową instancję webservice obliczeniowego symulacji",
       "editButton": "Zaktualizuj webservice",
-      "createButton": "Zarejestruj webservice"
+      "createButton": "Zarejestruj usługę"
     },
     "notifications": {
       "created": "Webservice zarejestrowany pomyślnie!",
@@ -1305,7 +1305,7 @@
       "failedToPing": "Nie udało się wykonać ping webservice"
     },
     "noWebservicesAvailable": "Brak skonfigurowanych silników symulacji. Skontaktuj się z administratorem.",
-    "healthCheck": "Silnik symulacji"
+    "healthCheck": "Usługi obliczeniowe"
   },
   "feedbackManagement": {
     "title": "Zarządzanie Opiniami Użytkowników",
