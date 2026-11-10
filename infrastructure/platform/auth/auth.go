@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/coreos/go-oidc/v3/oidc"
 	"golang.org/x/oauth2"
@@ -21,6 +22,7 @@ type Config struct {
 	RedirectURL  string // valid redirect url
 	ClientSecret string // optional
 	Realm        string // keycloak realm
+	IssuerURL    string // public issuer
 }
 type Option func(*Config)
 
@@ -53,6 +55,14 @@ func New(ctx context.Context,
 	
 	providerURL := fmt.Sprintf("%s/realms/%s", baseURL, config.Realm)
 
+	// Internal fetch, public issuer.
+	if config.IssuerURL != "" {
+		issuer := fmt.Sprintf("%s/realms/%s", strings.TrimSuffix(config.IssuerURL, "/"), config.Realm)
+		if issuer != providerURL {
+			ctx = oidc.InsecureIssuerURLContext(ctx, issuer)
+		}
+	}
+
 	provider, err := oidc.NewProvider(ctx, providerURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get provider: %v", err)
@@ -79,6 +89,13 @@ func WithClientSecret(clientSecret string) Option {
 		c.ClientSecret = clientSecret
 	}
 }
+// WithIssuerURL sets public issuer.
+func WithIssuerURL(issuerURL string) Option {
+	return func(c *Config) {
+		c.IssuerURL = issuerURL
+	}
+}
+
 func WithRealmKeycloak(realm string) Option {
 	return func(c *Config) {
 		c.Realm = realm

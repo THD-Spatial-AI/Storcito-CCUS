@@ -72,15 +72,13 @@ jobs:
           cp app/backend/.env.example "$DEPLOY_PATH_PROD/app/backend/.env.example"
           [ -f "$DEPLOY_PATH_PROD/app/backend/.env" ] || cp "$DEPLOY_PATH_PROD/app/backend/.env.example" "$DEPLOY_PATH_PROD/app/backend/.env"
           cd "$DEPLOY_PATH_PROD/platform-core"
-          sed -i '/auth-service:/,/depends_on:/ s|KEYCLOAK_URL: .*|KEYCLOAK_URL: ${KEYCLOAK_ISSUER_URL:-'"${SERVER_URL_PROD}"'/keycloak}|' docker-compose.yml
-          sed -i '/webservice:/,/depends_on:/ s|KEYCLOAK_URL: .*|KEYCLOAK_URL: ${KEYCLOAK_ISSUER_URL:-'"${SERVER_URL_PROD}"'/keycloak}|' docker-compose.yml
           AUTH_ENV="$DEPLOY_PATH_PROD/platform-core/auth-service/.env"
           WEB_ENV="$DEPLOY_PATH_PROD/platform-core/webservice/.env"
           sed -i 's|^APP_ENV=.*|APP_ENV=production|' "$AUTH_ENV"
           sed -i 's|^COOKIE_DOMAIN=.*|COOKIE_DOMAIN=ccus.th-deg.de|' "$AUTH_ENV"
           sed -i "s|^FRONTEND_URL=.*|FRONTEND_URL=${SERVER_URL_PROD}|" "$AUTH_ENV"
           sed -i "s|^WEB_URLS=.*|WEB_URLS=${SERVER_URL_PROD}|" "$AUTH_ENV"
-          sed -i "s|^KEYCLOAK_URL=.*|KEYCLOAK_URL=${SERVER_URL_PROD}/keycloak|" "$AUTH_ENV"
+          sed -i "s|^KEYCLOAK_URL=.*|KEYCLOAK_URL=http://keycloak:8080/keycloak|" "$AUTH_ENV"
           sed -i "s|^REDIRECT_URL=.*|REDIRECT_URL=${SERVER_URL_PROD}/api/callback-auth|" "$AUTH_ENV"
           sed -i 's|^BACKEND_SERVICE_URL=.*|BACKEND_SERVICE_URL=http://app-backend-prod:8000|' "$AUTH_ENV"
           sed -i 's|^DB_HOST=.*|DB_HOST=postgres|' "$AUTH_ENV"
@@ -102,6 +100,8 @@ jobs:
           grep -q '^KC_HOSTNAME=' .env && \
             sed -i "s|^KC_HOSTNAME=.*|KC_HOSTNAME=${SERVER_URL_PROD}/keycloak|" .env || \
             echo "KC_HOSTNAME=${SERVER_URL_PROD}/keycloak" >> .env
+          sed -i '/^KC_HOSTNAME_BACKCHANNEL_DYNAMIC=/d' .env
+          echo 'KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true' >> .env
           chmod 600 .env
           docker network create spatialhub-net 2>/dev/null || true
           docker compose up -d postgres redis
@@ -130,6 +130,8 @@ jobs:
           grep -q '^KC_HOSTNAME=' .env && \
             sed -i "s|^KC_HOSTNAME=.*|KC_HOSTNAME=${SERVER_URL_PROD}/keycloak|" .env || \
             echo "KC_HOSTNAME=${SERVER_URL_PROD}/keycloak" >> .env
+          sed -i '/^KC_HOSTNAME_BACKCHANNEL_DYNAMIC=/d' .env
+          echo 'KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true' >> .env
           chmod 600 .env
           docker compose up -d --force-recreate keycloak
           echo 'Waiting for Keycloak to be healthy...'
@@ -178,15 +180,13 @@ jobs:
           [ -f "$DEPLOY_PATH_PROD/platform-core/auth-service/.env" ] || cp "$DEPLOY_PATH_PROD/platform-core/auth-service/.env.example" "$DEPLOY_PATH_PROD/platform-core/auth-service/.env"
           [ -f "$DEPLOY_PATH_PROD/platform-core/webservice/.env" ] || cp "$DEPLOY_PATH_PROD/platform-core/webservice/.env.example" "$DEPLOY_PATH_PROD/platform-core/webservice/.env"
           cd "$DEPLOY_PATH_PROD/platform-core"
-          sed -i '/auth-service:/,/depends_on:/ s|KEYCLOAK_URL: .*|KEYCLOAK_URL: ${KEYCLOAK_ISSUER_URL:-'"${SERVER_URL_PROD}"'/keycloak}|' docker-compose.yml
-          sed -i '/webservice:/,/depends_on:/ s|KEYCLOAK_URL: .*|KEYCLOAK_URL: ${KEYCLOAK_ISSUER_URL:-'"${SERVER_URL_PROD}"'/keycloak}|' docker-compose.yml
           AUTH_ENV="$DEPLOY_PATH_PROD/platform-core/auth-service/.env"
           WEB_ENV="$DEPLOY_PATH_PROD/platform-core/webservice/.env"
           sed -i 's|^APP_ENV=.*|APP_ENV=production|' "$AUTH_ENV"
           sed -i 's|^COOKIE_DOMAIN=.*|COOKIE_DOMAIN=ccus.th-deg.de|' "$AUTH_ENV"
           sed -i "s|^FRONTEND_URL=.*|FRONTEND_URL=${SERVER_URL_PROD}|" "$AUTH_ENV"
           sed -i "s|^WEB_URLS=.*|WEB_URLS=${SERVER_URL_PROD}|" "$AUTH_ENV"
-          sed -i "s|^KEYCLOAK_URL=.*|KEYCLOAK_URL=${SERVER_URL_PROD}/keycloak|" "$AUTH_ENV"
+          sed -i "s|^KEYCLOAK_URL=.*|KEYCLOAK_URL=http://keycloak:8080/keycloak|" "$AUTH_ENV"
           sed -i "s|^REDIRECT_URL=.*|REDIRECT_URL=${SERVER_URL_PROD}/api/callback-auth|" "$AUTH_ENV"
           sed -i 's|^BACKEND_SERVICE_URL=.*|BACKEND_SERVICE_URL=http://app-backend-prod:8000|' "$AUTH_ENV"
           sed -i 's|^DB_HOST=.*|DB_HOST=postgres|' "$AUTH_ENV"
@@ -208,6 +208,8 @@ jobs:
           grep -q '^KC_HOSTNAME=' .env && \
             sed -i "s|^KC_HOSTNAME=.*|KC_HOSTNAME=${SERVER_URL_PROD}/keycloak|" .env || \
             echo "KC_HOSTNAME=${SERVER_URL_PROD}/keycloak" >> .env
+          sed -i '/^KC_HOSTNAME_BACKCHANNEL_DYNAMIC=/d' .env
+          echo 'KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true' >> .env
           sed -i '/^BACKEND_INTERNAL_URL=/d' .env
           echo 'BACKEND_INTERNAL_URL=http://app-backend-prod:8000' >> .env
           chmod 600 .env

@@ -73,6 +73,7 @@ func initializeInfrastructure(cfg *config.Config, log *logrus.Logger) *AppDepend
 	authOptions := []pkgauth.Option{
 		pkgauth.WithClientSecret(cfg.Auth.ClientSecret),
 		pkgauth.WithRealmKeycloak(cfg.Auth.Realm),
+		pkgauth.WithIssuerURL(cfg.Auth.IssuerURL),
 	}
 	authClient, err := pkgauth.New(
 		ctx,

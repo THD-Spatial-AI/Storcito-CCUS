@@ -45,6 +45,8 @@ services:
       KC_HEALTH_ENABLED: "true"
       KC_HOSTNAME: ${KC_HOSTNAME:-localhost}
       KC_HOSTNAME_STRICT: "false"
+      # Internal backchannel URLs.
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: ${KC_HOSTNAME_BACKCHANNEL_DYNAMIC:-false}
       KC_HTTP_ENABLED: "true"
       KC_PROXY_HEADERS: "xforwarded"
       KC_HTTP_RELATIVE_PATH: /keycloak
@@ -108,7 +110,8 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       REDIS_HOST: redis
-      KEYCLOAK_URL: ${KEYCLOAK_ISSUER_URL:-http://keycloak:8080/keycloak}
+      KEYCLOAK_URL: http://keycloak:8080/keycloak
+      KEYCLOAK_ISSUER_URL: ${KEYCLOAK_ISSUER_URL:-}
     depends_on:
       postgres:
         condition: service_healthy
@@ -131,7 +134,8 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       REDIS_HOST: redis
-      KEYCLOAK_URL: ${KEYCLOAK_ISSUER_URL:-http://keycloak:8080/keycloak}
+      KEYCLOAK_URL: http://keycloak:8080/keycloak
+      KEYCLOAK_ISSUER_URL: ${KEYCLOAK_ISSUER_URL:-}
       # Backend internal lifecycle API — the backend is the sole writer of
       # Model.status; the webservice requests transitions over this URL.
       # CALLBACK_SECRET must match the backend's value.

@@ -28,6 +28,7 @@ func AuthConfigFromEnv() auth.Config {
 		RedirectURL:  os.Getenv("REDIRECT_URL"),
 		ClientSecret: os.Getenv("KEYCLOAK_CLIENT_SECRET"),
 		Realm:        os.Getenv("KEYCLOAK_REALM"),
+		IssuerURL:    os.Getenv("KEYCLOAK_ISSUER_URL"),
 	}
 }
 
