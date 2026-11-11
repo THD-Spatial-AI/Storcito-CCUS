@@ -240,7 +240,7 @@ jobs:
           set -e
           echo '=== [PROD] Deploying CCUS App ==='
           DEPLOY_PATH_PROD="$HOME/${DEPLOY_SUBDIR_PROD}"
-          mkdir -p "$DEPLOY_PATH_PROD/app/backend" "$DEPLOY_PATH_PROD/nginx/conf.d" "$DEPLOY_PATH_PROD/nginx/ssl" "$DEPLOY_PATH_PROD/nginx/certbot"
+          mkdir -p "$DEPLOY_PATH_PROD/survey" "$DEPLOY_PATH_PROD/app/backend" "$DEPLOY_PATH_PROD/nginx/conf.d" "$DEPLOY_PATH_PROD/nginx/ssl" "$DEPLOY_PATH_PROD/nginx/certbot"
           cp "app/${APP_DEPLOY_COMPOSE}" "$DEPLOY_PATH_PROD/app/"
           cp nginx/nginx.conf "$DEPLOY_PATH_PROD/nginx/"
           cp nginx/conf.d/ccus.th-deg.de.conf "$DEPLOY_PATH_PROD/nginx/conf.d/"

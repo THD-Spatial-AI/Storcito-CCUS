@@ -36,8 +36,11 @@ services:
       AUTH_SERVICE_URL: http://auth-service:8001
       WEBSERVICE_SERVICE_URL: http://webservice:8082
       RATE_LIMIT_PER_MIN: 1000
+      # RUB survey sheets.
+      SURVEY_DATA_DIR: /app/survey
     volumes:
       - backend-storage-prod:/app/storage
+      - ../survey:/app/survey:ro
     networks:
       - spatialhub-net
 
