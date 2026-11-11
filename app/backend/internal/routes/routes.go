@@ -152,6 +152,8 @@ func registerFrontend(r *gin.Engine) {
 	r.Static("/assets", "./www/assets")
 	r.Static("/cesium", "./www/cesium")
 	r.Static("/images", "./www/images")
+	r.Static("/data", "./www/data")
+	r.Static("/docs", "./www/docs")
 	r.StaticFile("/vite.svg", "./www/vite.svg")
 
 	r.NoRoute(func(c *gin.Context) {
