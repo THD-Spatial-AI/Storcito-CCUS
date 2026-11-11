@@ -23,6 +23,7 @@ COPY app/backend/. .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/server ./cmd/main.go
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/migrate ./cmd/migrate/migration.go
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/seed ./cmd/seed
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/bin/seed-co2 ./cmd/seed-co2
 
 # Build the frontend.
 FROM node:20-alpine AS febuilder
@@ -60,6 +61,7 @@ WORKDIR /app
 COPY --from=gobuilder /app/bin/server /app/server
 COPY --from=gobuilder /app/bin/migrate /app/migrate
 COPY --from=gobuilder /app/bin/seed /app/seed
+COPY --from=gobuilder /app/bin/seed-co2 /app/seed-co2
 
 # Copy frontend dist
 COPY --from=febuilder /build/app/frontend/dist /app/www
@@ -76,7 +78,7 @@ COPY app/backend/entrypoint.sh /app/entrypoint.sh
 # Non-root user and storage.
 RUN useradd -r -s /bin/sh appuser && \
     mkdir -p /app/storage/data && \
-    chmod +x /app/server /app/migrate /app/seed /app/entrypoint.sh && \
+    chmod +x /app/server /app/migrate /app/seed /app/seed-co2 /app/entrypoint.sh && \
     chown -R appuser:appuser /app
 
 # Expose port

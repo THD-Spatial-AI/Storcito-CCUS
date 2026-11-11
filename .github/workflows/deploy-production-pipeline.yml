@@ -19,6 +19,7 @@ on:
           - deploy-app
           - migrate
           - seed
+          - seed-co2
 
 env:
   SERVER_URL_PROD: https://ccus.th-deg.de
@@ -310,3 +311,17 @@ jobs:
           cd "$DEPLOY_PATH_PROD/app"
           APP_IMAGE="${APP_IMAGE}" docker compose -f "$APP_DEPLOY_COMPOSE" run --rm -e SEED_KEYCLOAK_USER=false --entrypoint /app/seed app-backend-prod
           echo '=== [PROD] Seed complete ==='
+
+  seed-co2:
+    if: ${{ github.event.inputs.step == 'seed-co2' }}
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import STORE_CO2 nodes
+        run: |
+          set -e
+          echo '=== [PROD] Importing STORE_CO2 nodes ==='
+          DEPLOY_PATH_PROD="$HOME/${DEPLOY_SUBDIR_PROD}"
+          cd "$DEPLOY_PATH_PROD/app"
+          APP_IMAGE="${APP_IMAGE}" docker compose -f "$APP_DEPLOY_COMPOSE" run --rm --entrypoint /app/seed-co2 app-backend-prod
+          echo '=== [PROD] STORE_CO2 import complete ==='
