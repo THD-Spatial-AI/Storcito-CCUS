@@ -1891,11 +1891,6 @@
         "description": "Depois de configurar tudo, clique aqui para criar o modelo de simulação CCUS e iniciar a análise.",
         "tip": "Todos os campos têm de estar preenchidos antes de poder guardar"
       },
-      "precomputed": {
-        "title": "Mapa regional pré-calculado",
-        "description": "Todas as noites a região inteira é analisada com todas as camadas de risco ativas. Se a sua data dinâmica única estiver coberta, este interruptor recorta o resultado da sua área desse mapa e devolve-o em segundos.",
-        "tip": "Quando o interruptor não está disponível, o texto abaixo explica porquê, e o modelo calcula todos os passos para a sua área."
-      },
       "calculationStatus": {
         "title": "Estado do cálculo",
         "description": "Esta linha indica se as datas disponíveis estão a carregar, indisponíveis, com erro ou prontas a selecionar.",
@@ -2527,11 +2522,6 @@
       "purpose": "O STORE_CO2 analisa os nós selecionados em busca de ligações candidatas, depois traça-as e calcula os custos.",
       "nextStepHint": "A seguir verá quanto custam essas rotas.",
       "customData": "Dados personalizados (opcional)",
-      "lockedByPrecomputed": "Incluída no mapa regional pré-calculado. Desative o interruptor de pré-cálculo acima para personalizar as camadas.",
-      "precomputedLabel": "Mapa regional pré-calculado",
-      "precomputedInfoLabel": "Sobre o mapa regional pré-calculado",
-      "precomputedUnavailable": "A análise noturna ainda não processou esta data. O modelo calculará todos os passos para a sua área.",
-      "precomputedOffHint": "Cálculo completo para a sua área exata (~1-2 minutos); pode ativar ou desativar camadas individuais abaixo.",
       "routesQuestion": "Como se ligam?",
       "routesInfo": "Uma rota por par fonte-sumidouro, por conduta, camião ou ferrovia."
     },

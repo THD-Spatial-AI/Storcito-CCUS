@@ -1891,11 +1891,6 @@
         "description": "Når alt er konfigurert, klikker du her for å opprette CCUS-simuleringsmodellen og starte analysen.",
         "tip": "Alle feltene må fylles ut før du kan lagre"
       },
-      "precomputed": {
-        "title": "Forhåndsberegnet regionkart",
-        "description": "Hver natt analyseres hele regionen med alle risikolag aktivert. Hvis den ene dynamiske datoen din er dekket, klipper denne bryteren ut resultatet for området ditt fra det kartet og returnerer det på sekunder.",
-        "tip": "Når bryteren ikke er tilgjengelig, forklarer teksten under hvorfor, og modellen beregner i stedet hvert trinn for området ditt."
-      },
       "calculationStatus": {
         "title": "Beregningsstatus",
         "description": "Denne linjen viser om tilgjengelige datoer lastes inn, er utilgjengelige, har feil eller er klare til å velges.",
@@ -2532,11 +2527,6 @@
       "purpose": "STORE_CO2 undersøker de valgte nodene for mulige forbindelser, og finner deretter ruter og kostnader for dem.",
       "nextStepHint": "Deretter ser du hva rutene koster.",
       "customData": "Egne data (valgfritt)",
-      "lockedByPrecomputed": "Inkludert i det forhåndsberegnede regionkartet. Slå av bryteren for forhåndsberegning ovenfor for å tilpasse lagene.",
-      "precomputedLabel": "Forhåndsberegnet regionkart",
-      "precomputedInfoLabel": "Om det forhåndsberegnede regionkartet",
-      "precomputedUnavailable": "Den nattlige analysen har ikke behandlet denne datoen ennå. Modellen beregner alle trinn for området ditt.",
-      "precomputedOffHint": "Full beregning for nøyaktig ditt område (~1–2 minutter); du kan slå enkeltlag av og på nedenfor.",
       "routesQuestion": "Hvordan henger de sammen?",
       "routesInfo": "Én rute per par av kilde og lager, med rørledning, lastebil eller jernbane."
     },

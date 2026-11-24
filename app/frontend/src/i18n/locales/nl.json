@@ -1694,11 +1694,6 @@
         "description": "Zodra u alles heeft geconfigureerd, klikt u hier om uw CCUS-simulatiemodel te maken en de analyse te starten.",
         "tip": "Alle velden moeten zijn ingevuld voordat u kunt opslaan"
       },
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -2542,11 +2537,6 @@
       "purpose": "STORE_CO2 onderzoekt de gekozen knooppunten op mogelijke verbindingen en berekent route en kosten.",
       "nextStepHint": "Daarna ziet u wat die routes kosten.",
       "customData": "Custom data (optional)",
-      "lockedByPrecomputed": "Opgenomen in de voorberekende regiokaart. Schakel de schakelaar hierboven uit om lagen aan te passen.",
-      "precomputedLabel": "Voorberekende regiokaart",
-      "precomputedInfoLabel": "Over de voorberekende regiokaart",
-      "precomputedUnavailable": "De nachtelijke analyse heeft deze datum nog niet verwerkt. Het model berekent alle stappen voor uw gebied.",
-      "precomputedOffHint": "Volledige berekening voor precies uw gebied (~1-2 minuten); u kunt losse lagen hieronder aan- of uitzetten.",
       "routesQuestion": "Hoe zijn ze verbonden?",
       "routesInfo": "Eén route per bron-putpaar, via pijpleiding, vrachtwagen of spoor."
     },

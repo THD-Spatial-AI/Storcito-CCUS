@@ -1891,11 +1891,6 @@
         "description": "Sobald Sie alles konfiguriert haben, klicken Sie hier, um Ihr CCUS-Simulationsmodell zu erstellen und die Analyse zu starten.",
         "tip": "Alle Felder müssen ausgefüllt sein, bevor Sie speichern können"
       },
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -2532,11 +2527,6 @@
       "purpose": "STORE_CO2 prüft die gewählten Knoten auf mögliche Verbindungen und berechnet Route und Kosten.",
       "nextStepHint": "Als Nächstes sehen Sie die Kosten dieser Routen.",
       "customData": "Custom data (optional)",
-      "lockedByPrecomputed": "In der vorberechneten Regionalkarte enthalten. Deaktivieren Sie den Schalter oben, um Ebenen anzupassen.",
-      "precomputedLabel": "Vorberechnete Regionalkarte",
-      "precomputedInfoLabel": "Über die vorberechnete Regionalkarte",
-      "precomputedUnavailable": "Die nächtliche Analyse hat dieses Datum noch nicht verarbeitet. Das Modell berechnet alle Schritte für Ihr Gebiet.",
-      "precomputedOffHint": "Vollständige Berechnung für genau Ihr Gebiet (~1-2 Minuten); Sie können einzelne Ebenen unten umschalten.",
       "routesQuestion": "Wie sind sie verbunden?",
       "routesInfo": "Eine Route je Quelle-Senke-Paar, per Pipeline, Lkw oder Bahn."
     },

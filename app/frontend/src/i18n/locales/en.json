@@ -1891,11 +1891,6 @@
         "description": "Once you've configured everything, click here to create your CCUS simulation model and start the analysis.",
         "tip": "All fields must be completed before you can save"
       },
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -2532,11 +2527,6 @@
       "purpose": "STORE_CO2 screens the selected nodes for candidate connections, then routes and costs them.",
       "nextStepHint": "Next you'll see what those routes cost.",
       "customData": "Custom data (optional)",
-      "lockedByPrecomputed": "Included in the precomputed regional map. Disable the precomputed switch above to customise layers.",
-      "precomputedLabel": "Precomputed regional map",
-      "precomputedInfoLabel": "About the precomputed regional map",
-      "precomputedUnavailable": "The nightly analysis has not processed this date yet. The model will compute all steps for your area.",
-      "precomputedOffHint": "Full computation for your exact area (~1-2 minutes); you can toggle individual layers below.",
       "routesQuestion": "How do they connect?",
       "routesInfo": "One route per source-sink pair, by pipeline, truck or railway."
     },

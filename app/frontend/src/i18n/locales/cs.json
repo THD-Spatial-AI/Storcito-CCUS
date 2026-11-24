@@ -1698,11 +1698,6 @@
         "description": "Jakmile vše nakonfigurujete, klikněte zde pro vytvoření modelu CCUS simulace a spuštění analýzy.",
         "tip": "Všechna pole musí být vyplněna, než budete moci uložit"
       },
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -2541,11 +2536,6 @@
       "purpose": "STORE_CO2 prověří vybrané uzly na možná spojení, poté je trasuje a spočítá náklady.",
       "nextStepHint": "Dále uvidíte, kolik tyto trasy stojí.",
       "customData": "Custom data (optional)",
-      "lockedByPrecomputed": "Zahrnuto v předpočítané regionální mapě. Vypněte přepínač výše, chcete-li vrstvy upravit.",
-      "precomputedLabel": "Předpočítaná regionální mapa",
-      "precomputedInfoLabel": "O předpočítané regionální mapě",
-      "precomputedUnavailable": "Noční analýza toto datum zatím nezpracovala. Model spočítá všechny kroky pro vaši oblast.",
-      "precomputedOffHint": "Úplný výpočet přesně pro vaši oblast (~1-2 minuty); jednotlivé vrstvy níže můžete přepínat.",
       "routesQuestion": "Jak jsou propojeny?",
       "routesInfo": "Jedna trasa na dvojici zdroj-úložiště: potrubí, kamion nebo železnice."
     },

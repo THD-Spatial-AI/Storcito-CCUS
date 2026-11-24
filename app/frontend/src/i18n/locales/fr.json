@@ -1895,11 +1895,6 @@
         "description": "Une fois tout configuré, cliquez ici pour créer votre modèle de simulation CCUS et démarrer l'analyse.",
         "tip": "Tous les champs doivent être complétés avant de pouvoir enregistrer"
       },
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -2531,11 +2526,6 @@
       "purpose": "STORE_CO2 examine les nœuds sélectionnés pour trouver des connexions, puis les trace et les chiffre.",
       "nextStepHint": "Ensuite, vous verrez le coût de ces itinéraires.",
       "customData": "Custom data (optional)",
-      "lockedByPrecomputed": "Inclus dans la carte régionale précalculée. Désactivez le commutateur ci-dessus pour personnaliser les couches.",
-      "precomputedLabel": "Carte régionale précalculée",
-      "precomputedInfoLabel": "À propos de la carte régionale précalculée",
-      "precomputedUnavailable": "L'analyse nocturne n'a pas encore traité cette date. Le modèle calculera toutes les étapes pour votre zone.",
-      "precomputedOffHint": "Calcul complet pour votre zone exacte (~1-2 minutes) ; vous pouvez basculer des couches individuelles ci-dessous.",
       "routesQuestion": "Comment sont-ils connectés ?",
       "routesInfo": "Un itinéraire par paire source-puits, par conduite, camion ou rail."
     },

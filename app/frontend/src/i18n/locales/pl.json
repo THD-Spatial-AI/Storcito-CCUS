@@ -1698,11 +1698,6 @@
         "description": "Po skonfigurowaniu wszystkiego, kliknij tutaj, aby utworzyć model symulacji CCUS i rozpocząć analizę.",
         "tip": "Wszystkie pola muszą być wypełnione, zanim będziesz mógł zapisać"
       },
-      "precomputed": {
-        "title": "Precomputed regional map",
-        "description": "Every night the whole region is analysed with all risk layers enabled. If your single dynamic date is covered, this switch clips your area's result from that map and returns it in seconds.",
-        "tip": "When the switch is unavailable, the text below it explains why, and the model computes every step for your area instead."
-      },
       "calculationStatus": {
         "title": "Calculation status",
         "description": "This line tells you whether available dates are loading, unavailable, errored, or ready for selection.",
@@ -2541,11 +2536,6 @@
       "purpose": "STORE_CO2 sprawdza wybrane węzły pod kątem możliwych połączeń, a następnie wyznacza trasy i koszty.",
       "nextStepHint": "Następnie zobaczysz, ile kosztują te trasy.",
       "customData": "Custom data (optional)",
-      "lockedByPrecomputed": "Uwzględnione we wstępnie obliczonej mapie regionalnej. Wyłącz przełącznik powyżej, aby dostosować warstwy.",
-      "precomputedLabel": "Wstępnie obliczona mapa regionalna",
-      "precomputedInfoLabel": "O wstępnie obliczonej mapie regionalnej",
-      "precomputedUnavailable": "Nocna analiza nie przetworzyła jeszcze tej daty. Model policzy wszystkie kroki dla Twojego obszaru.",
-      "precomputedOffHint": "Pełne obliczenia dokładnie dla Twojego obszaru (~1-2 minuty); możesz przełączać pojedyncze warstwy poniżej.",
       "routesQuestion": "Jak są połączone?",
       "routesInfo": "Jedna trasa na parę źródło-zbiornik: rurociąg, ciężarówka lub kolej."
     },
