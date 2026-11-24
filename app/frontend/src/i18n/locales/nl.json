@@ -1521,7 +1521,7 @@
       },
       "map": {
         "title": "Interactieve Kaart",
-        "description": "Uw belangrijkste werkruimte voor geografische analyse. Bekijk kaartlagen, selecteer gebieden voor beoordeling en visualiseer energierisicogegevens."
+        "description": "Uw belangrijkste werkruimte voor geografische analyse. Bekijk kaartlagen, selecteer gebieden voor beoordeling en visualiseer gegevens over CO₂-uitstoot, -transport en -opslag."
       },
       "reports": {
         "title": "Simulatierapporten",
@@ -1715,7 +1715,7 @@
       },
       "finalReview": {
         "title": "Validation status",
-        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+        "description": "De controlestap controleert de modelnaam, de periode en de geselecteerde knooppunten voordat de berekening kan starten."
       },
       "saveSummary": {
         "title": "Save summary",

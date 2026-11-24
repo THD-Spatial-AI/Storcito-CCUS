@@ -1912,7 +1912,7 @@
       },
       "finalReview": {
         "title": "Estado da validação",
-        "description": "O passo de revisão verifica o nome do modelo, a data, a AOI, os componentes de risco e o buffer antes de a execução poder começar."
+        "description": "O passo de revisão verifica o nome do modelo, o período e os nós selecionados antes de a execução poder começar."
       },
       "saveSummary": {
         "title": "Resumo antes de guardar",

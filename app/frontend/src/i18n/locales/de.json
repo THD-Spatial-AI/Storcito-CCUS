@@ -1718,7 +1718,7 @@
       },
       "map": {
         "title": "Interaktive Karte",
-        "description": "Ihr Hauptarbeitsbereich für geografische Analysen. Zeigen Sie Kartenebenen an, wählen Sie Bereiche für die Bewertung aus und visualisieren Sie Energierisikodaten."
+        "description": "Ihr Hauptarbeitsbereich für geografische Analysen. Zeigen Sie Kartenebenen an, wählen Sie Bereiche für die Bewertung aus und visualisieren Sie Daten zu CO₂-Emissionen, -Transport und -Speicherung."
       },
       "reports": {
         "title": "Simulationsberichte",
@@ -1912,7 +1912,7 @@
       },
       "finalReview": {
         "title": "Validation status",
-        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+        "description": "Der Prüfschritt kontrolliert Modellname, Zeitraum und ausgewählte Knoten, bevor die Berechnung starten kann."
       },
       "saveSummary": {
         "title": "Save summary",

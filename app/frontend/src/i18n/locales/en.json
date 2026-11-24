@@ -1718,7 +1718,7 @@
       },
       "map": {
         "title": "Interactive Map",
-        "description": "Your main workspace for geographical analysis. View map layers, select areas for assessment, and visualize energy risk data."
+        "description": "Your main workspace for geographical analysis. View map layers, select areas for assessment, and visualize CO₂ emission, transport and storage data."
       },
       "reports": {
         "title": "Simulation Reports",
@@ -1912,7 +1912,7 @@
       },
       "finalReview": {
         "title": "Validation status",
-        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+        "description": "The review step checks the model name, timeframe and selected nodes before the run can start."
       },
       "saveSummary": {
         "title": "Save summary",

@@ -1521,7 +1521,7 @@
       },
       "map": {
         "title": "Mappa Interattiva",
-        "description": "Il tuo spazio di lavoro principale per l'analisi geografica. Visualizza livelli mappa, seleziona aree per la valutazione e visualizza dati di rischio energetico."
+        "description": "Il tuo spazio di lavoro principale per l'analisi geografica. Visualizza livelli mappa, seleziona aree per la valutazione e visualizza dati su emissioni, trasporto e stoccaggio di CO₂."
       },
       "reports": {
         "title": "Report di Simulazione",
@@ -1715,7 +1715,7 @@
       },
       "finalReview": {
         "title": "Validation status",
-        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+        "description": "Il passaggio di revisione verifica il nome del modello, il periodo e i nodi selezionati prima che l'esecuzione possa iniziare."
       },
       "saveSummary": {
         "title": "Save summary",

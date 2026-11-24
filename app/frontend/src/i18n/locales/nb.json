@@ -1912,7 +1912,7 @@
       },
       "finalReview": {
         "title": "Valideringsstatus",
-        "description": "Gjennomgangstrinnet kontrollerer modellnavn, dato, interesseområde, risikokomponenter og buffer før kjøringen kan starte."
+        "description": "Gjennomgangstrinnet kontrollerer modellnavn, tidsperiode og valgte noder før kjøringen kan starte."
       },
       "saveSummary": {
         "title": "Lagringssammendrag",

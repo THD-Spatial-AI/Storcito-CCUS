@@ -1722,7 +1722,7 @@
       },
       "map": {
         "title": "Carte Interactive",
-        "description": "Votre espace de travail principal pour l'analyse géographique. Visualisez les couches de carte, sélectionnez des zones pour l'évaluation et visualisez les données de risque énergétique."
+        "description": "Votre espace de travail principal pour l'analyse géographique. Visualisez les couches de carte, sélectionnez des zones pour l'évaluation et visualisez les données d'émissions, de transport et de stockage de CO₂."
       },
       "reports": {
         "title": "Rapports de Simulation",
@@ -1916,7 +1916,7 @@
       },
       "finalReview": {
         "title": "Validation status",
-        "description": "The review step checks the model name, date, AOI, risk components, and buffer before the run can start."
+        "description": "L'étape de vérification contrôle le nom du modèle, la période et les nœuds sélectionnés avant que le calcul puisse démarrer."
       },
       "saveSummary": {
         "title": "Save summary",
