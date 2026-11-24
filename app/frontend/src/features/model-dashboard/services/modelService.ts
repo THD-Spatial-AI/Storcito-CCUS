@@ -21,10 +21,10 @@ function extractBaseTitle(title: string): string {
   }
 
   const possibleVersion = trimmedTitle.substring(lastSpaceIndex);
-  // Version suffix.
+  // version suffix
   if (possibleVersion.length >= 3 && possibleVersion.startsWith(" v")) {
     const numberPart = possibleVersion.substring(2);
-    // Digits only.
+    // digits only
     if (/^\d{1,5}$/.test(numberPart)) {
       return trimmedTitle.substring(0, lastSpaceIndex);
     }
@@ -69,13 +69,13 @@ export interface Model {
   description?: string;
   status: ModelStatus;
 
-  // Location
+  // location
   region?: string;
   country?: string;
   coordinates?: Record<string, unknown>;
   selected_count?: number;
 
-  // Period
+  // period
   from_date: string;
   to_date: string;
 
@@ -83,33 +83,33 @@ export interface Model {
 
   results?: Record<string, unknown>;
 
-  // External
+  // external
   session_id?: number;
   callback_url?: string;
 
-  // Group/Hierarchy
+  // group/hierarchy
   group_id?: number;
   parent_model_id?: number;
   parent_model_title?: string;
   child_model_ids?: number[];
   is_copy?: boolean;
-  /** Family versions, grouped only. */
+  /** family versions grouped */
   versions?: Model[];
 
-  // Activation
+  // activation
   is_active?: boolean;
 
-  // Calculation timing
+  // calculation timing
   calculation_queued_at?: string;
   calculation_started_at?: string;
   calculation_completed_at?: string;
-  /** Backfilled queue time. */
+  /** backfilled queue time */
   calculation_queued_at_estimated?: boolean;
 
-  // Sharing
+  // sharing
   shares?: ModelShare[];
 
-  // Timestamps
+  // timestamps
   created_at: string;
   updated_at: string;
   deleted_at?: string;
@@ -126,40 +126,65 @@ export interface ModelShare {
   updated_at: string;
 }
 
-interface CreateModelRequest {
-  title: string;
+// shared request fields
+interface ModelRequestFields {
   description?: string;
   workspace_id?: number;
   region?: string;
   country?: string;
   coordinates?: Record<string, unknown>;
   selected_count?: number;
-  from_date: string;
-  to_date: string;
   config?: Record<string, unknown>;
   group_id?: number;
-  parent_model_id?: number;
   is_copy?: boolean;
 }
 
-export interface UpdateModelRequest {
+interface CreateModelRequest extends ModelRequestFields {
+  title: string;
+  from_date: string;
+  to_date: string;
+  parent_model_id?: number;
+}
+
+export interface UpdateModelRequest extends ModelRequestFields {
   title?: string;
-  description?: string;
   status?: string;
-  workspace_id?: number;
-  region?: string;
-  country?: string;
-  coordinates?: Record<string, unknown>;
-  selected_count?: number;
   from_date?: string;
   to_date?: string;
-  config?: Record<string, unknown>;
   results?: Record<string, unknown>;
   session_id?: number;
   callback_url?: string;
-  group_id?: number;
   parent_model_id?: number | null;
-  is_copy?: boolean;
+}
+
+/** list query filters */
+export interface ModelListParams {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  workspace_id?: number;
+  sort_by?: string;
+  sort_order?: string;
+  mine?: boolean;
+  from_date?: string;
+  to_date?: string;
+  pinned?: string;
+  pinned_only?: string;
+  status?: string;
+  grouped?: boolean;
+  owner?: string;
+  territory?: string;
+}
+
+/** tab count filters */
+export interface TabCountParams {
+  search?: string;
+  workspace_id?: number;
+  from_date?: string;
+  to_date?: string;
+  pinned?: string;
+  owner?: string;
+  territory?: string;
 }
 
 export interface ModelStats {
@@ -196,6 +221,16 @@ interface ModelStatsResponse {
   data: ModelStats;
 }
 
+export interface AdminMetrics {
+  total_models: number;
+  created_today: number;
+  runs_24h: number;
+  failed_24h: number;
+  queued: number;
+  running: number;
+  avg_run_seconds: number | null;
+}
+
 class ModelService {
   private readonly baseURL = "/models";
 
@@ -204,21 +239,7 @@ class ModelService {
     return response.data;
   }
 
-  async getModels(params?: {
-    limit?: number;
-    offset?: number;
-    search?: string;
-    workspace_id?: number;
-    sort_by?: string;
-    sort_order?: string;
-    mine?: boolean;
-    from_date?: string;
-    to_date?: string;
-    pinned?: string;
-    pinned_only?: string;
-    status?: string;
-    grouped?: boolean;
-  }): Promise<ModelListResponse> {
+  async getModels(params?: ModelListParams): Promise<ModelListResponse> {
     const response = await axios.get(this.baseURL, { params });
     return response.data;
   }
@@ -238,13 +259,28 @@ class ModelService {
     return response.data;
   }
 
+  /** count dashboard tab */
+  async getTabCounts(params: TabCountParams): Promise<Record<string, number>> {
+    const response = await axios.get(`${this.baseURL}/tab-counts`, { params });
+    const data = response.data?.data;
+    return data && !Array.isArray(data) ? data : {};
+  }
+
+  /** system numbers admin */
+  async getAdminMetrics(): Promise<AdminMetrics> {
+    const response = await axios.get(`${this.baseURL}/admin-metrics`);
+    return response.data?.data;
+  }
+
   async getModelStats(): Promise<ModelStatsResponse> {
     const response = await axios.get(`${this.baseURL}/stats`);
     return response.data;
   }
 
-  async startCalculation(id: number): Promise<ModelResponse> {
-    const response = await axios.post(`/calculation/start/${id}`);
+  async startCalculation(id: number, options: { notify?: boolean } = {}): Promise<ModelResponse> {
+    // notify=false no notification
+    const query = options.notify === false ? "?notify=false" : "";
+    const response = await axios.post(`/calculation/start/${id}${query}`);
     return response.data;
   }
 
@@ -273,7 +309,7 @@ class ModelService {
   }
 
   async duplicateModel(id: number, cachedModels?: Model[]): Promise<ModelResponse> {
-    // Fetch original model
+    // fetch original model
     const originalResponse = await this.getModelById(id);
     if (!originalResponse.success) {
       throw new Error("Failed to fetch original simulation");
@@ -281,7 +317,7 @@ class ModelService {
 
     const original = originalResponse.data;
 
-    // YYYY-MM-DD formatter
+    // yyyy-mm-dd formatter
     const formatDate = (dateStr: string): string => {
       const date = new Date(dateStr);
       return date.toISOString().split("T")[0];
@@ -298,7 +334,7 @@ class ModelService {
       groupId = groupId || original.id;
     }
 
-    // Reuse cache.
+    // reuse cache
     let allModels: Model[];
     if (cachedModels) {
       allModels = cachedModels;
@@ -310,10 +346,10 @@ class ModelService {
       allModels = allModelsResponse.data;
     }
 
-    // ReDoS-safe extraction.
+    // redos-safe extraction
     const baseTitle = extractBaseTitle(original.title);
 
-    // Match version suffix.
+    // match version suffix
     const versionRegex = /^ v(\d{1,5})$/;
     const siblings = allModels.filter((model) => {
       if (model.parent_model_id !== parentModelId) return false;
@@ -323,7 +359,7 @@ class ModelService {
       return versionRegex.test(versionPart);
     });
 
-    // Highest sibling version.
+    // highest sibling version
     let maxVersion = 0;
     for (const sibling of siblings) {
       const versionPart = sibling.title.slice(baseTitle.length);

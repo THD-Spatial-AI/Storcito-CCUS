@@ -164,7 +164,7 @@ export const ModelsManagement: React.FC<ModelsManagementProps> = ({ onModelActio
 	};
 
 	const stats = statsResponse?.data;
-	const tabCounts: Record<Exclude<StatusTab, "pinned">, number> | null = stats
+	const tabCounts: Partial<Record<Exclude<StatusTab, "pinned">, number>> | null = stats
 		? {
 			all: stats.total,
 			running: (stats.queue || 0) + (stats.running || 0),
