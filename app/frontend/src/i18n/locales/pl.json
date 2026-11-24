@@ -1591,7 +1591,7 @@
         },
         "columns": {
           "title": "Kolumny",
-          "description": "Ostatnia aktywność pokazuje najpierw uruchomione modele, potem ostatnio zakończone. Okres, obszar i ryzyko w jednym miejscu."
+          "description": "Ostatnia aktywność pokazuje najpierw uruchomione modele, potem ostatnio zakończone. Okres, obszar i status w jednym miejscu."
         },
         "pin": {
           "title": "Przypnij modele",

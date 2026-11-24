@@ -1788,7 +1788,7 @@
         },
         "columns": {
           "title": "Colonnes",
-          "description": "Dernière activité liste d'abord les modèles en cours, puis les plus récemment terminés. Période, zone et risque en un coup d'œil."
+          "description": "Dernière activité liste d'abord les modèles en cours, puis les plus récemment terminés. Période, zone et statut en un coup d'œil."
         },
         "pin": {
           "title": "Épingler les modèles",

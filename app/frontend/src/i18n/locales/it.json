@@ -1587,7 +1587,7 @@
         },
         "columns": {
           "title": "Colonne",
-          "description": "Ultima attività elenca prima i modelli in esecuzione, poi quelli terminati più di recente. Periodo, area e rischio a colpo d'occhio."
+          "description": "Ultima attività elenca prima i modelli in esecuzione, poi quelli terminati più di recente. Periodo, area e stato a colpo d'occhio."
         },
         "pin": {
           "title": "Fissa i modelli",

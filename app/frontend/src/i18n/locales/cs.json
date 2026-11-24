@@ -1591,7 +1591,7 @@
         },
         "columns": {
           "title": "Sloupce",
-          "description": "Poslední aktivita řadí nejprve běžící modely, poté naposledy dokončené. Období, oblast a riziko na první pohled."
+          "description": "Poslední aktivita řadí nejprve běžící modely, poté naposledy dokončené. Období, oblast a stav na první pohled."
         },
         "pin": {
           "title": "Připnout modely",

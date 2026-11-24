@@ -1587,7 +1587,7 @@
         },
         "columns": {
           "title": "Kolommen",
-          "description": "Laatste activiteit toont eerst actieve modellen, daarna de meest recent afgeronde. Periode, gebied en risico in één oogopslag."
+          "description": "Laatste activiteit toont eerst actieve modellen, daarna de meest recent afgeronde. Periode, gebied en status in één oogopslag."
         },
         "pin": {
           "title": "Modellen pinnen",

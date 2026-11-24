@@ -1788,7 +1788,7 @@
         },
         "columns": {
           "title": "Columnas",
-          "description": "Última actividad lista primero los modelos en ejecución y luego los finalizados más recientemente. Período, área y riesgo de un vistazo."
+          "description": "Última actividad lista primero los modelos en ejecución y luego los finalizados más recientemente. Período, área y estado de un vistazo."
         },
         "pin": {
           "title": "Fijar modelos",

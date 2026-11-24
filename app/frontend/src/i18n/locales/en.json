@@ -1784,7 +1784,7 @@
         },
         "columns": {
           "title": "Columns",
-          "description": "Last activity lists running models first, then the most recently finished. Period, area and risk at a glance."
+          "description": "Last activity lists running models first, then the most recently finished. Period, area and status at a glance."
         },
         "pin": {
           "title": "Pin models",

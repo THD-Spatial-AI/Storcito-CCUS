@@ -1784,7 +1784,7 @@
         },
         "columns": {
           "title": "Spalten",
-          "description": "Letzte Aktivität listet zuerst laufende Modelle, dann die zuletzt abgeschlossenen. Zeitraum, Gebiet und Risiko auf einen Blick."
+          "description": "Letzte Aktivität listet zuerst laufende Modelle, dann die zuletzt abgeschlossenen. Zeitraum, Gebiet und Status auf einen Blick."
         },
         "pin": {
           "title": "Modelle anpinnen",

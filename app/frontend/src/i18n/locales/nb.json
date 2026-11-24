@@ -1784,7 +1784,7 @@
         },
         "columns": {
           "title": "Kolonner",
-          "description": "Siste aktivitet viser modeller som kjører først, deretter de sist fullførte. Periode, område og risiko på et øyeblikk."
+          "description": "Siste aktivitet viser modeller som kjører først, deretter de sist fullførte. Periode, område og status på et øyeblikk."
         },
         "pin": {
           "title": "Fest modeller",
