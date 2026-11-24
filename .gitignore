@@ -11,7 +11,7 @@ build/
 sonarqube-25.10.0.114319
 sonar-project.properties
 .scannerwork
-
+docs
 
 # Compiled Go binaries
 main
