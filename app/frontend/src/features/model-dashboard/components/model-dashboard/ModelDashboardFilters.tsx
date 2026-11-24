@@ -1,8 +1,16 @@
 import type { ReactNode } from "react";
 import { DateRangePicker, Dialog, Group as FieldGroup, Popover, Button as Trigger } from "react-aria-components";
 import { parseDate, type DateValue } from "@internationalized/date";
-import { AlertCircle, BarChart3, Copy, Edit, Filter, Plus, RefreshCw, Search, Settings, Share2, Trash2, X } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@spatialhub/ui";
+import { AlertCircle, BarChart3, Copy, Edit, Filter, FolderCog, Plus, RefreshCw, Settings, Share2, Trash2, X } from "lucide-react";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@spatialhub/ui";
 import Chip from "@/components/ui/Chip";
 import { WorkspaceSelector } from "@/components/workspace";
 import type { Workspace } from "@/components/workspace";
@@ -10,6 +18,7 @@ import { useTranslation } from "@/i18n";
 import type { ModelStats } from "@/features/model-dashboard/services/modelService";
 import { RangeCalendar } from "@/components/ui/calendar-rac";
 import type { Group } from "./types";
+import { RefreshButton, SearchInput, TOOLBAR_ICON_BUTTON_CLASS } from "./ToolbarControls";
 
 interface ModelDashboardFiltersProps {
 	groups: Group[];
@@ -43,11 +52,6 @@ interface ModelDashboardFiltersProps {
 	table: ReactNode;
 }
 
-const TOOLBAR_BUTTON_CLASS =
-	"inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors duration-150 hover:bg-muted/60 disabled:cursor-not-allowed disabled:opacity-50";
-const TOOLBAR_ICON_BUTTON_CLASS =
-	"inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors duration-150 hover:bg-muted/60 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
-
 export function ModelDashboardFilters({
 	groups, selectedGroup, setSelectedGroup, filterText, setFilterText, filterFromDate, filterToDate, onDateRangeChange, isLoadingWorkspace, handleWorkspaceChange, setIsCreateWsOpen, wsReloadKey, normalizedWorkspaceId, preferredWorkspaceId, currentWorkspace, handleRefresh, isRefreshing, isLoading, canManageWorkspace, setIsShareWsOpen, setIsCopyWsOpen, setIsRenameWsOpen, handleDeleteWorkspace, bulkActions, stats, handleNewModel, isModelLimitReached, tabs, table,
 }: ModelDashboardFiltersProps) {
@@ -67,17 +71,17 @@ export function ModelDashboardFilters({
 
 	return (
 		<>
-			{/* Page header */}
+			{/* page header */}
 			<div className="md-rise flex flex-wrap items-end justify-between gap-4">
 				<div className="flex items-center gap-3.5">
 					<div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-muted/50">
 						<BarChart3 className="h-4.5 w-4.5 text-foreground" />
 					</div>
 					<div>
-						<h1 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl">
+						<h1 className="text-lg font-semibold tracking-tight text-foreground sm:text-xl [@media(pointer:coarse)]:!text-base">
 							{t('model.dashboard')}
 						</h1>
-						<p className="mt-0.5 text-sm text-muted-foreground">{t('model.manageConfigurations')}</p>
+						<p className="mt-0.5 text-sm text-muted-foreground [@media(pointer:coarse)]:!text-xs">{t('model.manageConfigurations')}</p>
 					</div>
 				</div>
 				<Tooltip>
@@ -106,7 +110,7 @@ export function ModelDashboardFilters({
 				</Tooltip>
 			</div>
 
-			{/* Groups Section */}
+			{/* groups section */}
 			{groups.length > 0 && (
 				<div className="md-card md-rise px-4 py-3.5">
 					<div className="mb-2.5 flex items-center gap-2">
@@ -135,24 +139,15 @@ export function ModelDashboardFilters({
 				</div>
 			)}
 
-			{/* Main Content Card */}
+			{/* main content card */}
 			<div className="md-card md-rise" style={{ animationDelay: "60ms" }}>
-				{/* Filter toolbar */}
+				{/* filter toolbar */}
 				<div className="flex flex-wrap items-center gap-2 p-4 sm:px-5">
-					{/* Search and period */}
+					{/* search and period */}
 					<div data-tour="model-search" className="flex w-full items-center gap-2 sm:w-auto sm:min-w-[264px] sm:flex-1 sm:max-w-[26.75rem]">
-						<div className="relative min-w-0 flex-1">
-							<Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-							<input
-								type="text"
-								placeholder={t('model.searchModels')}
-								value={filterText}
-								onChange={(e) => setFilterText(e.target.value)}
-								className="h-9 w-full rounded-lg border border-input bg-background pl-9 pr-3 text-sm text-foreground transition-colors duration-150 placeholder:text-muted-foreground hover:border-muted-foreground/40"
-							/>
-						</div>
+						<SearchInput value={filterText} onChange={setFilterText} placeholder={t('model.searchModels')} />
 
-						{/* Period filter. */}
+						{/* period filter */}
 						<DateRangePicker
 							value={dateRangeValue}
 							onChange={handleRangeChange}
@@ -205,7 +200,7 @@ export function ModelDashboardFilters({
 						</DateRangePicker>
 					</div>
 
-					{/* Workspace Controls */}
+					{/* workspace controls */}
 					<div className="flex flex-wrap items-center gap-2">
 						{isLoadingWorkspace ? (
 							<div className="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm">
@@ -233,106 +228,72 @@ export function ModelDashboardFilters({
 
 						<span className="mx-1 hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
 
-						{/* Model, workspace actions */}
+						{/* model workspace actions */}
 						<div data-tour="model-actions" className="flex flex-wrap items-center gap-2">
-							{/* Model refresh */}
-							<Tooltip>
-								<TooltipTrigger asChild>
-									<button
-										data-tour="model-refresh"
-										onClick={handleRefresh}
-										disabled={isRefreshing || isLoading}
-										className={TOOLBAR_ICON_BUTTON_CLASS}
-										aria-label={t('model.refreshModels')}
-									>
-										<RefreshCw className={`h-4 w-4 ${isRefreshing || isLoading ? 'animate-spin' : ''}`} />
-									</button>
-								</TooltipTrigger>
-								<TooltipContent>
-									{t('model.refreshModels')}
-								</TooltipContent>
-							</Tooltip>
+							{/* model refresh */}
+							<RefreshButton
+								dataTour="model-refresh"
+								onClick={() => void handleRefresh()}
+								spinning={isRefreshing || isLoading}
+								label={t('model.refreshModels')}
+							/>
 
+							{/* workspace actions out */}
 							{currentWorkspace && (
-								<>
-									{canManageWorkspace && (
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<button
-													onClick={() => setIsShareWsOpen(true)}
-													className={TOOLBAR_BUTTON_CLASS}
-												>
-													<Share2 className="h-4 w-4 text-muted-foreground" />
-													<span className="hidden sm:inline">{t('model.share')}</span>
-												</button>
-											</TooltipTrigger>
-											<TooltipContent>
-												{t('model.shareWorkspace')}
-											</TooltipContent>
-										</Tooltip>
-									)}
-
+								<DropdownMenu>
 									<Tooltip>
 										<TooltipTrigger asChild>
-											<button
-												onClick={() => setIsCopyWsOpen(true)}
-												className={TOOLBAR_BUTTON_CLASS}
-											>
-												<Copy className="h-4 w-4 text-muted-foreground" />
-												<span className="hidden sm:inline">{t('model.copy')}</span>
-											</button>
+											<DropdownMenuTrigger asChild>
+												<button
+													type="button"
+													data-tour="workspace-actions"
+													aria-label={t('model.workspaceActions', 'Workspace actions')}
+													className={TOOLBAR_ICON_BUTTON_CLASS}
+												>
+													<FolderCog className="h-4 w-4" />
+												</button>
+											</DropdownMenuTrigger>
 										</TooltipTrigger>
-										<TooltipContent>
-											{t('model.copyWorkspace')}
-										</TooltipContent>
+										<TooltipContent>{t('model.workspaceActions', 'Workspace actions')}</TooltipContent>
 									</Tooltip>
-
-									{!currentWorkspace.is_default && canManageWorkspace && (
-										<>
-											<Tooltip>
-												<TooltipTrigger asChild>
-													<button
-														onClick={() => setIsRenameWsOpen(true)}
-														className={TOOLBAR_BUTTON_CLASS}
-													>
-														<Edit className="h-4 w-4 text-muted-foreground" />
-														<span className="hidden sm:inline">{t('model.rename')}</span>
-													</button>
-												</TooltipTrigger>
-												<TooltipContent>
-													{t('model.renameWorkspace')}
-												</TooltipContent>
-											</Tooltip>
-
-											<Tooltip>
-												<TooltipTrigger asChild>
-													<button
-														onClick={handleDeleteWorkspace}
-														className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-destructive/30 bg-card px-3 text-sm font-medium text-destructive transition-colors duration-150 hover:bg-destructive/10"
-													>
-														<Trash2 className="h-4 w-4" />
-														<span className="hidden sm:inline">{t('model.delete')}</span>
-													</button>
-												</TooltipTrigger>
-												<TooltipContent>
-													{t('model.deleteWorkspace')}
-												</TooltipContent>
-											</Tooltip>
-										</>
-									)}
-								</>
+									<DropdownMenuContent align="start" className="w-52">
+										{canManageWorkspace && (
+											<DropdownMenuItem onSelect={() => setIsShareWsOpen(true)}>
+												<Share2 />
+												{t('model.workspaceMenu.share', 'Share workspace')}
+											</DropdownMenuItem>
+										)}
+										<DropdownMenuItem onSelect={() => setIsCopyWsOpen(true)}>
+											<Copy />
+											{t('model.workspaceMenu.copy', 'Copy workspace')}
+										</DropdownMenuItem>
+										{!currentWorkspace.is_default && canManageWorkspace && (
+											<>
+												<DropdownMenuItem onSelect={() => setIsRenameWsOpen(true)}>
+													<Edit />
+													{t('model.workspaceMenu.rename', 'Rename workspace')}
+												</DropdownMenuItem>
+												<div role="separator" className="my-1 h-px bg-border" />
+												<DropdownMenuItem variant="destructive" onSelect={() => void handleDeleteWorkspace()}>
+													<Trash2 />
+													{t('model.workspaceMenu.delete', 'Delete workspace')}
+												</DropdownMenuItem>
+											</>
+										)}
+									</DropdownMenuContent>
+								</DropdownMenu>
 							)}
 						</div>
-
-						{/* Bulk actions. */}
-						{bulkActions}
 					</div>
 				</div>
 
-				{/* Status tabs. */}
+				{/* status tabs */}
 				{tabs}
 
-				{/* Table */}
+				{/* selection bar rows */}
+				{bulkActions}
+
+				{/* table */}
 				<div>
 					{table}
 				</div>
