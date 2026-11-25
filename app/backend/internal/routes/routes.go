@@ -21,6 +21,7 @@ import (
 	"spatialhub_backend/internal/webservice"
 	workspacehandler "spatialhub_backend/internal/workspace/handler"
 
+	"platform.local/common/pkg/httputil"
 	"platform.local/platform/proxy"
 	"platform.local/platform/server"
 )
@@ -80,6 +81,8 @@ func Register(r *gin.Engine, deps Deps) {
 
 func RegisterPublic(r *gin.Engine, deps Deps) {
 	api := r.Group("/api")
+	// Require csrf token
+	api.Use(httputil.CSRFProtection(nil))
 
 	api.GET("/health", server.HealthHandler("backend"))
 
@@ -120,6 +123,7 @@ func RegisterProtected(r *gin.Engine, deps Deps) {
 		// Before session middleware.
 		protectedAPI.Use(middleware.APITokenAuth(deps.APITokenValidator))
 	}
+	protectedAPI.Use(httputil.CSRFProtection(middleware.IsAPITokenAuthenticated))
 	protectedAPI.Use(middleware.AuthServiceMiddleware(middleware.AuthServiceOptions{
 		AuthServiceURL:             deps.AuthServiceURL,
 		SessionCookieMaxAgeSeconds: deps.SessionCookieMaxAgeSeconds,
