@@ -1,5 +1,7 @@
 /* Tailwind CSS directives */
 @import "tailwindcss";
+/* legal page prose */
+@plugin "@tailwindcss/typography";
 
 /* Class-based dark mode. */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -634,3 +636,20 @@
 	-webkit-text-fill-color: transparent;
 }
 
+/* dialogs above sidebar */
+[data-slot="dialog-overlay"],
+[data-slot="alert-dialog-overlay"] {
+  z-index: 60;
+}
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"] {
+  z-index: 61;
+}
+
+[data-radix-popper-content-wrapper] > * {
+  z-index: 70;
+}
+
+body:has([data-slot="alert-dialog-content"]) [data-slot="tooltip-content"] {
+  display: none;
+}
