@@ -176,11 +176,11 @@ export const getUserFormSections = (
 
 type FormValue = string | number | boolean;
 
-export const getWebserviceFormSections = (t?: TranslateFunction): FormSection[] => [
+export const getWebserviceFormSections = (t?: TranslateFunction, autoScaling: boolean = false): FormSection[] => [
 	{
 		title: t?.("forms.webservice.serviceInfo.title") ?? "Service Information",
 		description: t?.("forms.webservice.serviceInfo.description") ?? "Basic webservice identification and metadata",
-		columns: 2,
+		columns: 1,
 		fields: [
 			            {
 							key: "name",
@@ -250,9 +250,9 @@ export const getWebserviceFormSections = (t?: TranslateFunction): FormSection[] 
 				label: t?.("forms.webservice.fields.endpoint") ?? "Endpoint Path",
 				type: "text",
 				value: "",
-				placeholder: "/api/calculate",
+				placeholder: "/assessment/start",
 				icon: formIcon(Server),
-				description: "",
+				description: t?.("forms.webservice.descriptions.endpoint") ?? "Leave empty to use /assessment/start.",
 			},
 		],
 	},
@@ -267,7 +267,7 @@ export const getWebserviceFormSections = (t?: TranslateFunction): FormSection[] 
 				type: "checkbox",
 				value: false,
 				icon: formIcon(ToggleLeft),
-				description: t?.("forms.webservice.descriptions.autoScaling") ?? "Enable automatic scaling based on load",
+				description: t?.("forms.webservice.descriptions.autoScalingRuns") ?? "Allow more than one run at a time on this engine.",
 			},
 			{
 				key: "max_concurrency",
@@ -278,7 +278,11 @@ export const getWebserviceFormSections = (t?: TranslateFunction): FormSection[] 
 				icon: formIcon(Hash),
 				min: 1,
 				max: 100,
-				description: t?.("forms.webservice.descriptions.maxConcurrency") ?? "Maximum number of concurrent requests (1-100)",
+				// backend forces 1
+				disabled: !autoScaling,
+				description: autoScaling
+					? t?.("forms.webservice.descriptions.maxConcurrency") ?? "Maximum number of concurrent requests (1-100)"
+					: t?.("forms.webservice.descriptions.concurrencyLocked") ?? "Fixed at 1 while Auto Scaling is off.",
 				validation: (value: FormValue) => {
 					const num = typeof value === 'number' ? value : Number(value);
 					if (num && (num < 1 || num > 100)) {
@@ -294,6 +298,7 @@ export const getWebserviceFormSections = (t?: TranslateFunction): FormSection[] 
 				value: "inactive",
 				required: true,
 				icon: formIcon(Shield),
+				description: t?.("forms.webservice.descriptions.status") ?? "Only active engines receive runs.",
 				options: [
 					{ value: "active", label: t?.("forms.webservice.statusOptions.active") ?? "Active" },
 					{ value: "inactive", label: t?.("forms.webservice.statusOptions.inactive") ?? "Inactive" },
