@@ -23,7 +23,33 @@ type FormIcon = NonNullable<FormSection["fields"][number]["icon"]>;
 
 const formIcon = (icon: unknown): FormIcon => icon as FormIcon;
 
-export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFunction, currentUserAccessLevel?: string): FormSection[] => [
+// shared backend rules
+const passwordRules = (t?: TranslateFunction) => [
+	{ label: t?.("profile.password.requirements.minChars") ?? "At least 8 characters", test: (v: string) => v.length >= 8 },
+	{ label: t?.("profile.password.requirements.uppercase") ?? "One uppercase letter", test: (v: string) => /[A-Z]/.test(v) },
+	{ label: t?.("profile.password.requirements.lowercase") ?? "One lowercase letter", test: (v: string) => /[a-z]/.test(v) },
+	{ label: t?.("profile.password.requirements.number") ?? "One number", test: (v: string) => /\d/.test(v) },
+	{ label: t?.("profile.password.requirements.specialChar") ?? "One special character", test: (v: string) => /[^A-Za-z0-9]/.test(v) },
+];
+
+// what each level gets
+const accessHint = (level: string | undefined, t?: TranslateFunction): string => {
+	const hints: Record<string, string> = {
+		very_low: t?.("forms.user.accessHints.very_low") ?? "Up to 10 models and the standard base map.",
+		intermediate: t?.("forms.user.accessHints.intermediate") ?? "Up to 25 models and more base maps.",
+		manager: t?.("forms.user.accessHints.manager") ?? "Up to 50 models, model comparison, and manages users in their groups.",
+		expert: t?.("forms.user.accessHints.expert") ?? "No model limit, all features and the admin area.",
+	};
+	return hints[level ?? "very_low"] ?? hints.very_low;
+};
+
+export const getUserFormSections = (
+	isEdit: boolean = false,
+	t?: TranslateFunction,
+	currentUserAccessLevel?: string,
+	selectedAccessLevel?: string,
+	sendInvite: boolean = true,
+): FormSection[] => [
 	{
 		title: t?.("forms.user.personalInfo.title") ?? "Personal Information",
 		description: t?.("forms.user.personalInfo.description") ?? "Basic user details and contact information",
@@ -54,7 +80,7 @@ export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFuncti
 				value: "very_low",
 				required: true,
 				icon: formIcon(Shield),
-				description: "",
+				description: accessHint(selectedAccessLevel, t),
 				options: [
 					{ value: "very_low", label: t?.("forms.user.accessLevels.veryLow") ?? "Very Low Access" },
 					{ value: "intermediate", label: t?.("forms.user.accessLevels.intermediate") ?? "Intermediate Access" },
@@ -96,6 +122,22 @@ export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFuncti
 					: ([
 				{
 					title: t?.("forms.user.security.title") ?? "Security",
+					description: t?.("forms.user.security.inviteDescription") ?? "How the user gets their password",
+					columns: 1,
+					fields: [
+						{
+							key: "send_invite",
+							label: t?.("forms.user.fields.sendInvite") ?? "E-mail the user a link to set their password",
+							type: "checkbox",
+							value: true,
+							icon: formIcon(Mail),
+							description: t?.("forms.user.descriptions.sendInvite") ?? "Recommended. The link works for 72 hours and opens the app afterwards.",
+						},
+					],
+				},
+				// typed password option
+				...(sendInvite ? [] : [{
+					title: t?.("forms.user.security.passwordTitle") ?? "Set a password now",
 					description: t?.("forms.user.security.description") ?? "Account security credentials",
 					columns: 2,
 					fields: [
@@ -108,10 +150,11 @@ export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFuncti
 							required: true,
 							icon: formIcon(Lock),
 							showPasswordToggle: true,
+							passwordRequirements: passwordRules(t),
 							validation: (value: FormValue) => {
 								const v = typeof value === 'string' ? value : '';
-								if (v && v.length < 6) {
-									return t?.("forms.user.validation.passwordLength") ?? "Password must be at least 8 characters long";
+								if (v && !passwordRules(t).every((rule) => rule.test(v))) {
+									return t?.("profile.password.requirementsNotMet") ?? "Password does not meet all requirements";
 								}
 								return null;
 							},
@@ -127,7 +170,7 @@ export const getUserFormSections = (isEdit: boolean = false, t?: TranslateFuncti
 							showPasswordToggle: true,
 						},
 											] as FormSection["fields"],
-				},
+				}]),
 			] as FormSection[])),
 ];
 
@@ -266,7 +309,8 @@ export const validateUserForm = (values: Record<string, unknown>, isEdit: boolea
 
 	validateUserBasicFields(errors, values, t);
 	
-	if (!isEdit) {
+	// invite sets password
+	if (!isEdit && values.send_invite === false) {
 		validateUserPasswords(errors, values, t);
 	}
 
