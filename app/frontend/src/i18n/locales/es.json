@@ -206,6 +206,7 @@
       "feedback": "Comentarios",
       "theme": "Tema",
       "searchLocation": "Buscar ubicación",
+      "searchLocationOrCoords": "Buscar un lugar o coordenadas (lat, lon)",
       "help": "Help"
     },
     "sidebar": {

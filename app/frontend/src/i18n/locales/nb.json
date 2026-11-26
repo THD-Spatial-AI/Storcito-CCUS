@@ -206,6 +206,7 @@
       "feedback": "Tilbakemelding",
       "theme": "Tema",
       "searchLocation": "Søk etter et sted",
+      "searchLocationOrCoords": "Søk etter et sted eller koordinater (bredde, lengde)",
       "help": "Hjelp"
     },
     "sidebar": {
