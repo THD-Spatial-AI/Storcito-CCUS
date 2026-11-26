@@ -44,7 +44,7 @@ interface MapStore {
 const LEGACY_MAPLIBRE_LAYER_ID = "maplibre_3d";
 const MAPLIBRE_DARK_LAYER_ID = "maplibre_dark";
 const RETIRED_OPENTOPOMAP_LAYER_ID = "opentopomap";
-export const MAPLIBRE_VOYAGER_LAYER_ID = "maplibre_voyager";
+const MAPLIBRE_VOYAGER_LAYER_ID = "maplibre_voyager";
 const DEFAULT_BASE_LAYER_ID = "carto_positron";
 // Previous default.
 const LEGACY_DEFAULT_BASE_LAYER_ID = "osm_standard";
