@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BookOpen, Globe2, GraduationCap, Info, LogOut, Settings, User, Waypoints } from "lucide-react";
+import { BookOpen, Globe2, GraduationCap, Info, LogOut, Settings, ShieldCheck, Waypoints } from "lucide-react";
 import { useTranslation } from "@/i18n";
 
 import { useAuth } from "@/providers/auth-provider";
@@ -9,8 +9,41 @@ import { useProductTour } from "@/features/guided-tour/hooks/useProductTour";
 import { useOnboarding } from "@/features/onboarding/hooks/useOnboarding";
 import { useMapStore } from "@/features/interactive-map/store/map-store";
 import { hasMinimumAccessLevel } from "@/utils/access-level";
-import { ADMIN_PATH, DOCUMENTATION_URL, SIDEBAR_WIDTH, TOPBAR_HEIGHT } from "../constants";
+import {
+  ADMIN_PATH,
+  DOCUMENTATION_URL,
+  NAV_EXPANDED_WIDTH,
+  SIDEBAR_WIDTH,
+} from "../constants";
+
 import type { AccessLevel, NavigationHandlers, SidebarItem, UserMenuItem } from "../types";
+
+const NAV_EXPANDED_KEY = "storcito_nav_expanded";
+
+// mouse or trackpad
+const isDesktopPointer = () => {
+  try {
+    return globalThis.matchMedia?.("(hover: hover) and (pointer: fine)").matches ?? true;
+  } catch {
+    return true;
+  }
+};
+
+// default by device
+const defaultNavExpanded = () => isDesktopPointer() && (globalThis.innerWidth ?? 1440) >= 1280;
+
+// touch starts collapsed
+const readNavExpanded = () => {
+  if (!isDesktopPointer()) return false;
+  try {
+    const saved = globalThis.localStorage?.getItem(NAV_EXPANDED_KEY);
+    if (saved === "1") return true;
+    if (saved === "0") return false;
+  } catch {
+    // storage may fail
+  }
+  return defaultNavExpanded();
+};
 
 export const useAppLayoutState = () => {
   const { user } = useAuth();
@@ -25,7 +58,8 @@ export const useAppLayoutState = () => {
   const { t } = useTranslation();
 
   const isActive = useCallback(
-    (path: string) => location.pathname === path || (path === ADMIN_PATH && location.pathname === "/"),
+    (path: string) =>
+      location.pathname === path || (path === ADMIN_PATH && location.pathname === "/"),
     [location.pathname]
   );
 
@@ -71,7 +105,7 @@ export const useAppLayoutState = () => {
 
   const navigationHandlers: NavigationHandlers = useMemo(
     () => ({
-      profile: () => navigate("/app/profile"),
+      profile: () => navigate("/app/settings?tab=profile"),
       settings: () => navigate("/app/settings"),
       dashboard: () => navigate(ADMIN_PATH),
       login: () => navigate("/login"),
@@ -103,7 +137,7 @@ export const useAppLayoutState = () => {
       {
         path: "/app/model-dashboard",
         icon: Waypoints,
-        title: t("common.sidebar.simulations"),
+        title: t("model.dashboard", "Model Dashboard"),
         color: "#8b5cf6",
         bgColor: "#ede9fe",
         dataTour: "simulations",
@@ -122,11 +156,11 @@ export const useAppLayoutState = () => {
 
   const userMenuItems: UserMenuItem[] = useMemo(
     () => [
-      { icon: User, label: t("common.menu.profile"), onClick: navigationHandlers.profile },
       { icon: Settings, label: t("common.menu.settings"), onClick: navigationHandlers.settings },
-      { icon: LogOut, label: t("common.menu.logout"), onClick: navigationHandlers.logout },
+      { icon: ShieldCheck, label: t("common.menu.privacy"), onClick: () => navigate("/privacy") },
+      { icon: LogOut, label: t("common.menu.logout"), onClick: navigationHandlers.logout, separatorBefore: true },
     ],
-    [navigationHandlers, t]
+    [navigationHandlers, navigate, t]
   );
 
   const utilityItems = useMemo(
@@ -143,9 +177,29 @@ export const useAppLayoutState = () => {
     [user]
   );
 
+  // sidebar for everyone
+  const topbarHeight = "0px";
+
+  // expandable left nav
+  const [navExpandedPref, setNavExpandedPref] = useState(readNavExpanded);
+  const navExpanded = navExpandedPref;
+  const toggleNav = useCallback(() => {
+    setNavExpandedPref((value) => {
+      const next = !value;
+      try {
+        // remember desktop only
+        if (isDesktopPointer()) globalThis.localStorage?.setItem(NAV_EXPANDED_KEY, next ? "1" : "0");
+      } catch {
+        // storage blocked
+      }
+      return next;
+    });
+  }, []);
+  const navWidth = navExpanded ? NAV_EXPANDED_WIDTH : SIDEBAR_WIDTH;
   const cssVariables = {
+    "--nav-width": navWidth,
     "--sidebar-width": SIDEBAR_WIDTH,
-    "--topbar-height": TOPBAR_HEIGHT,
+    "--topbar-height": topbarHeight,
   } as React.CSSProperties;
 
   return {
@@ -153,6 +207,10 @@ export const useAppLayoutState = () => {
     changeBaseLayer,
     completeOnboarding,
     cssVariables,
+    topbarHeight,
+    navExpanded,
+    navWidth,
+    toggleNav,
     getUserInitial,
     handleSmartRestartTour,
     hasAccessToLayer,

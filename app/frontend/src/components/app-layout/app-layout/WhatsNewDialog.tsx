@@ -118,6 +118,7 @@ export const WhatsNewDialog: React.FC<WhatsNewDialogProps> = ({ version }) => {
           <button
             type="button"
             data-tour="version"
+            data-compact
             onClick={handleOpen}
             aria-label={t("whatsNew.open")}
             className="group relative cursor-pointer rounded-full border border-border bg-muted/50 px-1.5 py-0.5 text-[9px] font-medium tabular-nums text-muted-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"

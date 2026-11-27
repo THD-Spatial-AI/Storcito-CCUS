@@ -11,6 +11,7 @@ import {
 } from "@spatialhub/ui";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "@/i18n";
+import { NAV_ROW_CLASS } from "@/components/ui/SidebarButton";
 import { cn } from "@/lib/utils";
 import { TimeAgo } from "@/components/ui/TimeAgo";
 import {
@@ -27,12 +28,14 @@ import {
   getNotificationTypeIcon,
 } from "./NotificationDetailDialog";
 
-export const NotificationDropdown: React.FC = () => {
+/** rail sidebar icon */
+export const NotificationDropdown: React.FC<{ rail?: boolean; expanded?: boolean }> = ({ rail = false, expanded = false }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [showPulse, setShowPulse] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const lastUnreadCountRef = useRef(0);
 
   // Poll every 30s.
@@ -99,41 +102,65 @@ export const NotificationDropdown: React.FC = () => {
     setDetailDialogOpen(true);
   };
 
+  // wide nav row
+  const inline = rail && expanded;
+  const badgeText = unreadCount > 99 ? '99+' : String(unreadCount);
+  const title = t('notifications.title');
+
   return (
     <>
     <Tooltip>
-      <DropdownMenu>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="relative p-1.5 rounded-md transition-colors group bg-secondary text-secondary-foreground hover:bg-secondary/80 cursor-pointer"
+              className={cn(
+                "relative rounded-md transition-colors group cursor-pointer",
+                inline
+                  ? NAV_ROW_CLASS
+                  : rail
+                  ? "flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground"
+                  : "p-1.5 bg-secondary text-secondary-foreground hover:bg-secondary/80",
+              )}
             >
               <Bell className={cn(
-                "w-4 h-4 transition-transform duration-200",
+                rail ? "w-5 h-5" : "w-4 h-4",
+                "transition-transform duration-200",
                 unreadCount > 0 && "group-hover:rotate-12"
               )} />
-              {unreadCount > 0 && (
+              {unreadCount > 0 && !inline && (
                 <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center">
                   {showPulse && (
                     <span className="absolute inline-flex h-4 w-4 rounded-full bg-foreground/40 animate-ping"></span>
                   )}
                   <span className="relative inline-flex items-center justify-center min-w-[14px] h-[14px] px-1 rounded-full bg-foreground text-[9px] font-semibold text-background shadow-sm">
-                    {unreadCount > 99 ? '99+' : unreadCount}
+                    {badgeText}
                   </span>
                 </span>
+              )}
+              {inline && (
+                <>
+                  <span className="truncate">{title}</span>
+                  {/* count line label */}
+                  {unreadCount > 0 && (
+                    <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-foreground px-1.5 text-[11px] font-semibold tabular-nums text-background">
+                      {badgeText}
+                    </span>
+                  )}
+                </>
               )}
             </button>
           </DropdownMenuTrigger>
         </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>{t('notifications.title')}</p>
+        <TooltipContent side={rail ? "right" : "bottom"}>
+          <p>{title}</p>
         </TooltipContent>
-      <DropdownMenuContent align="end" className="w-80 p-0 rounded-xl border border-border shadow-xl overflow-hidden bg-card z-[52]">
+      <DropdownMenuContent align={rail ? "start" : "end"} side={rail ? "right" : undefined} sideOffset={rail ? 8 : 4} className="w-80 p-0 rounded-xl border border-border shadow-xl overflow-hidden bg-card z-[52]">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 bg-muted border-b border-border">
           <h3 className="font-semibold text-sm text-foreground">
-            {t('notifications.title')}
+            {title}
           </h3>
           {notifications.length > 0 && (
             <div className="flex items-center gap-2">
@@ -154,7 +181,7 @@ export const NotificationDropdown: React.FC = () => {
           )}
         </div>
 
-        {/* Notifications List */}
+        {/* notifications list */}
         {notifications.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
@@ -177,12 +204,12 @@ export const NotificationDropdown: React.FC = () => {
                   onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="flex items-start gap-3 w-full">
-                    {/* Icon */}
+                    {/* type icon */}
                     <div className={cn("flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center", typeStyles.bg, typeStyles.text)}>
                       {getNotificationTypeIcon(notification.type)}
                     </div>
 
-                    {/* Content */}
+                    {/* message text */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <p className={cn(
@@ -216,12 +243,13 @@ export const NotificationDropdown: React.FC = () => {
           </div>
         )}
 
-        {/* Footer */}
+        {/* dropdown footer */}
         {notifications.length > 0 && (
           <div className="border-t border-border px-4 py-2.5 bg-muted">
             <button 
               onClick={() => {
-                globalThis.location.href = '/notifications';
+                setIsOpen(false);
+                navigate("/app/notifications");
               }}
               className="w-full text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -233,7 +261,7 @@ export const NotificationDropdown: React.FC = () => {
     </DropdownMenu>
   </Tooltip>
 
-    {/* Notification Detail Dialog */}
+    {/* notification detail dialog */}
     <NotificationDetailDialog
       notification={selectedNotification}
       open={detailDialogOpen}
